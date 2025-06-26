@@ -6,36 +6,36 @@ import { TavilySearch } from '@langchain/tavily';
 import 'dotenv/config';
 
 const handler = traceable(
-  async function ({ prompt }: { prompt: string }) {
-    const model = new ChatOpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,
-      modelName: 'gpt-4o-mini',
-      temperature: 0,
-      maxTokens: 256,
-    });
+	async function ({ prompt }: { prompt: string }) {
+		const model = new ChatOpenAI({
+			openAIApiKey: process.env.OPENAI_API_KEY,
+			modelName: 'gpt-4o-mini',
+			temperature: 0,
+			maxTokens: 256
+		});
 
-    const tool = new TavilySearch({
-      maxResults: 5,
-    });
+		const tool = new TavilySearch({
+			maxResults: 5
+		});
 
-    const executor = await initializeAgentExecutorWithOptions([tool], model, {
-      agentType: 'openai-functions',
-      verbose: true,
-    });
+		const executor = await initializeAgentExecutorWithOptions([tool], model, {
+			agentType: 'openai-functions',
+			verbose: true
+		});
 
-    const result = await executor.call({ input: prompt });
+		const result = await executor.call({ input: prompt });
 
-    return { result };
-  },
-  {
-    name: 'SvelteKit LangChain Agent Handler',
-  }
+		return { result };
+	},
+	{
+		name: 'SvelteKit LangChain Agent Handler'
+	}
 );
 
 export async function POST({ request }) {
-  const { prompt } = await request.json();
-  const response = await handler({ prompt });
-  return json({ output: response.result });
+	const { prompt } = await request.json();
+	const response = await handler({ prompt });
+	return json({ output: response.result });
 }
 
 // How we might add langgraph
