@@ -20,8 +20,12 @@
 				typeof data.output === 'object'
 					? JSON.stringify(data.output, null, 2)
 					: data.output || JSON.stringify(data);
-		} catch (e) {
-			error = e.message;
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				error = err.message;
+			} else {
+				error = String(err);
+			}
 		} finally {
 			loading = false;
 		}
