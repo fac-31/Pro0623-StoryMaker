@@ -13,6 +13,7 @@ jobs:
 
       - name: GitHub Tag Action
         uses: anothrNick/github-tag-action@v1
+        continue-on-error: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
