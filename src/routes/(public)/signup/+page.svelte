@@ -3,23 +3,19 @@
   import { supabase } from '$lib/supabaseBrowserClient';
   import { goto } from '$app/navigation';
 
+import { navigating } from '$app/state';
   let email = '';
   let password = '';
   let fullName = '';
   let displayName = '';
   let error = '';
-  let loading = false;
 
   async function submit() {
-    loading = true;
-    error = '';
     const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName, display_name: displayName } }
     });
-    loading = false;
-
     if (signUpError) {
       error = signUpError.message;
     } else {
@@ -53,8 +49,12 @@
     placeholder="Display Name"
     required
   />
-  <button type="submit" disabled={loading}>
-    {#if loading}Signing up…{:else}Sign up{/if}
+  <button type="submit" disabled={navigating != null}>
+    {#if navigating}
+      Signing up…
+    {:else}
+      Sign up
+    {/if}
   </button>
   {#if error}
     <p style="color: red">{error}</p>

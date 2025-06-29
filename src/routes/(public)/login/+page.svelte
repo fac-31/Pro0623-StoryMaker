@@ -2,6 +2,7 @@
  <script lang="ts">
     import { supabase } from "$lib/supabaseBrowserClient";
     import { goto } from "$app/navigation";
+import { navigating } from '$app/state';
 
     let email = '', password = '', error = '';
 
@@ -22,6 +23,12 @@
  <form on:submit|preventDefault={submit}>
     <input type='email' bind:value={email} placeholder="Email" required/>
     <input type='password' bind:value={password} placeholder="Password" required/>
-    <button type='submit'>Log in</button>
+    <button type='submit' disabled={navigating != null}>
+      {#if navigating}
+        Logging in…
+      {:else}
+        Log in
+      {/if}
+    </button>
     {#if error}<p style="color: red">{error}</p>{/if}
  </form>
