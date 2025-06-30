@@ -1,9 +1,11 @@
 import { json } from '@sveltejs/kit';
-import { submitRefinementFeedback, runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
+import { submitRefinementFeedback } from '$lib/langgraph/storyboardGraph';
 import { initDB } from '$lib/server/db';
 import { ObjectId } from 'mongodb';
+import type { RequestHandler } from '@sveltejs/kit';
+import type { StoryboardState } from '$lib/langgraph/storyboardGraph';
 
-export const POST = async ({ request }) => {
+export const POST: RequestHandler = async ({ request }) => {
 	const { _id, feedback } = await request.json();
 	const db = await initDB();
 	const storyboards = db.collection('storyboards');
@@ -12,7 +14,7 @@ export const POST = async ({ request }) => {
 	if (!storyboard) return json({ error: 'Storyboard not found' }, { status: 404 });
 
 	// Apply feedback
-	const updatedState = { ...storyboard, ...submitRefinementFeedback(storyboard, feedback) };
+	const updatedState = { ...storyboard, ...submitRefinementFeedback(storyboard as unknown as StoryboardState, feedback) };
 
 	// Optionally, re-run the workflow for the next step if needed
 	await storyboards.updateOne(

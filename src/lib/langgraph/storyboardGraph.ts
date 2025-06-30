@@ -32,7 +32,7 @@ interface HeroJourney {
 	parts: HeroJourneyPart[];
 }
 
-interface StoryboardState {
+export interface StoryboardState {
 	userConcept: string;
 	heroJourneyOutline: HeroJourney;
 	currentSlide: number | null;
@@ -301,7 +301,7 @@ const generateImage = async (state: StoryboardState): Promise<Partial<Storyboard
 			generationReady: true
 		};
 	} catch (error) {
-		addLog('Image generation failed:', error);
+		addLog(`Image generation failed:', ${error}`);
 		return {
 			generationReady: false
 		};
@@ -447,7 +447,7 @@ export const exampleUsage = async () => {
 
 		return finalState;
 	} catch (error) {
-		addLog('Storyboard creation failed:', error);
+		addLog(`Storyboard creation failed:', ${error}`);
 		throw error;
 	}
 };

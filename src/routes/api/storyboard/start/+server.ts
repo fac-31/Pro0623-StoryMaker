@@ -1,9 +1,9 @@
 import { json } from '@sveltejs/kit';
 import { runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
 import { initDB } from '$lib/server/db';
-import { ObjectId } from 'mongodb';
+import type { RequestHandler } from '@sveltejs/kit';
 
-export const POST = async ({ request }) => {
+export const POST: RequestHandler = async ({ request }) => {
 	const { concept } = await request.json();
 	const state = await runStoryboardCreation(concept);
 
