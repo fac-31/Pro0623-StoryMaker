@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	let concept = '';
 	let feedback = '';
 	let storyboard: unknown = null;
@@ -14,8 +13,7 @@
 			if (res.ok) {
 				logs = await res.json();
 			}
-		} catch {
-		}
+		} catch {}
 	}
 
 	async function startStoryboard() {
