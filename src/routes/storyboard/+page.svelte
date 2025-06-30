@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 
 	let concept = '';
 	let feedback = '';
-	let storyboard: any = null;
+	let storyboard: unknown = null;
 	let loading = false;
 	let error = '';
 	let imageUrl = '';
@@ -15,8 +14,7 @@
 			if (res.ok) {
 				logs = await res.json();
 			}
-		} catch (e) {
-			// ignore log fetch errors
+		} catch () {
 		}
 	}
 
@@ -164,7 +162,7 @@
 		<button on:click={fetchCurrent} disabled={loading}>Refresh</button>
 		<div style="margin-top:1em;">
 			<strong>Slide Progress:</strong>
-			{#each storyboard.slides as slide}
+			{#each storyboard.slides as slide (slide.slideNumber)}
 				<span style="margin-right:0.5em;"
 					>{slide.slideNumber}{slide.imageGenerated ? '✅' : ''}</span
 				>
