@@ -55,6 +55,7 @@
 		"langchain": "^0.3.29",
 		"langsmith": "^0.3.33",
 		"mongodb": "^6.17.0",
+		"openai": "^5.8.2",
 		"serpapi": "^2.1.0"
 	}
 }
