@@ -14,7 +14,7 @@
 			if (res.ok) {
 				logs = await res.json();
 			}
-		} catch () {
+		} catch {
 		}
 	}
 

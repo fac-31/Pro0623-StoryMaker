@@ -1,8 +1,9 @@
 import { json } from '@sveltejs/kit';
 import { initDB } from '$lib/server/db';
 import { ObjectId } from 'mongodb';
+import type { RequestHandler } from '@sveltejs/kit';
 
-export const GET = async ({ url }) => {
+export const GET: RequestHandler = async ({ url }) => {
 	const _id = url.searchParams.get('_id');
 	if (!_id) return json({ error: 'Missing _id parameter' }, { status: 400 });
 
