@@ -14,7 +14,10 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (!storyboard) return json({ error: 'Storyboard not found' }, { status: 404 });
 
 	// Apply feedback
-	const updatedState = { ...storyboard, ...submitRefinementFeedback(storyboard as unknown as StoryboardState, feedback) };
+	const updatedState = {
+		...storyboard,
+		...submitRefinementFeedback(storyboard as unknown as StoryboardState, feedback)
+	};
 
 	// Optionally, re-run the workflow for the next step if needed
 	await storyboards.updateOne(
