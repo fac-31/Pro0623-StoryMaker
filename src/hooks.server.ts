@@ -1,7 +1,15 @@
 import type { Handle } from '@sveltejs/kit';
+import { initDB } from '$lib/server/db';
 import { getSupabase } from '$lib/supabaseServerClient';
 
+let isInitialized = false;
+
 export const handle: Handle = async ({ event, resolve }) => {
+	if (!isInitialized) {
+		await initDB(); // Connect to MongoDB once
+		isInitialized = true; // Flag to avoid reconnecting
+	}
+
 	event.locals.supabase = getSupabase(event);
 	// Securely retrieve current user by revalidating session with Supabase Auth server
 	const {
