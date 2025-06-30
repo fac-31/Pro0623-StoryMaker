@@ -23,8 +23,8 @@ import { navigating } from '$app/state';
  <form on:submit|preventDefault={submit}>
     <input type='email' bind:value={email} placeholder="Email" required/>
     <input type='password' bind:value={password} placeholder="Password" required/>
-    <button type='submit' disabled={navigating != null}>
-      {#if navigating}
+    <button type='submit' disabled={navigating.to != null}>
+      {#if navigating.to}
         Logging in…
       {:else}
         Log in

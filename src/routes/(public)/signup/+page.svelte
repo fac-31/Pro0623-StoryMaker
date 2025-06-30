@@ -49,8 +49,8 @@ import { navigating } from '$app/state';
     placeholder="Display Name"
     required
   />
-  <button type="submit" disabled={navigating != null}>
-    {#if navigating}
+  <button type="submit" disabled={navigating.to != null}>
+    {#if navigating.to}
       Signing up…
     {:else}
       Sign up
