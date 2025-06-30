@@ -126,7 +126,7 @@
 	</form>
 {/if}
 
-{#if storyboard}
+{#if storyboard && storyboard.currentSlide !== null}
 	<div>
 		<h2>Current Slide: {storyboard.currentSlide}</h2>
 		<h3>{storyboard.slides?.[storyboard.currentSlide - 1]?.title}</h3>
