@@ -51,6 +51,7 @@
 		"dotenv": "^16.5.0",
 		"langchain": "^0.3.29",
 		"langsmith": "^0.3.33",
+		"mongodb": "^6.17.0",
 		"serpapi": "^2.1.0"
 	}
 }
