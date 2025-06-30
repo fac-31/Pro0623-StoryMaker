@@ -27,8 +27,7 @@ export const slideTextSchema = z.object({
 			character: z.string(),
 			line: z.string()
 		})
-	),
-	onScreenText: z.string().optional()
+	)
 });
 
 export const slideSchema = z.object({

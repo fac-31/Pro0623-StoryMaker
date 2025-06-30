@@ -11,7 +11,6 @@ export interface SlideText {
     character: string;
     line: string;
   }>;
-  onScreenText?: string;
 }
 
 export interface Slide {
