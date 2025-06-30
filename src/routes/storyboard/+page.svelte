@@ -1,7 +1,8 @@
 <script lang="ts">
+	import type { StoryboardState } from '$lib/langgraph/storyboardGraph';
 	let concept = '';
 	let feedback = '';
-	let storyboard: unknown = null;
+	let storyboard: (StoryboardState & { _id?: string }) | null = null;
 	let loading = false;
 	let error = '';
 	let imageUrl = '';
