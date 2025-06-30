@@ -1,11 +1,4 @@
 import { createBrowserClient } from '@supabase/ssr';
-import 'dotenv/config';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
-const supa_url = process.env.SUPABASE_URL;
-const supa_key = process.env.SUPABASE_ANON_KEY;
-
-if (!supa_key || !supa_url) {
-	throw new Error('Supabase env variables not set');
-}
-
-export const supabase = createBrowserClient(supa_url, supa_key);
+export const supabase = createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
