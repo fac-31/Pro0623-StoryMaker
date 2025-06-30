@@ -13,7 +13,9 @@
 			if (res.ok) {
 				logs = await res.json();
 			}
-		} catch {}
+		} catch {
+			// intentionally empty
+		}
 	}
 
 	async function startStoryboard() {
