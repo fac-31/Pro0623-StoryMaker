@@ -38,7 +38,7 @@
 				error = data.error || 'Failed to start storyboard';
 			}
 		} catch (e) {
-			error = e.message;
+			error = e instanceof Error ? e.message : String(e);
 		} finally {
 			loading = false;
 		}
@@ -64,7 +64,7 @@
 				error = data.error || 'Failed to refine slide';
 			}
 		} catch (e) {
-			error = e.message;
+			error = e instanceof Error ? e.message : String(e);
 		} finally {
 			loading = false;
 		}
@@ -89,7 +89,7 @@
 				error = data.error || 'Failed to approve slide';
 			}
 		} catch (e) {
-			error = e.message;
+			error = e instanceof Error ? e.message : String(e);
 		} finally {
 			loading = false;
 		}
@@ -110,7 +110,7 @@
 				error = data.error || 'Failed to fetch storyboard';
 			}
 		} catch (e) {
-			error = e.message;
+			error = e instanceof Error ? e.message : String(e);
 		} finally {
 			loading = false;
 		}
