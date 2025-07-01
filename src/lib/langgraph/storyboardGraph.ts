@@ -59,7 +59,7 @@ Genre: {genre}
 
 	const chain = prompt.pipe(llm);
 	const storyOutLine = await chain.invoke({
-	userInput: state.userConcept.userInput,
+	userInput: state.userConcept.concept,
 	numSlides: state.userConcept.numSlides,
 	targetAudience: state.userConcept.targetAudience,
 	storyStyle: state.userConcept.storyStyle,

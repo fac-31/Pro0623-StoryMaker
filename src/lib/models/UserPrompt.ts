@@ -1,6 +1,6 @@
 export interface UserPrompt {
 	numSlides : number;
-	userInput: string;
+	concept: string;
 	storyStyle: string;
 	targetAudience : string
 	genre: string;

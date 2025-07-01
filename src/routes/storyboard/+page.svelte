@@ -1,8 +1,17 @@
 <script lang="ts">
-	import type { StoryboardState } from '$lib/langgraph/storyboardGraph';
-	let concept = '';
+	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { UserPrompt } from '$lib/models/UserPrompt';
+
+	let userPrompt : UserPrompt = {
+		numSlides: 6,
+		concept: '',
+		storyStyle: '',
+		targetAudience: '',
+		genre: ''
+	};
+
 	let feedback = '';
-	let storyboard: (StoryboardState & { _id?: string }) | null = null;
+	let storyboard: (StoryboardOutput & { _id?: string }) | null = null;
 	let loading = false;
 	let error = '';
 	let imageUrl = '';
@@ -26,7 +35,7 @@
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ concept })
+				body: JSON.stringify(userPrompt)
 			});
 			const data = await res.json();
 			if (res.ok) {
@@ -120,12 +129,67 @@
 
 {#if !storyboard}
 	<form on:submit|preventDefault={startStoryboard}>
-		<label for="concept">Enter your story concept:</label><br />
-		<textarea id="concept" bind:value={concept} rows="3" cols="60" required></textarea><br />
+		<div class="form-group">
+			<label for="concept">Story Concept:</label><br />
+			<textarea 
+				id="concept" 
+				bind:value={userPrompt.concept} 
+				rows="3" 
+				cols="60" 
+				placeholder="Enter your story concept..."
+				required
+			></textarea>
+		</div>
+
+		<div class="form-group">
+			<label for="numSlides">Number of Slides:</label><br />
+			<input 
+				type="number" 
+				id="numSlides" 
+				bind:value={userPrompt.numSlides} 
+				min="1" 
+				max="20"
+				required
+			/>
+		</div>
+
+		<div class="form-group">
+			<label for="storyStyle">Story Style:</label><br />
+			<input 
+				type="text" 
+				id="storyStyle" 
+				bind:value={userPrompt.storyStyle}
+				placeholder="e.g., minimalist, detailed, cartoon, realistic..."
+				required
+			/>
+		</div>
+
+		<div class="form-group">
+			<label for="targetAudience">Target Audience:</label><br />
+			<input 
+				type="text" 
+				id="targetAudience" 
+				bind:value={userPrompt.targetAudience}
+				placeholder="e.g., children, teens, adults, professionals..."
+				required
+			/>
+		</div>
+
+		<div class="form-group">
+			<label for="genre">Genre:</label><br />
+			<input 
+				type="text" 
+				id="genre" 
+				bind:value={userPrompt.genre}
+				placeholder="e.g., adventure, comedy, drama, fantasy..."
+				required
+			/>
+		</div>
+
 		<button type="submit" disabled={loading}>Start Storyboard</button>
 	</form>
 {/if}
-
+<!-- 
 {#if storyboard && storyboard.currentSlide !== null}
 	<div>
 		<h2>Current Slide: {storyboard.currentSlide}</h2>
@@ -180,7 +244,7 @@
 		<h3>Server Logs</h3>
 		<pre>{logs.join('\n')}</pre>
 	</div>
-{/if}
+{/if} -->
 
 {#if loading}
 	<p>Loading...</p>
