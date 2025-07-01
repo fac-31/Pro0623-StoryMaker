@@ -2,7 +2,7 @@
 	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 
-	let userPrompt : UserPrompt = {
+	let userPrompt: UserPrompt = {
 		numSlides: 6,
 		concept: '',
 		storyStyle: '',
@@ -70,7 +70,7 @@
 		}
 	}
 
-	//not used yet. 
+	//not used yet.
 	// async function refineSlide() {
 	// 	if (!storyboard?._id) return;
 	// 	loading = true;
@@ -152,11 +152,11 @@
 	<form on:submit|preventDefault={startStoryboard}>
 		<div class="form-group">
 			<label for="concept">Story Concept:</label><br />
-			<textarea 
-				id="concept" 
-				bind:value={userPrompt.concept} 
-				rows="3" 
-				cols="60" 
+			<textarea
+				id="concept"
+				bind:value={userPrompt.concept}
+				rows="3"
+				cols="60"
 				placeholder="Enter your story concept..."
 				required
 			></textarea>
@@ -164,11 +164,11 @@
 
 		<div class="form-group">
 			<label for="numSlides">Number of Slides:</label><br />
-			<input 
-				type="number" 
-				id="numSlides" 
-				bind:value={userPrompt.numSlides} 
-				min="1" 
+			<input
+				type="number"
+				id="numSlides"
+				bind:value={userPrompt.numSlides}
+				min="1"
 				max="20"
 				required
 			/>
@@ -176,9 +176,9 @@
 
 		<div class="form-group">
 			<label for="storyStyle">Story Style:</label><br />
-			<input 
-				type="text" 
-				id="storyStyle" 
+			<input
+				type="text"
+				id="storyStyle"
 				bind:value={userPrompt.storyStyle}
 				placeholder="e.g., minimalist, detailed, cartoon, realistic..."
 				required
@@ -187,9 +187,9 @@
 
 		<div class="form-group">
 			<label for="targetAudience">Target Audience:</label><br />
-			<input 
-				type="text" 
-				id="targetAudience" 
+			<input
+				type="text"
+				id="targetAudience"
 				bind:value={userPrompt.targetAudience}
 				placeholder="e.g., children, teens, adults, professionals..."
 				required
@@ -198,9 +198,9 @@
 
 		<div class="form-group">
 			<label for="genre">Genre:</label><br />
-			<input 
-				type="text" 
-				id="genre" 
+			<input
+				type="text"
+				id="genre"
 				bind:value={userPrompt.genre}
 				placeholder="e.g., adventure, comedy, drama, fantasy..."
 				required
@@ -224,8 +224,8 @@
 		<h2>Visual Slides</h2>
 		<div class="slides-flex">
 			{#each storyboard.visualSlides as slide, index}
-				<div 
-					class="slide-thumbnail" 
+				<div
+					class="slide-thumbnail"
 					on:dblclick={() => openSlideModal(index)}
 					role="button"
 					tabindex="0"
@@ -252,19 +252,24 @@
 		<h2>Story Details</h2>
 		<div class="metadata-grid">
 			<div class="metadata-item">
-				<strong>Title:</strong> {storyboard.storyOutline.storyMetadata.title}
+				<strong>Title:</strong>
+				{storyboard.storyOutline.storyMetadata.title}
 			</div>
 			<div class="metadata-item">
-				<strong>Genre:</strong> {storyboard.storyOutline.storyMetadata.genre}
+				<strong>Genre:</strong>
+				{storyboard.storyOutline.storyMetadata.genre}
 			</div>
 			<div class="metadata-item">
-				<strong>Style:</strong> {storyboard.storyOutline.storyMetadata.style}
+				<strong>Style:</strong>
+				{storyboard.storyOutline.storyMetadata.style}
 			</div>
 			<div class="metadata-item">
-				<strong>Target Audience:</strong> {storyboard.storyOutline.storyMetadata.targetAudience}
+				<strong>Target Audience:</strong>
+				{storyboard.storyOutline.storyMetadata.targetAudience}
 			</div>
 			<div class="metadata-item">
-				<strong>Total Duration:</strong> {storyboard.storyOutline.storyMetadata.totalDuration}
+				<strong>Total Duration:</strong>
+				{storyboard.storyOutline.storyMetadata.totalDuration}
 			</div>
 		</div>
 	</div>
@@ -290,12 +295,12 @@
 				on:keydown|stopPropagation
 			>
 				<button class="close-button" on:click={closeModal}>&times;</button>
-				
+
 				<div class="modal-body">
 					<!-- Left side - Slide details (20%) -->
 					<div class="slide-details">
 						<h3>Slide {slideOutline.slideId}</h3>
-						
+
 						<div class="detail-section">
 							<h4>Scene</h4>
 							<p><strong>Title:</strong> {slideOutline.sceneTitle}</p>
@@ -398,7 +403,7 @@
 	.slide-thumbnail:hover {
 		border-color: #007bff;
 		transform: scale(1.05);
-		box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
 
 	.slide-number {
@@ -529,7 +534,7 @@
 		max-height: 100%;
 		object-fit: contain;
 		border-radius: 8px;
-		box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
 
 	.large-placeholder {

@@ -13,11 +13,11 @@ export async function initDB() {
 		}
 
 		const client = new MongoClient(env.DB_CONN_STRING, {
-  tls: true,
-  tlsAllowInvalidCertificates: true, // Only for development
-  serverSelectionTimeoutMS: 5000,
-  connectTimeoutMS: 10000,
-});
+			tls: true,
+			tlsAllowInvalidCertificates: true, // Only for development
+			serverSelectionTimeoutMS: 5000,
+			connectTimeoutMS: 10000
+		});
 		//const client = new MongoClient(env.DB_CONN_STRING);
 
 		console.log('Connecting to MongoDB...');

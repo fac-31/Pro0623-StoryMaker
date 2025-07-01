@@ -23,7 +23,7 @@ export interface StoryboardOutput {
 	};
 }
 
-export interface StoryboardResponse  {
+export interface StoryboardResponse {
 	storyboardOutput: StoryboardOutput;
 	_id: string; // MongoDB ObjectId as string
 }
@@ -33,12 +33,11 @@ export interface StoryboardState {
 	storyOutline: StoryOutline;
 	currentSlide: number;
 	visualSlides: VisualSlide[];
-
 }
 
 const llm = new ChatOpenAI({
-    modelName: 'gpt-4',
-    temperature: 0,
+	modelName: 'gpt-4',
+	temperature: 0
 }).withStructuredOutput(storyOutlineSchema);
 
 const openai = new OpenAI({
@@ -67,61 +66,58 @@ Genre: {genre}
 `);
 
 	const chain = prompt.pipe(llm);
-	const storyOutLine = await chain.invoke({
-	userInput: state.userConcept.concept,
-	numSlides: state.userConcept.numSlides,
-	targetAudience: state.userConcept.targetAudience,
-	storyStyle: state.userConcept.storyStyle,
-	genre: state.userConcept.genre
-	}) as StoryOutline;
-	
+	const storyOutLine = (await chain.invoke({
+		userInput: state.userConcept.concept,
+		numSlides: state.userConcept.numSlides,
+		targetAudience: state.userConcept.targetAudience,
+		storyStyle: state.userConcept.storyStyle,
+		genre: state.userConcept.genre
+	})) as StoryOutline;
 
 	// Initialize visual slides structure
 	const slides: VisualSlide[] = storyOutLine.slideOutlines.map((part, index) => ({
 		slideNumber: index + 1,
-		imageGenerated: false,
+		imageGenerated: false
 	}));
 
-	
 	console.log('[LangGraph] generateStoryOutline result:\n', JSON.stringify(storyOutLine, null, 2));
-	addLog(`[LangGraph] generateStoryOutline result: ${JSON.stringify( storyOutLine , null, 2)}`);
+	addLog(`[LangGraph] generateStoryOutline result: ${JSON.stringify(storyOutLine, null, 2)}`);
 	return {
 		storyOutline: storyOutLine,
 		currentSlide: 1,
-		visualSlides: slides,
+		visualSlides: slides
 	};
 };
 
 const generateImagePrompt = (slide: SlideOutline): string => {
-
 	const promptParts: string[] = [];
-      
-      // Add scene description
-      promptParts.push(`Scene: ${slide.sceneDescription}`);
-      
-      // Add character descriptions
-      const characterNames: string[] = [];
-      slide.characters.forEach(char => {
-        characterNames.push(char.name);
-        const charDesc = `${char.name}: ${char.description}, positioned ${char.position}`;
-        if (char.emotions.length > 0) {
-          charDesc + `, expressing ${char.emotions.join(', ')}`;
-        }
-        promptParts.push(charDesc);
-      });
-      
-      // Add visual style and camera
-      promptParts.push(`Visual style: ${slide.visualStyle}`);
-      promptParts.push(`Camera angle: ${slide.cameraAngle}`);
-      
-      const fullPrompt = `Storyboard panel: ${promptParts.join('. ')}. Professional illustration style, clean lines, suitable for storyboard presentation.`;
-	  return fullPrompt
-}
+
+	// Add scene description
+	promptParts.push(`Scene: ${slide.sceneDescription}`);
+
+	// Add character descriptions
+	const characterNames: string[] = [];
+	slide.characters.forEach((char) => {
+		characterNames.push(char.name);
+		const charDesc = `${char.name}: ${char.description}, positioned ${char.position}`;
+		if (char.emotions.length > 0) {
+			charDesc + `, expressing ${char.emotions.join(', ')}`;
+		}
+		promptParts.push(charDesc);
+	});
+
+	// Add visual style and camera
+	promptParts.push(`Visual style: ${slide.visualStyle}`);
+	promptParts.push(`Camera angle: ${slide.cameraAngle}`);
+
+	const fullPrompt = `Storyboard panel: ${promptParts.join('. ')}. Professional illustration style, clean lines, suitable for storyboard presentation.`;
+	return fullPrompt;
+};
 
 const generateImage = async (state: StoryboardState): Promise<Partial<StoryboardState>> => {
 	console.log('[LangGraph] generateImage called for slide :', state.currentSlide);
 	addLog(`[LangGraph] generateImage called for prompt: ${state.currentSlide}`);
-	
+
 	//create prompt for image generation
 	const imagePrompt = generateImagePrompt(state.storyOutline.slideOutlines[state.currentSlide - 1]);
 
@@ -146,7 +142,7 @@ const generateImage = async (state: StoryboardState): Promise<Partial<Storyboard
 		const updatedVisualSlides = [...state.visualSlides];
 		updatedVisualSlides[state.currentSlide - 1] = visualSlide;
 
-if (imageUrl) {
+		if (imageUrl) {
 			console.log('[LangGraph] generateImage result:', imageUrl);
 			addLog(`[LangGraph] generateImage result: ${imageUrl}`);
 		} else {
@@ -154,12 +150,11 @@ if (imageUrl) {
 			addLog('[LangGraph] generateImage failed');
 		}
 		return {
-			visualSlides: updatedVisualSlides,
+			visualSlides: updatedVisualSlides
 		};
 	} catch (error) {
 		addLog(`Image generation failed:', ${error}`);
-		return {
-		};
+		return {};
 	}
 };
 
@@ -175,13 +170,14 @@ const saveSlideAndAdvance = async (state: StoryboardState): Promise<Partial<Stor
 	console.log('[LangGraph] saveSlideAndAdvance nextSlide:', nextSlide);
 	addLog(`[LangGraph] saveSlideAndAdvance nextSlide: ${nextSlide}`);
 	return {
-		currentSlide: nextSlide,
+		currentSlide: nextSlide
 	};
 };
 
-
 const shouldContinue = (state: StoryboardState): 'nextSlide' | 'complete' => {
-	return state.currentSlide && state.currentSlide <= state.storyOutline.slideOutlines.length ? 'nextSlide' : 'complete';
+	return state.currentSlide && state.currentSlide <= state.storyOutline.slideOutlines.length
+		? 'nextSlide'
+		: 'complete';
 };
 
 // Build the Graph
@@ -190,10 +186,9 @@ export const createStoryboardGraph = () => {
 	addLog('[LangGraph] createStoryboardGraph called');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
-
 	//First - Input type
 	//Second - Output type,
-	//Third - 
+	//Third -
 	const workflow = new StateGraph<StoryboardState, any, any, string>({
 		channels: {
 			userConcept: null,
@@ -230,15 +225,18 @@ export const runStoryboardCreation = async (userConcept: UserPrompt): Promise<St
 
 	const initialState: StoryboardState = {
 		userConcept,
-		storyOutline: { storyMetadata: {
-			title: '',
-			totalDuration: '',
-			genre: '',
-			style: '',
-			targetAudience: ''
-		}, slideOutlines: [] },
+		storyOutline: {
+			storyMetadata: {
+				title: '',
+				totalDuration: '',
+				genre: '',
+				style: '',
+				targetAudience: ''
+			},
+			slideOutlines: []
+		},
 		currentSlide: 1,
-		visualSlides: [],
+		visualSlides: []
 	};
 
 	const result = await app.invoke(initialState);
@@ -251,7 +249,7 @@ export const runStoryboardCreation = async (userConcept: UserPrompt): Promise<St
 		metadata: {
 			totalSlides: result.visualSlides.length,
 			createdAt: new Date(),
-			updatedAt: new Date(), 
+			updatedAt: new Date(),
 			userConcept: userConcept
 		}
 	};
