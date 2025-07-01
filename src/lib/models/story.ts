@@ -13,7 +13,7 @@ export interface SlideText {
 	}>;
 }
 
-export interface Slide {
+export interface SlideOutline {
 	slideId: number;
 	timestamp: string;
 	durationSeconds: number;
@@ -33,7 +33,14 @@ export interface StoryMetadata {
 	targetAudience: string;
 }
 
-export interface Story {
+export interface StoryOutline {
 	storyMetadata: StoryMetadata;
-	slides: Slide[];
+	slides: SlideOutline[];
+}
+
+export interface VisualSlide {
+	slideNumber: number;
+	imageGenerated: boolean;
+	imagePrompt?: string;
+	imageUrl?: string;
 }

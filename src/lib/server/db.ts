@@ -12,7 +12,13 @@ export async function initDB() {
 			throw new Error('DB_NAME environment variable not set.');
 		}
 
-		const client = new MongoClient(env.DB_CONN_STRING);
+		const client = new MongoClient(env.DB_CONN_STRING, {
+  tls: true,
+  tlsAllowInvalidCertificates: true, // Only for development
+  serverSelectionTimeoutMS: 5000,
+  connectTimeoutMS: 10000,
+});
+		//const client = new MongoClient(env.DB_CONN_STRING);
 
 		console.log('Connecting to MongoDB...');
 		await client.connect();

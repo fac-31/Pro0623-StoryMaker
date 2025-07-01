@@ -129,10 +129,10 @@
 {#if storyboard && storyboard.currentSlide !== null}
 	<div>
 		<h2>Current Slide: {storyboard.currentSlide}</h2>
-		<h3>{storyboard.slides?.[storyboard.currentSlide - 1]?.title}</h3>
+		<h3>{storyboard.visualSlides?.[storyboard.currentSlide - 1]?.title}</h3>
 		<p>
 			<strong>Outline:</strong>
-			{storyboard.slides?.[storyboard.currentSlide - 1]?.storyOutline}
+			{storyboard.visualSlides?.[storyboard.currentSlide - 1]?.storyOutline}
 		</p>
 		{#if storyboard.currentSlideDraft}
 			<div style="border:1px solid #ccc; padding:1em; margin:1em 0;">
@@ -163,7 +163,7 @@
 		<button on:click={fetchCurrent} disabled={loading}>Refresh</button>
 		<div style="margin-top:1em;">
 			<strong>Slide Progress:</strong>
-			{#each storyboard.slides as slide (slide.slideNumber)}
+			{#each storyboard.visualSlides as slide (slide.slideNumber)}
 				<span style="margin-right:0.5em;"
 					>{slide.slideNumber}{slide.imageGenerated ? '✅' : ''}</span
 				>
