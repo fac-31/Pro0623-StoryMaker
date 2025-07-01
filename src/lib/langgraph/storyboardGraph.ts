@@ -18,8 +18,14 @@ export interface StoryboardOutput {
 	metadata?: {
 		totalSlides: number;
 		createdAt: Date;
+		updatedAt: Date;
 		userConcept: UserPrompt;
 	};
+}
+
+export interface StoryboardResponse  {
+	storyboardOutput: StoryboardOutput;
+	_id: string; // MongoDB ObjectId as string
 }
 
 export interface StoryboardState {
@@ -245,6 +251,7 @@ export const runStoryboardCreation = async (userConcept: UserPrompt): Promise<St
 		metadata: {
 			totalSlides: result.visualSlides.length,
 			createdAt: new Date(),
+			updatedAt: new Date(), 
 			userConcept: userConcept
 		}
 	};
