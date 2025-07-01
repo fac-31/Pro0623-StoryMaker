@@ -1,23 +1,20 @@
 <script lang="ts">
-	import type { StoryboardState } from '$lib/langgraph/storyboardGraph';
-	let concept = '';
-	let feedback = '';
-	let storyboard: (StoryboardState & { _id?: string }) | null = null;
+	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
+	import type { UserPrompt } from '$lib/models/UserPrompt';
+
+	let userPrompt: UserPrompt = {
+		numSlides: 6,
+		concept: '',
+		storyStyle: '',
+		targetAudience: '',
+		genre: ''
+	};
+
+	let storyboard: (StoryboardOutput & { _id?: string }) | null = null;
 	let loading = false;
 	let error = '';
-	let imageUrl = '';
-	let logs: string[] = [];
-
-	async function fetchLogs() {
-		try {
-			const res = await fetch('/api/storyboard/logs');
-			if (res.ok) {
-				logs = await res.json();
-			}
-		} catch {
-			// intentionally empty
-		}
-	}
+	let selectedSlideIndex: number | null = null;
+	let showModal = false;
 
 	async function startStoryboard() {
 		loading = true;
@@ -26,13 +23,13 @@
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ concept })
+				body: JSON.stringify(userPrompt)
 			});
 			const data = await res.json();
 			if (res.ok) {
-				storyboard = data;
-				imageUrl = '';
-				await fetchLogs();
+				const storyBoardResponse = data as StoryboardResponse;
+				storyboard = storyBoardResponse.storyboardOutput;
+				//await fetchLogs();
 			} else {
 				error = data.error || 'Failed to start storyboard';
 			}
@@ -43,143 +40,161 @@
 		}
 	}
 
-	async function refineSlide() {
-		if (!storyboard?._id) return;
-		loading = true;
-		error = '';
-		try {
-			const res = await fetch('/api/storyboard/refine', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ _id: storyboard._id, feedback })
-			});
-			const data = await res.json();
-			if (res.ok) {
-				storyboard = data;
-				imageUrl = '';
-				feedback = '';
-				await fetchLogs();
-			} else {
-				error = data.error || 'Failed to refine slide';
-			}
-		} catch (e) {
-			error = e instanceof Error ? e.message : String(e);
-		} finally {
-			loading = false;
+	function openSlideModal(index: number) {
+		selectedSlideIndex = index;
+		showModal = true;
+	}
+
+	function closeModal() {
+		showModal = false;
+		selectedSlideIndex = null;
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			closeModal();
 		}
 	}
 
-	async function approveSlide() {
-		if (!storyboard?._id) return;
-		loading = true;
-		error = '';
-		try {
-			const res = await fetch('/api/storyboard/approve', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ _id: storyboard._id })
-			});
-			const data = await res.json();
-			if (res.ok) {
-				storyboard = data;
-				imageUrl = data.currentSlideDraft?.imageUrl || '';
-				await fetchLogs();
-			} else {
-				error = data.error || 'Failed to approve slide';
-			}
-		} catch (e) {
-			error = e instanceof Error ? e.message : String(e);
-		} finally {
-			loading = false;
-		}
-	}
+	//not used yet.
+	// async function refineSlide() {
+	// 	if (!storyboard?._id) return;
+	// 	loading = true;
+	// 	error = '';
+	// 	try {
+	// 		const res = await fetch('/api/storyboard/refine', {
+	// 			method: 'POST',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 			body: JSON.stringify({ _id: storyboard._id, feedback })
+	// 		});
+	// 		const data = await res.json();
+	// 		if (res.ok) {
+	// 			storyboard = data;
+	// 			imageUrl = '';
+	// 			feedback = '';
+	// 			await fetchLogs();
+	// 		} else {
+	// 			error = data.error || 'Failed to refine slide';
+	// 		}
+	// 	} catch (e) {
+	// 		error = e instanceof Error ? e.message : String(e);
+	// 	} finally {
+	// 		loading = false;
+	// 	}
+	// }
 
-	async function fetchCurrent() {
-		if (!storyboard?._id) return;
-		loading = true;
-		error = '';
-		try {
-			const res = await fetch(`/api/storyboard/current?_id=${storyboard._id}`);
-			const data = await res.json();
-			if (res.ok) {
-				storyboard = data;
-				imageUrl = data.currentSlideDraft?.imageUrl || '';
-				await fetchLogs();
-			} else {
-				error = data.error || 'Failed to fetch storyboard';
-			}
-		} catch (e) {
-			error = e instanceof Error ? e.message : String(e);
-		} finally {
-			loading = false;
-		}
-	}
+	// async function approveSlide() {
+	// 	if (!storyboard?._id) return;
+	// 	loading = true;
+	// 	error = '';
+	// 	try {
+	// 		const res = await fetch('/api/storyboard/approve', {
+	// 			method: 'POST',
+	// 			headers: { 'Content-Type': 'application/json' },
+	// 			body: JSON.stringify({ _id: storyboard._id })
+	// 		});
+	// 		const data = await res.json();
+	// 		if (res.ok) {
+	// 			storyboard = data;
+	// 			imageUrl = data.currentSlideDraft?.imageUrl || '';
+	// 			await fetchLogs();
+	// 		} else {
+	// 			error = data.error || 'Failed to approve slide';
+	// 		}
+	// 	} catch (e) {
+	// 		error = e instanceof Error ? e.message : String(e);
+	// 	} finally {
+	// 		loading = false;
+	// 	}
+	// }
+
+	// async function fetchCurrent() {
+	// 	if (!storyboard?._id) return;
+	// 	loading = true;
+	// 	error = '';
+	// 	try {
+	// 		const res = await fetch(`/api/storyboard/current?_id=${storyboard._id}`);
+	// 		const data = await res.json();
+	// 		if (res.ok) {
+	// 			storyboard = data;
+	// 			imageUrl = data.currentSlideDraft?.imageUrl || '';
+	// 			await fetchLogs();
+	// 		} else {
+	// 			error = data.error || 'Failed to fetch storyboard';
+	// 		}
+	// 	} catch (e) {
+	// 		error = e instanceof Error ? e.message : String(e);
+	// 	} finally {
+	// 		loading = false;
+	// 	}
+	// }
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <h1>Storyboard Creator</h1>
 
 {#if !storyboard}
 	<form on:submit|preventDefault={startStoryboard}>
-		<label for="concept">Enter your story concept:</label><br />
-		<textarea id="concept" bind:value={concept} rows="3" cols="60" required></textarea><br />
+		<div class="form-group">
+			<label for="concept">Story Concept:</label><br />
+			<textarea
+				id="concept"
+				bind:value={userPrompt.concept}
+				rows="3"
+				cols="60"
+				placeholder="Enter your story concept..."
+				required
+			></textarea>
+		</div>
+
+		<div class="form-group">
+			<label for="numSlides">Number of Slides:</label><br />
+			<input
+				type="number"
+				id="numSlides"
+				bind:value={userPrompt.numSlides}
+				min="1"
+				max="20"
+				required
+			/>
+		</div>
+
+		<div class="form-group">
+			<label for="storyStyle">Story Style:</label><br />
+			<input
+				type="text"
+				id="storyStyle"
+				bind:value={userPrompt.storyStyle}
+				placeholder="e.g., minimalist, detailed, cartoon, realistic..."
+				required
+			/>
+		</div>
+
+		<div class="form-group">
+			<label for="targetAudience">Target Audience:</label><br />
+			<input
+				type="text"
+				id="targetAudience"
+				bind:value={userPrompt.targetAudience}
+				placeholder="e.g., children, teens, adults, professionals..."
+				required
+			/>
+		</div>
+
+		<div class="form-group">
+			<label for="genre">Genre:</label><br />
+			<input
+				type="text"
+				id="genre"
+				bind:value={userPrompt.genre}
+				placeholder="e.g., adventure, comedy, drama, fantasy..."
+				required
+			/>
+		</div>
+
 		<button type="submit" disabled={loading}>Start Storyboard</button>
 	</form>
-{/if}
-
-{#if storyboard && storyboard.currentSlide !== null}
-	<div>
-		<h2>Current Slide: {storyboard.currentSlide}</h2>
-		<h3>{storyboard.slides?.[storyboard.currentSlide - 1]?.title}</h3>
-		<p>
-			<strong>Outline:</strong>
-			{storyboard.slides?.[storyboard.currentSlide - 1]?.storyOutline}
-		</p>
-		{#if storyboard.currentSlideDraft}
-			<div style="border:1px solid #ccc; padding:1em; margin:1em 0;">
-				<p><strong>Scene:</strong> {storyboard.currentSlideDraft.scene}</p>
-				<p><strong>Characters:</strong> {storyboard.currentSlideDraft.characters}</p>
-				<p><strong>Action:</strong> {storyboard.currentSlideDraft.action}</p>
-				<p><strong>Dialogue:</strong> {storyboard.currentSlideDraft.dialogue}</p>
-				{#if storyboard.currentSlideDraft.imagePrompt}
-					<p><strong>Image Prompt:</strong> {storyboard.currentSlideDraft.imagePrompt}</p>
-				{/if}
-				{#if imageUrl}
-					<img src={imageUrl} alt="Generated" style="max-width:100%; margin-top:1em;" />
-				{/if}
-			</div>
-		{/if}
-		<form on:submit|preventDefault={refineSlide}>
-			<label for="feedback">Refinement Feedback:</label><br />
-			<input
-				id="feedback"
-				type="text"
-				bind:value={feedback}
-				placeholder="e.g. Add more action"
-				size="40"
-			/>
-			<button type="submit" disabled={loading || !feedback}>Refine Slide</button>
-		</form>
-		<button on:click={approveSlide} disabled={loading}>Approve Slide & Generate Image</button>
-		<button on:click={fetchCurrent} disabled={loading}>Refresh</button>
-		<div style="margin-top:1em;">
-			<strong>Slide Progress:</strong>
-			{#each storyboard.slides as slide (slide.slideNumber)}
-				<span style="margin-right:0.5em;"
-					>{slide.slideNumber}{slide.imageGenerated ? '✅' : ''}</span
-				>
-			{/each}
-		</div>
-		<button on:click={() => (storyboard = null)} style="margin-top:2em;">Start Over</button>
-	</div>
-{/if}
-
-{#if logs.length}
-	<div
-		style="margin-top:2em; background:#222; color:#fff; padding:1em; border-radius:8px; max-height:300px; overflow:auto;"
-	>
-		<h3>Server Logs</h3>
-		<pre>{logs.join('\n')}</pre>
-	</div>
 {/if}
 
 {#if loading}
@@ -188,3 +203,394 @@
 {#if error}
 	<p style="color:red;">{error}</p>
 {/if}
+
+{#if storyboard}
+	<!-- Visual Slides Horizontal Container -->
+	<div class="slides-container">
+		<h2>Visual Slides</h2>
+		<div class="slides-flex">
+			{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
+				<div
+					class="slide-thumbnail"
+					on:dblclick={() => openSlideModal(index)}
+					role="button"
+					tabindex="0"
+					on:keydown={(e) => e.key === 'Enter' && openSlideModal(index)}
+				>
+					<div class="slide-number">Slide {slide.slideNumber}</div>
+					{#if slide.imageGenerated && slide.imageUrl}
+						<img src={slide.imageUrl} alt="Slide {slide.slideNumber}" />
+					{:else}
+						<div class="placeholder-image">
+							<span>No Image</span>
+							{#if slide.imagePrompt}
+								<small>{slide.imagePrompt.substring(0, 50)}...</small>
+							{/if}
+						</div>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	</div>
+
+	<!-- Story Metadata -->
+	<div class="metadata-container">
+		<h2>Story Details</h2>
+		<div class="metadata-grid">
+			<div class="metadata-item">
+				<strong>Title:</strong>
+				{storyboard.storyOutline.storyMetadata.title}
+			</div>
+			<div class="metadata-item">
+				<strong>Genre:</strong>
+				{storyboard.storyOutline.storyMetadata.genre}
+			</div>
+			<div class="metadata-item">
+				<strong>Style:</strong>
+				{storyboard.storyOutline.storyMetadata.style}
+			</div>
+			<div class="metadata-item">
+				<strong>Target Audience:</strong>
+				{storyboard.storyOutline.storyMetadata.targetAudience}
+			</div>
+			<div class="metadata-item">
+				<strong>Total Duration:</strong>
+				{storyboard.storyOutline.storyMetadata.totalDuration}
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal for detailed slide view -->
+	{#if showModal && selectedSlideIndex !== null}
+		{@const slideOutline = storyboard.storyOutline.slideOutlines[selectedSlideIndex]}
+		{@const visualSlide = storyboard.visualSlides[selectedSlideIndex]}
+		<div
+			class="modal-overlay"
+			role="button"
+			tabindex="0"
+			aria-label="Close modal"
+			on:click={closeModal}
+			on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && closeModal()}
+		>
+			<div
+				class="modal-content"
+				role="dialog"
+				aria-modal="true"
+				tabindex="0"
+				on:click|stopPropagation
+				on:keydown|stopPropagation
+			>
+				<button class="close-button" on:click={closeModal}>&times;</button>
+
+				<div class="modal-body">
+					<!-- Left side - Slide details (20%) -->
+					<div class="slide-details">
+						<h3>Slide {slideOutline.slideId}</h3>
+
+						<div class="detail-section">
+							<h4>Scene</h4>
+							<p><strong>Title:</strong> {slideOutline.sceneTitle}</p>
+							<p><strong>Duration:</strong> {slideOutline.durationSeconds}s</p>
+							<p><strong>Timestamp:</strong> {slideOutline.timestamp}</p>
+						</div>
+
+						<div class="detail-section">
+							<h4>Description</h4>
+							<p>{slideOutline.sceneDescription}</p>
+						</div>
+
+						<div class="detail-section">
+							<h4>Visual Style</h4>
+							<p>{slideOutline.visualStyle}</p>
+							<p><strong>Camera:</strong> {slideOutline.cameraAngle}</p>
+						</div>
+
+						{#if slideOutline.characters.length > 0}
+							<div class="detail-section">
+								<h4>Characters</h4>
+								{#each slideOutline.characters as character (slideOutline.slideId + character.name)}
+									<div class="character-info">
+										<strong>{character.name}</strong> ({character.role})
+										<p>{character.description}</p>
+										<small>Position: {character.position}</small>
+										{#if character.emotions.length > 0}
+											<div class="emotions">Emotions: {character.emotions.join(', ')}</div>
+										{/if}
+									</div>
+								{/each}
+							</div>
+						{/if}
+
+						{#if slideOutline.text.dialogue.length > 0}
+							<div class="detail-section">
+								<h4>Dialogue</h4>
+								{#each slideOutline.text.dialogue as dialogue (slideOutline.slideId + dialogue.line)}
+									<div class="dialogue-line">
+										<strong>{dialogue.character}:</strong> "{dialogue.line}"
+									</div>
+								{/each}
+							</div>
+						{/if}
+					</div>
+
+					<!-- Right side - Image (80%) -->
+					<div class="slide-image">
+						{#if visualSlide.imageGenerated && visualSlide.imageUrl}
+							<img src={visualSlide.imageUrl} alt="Slide {visualSlide.slideNumber}" />
+						{:else}
+							<div class="large-placeholder">
+								<h3>No Image Generated</h3>
+								{#if visualSlide.imagePrompt}
+									<p><strong>Image Prompt:</strong></p>
+									<p>{visualSlide.imagePrompt}</p>
+								{/if}
+							</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+	{/if}
+{/if}
+
+<style>
+	.form-group {
+		margin-bottom: 1rem;
+	}
+
+	.slides-container {
+		margin: 2rem 0;
+	}
+
+	.slides-flex {
+		display: flex;
+		gap: 1rem;
+		overflow-x: auto;
+		padding: 1rem 0;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		background: #f9f9f9;
+	}
+
+	.slide-thumbnail {
+		min-width: 200px;
+		width: 200px;
+		height: 150px;
+		border: 2px solid #ccc;
+		border-radius: 8px;
+		cursor: pointer;
+		background: white;
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		transition: all 0.2s ease;
+	}
+
+	.slide-thumbnail:hover {
+		border-color: #007bff;
+		transform: scale(1.05);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.slide-number {
+		background: #007bff;
+		color: white;
+		padding: 0.25rem 0.5rem;
+		font-size: 0.8rem;
+		font-weight: bold;
+		border-radius: 6px 6px 0 0;
+	}
+
+	.slide-thumbnail img {
+		width: 100%;
+		height: calc(100% - 2rem);
+		object-fit: cover;
+		border-radius: 0 0 6px 6px;
+	}
+
+	.placeholder-image {
+		height: calc(100% - 2rem);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background: #f0f0f0;
+		color: #666;
+		text-align: center;
+		padding: 0.5rem;
+		border-radius: 0 0 6px 6px;
+	}
+
+	.placeholder-image small {
+		margin-top: 0.5rem;
+		font-size: 0.7rem;
+		line-height: 1.2;
+	}
+
+	.metadata-container {
+		margin: 2rem 0;
+		padding: 1.5rem;
+		border: 1px solid #ddd;
+		border-radius: 8px;
+		background: #f8f9fa;
+	}
+
+	.metadata-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1rem;
+		margin-top: 1rem;
+	}
+
+	.metadata-item {
+		padding: 0.75rem;
+		background: white;
+		border-radius: 4px;
+		border-left: 4px solid #007bff;
+	}
+
+	.modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.8);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+	}
+
+	.modal-content {
+		width: 95%;
+		height: 90%;
+		background: white;
+		border-radius: 8px;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.close-button {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		background: #dc3545;
+		color: white;
+		border: none;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		font-size: 1.5rem;
+		cursor: pointer;
+		z-index: 1001;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.close-button:hover {
+		background: #c82333;
+	}
+
+	.modal-body {
+		display: flex;
+		height: 100%;
+	}
+
+	.slide-details {
+		width: 20%;
+		padding: 2rem 1rem 1rem 2rem;
+		overflow-y: auto;
+		background: #f8f9fa;
+		border-right: 1px solid #ddd;
+	}
+
+	.slide-image {
+		width: 80%;
+		padding: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #fff;
+	}
+
+	.slide-image img {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.large-placeholder {
+		text-align: center;
+		color: #666;
+		padding: 2rem;
+	}
+
+	.detail-section {
+		margin-bottom: 1.5rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid #eee;
+	}
+
+	.detail-section:last-child {
+		border-bottom: none;
+	}
+
+	.detail-section h4 {
+		margin: 0 0 0.5rem 0;
+		color: #007bff;
+		font-size: 1rem;
+	}
+
+	.detail-section p {
+		margin: 0.25rem 0;
+		line-height: 1.4;
+		font-size: 0.9rem;
+	}
+
+	.character-info {
+		margin-bottom: 1rem;
+		padding: 0.75rem;
+		background: white;
+		border-radius: 4px;
+		border-left: 3px solid #28a745;
+	}
+
+	.emotions {
+		font-style: italic;
+		color: #666;
+		font-size: 0.8rem;
+		margin-top: 0.25rem;
+	}
+
+	.dialogue-line {
+		margin-bottom: 0.5rem;
+		padding: 0.5rem;
+		background: white;
+		border-radius: 4px;
+		border-left: 3px solid #ffc107;
+		font-size: 0.9rem;
+	}
+
+	button {
+		padding: 0.5rem 1rem;
+		background: #007bff;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 1rem;
+	}
+
+	button:hover:not(:disabled) {
+		background: #0056b3;
+	}
+
+	button:disabled {
+		background: #6c757d;
+		cursor: not-allowed;
+	}
+</style>
