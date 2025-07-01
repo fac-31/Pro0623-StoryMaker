@@ -35,7 +35,7 @@ export interface StoryMetadata {
 
 export interface StoryOutline {
 	storyMetadata: StoryMetadata;
-	slides: SlideOutline[];
+	slideOutlines: SlideOutline[];
 }
 
 export interface VisualSlide {

@@ -71,13 +71,14 @@ Genre: {genre}
 	
 
 	// Initialize visual slides structure
-	const slides: VisualSlide[] = storyOutLine.slides.map((part, index) => ({
+	const slides: VisualSlide[] = storyOutLine.slideOutlines.map((part, index) => ({
 		slideNumber: index + 1,
 		imageGenerated: false,
 	}));
 
-	console.log('[LangGraph] generateStoryOutline result:', { generateStoryOutline, storyOutLine });
-	addLog(`[LangGraph] generateStoryOutline result: ${JSON.stringify({ generateStoryOutline, storyOutLine })}`);
+	
+	console.log('[LangGraph] generateStoryOutline result:\n', JSON.stringify(storyOutLine, null, 2));
+	addLog(`[LangGraph] generateStoryOutline result: ${JSON.stringify( storyOutLine , null, 2)}`);
 	return {
 		storyOutline: storyOutLine,
 		currentSlide: 1,
@@ -116,7 +117,7 @@ const generateImage = async (state: StoryboardState): Promise<Partial<Storyboard
 	addLog(`[LangGraph] generateImage called for prompt: ${state.currentSlide}`);
 	
 	//create prompt for image generation
-	const imagePrompt = generateImagePrompt(state.storyOutline.slides[state.currentSlide - 1]);
+	const imagePrompt = generateImagePrompt(state.storyOutline.slideOutlines[state.currentSlide - 1]);
 
 	try {
 		const response = await openai.images.generate({
@@ -174,7 +175,7 @@ const saveSlideAndAdvance = async (state: StoryboardState): Promise<Partial<Stor
 
 
 const shouldContinue = (state: StoryboardState): 'nextSlide' | 'complete' => {
-	return state.currentSlide && state.currentSlide <= state.storyOutline.slides.length ? 'nextSlide' : 'complete';
+	return state.currentSlide && state.currentSlide <= state.storyOutline.slideOutlines.length ? 'nextSlide' : 'complete';
 };
 
 // Build the Graph
@@ -229,7 +230,7 @@ export const runStoryboardCreation = async (userConcept: UserPrompt): Promise<St
 			genre: '',
 			style: '',
 			targetAudience: ''
-		}, slides: [] },
+		}, slideOutlines: [] },
 		currentSlide: 1,
 		visualSlides: [],
 	};
