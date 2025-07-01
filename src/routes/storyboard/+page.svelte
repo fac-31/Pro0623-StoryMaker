@@ -10,25 +10,11 @@
 		genre: ''
 	};
 
-	let feedback = '';
 	let storyboard: (StoryboardOutput & { _id?: string }) | null = null;
 	let loading = false;
 	let error = '';
-	let imageUrl = '';
-	let logs: string[] = [];
 	let selectedSlideIndex: number | null = null;
 	let showModal = false;
-
-	async function fetchLogs() {
-		try {
-			const res = await fetch('/api/storyboard/logs');
-			if (res.ok) {
-				logs = await res.json();
-			}
-		} catch {
-			// intentionally empty
-		}
-	}
 
 	async function startStoryboard() {
 		loading = true;
@@ -223,7 +209,7 @@
 	<div class="slides-container">
 		<h2>Visual Slides</h2>
 		<div class="slides-flex">
-			{#each storyboard.visualSlides as slide, index}
+			{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
 				<div
 					class="slide-thumbnail"
 					on:dblclick={() => openSlideModal(index)}
@@ -322,7 +308,7 @@
 						{#if slideOutline.characters.length > 0}
 							<div class="detail-section">
 								<h4>Characters</h4>
-								{#each slideOutline.characters as character}
+								{#each slideOutline.characters as character (slideOutline.slideId + character.name)}
 									<div class="character-info">
 										<strong>{character.name}</strong> ({character.role})
 										<p>{character.description}</p>
@@ -338,7 +324,7 @@
 						{#if slideOutline.text.dialogue.length > 0}
 							<div class="detail-section">
 								<h4>Dialogue</h4>
-								{#each slideOutline.text.dialogue as dialogue}
+								{#each slideOutline.text.dialogue as dialogue (slideOutline.slideId + dialogue.line)}
 									<div class="dialogue-line">
 										<strong>{dialogue.character}:</strong> "{dialogue.line}"
 									</div>

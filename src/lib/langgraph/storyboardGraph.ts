@@ -99,9 +99,9 @@ const generateImagePrompt = (slide: SlideOutline): string => {
 	const characterNames: string[] = [];
 	slide.characters.forEach((char) => {
 		characterNames.push(char.name);
-		const charDesc = `${char.name}: ${char.description}, positioned ${char.position}`;
+		let charDesc = `${char.name}: ${char.description}, positioned ${char.position}`;
 		if (char.emotions.length > 0) {
-			charDesc + `, expressing ${char.emotions.join(', ')}`;
+			charDesc += `, expressing ${char.emotions.join(', ')}`;
 		}
 		promptParts.push(charDesc);
 	});
@@ -185,10 +185,6 @@ export const createStoryboardGraph = () => {
 	console.log('[LangGraph] createStoryboardGraph called');
 	addLog('[LangGraph] createStoryboardGraph called');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-	//First - Input type
-	//Second - Output type,
-	//Third -
 	const workflow = new StateGraph<StoryboardState, any, any, string>({
 		channels: {
 			userConcept: null,
