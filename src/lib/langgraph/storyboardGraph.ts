@@ -14,7 +14,7 @@ export interface StoryboardState {
 	storyOutline: StoryOutline;
 	currentSlide: number;
 	visualSlides: VisualSlide[];
-	generationReady: boolean;
+
 }
 
 const llm = new ChatOpenAI({
@@ -139,7 +139,6 @@ if (imageUrl) {
 	} catch (error) {
 		addLog(`Image generation failed:', ${error}`);
 		return {
-			generationReady: false
 		};
 	}
 };
@@ -150,31 +149,19 @@ const saveSlideAndAdvance = async (state: StoryboardState): Promise<Partial<Stor
 
 	const currentSlideNum = state.currentSlide;
 
-	
-	const slides = [...state.visualSlides];
-
-	// Update the current slide with finalized content
-	slides[currentSlideNum - 1] = {
-		...slides[currentSlideNum - 1],
-		content: state.currentSlideDraft,
-		imageGenerated: true
-	};
-
-	// Advance to next slide or mark complete
-	const nextSlide = currentSlideNum < 6 ? currentSlideNum + 1 : null;
+	// Advance to next slide. mark complete is in the logic of shouldContinue()
+	const nextSlide = currentSlideNum + 1;
 
 	console.log('[LangGraph] saveSlideAndAdvance nextSlide:', nextSlide);
 	addLog(`[LangGraph] saveSlideAndAdvance nextSlide: ${nextSlide}`);
 	return {
-		visualSlides: slides,
 		currentSlide: nextSlide,
-		generationReady: false
 	};
 };
 
 
 const shouldContinue = (state: StoryboardState): 'nextSlide' | 'complete' => {
-	return state.currentSlide && state.currentSlide <= 6 ? 'nextSlide' : 'complete';
+	return state.currentSlide && state.currentSlide <= state.storyOutline.slides.length ? 'nextSlide' : 'complete';
 };
 
 // Build the Graph
@@ -232,8 +219,6 @@ export const runStoryboardCreation = async (userConcept: UserPrompt): Promise<St
 		}, slides: [] },
 		currentSlide: 1,
 		visualSlides: [],
-		generationReady: false,
-		generatedImages: []
 	};
 
 	const result = await app.invoke(initialState);
