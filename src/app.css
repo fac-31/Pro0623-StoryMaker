@@ -5,141 +5,140 @@
 /* TODO: we need to set primary, secondary, emphassis colours for the app to be used consistently*/
 
 form {
-  @apply max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg border border-gray-300;
+	@apply mx-auto max-w-2xl rounded-lg border border-gray-300 bg-gray-50 p-6;
 }
 
 .form-group {
-  @apply mb-6;
+	@apply mb-6;
 }
 
 .form-group label {
-  @apply block mb-2 text-base font-medium text-gray-700;
+	@apply mb-2 block text-base font-medium text-gray-700;
 }
 
 .form-group input,
 .form-group textarea {
-  @apply w-full px-3 py-2 border border-gray-300 rounded bg-white text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+	@apply w-full rounded border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none;
 }
 
-.form-group input[type="number"] {
-  @apply max-w-xs;
+.form-group input[type='number'] {
+	@apply max-w-xs;
 }
 
 .form-group textarea {
-  @apply min-h-[80px];
+	@apply min-h-[80px];
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  @apply text-gray-500;
+	@apply text-gray-500;
 }
 
 /* Form Submit Button */
-form button[type="submit"] {
-  @apply w-full mt-4 py-3 bg-blue-500 text-white text-lg font-medium hover:bg-blue-700 disabled:bg-gray-500;
+form button[type='submit'] {
+	@apply mt-4 w-full bg-blue-500 py-3 text-lg font-medium text-white hover:bg-blue-700 disabled:bg-gray-500;
 }
 
-
 .slides-container {
-  @apply my-8;
+	@apply my-8;
 }
 
 .slides-flex {
-  @apply flex gap-4 overflow-x-auto py-4 border border-gray-300 rounded-lg;
+	@apply flex gap-4 overflow-x-auto rounded-lg border border-gray-300 py-4;
 }
 
 .slide-thumbnail {
-  @apply min-w-48 w-48 h-36 border-2 border-gray-300 rounded-lg cursor-pointer flex flex-col relative transition-all duration-200 ease-in-out;
+	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 transition-all duration-200 ease-in-out;
 }
 
 .slide-number {
-  @apply bg-blue-600 text-white px-2 py-1 text-sm font-bold rounded-t-md;
+	@apply rounded-t-md bg-blue-600 px-2 py-1 text-sm font-bold text-white;
 }
 
 .slide-thumbnail:hover {
-  @apply border-blue-600 scale-105 shadow-md;
+	@apply scale-105 border-blue-600 shadow-md;
 }
 
 .slide-thumbnail img {
-  @apply w-full flex-1 object-cover rounded-b-md;
+	@apply w-full flex-1 rounded-b-md object-cover;
 }
 
 .placeholder-image {
-  @apply h-[calc(100%-2rem)] flex flex-col items-center justify-center bg-gray-100 text-gray-600 text-center p-2 rounded-b-md;
+	@apply flex h-[calc(100%-2rem)] flex-col items-center justify-center rounded-b-md bg-gray-100 p-2 text-center text-gray-600;
 }
 
 .placeholder-image small {
-  @apply mt-2 text-xs leading-tight;
+	@apply mt-2 text-xs leading-tight;
 }
 
 .metadata-container {
-  @apply my-8 p-6 border border-gray-300 rounded-lg bg-gray-50;
+	@apply my-8 rounded-lg border border-gray-300 bg-gray-50 p-6;
 }
 
 .metadata-grid {
-  @apply grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 mt-4;
+	@apply mt-4 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4;
 }
 
 .metadata-item {
-  @apply p-3 bg-white rounded border-l-4 border-blue-500;
+	@apply rounded border-l-4 border-blue-500 bg-white p-3;
 }
 
 .modal-overlay {
-  @apply fixed inset-0 bg-black/80 flex items-center justify-center z-[1000];
+	@apply fixed inset-0 z-[1000] flex items-center justify-center bg-black/80;
 }
 
 .modal-content {
-  @apply w-[95%] h-[90%] bg-white rounded-lg relative overflow-hidden;
+	@apply relative h-[90%] w-[95%] overflow-hidden rounded-lg bg-white;
 }
 
 .close-button {
-  @apply absolute top-4 right-4 bg-red-600 text-white border-0 w-12 h-12 rounded-full text-2xl cursor-pointer z-[1001] flex items-center justify-center hover:bg-red-700;
+	@apply absolute top-4 right-4 z-[1001] flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 bg-red-600 text-2xl text-white hover:bg-red-700;
 }
 
 .modal-body {
-  @apply flex h-full;
+	@apply flex h-full;
 }
 
 .slide-details {
-  @apply w-1/5 py-8 px-4 pr-8 overflow-y-auto bg-gray-50 border-r border-gray-300;
+	@apply w-1/5 overflow-y-auto border-r border-gray-300 bg-gray-50 px-4 py-8 pr-8;
 }
 
 .slide-image {
-  @apply w-4/5 p-8 flex items-center justify-center bg-white;
+	@apply flex w-4/5 items-center justify-center bg-white p-8;
 }
 
 .slide-image img {
-  @apply max-w-full max-h-full object-contain rounded-lg shadow-lg;
+	@apply max-h-full max-w-full rounded-lg object-contain shadow-lg;
 }
 
 .large-placeholder {
-  @apply text-center text-gray-600 p-8;
+	@apply p-8 text-center text-gray-600;
 }
 
 .detail-section {
-  @apply mb-6 pb-4 border-b border-gray-200 last:border-b-0;
+	@apply mb-6 border-b border-gray-200 pb-4 last:border-b-0;
 }
 
 .detail-section h4 {
-  @apply m-0 mb-2 text-blue-500 text-base;
+	@apply m-0 mb-2 text-base text-blue-500;
 }
 
 .detail-section p {
-  @apply my-1 leading-snug text-sm;
+	@apply my-1 text-sm leading-snug;
 }
 
 .character-info {
-  @apply mb-4 p-3 bg-white rounded border-l-4 border-green-500;
+	@apply mb-4 rounded border-l-4 border-green-500 bg-white p-3;
 }
 
 .emotions {
-  @apply italic text-gray-600 text-xs mt-1;
+	@apply mt-1 text-xs text-gray-600 italic;
 }
 
 .dialogue-line {
-  @apply mb-2 p-2 bg-white rounded border-l-4 border-yellow-400 text-sm;
+	@apply mb-2 rounded border-l-4 border-yellow-400 bg-white p-2 text-sm;
 }
 
 button {
-  @apply px-4 py-2 bg-blue-500 text-white border-0 rounded cursor-pointer text-base hover:bg-blue-700 disabled:bg-gray-500 disabled:cursor-not-allowed;
+	@apply cursor-pointer rounded border-0 bg-blue-500 px-4 py-2 text-base text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-500;
 }
