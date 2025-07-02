@@ -4,6 +4,42 @@
 
 /* TODO: we need to set primary, secondary, emphassis colours for the app to be used consistently*/
 
+form {
+  @apply max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg border border-gray-300;
+}
+
+.form-group {
+  @apply mb-6;
+}
+
+.form-group label {
+  @apply block mb-2 text-base font-medium text-gray-700;
+}
+
+.form-group input,
+.form-group textarea {
+  @apply w-full px-3 py-2 border border-gray-300 rounded bg-white text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+.form-group input[type="number"] {
+  @apply max-w-xs;
+}
+
+.form-group textarea {
+  @apply min-h-[80px];
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  @apply text-gray-500;
+}
+
+/* Form Submit Button */
+form button[type="submit"] {
+  @apply w-full mt-4 py-3 bg-blue-500 text-white text-lg font-medium hover:bg-blue-700 disabled:bg-gray-500;
+}
+
+
 .slides-container {
   @apply my-8;
 }
@@ -34,4 +70,76 @@
 
 .placeholder-image small {
   @apply mt-2 text-xs leading-tight;
+}
+
+.metadata-container {
+  @apply my-8 p-6 border border-gray-300 rounded-lg bg-gray-50;
+}
+
+.metadata-grid {
+  @apply grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 mt-4;
+}
+
+.metadata-item {
+  @apply p-3 bg-white rounded border-l-4 border-blue-500;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black/80 flex items-center justify-center z-[1000];
+}
+
+.modal-content {
+  @apply w-[95%] h-[90%] bg-white rounded-lg relative overflow-hidden;
+}
+
+.close-button {
+  @apply absolute top-4 right-4 bg-red-600 text-white border-0 w-12 h-12 rounded-full text-2xl cursor-pointer z-[1001] flex items-center justify-center hover:bg-red-700;
+}
+
+.modal-body {
+  @apply flex h-full;
+}
+
+.slide-details {
+  @apply w-1/5 py-8 px-4 pr-8 overflow-y-auto bg-gray-50 border-r border-gray-300;
+}
+
+.slide-image {
+  @apply w-4/5 p-8 flex items-center justify-center bg-white;
+}
+
+.slide-image img {
+  @apply max-w-full max-h-full object-contain rounded-lg shadow-lg;
+}
+
+.large-placeholder {
+  @apply text-center text-gray-600 p-8;
+}
+
+.detail-section {
+  @apply mb-6 pb-4 border-b border-gray-200 last:border-b-0;
+}
+
+.detail-section h4 {
+  @apply m-0 mb-2 text-blue-500 text-base;
+}
+
+.detail-section p {
+  @apply my-1 leading-snug text-sm;
+}
+
+.character-info {
+  @apply mb-4 p-3 bg-white rounded border-l-4 border-green-500;
+}
+
+.emotions {
+  @apply italic text-gray-600 text-xs mt-1;
+}
+
+.dialogue-line {
+  @apply mb-2 p-2 bg-white rounded border-l-4 border-yellow-400 text-sm;
+}
+
+button {
+  @apply px-4 py-2 bg-blue-500 text-white border-0 rounded cursor-pointer text-base hover:bg-blue-700 disabled:bg-gray-500 disabled:cursor-not-allowed;
 }
