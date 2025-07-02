@@ -1,3 +1,37 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/* TODO: we need to set primary, secondary, emphassis colours for the app to be used consistently*/
+
+.slides-container {
+  @apply my-8;
+}
+
+.slides-flex {
+  @apply flex gap-4 overflow-x-auto py-4 border border-gray-300 rounded-lg;
+}
+
+.slide-thumbnail {
+  @apply min-w-48 w-48 h-36 border-2 border-gray-300 rounded-lg cursor-pointer flex flex-col relative transition-all duration-200 ease-in-out;
+}
+
+.slide-number {
+  @apply bg-blue-600 text-white px-2 py-1 text-sm font-bold rounded-t-md;
+}
+
+.slide-thumbnail:hover {
+  @apply border-blue-600 scale-105 shadow-md;
+}
+
+.slide-thumbnail img {
+  @apply w-full flex-1 object-cover rounded-b-md;
+}
+
+.placeholder-image {
+  @apply h-[calc(100%-2rem)] flex flex-col items-center justify-center bg-gray-100 text-gray-600 text-center p-2 rounded-b-md;
+}
+
+.placeholder-image small {
+  @apply mt-2 text-xs leading-tight;
+}

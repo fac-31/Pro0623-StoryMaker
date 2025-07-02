@@ -134,7 +134,7 @@
 
 <h1>Storyboard Creator</h1>
 
-{#if !storyboard}
+{#if !storyboard && !loading}
 	<form on:submit|preventDefault={startStoryboard}>
 		<div class="form-group">
 			<label for="concept">Story Concept:</label><br />
@@ -358,74 +358,6 @@
 		margin-bottom: 1rem;
 	}
 
-	.slides-container {
-		margin: 2rem 0;
-	}
-
-	.slides-flex {
-		display: flex;
-		gap: 1rem;
-		overflow-x: auto;
-		padding: 1rem 0;
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		background: #f9f9f9;
-	}
-
-	.slide-thumbnail {
-		min-width: 200px;
-		width: 200px;
-		height: 150px;
-		border: 2px solid #ccc;
-		border-radius: 8px;
-		cursor: pointer;
-		background: white;
-		display: flex;
-		flex-direction: column;
-		position: relative;
-		transition: all 0.2s ease;
-	}
-
-	.slide-thumbnail:hover {
-		border-color: #007bff;
-		transform: scale(1.05);
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	}
-
-	.slide-number {
-		background: #007bff;
-		color: white;
-		padding: 0.25rem 0.5rem;
-		font-size: 0.8rem;
-		font-weight: bold;
-		border-radius: 6px 6px 0 0;
-	}
-
-	.slide-thumbnail img {
-		width: 100%;
-		height: calc(100% - 2rem);
-		object-fit: cover;
-		border-radius: 0 0 6px 6px;
-	}
-
-	.placeholder-image {
-		height: calc(100% - 2rem);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		background: #f0f0f0;
-		color: #666;
-		text-align: center;
-		padding: 0.5rem;
-		border-radius: 0 0 6px 6px;
-	}
-
-	.placeholder-image small {
-		margin-top: 0.5rem;
-		font-size: 0.7rem;
-		line-height: 1.2;
-	}
 
 	.metadata-container {
 		margin: 2rem 0;
