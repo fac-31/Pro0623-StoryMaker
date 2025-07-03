@@ -30,7 +30,7 @@ export const slideTextSchema = z.object({
 	)
 });
 
-export const slideSchema = z.object({
+export const slideOutlineSchema = z.object({
 	slideId: z.number(),
 	timestamp: z.string(),
 	durationSeconds: z.number(),
@@ -50,7 +50,14 @@ export const storyMetadataSchema = z.object({
 	targetAudience: z.string()
 });
 
-export const storySchema = z.object({
+export const storyOutlineSchema = z.object({
 	storyMetadata: storyMetadataSchema,
-	slides: z.array(slideSchema)
+	slideOutlines: z.array(slideOutlineSchema)
+});
+
+export const visualSlideSchema = z.object({
+	slideNumber: z.number(),
+	imageGenerated: z.boolean(),
+	imagePrompt: z.string().optional(),
+	imageUrl: z.string().optional()
 });
