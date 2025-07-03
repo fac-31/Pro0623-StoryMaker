@@ -1,35 +1,20 @@
-<!-- login form -->
 <script lang="ts">
-	import { supabase } from '$lib/supabaseBrowserClient';
-	import { goto } from '$app/navigation';
-	import { navigating } from '$app/state';
+	let error = '';
+	let submitting = false;
 
-	let email = '',
-		password = '',
-		error = '';
-
-	async function submit() {
-		const { error: authError } = await supabase.auth.signInWithPassword({
-			email,
-			password
-		});
-		if (authError) {
-			error = authError.message;
-		} else {
-			goto('/');
-		}
-	}
+	// We'll use a reactive statement or a way to get the error from the page data,
+	// but for now, without enhance, you can't intercept errors client-side.
+	// Errors must be passed from server via page data or URL params.
 </script>
 
-<form on:submit|preventDefault={submit}>
-	<input type="email" bind:value={email} placeholder="Email" required />
-	<input type="password" bind:value={password} placeholder="Password" required />
-	<button type="submit" disabled={navigating.to != null}>
-		{#if navigating.to}
-			Logging in…
-		{:else}
-			Log in
-		{/if}
+<form method="POST" on:submit={() => (submitting = true)}>
+	<input name="email" type="email" placeholder="Email" required />
+	<input name="password" type="password" placeholder="Password" required />
+	<button type="submit" disabled={submitting}>
+		{submitting ? 'Logging in…' : 'Log in'}
 	</button>
-	{#if error}<p style="color: red">{error}</p>{/if}
 </form>
+
+{#if error}
+	<p style="color: red">{error}</p>
+{/if}

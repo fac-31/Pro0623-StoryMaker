@@ -1,7 +1,16 @@
-import { supabase } from '$lib/supabaseBrowserClient';
-import { redirect } from '@sveltejs/kit';
+import type { RequestHandler } from '@sveltejs/kit';
+import { getSupabase } from '$lib/supabaseServerClient';
 
-export async function POST() {
+export const POST: RequestHandler = async (event) => {
+	const supabase = getSupabase(event);
 	await supabase.auth.signOut();
-	throw redirect(303, '/login');
-}
+
+	// Clear cookies manually (optional, if supabase does not clear them)
+	event.cookies.delete('sb-access-token', { path: '/' });
+	event.cookies.delete('sb-refresh-token', { path: '/' });
+
+	return new Response(null, {
+		status: 303,
+		headers: { location: '/' }
+	});
+};
