@@ -1,10 +1,7 @@
 <script lang="ts">
 	let error = '';
 	let submitting = false;
-
-	// We'll use a reactive statement or a way to get the error from the page data,
-	// but for now, without enhance, you can't intercept errors client-side.
-	// Errors must be passed from server via page data or URL params.
+	export let form;
 </script>
 
 <form method="POST" on:submit={() => (submitting = true)}>
@@ -15,6 +12,6 @@
 	</button>
 </form>
 
-{#if error}
-	<p style="color: red">{error}</p>
+{#if form?.error}
+	<p style="color: red">{form.error}</p>
 {/if}
