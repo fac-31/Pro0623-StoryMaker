@@ -2,8 +2,16 @@ import type { ObjectId } from 'mongodb';
 
 export interface User {
 	_id: ObjectId;
+	supabase: string;
 	name: string;
 	projects: ObjectId[];
 }
 
 export type NewUser = Omit<User, '_id'>;
+
+export interface UserSignup {
+	email: string;
+	password: string;
+	full_name: string;
+	display_name: string;
+}
