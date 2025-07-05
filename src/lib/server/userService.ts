@@ -1,6 +1,8 @@
+import type { RequestEvent } from '@sveltejs/kit';
+
 import { getDB } from './db';
 
-import type { NewUser } from '$lib/models/user.model';
+import type { User, NewUser } from '$lib/models/user.model';
 
 export async function insertUser(supabase: string, name: string): Promise<void> {
 	const db = getDB();
@@ -17,5 +19,21 @@ export async function insertUser(supabase: string, name: string): Promise<void> 
 	} catch (err) {
 		console.error('Failed to insert user:', err);
 		throw new Error('Database insert failed');
+	}
+}
+
+export async function getUserFromEvent(event: RequestEvent): Promise<User | null> {
+	const supabase = event.locals.user;
+	if (!supabase) return null;
+
+	const db = getDB();
+	const users = db.collection<User>('users');
+
+	try {
+		return await users.findOne({ supabase: supabase.id });
+	} catch (err) {
+		// Should be expecting every supabase users have mongodb user?
+		console.error('Failed to find user:', err);
+		throw new Error('Database find failed');
 	}
 }
