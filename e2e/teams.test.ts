@@ -37,8 +37,10 @@ test('Creating a team', async ({ page }) => {
 	// Find any user thats not us to add to team
 	const user = resultAll.find((user) => user._id !== resultMe._id);
 
+	let response;
+
 	// Add user to the team
-	const response = await apiContext.post('/api/teams/adduser', {
+	response = await apiContext.post('/api/teams/updateuser', {
 		data: {
 			team_id: resultTeam.insertedId,
 			user_id: user._id,
@@ -46,8 +48,26 @@ test('Creating a team', async ({ page }) => {
 		}
 	});
 
-	const resultAdd = await response.json();
-	console.log('Result:', resultAdd);
+	expect(response.ok(), await response.text()).toBeTruthy();
 
-	expect(response.status()).toBe(200);
+	// Update same user to be an admin
+	response = await apiContext.post('/api/teams/updateuser', {
+		data: {
+			team_id: resultTeam.insertedId,
+			user_id: user._id,
+			role: 'admin'
+		}
+	});
+
+	expect(response.ok(), await response.text()).toBeTruthy();
+
+	// Remove user from team
+	response = await apiContext.post('/api/teams/removeuser', {
+		data: {
+			team_id: resultTeam.insertedId,
+			user_id: user._id
+		}
+	});
+
+	expect(response.ok(), await response.text()).toBeTruthy();
 });
