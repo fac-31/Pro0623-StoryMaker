@@ -1,6 +1,8 @@
 import type { ObjectId } from 'mongodb';
 
-export type TeamRole = 'user' | 'admin';
+export const teamRoles = ['user', 'admin'] as const;
+
+export type TeamRole = (typeof teamRoles)[number];
 
 export interface TeamUser {
 	user: ObjectId;

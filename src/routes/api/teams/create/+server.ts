@@ -1,3 +1,4 @@
+import type { InsertOneResult } from 'mongodb';
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { NewTeam, TeamUser } from '$lib/models/team.model';
@@ -11,8 +12,11 @@ export async function POST(event: RequestEvent) {
 	if (!user) return json({ error: 'User not logged in' }, { status: 401 });
 
 	try {
-		await insertTeam(info.name, user);
-		return json({ success: true });
+		const result: InsertOneResult = await insertTeam(info.name, user);
+		return json({
+			success: result.acknowledged,
+			insertedId: result.insertedId
+		});
 	} catch (e) {
 		console.error('Insert team failed:', e);
 		return json({ error: 'Failed to insert team' }, { status: 500 });
