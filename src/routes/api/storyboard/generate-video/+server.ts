@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
-import ElevenLabs from '@elevenlabs/elevenlabs-js';
+import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
 import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
 import 'dotenv/config';
 
@@ -29,9 +29,7 @@ export async function POST(event: RequestEvent) {
 		}
 
 		// Initialize ElevenLabs
-		const elevenlabs = new ElevenLabs({
-			apiKey: process.env.ELEVENLABS_API_KEY!
-		});
+		const elevenlabs = new ElevenLabs(process.env.ELEVENLABS_API_KEY!);
 
 		const audioSegments: Array<{
 			slideNumber: number;
