@@ -44,8 +44,6 @@
 				'Watch as your storyboard comes to life. Edit, rearrange, and perfect each frame.'
 		}
 	];
-
-
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
