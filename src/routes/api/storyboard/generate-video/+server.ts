@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
-import { ElevenLabsClient } from 'elevenlabs';
+// import { ElevenLabsClient } from 'elevenlabs';
 import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
 import 'dotenv/config';
 
@@ -29,7 +29,7 @@ export async function POST(event: RequestEvent) {
 		}
 
 		// Initialize ElevenLabs
-		const elevenlabs = new ElevenLabsClient(process.env.ELEVENLABS_API_KEY!);
+		// const elevenlabs = new ElevenLabsClient(process.env.ELEVENLABS_API_KEY!);
 
 		const audioSegments: Array<{
 			slideNumber: number;
@@ -48,7 +48,7 @@ export async function POST(event: RequestEvent) {
 				continue;
 			}
 
-			let audioUrl = '';
+			const audioUrl = '';
 			let duration = slideOutline.durationSeconds || 3;
 			let dialogue = '';
 
@@ -60,16 +60,19 @@ export async function POST(event: RequestEvent) {
 					console.log(`Generating audio for slide ${i + 1}: ${dialogue.substring(0, 100)}...`);
 
 					// Generate audio using ElevenLabs
-					const audioBuffer = await elevenlabs.text_to_speech.convert({
-						text: dialogue,
-						voice_id: 'JBFqnCBsd6RMkjVDRZzb', // Default voice from docs
-						model_id: 'eleven_multilingual_v2',
-						output_format: 'mp3_44100_128'
-					});
+					// const audioBuffer = await elevenlabs.text_to_speech.convert({
+					// 	text: dialogue,
+					// 	voice_id: 'JBFqnCBsd6RMkjVDRZzb', // Default voice from docs
+					// 	model_id: 'eleven_multilingual_v2',
+					// 	output_format: 'mp3_44100_128'
+					// });
 
 					// Convert audio buffer to base64 for transmission
-					const base64Audio = Buffer.from(audioBuffer).toString('base64');
-					audioUrl = `data:audio/mp3;base64,${base64Audio}`;
+					// const base64Audio = Buffer.from(audioBuffer).toString('base64');
+					// audioUrl = `data:audio/mp3;base64,${base64Audio}`;
+
+					// For now, just use the dialogue text without audio
+					console.log(`Audio generation disabled for slide ${i + 1}`);
 
 					// Estimate duration (rough calculation)
 					duration = Math.max(duration, 2); // Minimum 2 seconds
