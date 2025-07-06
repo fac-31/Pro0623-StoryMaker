@@ -29,6 +29,18 @@ export async function insertTeam(name: string, owner: User): Promise<InsertOneRe
 	}
 }
 
+export async function getAllTeams(): Promise<Team[]> {
+	const db = getDB();
+	const teams = db.collection<Team>('teams');
+
+	try {
+		return await teams.find({}).toArray();
+	} catch (err) {
+		console.error('Failed to get all teams:', err);
+		throw new Error('Database find failed');
+	}
+}
+
 export async function getTeamById(id: string): Promise<Team | null> {
 	const db = getDB();
 	const teams = db.collection<NewTeam>('teams');
