@@ -22,6 +22,19 @@ export async function insertUser(supabase: string, name: string): Promise<void> 
 	}
 }
 
+export async function getAllUsers(): Promise<User[]> {
+	const db = getDB();
+	const users = db.collection<User>('users');
+
+	try {
+		return await users.find({}).toArray();
+	} catch (err) {
+		// Should be expecting every supabase users have mongodb user?
+		console.error('Failed to get all users:', err);
+		throw new Error('Database find failed');
+	}
+}
+
 export async function getUserFromEvent(event: RequestEvent): Promise<User | null> {
 	const supabase = event.locals.user;
 	if (!supabase) return null;
