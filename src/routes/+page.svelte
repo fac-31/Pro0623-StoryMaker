@@ -322,7 +322,7 @@
 						class="rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-8 transition-all hover:border-purple-200 hover:shadow-lg"
 					>
 						<div class="mb-4 flex items-center space-x-1">
-							{#each Array(testimonial.rating) as _unused, i (i)}
+							{#each Array(testimonial.rating) as _, i (i)}
 								<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 								<Star class="h-5 w-5 fill-current text-yellow-400" />
 							{/each}
