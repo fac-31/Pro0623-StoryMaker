@@ -1,8 +1,7 @@
 import { json } from '@sveltejs/kit';
-import type { RequestEvent } from '@sveltejs/kit';
 import { getAllTeams } from '$lib/server/teamService';
 
-export async function GET(event: RequestEvent) {
+export async function GET() {
 	try {
 		return json(await getAllTeams());
 	} catch (e) {

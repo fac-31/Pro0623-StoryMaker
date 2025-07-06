@@ -53,10 +53,12 @@ export async function getUserFromEvent(event: RequestEvent): Promise<User | null
 }
 
 export function toSafeUser(user: User): SafeUser {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { supabase, ...safeUser } = user;
 	return safeUser;
 }
 
 export function toSafeUsers(users: User[]): SafeUser[] {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	return users.map(({ supabase, ...safeUser }) => safeUser);
 }

@@ -1,8 +1,7 @@
 import { json } from '@sveltejs/kit';
-import type { RequestEvent } from '@sveltejs/kit';
 import { getAllUsers, toSafeUsers } from '$lib/server/userService';
 
-export async function GET(event: RequestEvent) {
+export async function GET() {
 	try {
 		return json(toSafeUsers(await getAllUsers()));
 	} catch (e) {

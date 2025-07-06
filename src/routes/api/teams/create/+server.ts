@@ -1,7 +1,6 @@
 import type { InsertOneResult } from 'mongodb';
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
-import type { NewTeam, TeamUser } from '$lib/models/team.model';
 import { getUserFromEvent } from '$lib/server/userService';
 import { insertTeam } from '$lib/server/teamService';
 
