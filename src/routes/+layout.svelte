@@ -1,7 +1,6 @@
 <script lang="ts">
-	import '../app.css'
+	import '../app.css';
 	export let data: { user: any };
-	console.log(data.user);
 </script>
 
 <nav class="navbar">
@@ -11,12 +10,15 @@
 		<a class="btn btn-ghost" href="/signup">Sign up</a>
 	{:else}
 		<a class="btn btn-ghost" href="/storyboard">Storyboard</a>
-		<form class="p-0 m-0 bg-red-600" method="POST" action="/logout">
+		<a class="btn btn-ghost" href="/user">User Settings</a>
+		<form class="m-0 p-0" method="POST" action="/logout">
 			<button class="btn btn-ghost">Log out</button>
 		</form>
 	{/if}
 </nav>
 
-<main>
-	<slot />
-</main>
+<div class="bg-base-100 min-h-screen">
+	<main class="container mx-auto px-4 py-8">
+		<slot />
+	</main>
+</div>
