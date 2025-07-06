@@ -21,7 +21,7 @@
 	// State management
 	let showNewProjectModal = $state(false);
 	let showTeamModal = $state(false);
-	let selectedProject = $state(null);
+	let selectedProject = $state<(typeof projects)[0] | null>(null);
 	let viewMode = $state('grid'); // 'grid' or 'list'
 	let searchQuery = $state('');
 	let filterStatus = $state('all');
@@ -171,7 +171,7 @@
 
 	function addTeamMember() {
 		if (teamMember.email.trim() && selectedProject) {
-			const project = projects.find((p) => p.id === (selectedProject as (typeof projects)[0]).id);
+			const project = projects.find((p) => p.id === selectedProject.id);
 			if (project) {
 				project.teamMembers.push({
 					name: teamMember.email.split('@')[0],
@@ -380,7 +380,7 @@
 								<button
 									class="p-1 text-gray-400 transition-colors hover:text-purple-600"
 									onclick={() => {
-										selectedProject = project as typeof project;
+										selectedProject = project;
 										showTeamModal = true;
 									}}
 								>
@@ -734,14 +734,19 @@
 					<div class="mb-6">
 						<h3 class="mb-3 font-medium text-gray-900">Current Team Members</h3>
 						<div class="space-y-3">
-							{#each (selectedProject as (typeof projects)[0]).teamMembers as member (member.name)}
+							{#each selectedProject.teamMembers as member (member.name)}
 								<div class="flex items-center justify-between rounded-lg bg-gray-50 p-3">
 									<div class="flex items-center space-x-3">
-										<img
-											src={member.avatar || '/placeholder.svg'}
-											alt={member.name}
-											class="h-8 w-8 rounded-full"
-										/>
+										<div
+											class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
+										>
+											<span class="text-sm font-medium text-white"
+												>{member.name
+													.split(' ')
+													.map((n) => n[0])
+													.join('')}</span
+											>
+										</div>
 										<div>
 											<div class="font-medium text-gray-900">{member.name}</div>
 											<div class="text-sm text-gray-500 capitalize">{member.role}</div>
