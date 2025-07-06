@@ -2,10 +2,7 @@
 	import {
 		Plus,
 		Search,
-		Filter,
 		MoreHorizontal,
-		Users,
-		Calendar,
 		Play,
 		Edit3,
 		Trash2,
@@ -15,17 +12,11 @@
 		LogOut,
 		Grid3X3,
 		List,
-		Star,
 		Clock,
 		CheckCircle,
 		AlertCircle,
-		ArrowLeft,
-		Sparkles,
-		Video,
-		Loader2
+		Video
 	} from 'lucide-svelte';
-	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
-	import type { UserPrompt } from '$lib/models/UserPrompt';
 
 	// State management
 	let showNewProjectModal = $state(false);
@@ -193,7 +184,7 @@
 		}
 	}
 
-	function getStatusColor(status) {
+	function getStatusColor(status: string) {
 		switch (status) {
 			case 'completed':
 				return 'text-green-600 bg-green-100';
@@ -208,7 +199,7 @@
 		}
 	}
 
-	function getStatusIcon(status) {
+	function getStatusIcon(status: string) {
 		switch (status) {
 			case 'completed':
 				return CheckCircle;
@@ -351,18 +342,18 @@
 		<!-- Projects Grid/List -->
 		{#if viewMode === 'grid'}
 			<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each filteredProjects() as project}
+				{#each filteredProjects() as project (project.id)}
 					{@const SvelteComponent = getStatusIcon(project.status)}
 					<div
 						class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl"
 					>
 						<!-- Project Thumbnail -->
 						<div class="relative">
-							<img
-								src={project.thumbnail || '/placeholder.svg'}
-								alt={project.concept}
-								class="h-48 w-full rounded-t-2xl object-cover"
-							/>
+							<div
+								class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600"
+							>
+								<Play class="h-12 w-12 text-white" />
+							</div>
 							<div class="absolute top-3 right-3">
 								<button
 									class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100"
@@ -389,7 +380,7 @@
 								<button
 									class="p-1 text-gray-400 transition-colors hover:text-purple-600"
 									onclick={() => {
-										selectedProject = project;
+										selectedProject = project as any;
 										showTeamModal = true;
 									}}
 								>
@@ -422,7 +413,7 @@
 							<!-- Team Members -->
 							<div class="flex items-center justify-between">
 								<div class="flex -space-x-2">
-									{#each project.teamMembers.slice(0, 3) as member}
+									{#each project.teamMembers.slice(0, 3) as member (member.name)}
 										<div
 											class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-purple-600 to-blue-600"
 											title={member.name}
@@ -484,7 +475,7 @@
 				</div>
 
 				<div class="divide-y divide-gray-200/50">
-					{#each filteredProjects() as project}
+					{#each filteredProjects() as project (project.id)}
 						{@const SvelteComponent_1 = getStatusIcon(project.status)}
 						<div class="px-6 py-4 transition-colors hover:bg-gray-50/50">
 							<div class="grid grid-cols-12 items-center gap-4">
@@ -529,7 +520,7 @@
 								<!-- Team -->
 								<div class="col-span-2">
 									<div class="flex -space-x-2">
-										{#each project.teamMembers.slice(0, 3) as member}
+										{#each project.teamMembers.slice(0, 3) as member (member.name)}
 											<div
 												class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-purple-600 to-blue-600"
 												title={member.name}
@@ -649,7 +640,7 @@
 									bind:value={newProject.genre}
 								>
 									<option value="">Select genre...</option>
-									{#each genres as genre}
+									{#each genres as genre (genre)}
 										<option value={genre}>{genre}</option>
 									{/each}
 								</select>
@@ -665,7 +656,7 @@
 									bind:value={newProject.targetAudience}
 								>
 									<option value="">Select audience...</option>
-									{#each audiences as audience}
+									{#each audiences as audience (audience)}
 										<option value={audience}>{audience}</option>
 									{/each}
 								</select>
@@ -683,7 +674,7 @@
 									bind:value={newProject.storyStyle}
 								>
 									<option value="">Select style...</option>
-									{#each styles as style}
+									{#each styles as style (style)}
 										<option value={style}>{style}</option>
 									{/each}
 								</select>
@@ -743,7 +734,7 @@
 					<div class="mb-6">
 						<h3 class="mb-3 font-medium text-gray-900">Current Team Members</h3>
 						<div class="space-y-3">
-							{#each selectedProject.teamMembers as member}
+							{#each (selectedProject as any).teamMembers as member (member.name)}
 								<div class="flex items-center justify-between rounded-lg bg-gray-50 p-3">
 									<div class="flex items-center space-x-3">
 										<img
@@ -795,7 +786,7 @@
 								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
 								bind:value={teamMember.role}
 							>
-								{#each roles as role}
+								{#each roles as role (role)}
 									<option value={role} class="capitalize">{role}</option>
 								{/each}
 							</select>

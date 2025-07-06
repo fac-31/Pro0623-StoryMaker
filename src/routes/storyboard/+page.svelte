@@ -48,7 +48,7 @@
 		imageUrl: string;
 		sceneTitle: string;
 	}> = [];
-	let storyMetadata: any = null;
+	let storyMetadata: Record<string, unknown> | null = null;
 	let showPlayer = false;
 
 	async function startStoryboard() {
@@ -387,7 +387,7 @@
 
 						<!-- Slide Navigation -->
 						<div class="mt-6 flex flex-wrap justify-center space-x-2">
-							{#each slides as slide, index}
+							{#each slides as slide, index (slide.slideNumber)}
 								<button
 									onclick={() => goToSlide(index)}
 									class="flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors {currentSlideIndex ===
@@ -429,6 +429,6 @@
 </div>
 
 <!-- Modal for detailed slide view -->
-{#if selectedSlideIndex !== null}
+{#if selectedSlideIndex !== null && storyboard}
 	<SlideModal {storyboard} {selectedSlideIndex} show={showModal} on:close={closeModal} />
 {/if}
