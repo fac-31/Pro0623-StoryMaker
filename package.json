@@ -47,6 +47,9 @@
 		"vite-plugin-devtools-json": "^0.2.0"
 	},
 	"dependencies": {
+		"@elevenlabs/elevenlabs-js": "^2.5.0",
+		"@ffmpeg/ffmpeg": "^0.12.15",
+		"@ffmpeg/util": "^0.12.2",
 		"@langchain/core": "^0.3.61",
 		"@langchain/langgraph": "^0.3.5",
 		"@langchain/openai": "^0.5.16",
@@ -57,6 +60,7 @@
 		"histoire": "^1.0.0-alpha.2",
 		"langchain": "^0.3.29",
 		"langsmith": "^0.3.33",
+		"lucide-svelte": "^0.525.0",
 		"mongodb": "^6.17.0",
 		"openai": "^5.8.2",
 		"serpapi": "^2.1.0"
