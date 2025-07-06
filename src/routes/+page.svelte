@@ -323,7 +323,6 @@
 					>
 						<div class="mb-4 flex items-center space-x-1">
 							{#each Array(testimonial.rating) as _, i (i)}
-								<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 								<Star class="h-5 w-5 fill-current text-yellow-400" />
 							{/each}
 						</div>
