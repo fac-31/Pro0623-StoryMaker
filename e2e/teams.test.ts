@@ -2,11 +2,11 @@ import { test, expect, request } from '@playwright/test';
 
 test('Creating a team', async ({ page }) => {
 	await page.goto('login');
-	await page.getByRole('textbox', { name: 'Email' }).click();
-	await page.getByRole('textbox', { name: 'Email' }).fill('potato@potato.com');
+	await page.getByRole('textbox', { name: 'Email Address' }).click();
+	await page.getByRole('textbox', { name: 'Email Address' }).fill('potato@potato.com');
 	await page.getByRole('textbox', { name: 'Password' }).click();
 	await page.getByRole('textbox', { name: 'Password' }).fill('potato');
-	await page.getByRole('button', { name: 'Log in' }).click();
+	await page.getByRole('button', { name: 'Sign in' }).click();
 
 	// Wait for redirect or token to be set
 	await expect(page).toHaveURL('/');
