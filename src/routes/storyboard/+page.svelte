@@ -48,6 +48,7 @@
 		imageUrl: string;
 		sceneTitle: string;
 	}> = [];
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	let storyMetadata: Record<string, unknown> | null = null;
 	let showPlayer = false;
 
