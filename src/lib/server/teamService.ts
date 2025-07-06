@@ -55,7 +55,7 @@ export async function addUserToTeam(
 			role: role
 		};
 
-		await teams.updateOne({ _id: new ObjectId(team_id) }, { $addToSet: teamuser });
+		await teams.updateOne({ _id: new ObjectId(team_id) }, { $addToSet: { users: teamuser } });
 	} catch (err) {
 		console.error('Failed to get team:', err);
 		throw new Error('Database get failed');

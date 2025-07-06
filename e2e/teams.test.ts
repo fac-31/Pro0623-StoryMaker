@@ -25,9 +25,29 @@ test('Creating a team', async ({ page }) => {
 		}
 	});
 
-	const response = await apiContext.post('/api/teams/create', { data: { name: 'Team Potato' } });
-	expect(response.ok()).toBeTruthy();
+	// Create a team
+	const resultTeam = await (
+		await apiContext.post('/api/teams/create', { data: { name: 'Team Potato' } })
+	).json();
 
-	const data = await response.json();
-	console.log('Result:', data);
+	// Get yourself and all other users
+	const resultMe = await (await apiContext.get('/api/users/me')).json();
+	const resultAll = await (await apiContext.get('/api/users/getall')).json();
+
+	// Find any user thats not us to add to team
+	const user = resultAll.find((user) => user._id !== resultMe._id);
+
+	// Add user to the team
+	const response = await apiContext.post('/api/teams/adduser', {
+		data: {
+			team_id: resultTeam.insertedId,
+			user_id: user._id,
+			role: 'user'
+		}
+	});
+
+	const resultAdd = await response.json();
+	console.log('Result:', resultAdd);
+
+	expect(response.status()).toBe(200);
 });
