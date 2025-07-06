@@ -5,8 +5,7 @@ import { getUserFromEvent, toSafeUser } from '$lib/server/userService';
 export async function GET(event: RequestEvent) {
 	try {
 		const user = await getUserFromEvent(event);
-		if (!user)
-			return json({ error: 'User not logged in' }, { status: 401 });
+		if (!user) return json({ error: 'User not logged in' }, { status: 401 });
 
 		return json(toSafeUser(user));
 	} catch (e) {

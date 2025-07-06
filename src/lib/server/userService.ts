@@ -1,10 +1,11 @@
+import type { InsertOneResult } from 'mongodb';
 import type { RequestEvent } from '@sveltejs/kit';
 
 import { getDB } from './db';
 
 import type { User, NewUser, SafeUser } from '$lib/models/user.model';
 
-export async function insertUser(supabase: string, name: string): Promise<void> {
+export async function insertUser(supabase: string, name: string): Promise<InsertOneResult> {
 	const db = getDB();
 	const users = db.collection<NewUser>('users');
 
@@ -15,7 +16,7 @@ export async function insertUser(supabase: string, name: string): Promise<void> 
 			projects: []
 		};
 
-		await users.insertOne(user);
+		return await users.insertOne(user);
 	} catch (err) {
 		console.error('Failed to insert user:', err);
 		throw new Error('Database insert failed');
