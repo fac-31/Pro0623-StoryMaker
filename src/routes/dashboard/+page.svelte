@@ -171,7 +171,7 @@
 
 	function addTeamMember() {
 		if (teamMember.email.trim() && selectedProject) {
-			const project = projects.find((p) => p.id === selectedProject.id);
+			const project = projects.find((p) => p.id === selectedProject!.id);
 			if (project) {
 				project.teamMembers.push({
 					name: teamMember.email.split('@')[0],

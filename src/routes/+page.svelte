@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Menu, X, Play, Palette, Users, BookOpen, ArrowRight, Check, Star } from 'lucide-svelte';
+	import { Menu, X, Play, Palette, Users, BookOpen, ArrowRight, Check } from 'lucide-svelte';
 
 	let mobileMenuOpen = $state(false);
 
@@ -45,29 +45,7 @@
 		}
 	];
 
-	const testimonials = [
-		{
-			name: 'Sarah Chen',
-			role: 'Independent Filmmaker',
-			content:
-				'StoryMaker transformed how I pitch my films. Investors can now visualize my stories instantly.',
-			rating: 5
-		},
-		{
-			name: 'Marcus Rodriguez',
-			role: 'Content Creator',
-			content:
-				'From concept to storyboard in minutes. This tool has revolutionized my creative workflow.',
-			rating: 5
-		},
-		{
-			name: 'Emma Thompson',
-			role: 'Animation Director',
-			content:
-				'The style customization is incredible. Perfect for presenting ideas to different audiences.',
-			rating: 5
-		}
-	];
+
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">

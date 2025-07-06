@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
-import { ElevenLabs } from '@elevenlabs/elevenlabs-js';
+import ElevenLabs from '@elevenlabs/elevenlabs-js';
 import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
 import 'dotenv/config';
 
