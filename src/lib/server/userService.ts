@@ -2,7 +2,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 
 import { getDB } from './db';
 
-import type { User, NewUser } from '$lib/models/user.model';
+import type { User, NewUser, SafeUser } from '$lib/models/user.model';
 
 export async function insertUser(supabase: string, name: string): Promise<void> {
 	const db = getDB();
@@ -49,4 +49,13 @@ export async function getUserFromEvent(event: RequestEvent): Promise<User | null
 		console.error('Failed to find user:', err);
 		throw new Error('Database find failed');
 	}
+}
+
+export function toSafeUser(user: User): SafeUser {
+	const { supabase, ...safeUser } = user;
+	return safeUser;
+}
+
+export function toSafeUsers(users: User[]): SafeUser[] {
+	return users.map(({ supabase, ...safeUser }) => safeUser);
 }
