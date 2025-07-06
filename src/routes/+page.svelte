@@ -253,7 +253,7 @@
 						<div
 							class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110"
 						>
-							<svelte:component this={feature.icon} class="h-6 w-6 text-white" />
+							{@render feature.icon({ class: 'h-6 w-6 text-white' })}
 						</div>
 						<h3 class="mb-3 text-xl font-semibold text-gray-900">{feature.title}</h3>
 						<p class="leading-relaxed text-gray-600">{feature.description}</p>

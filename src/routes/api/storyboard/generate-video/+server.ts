@@ -29,7 +29,9 @@ export async function POST(event: RequestEvent) {
 		}
 
 		// Initialize ElevenLabs
-		const elevenlabs = new ElevenLabs(process.env.ELEVENLABS_API_KEY!);
+		const elevenlabs = new ElevenLabs({
+			apiKey: process.env.ELEVENLABS_API_KEY!
+		});
 
 		const audioSegments: Array<{
 			slideNumber: number;
