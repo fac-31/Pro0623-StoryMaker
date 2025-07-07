@@ -215,7 +215,7 @@
 	}
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+<div class="flex flex-col min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<!-- Header -->
 	<header class="sticky top-0 z-40 border-b border-gray-200/50 bg-white/80 backdrop-blur-md">
 		<div class="px-6 py-4">
@@ -235,20 +235,20 @@
 					</div>
 					<nav class="ml-8 hidden items-center space-x-6 md:flex">
 						<a href="/dashboard" class="font-medium text-purple-600">Dashboard</a>
-						<a href="/storyboard" class="text-gray-600 transition-colors hover:text-purple-600"
+						<a href="/storyboard" class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 							>Create Storyboard</a
 						>
-						<a href="/library" class="text-gray-600 transition-colors hover:text-purple-600"
+						<a href="/library" class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 							>Library</a
 						>
 					</nav>
 				</div>
 
 				<div class="flex items-center space-x-4">
-					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none">
 						<Bell class="h-5 w-5" />
 					</button>
-					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none">
 						<Settings class="h-5 w-5" />
 					</button>
 					<div class="flex items-center space-x-2">
@@ -259,7 +259,7 @@
 						</div>
 						<span class="hidden text-sm font-medium text-gray-700 md:block">John Doe</span>
 					</div>
-					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none">
 						<LogOut class="h-5 w-5" />
 					</button>
 				</div>
@@ -278,7 +278,7 @@
 				</div>
 
 				<button
-					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 					onclick={() => (showNewProjectModal = true)}
 				>
 					<Plus class="h-5 w-5" />
@@ -288,7 +288,8 @@
 		</div>
 
 		<!-- Filters and Search -->
-		<div
+		<section
+			aria-label="Filters and Search"
 			class="mb-8 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-xl backdrop-blur-sm"
 		>
 			<div class="flex flex-col gap-4 md:flex-row">
@@ -300,14 +301,14 @@
 					<input
 						type="text"
 						placeholder="Search storyboards..."
-						class="w-full rounded-lg border border-gray-300 py-3 pr-4 pl-10 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+						class="w-full rounded-lg border border-gray-300 py-3 pr-4 pl-10 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 						bind:value={searchQuery}
 					/>
 				</div>
 
 				<!-- Status Filter -->
 				<select
-					class="rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+					class="rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 					bind:value={filterStatus}
 				>
 					<option value="all">All Status</option>
@@ -322,7 +323,7 @@
 					<button
 						class="rounded-md p-2 transition-colors {viewMode === 'grid'
 							? 'bg-white text-purple-600 shadow-sm'
-							: 'text-gray-600 hover:text-gray-900'}"
+							: 'text-gray-600 hover:text-gray-900'} motion-reduce:transition-none"
 						onclick={() => (viewMode = 'grid')}
 					>
 						<Grid3X3 class="h-4 w-4" />
@@ -330,22 +331,23 @@
 					<button
 						class="rounded-md p-2 transition-colors {viewMode === 'list'
 							? 'bg-white text-purple-600 shadow-sm'
-							: 'text-gray-600 hover:text-gray-900'}"
+							: 'text-gray-600 hover:text-gray-900'} motion-reduce:transition-none"
 						onclick={() => (viewMode = 'list')}
 					>
 						<List class="h-4 w-4" />
 					</button>
 				</div>
 			</div>
-		</div>
+		</section>
 
 		<!-- Projects Grid/List -->
-		{#if viewMode === 'grid'}
-			<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each filteredProjects() as project (project.id)}
-					{@const SvelteComponent = getStatusIcon(project.status)}
+		<section aria-label="Projects">
+			{#if viewMode === 'grid'}
+				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					{#each filteredProjects() as project (project.id)}
+						{@const SvelteComponent = getStatusIcon(project.status)}
 					<div
-						class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl"
+						class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl motion-reduce:transition-none"
 					>
 						<!-- Project Thumbnail -->
 						<div class="relative">
@@ -356,7 +358,7 @@
 							</div>
 							<div class="absolute top-3 right-3">
 								<button
-									class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100"
+									class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 motion-reduce:transition-none"
 								>
 									<MoreHorizontal class="h-4 w-4 text-gray-600" />
 								</button>
@@ -398,7 +400,7 @@
 								</div>
 								<div class="h-2 w-full rounded-full bg-gray-200">
 									<div
-										class="h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all"
+										class="h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all motion-reduce:transition-none"
 										style="width: {project.progress}%"
 									></div>
 								</div>
@@ -444,12 +446,12 @@
 							<div class="mt-4 flex items-center space-x-2 border-t border-gray-100 pt-4">
 								<a
 									href="/storyboard"
-									class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700"
+									class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 								>
 									<Play class="mr-1 inline h-4 w-4" />
 									Continue
 								</a>
-								<button class="p-2 text-gray-400 transition-colors hover:text-purple-600">
+								<button class="p-2 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none">
 									<Video class="h-4 w-4" />
 								</button>
 							</div>
@@ -477,7 +479,7 @@
 				<div class="divide-y divide-gray-200/50">
 					{#each filteredProjects() as project (project.id)}
 						{@const SvelteComponent_1 = getStatusIcon(project.status)}
-						<div class="px-6 py-4 transition-colors hover:bg-gray-50/50">
+						<div class="px-6 py-4 transition-colors hover:bg-gray-50/50 motion-reduce:transition-none">
 							<div class="grid grid-cols-12 items-center gap-4">
 								<!-- Project Info -->
 								<div class="col-span-4 flex items-center space-x-3">
@@ -546,7 +548,7 @@
 								<!-- Modified -->
 								<div class="col-span-2 flex items-center justify-between">
 									<span class="text-sm text-gray-500">{project.lastModified}</span>
-									<button class="p-1 text-gray-400 transition-colors hover:text-gray-600">
+									<button class="p-1 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none">
 										<MoreHorizontal class="h-4 w-4" />
 									</button>
 								</div>
@@ -568,7 +570,7 @@
 				<h3 class="mb-2 text-lg font-medium text-gray-900">No storyboards found</h3>
 				<p class="mb-6 text-gray-500">Try adjusting your search or filter criteria</p>
 				<button
-					class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+					class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 					onclick={() => {
 						searchQuery = '';
 						filterStatus = 'all';
@@ -578,6 +580,7 @@
 				</button>
 			</div>
 		{/if}
+		</section>
 	</main>
 
 	<!-- New Project Modal -->
@@ -588,7 +591,7 @@
 					<div class="mb-6 flex items-center justify-between">
 						<h2 class="text-xl font-semibold text-gray-900">Create New Storyboard</h2>
 						<button
-							class="p-2 text-gray-400 transition-colors hover:text-gray-600"
+							class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
 							onclick={() => (showNewProjectModal = false)}
 						>
 							<Plus class="h-5 w-5 rotate-45" />
@@ -609,7 +612,7 @@
 							<input
 								id="projectConcept"
 								type="text"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 								placeholder="Enter your story concept..."
 								bind:value={newProject.concept}
 								required
@@ -622,7 +625,7 @@
 							>
 							<textarea
 								id="projectDescription"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 								rows="3"
 								placeholder="Describe your story..."
 								bind:value={newProject.description}
@@ -636,7 +639,7 @@
 								>
 								<select
 									id="projectGenre"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 									bind:value={newProject.genre}
 								>
 									<option value="">Select genre...</option>
@@ -652,7 +655,7 @@
 								>
 								<select
 									id="projectAudience"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 									bind:value={newProject.targetAudience}
 								>
 									<option value="">Select audience...</option>
@@ -670,7 +673,7 @@
 								>
 								<select
 									id="projectStyle"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 									bind:value={newProject.storyStyle}
 								>
 									<option value="">Select style...</option>
@@ -689,7 +692,7 @@
 									type="number"
 									min="1"
 									max="50"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 									bind:value={newProject.numSlides}
 								/>
 							</div>
@@ -698,14 +701,14 @@
 						<div class="flex space-x-3 pt-4">
 							<button
 								type="button"
-								class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+								class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 motion-reduce:transition-none"
 								onclick={() => (showNewProjectModal = false)}
 							>
 								Cancel
 							</button>
 							<button
 								type="submit"
-								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 							>
 								Create Storyboard
 							</button>
@@ -724,7 +727,7 @@
 					<div class="mb-6 flex items-center justify-between">
 						<h2 class="text-xl font-semibold text-gray-900">Manage Team</h2>
 						<button
-							class="p-2 text-gray-400 transition-colors hover:text-gray-600"
+							class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
 							onclick={() => (showTeamModal = false)}
 						>
 							<Plus class="h-5 w-5 rotate-45" />
@@ -753,7 +756,7 @@
 										</div>
 									</div>
 									{#if member.role !== 'owner'}
-										<button class="p-1 text-gray-400 transition-colors hover:text-red-600">
+										<button class="p-1 text-gray-400 transition-colors hover:text-red-600 motion-reduce:transition-none">
 											<Trash2 class="h-4 w-4" />
 										</button>
 									{/if}
@@ -776,7 +779,7 @@
 							<input
 								id="teamEmail"
 								type="email"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 								placeholder="Enter email address..."
 								bind:value={teamMember.email}
 								required
@@ -788,7 +791,7 @@
 							>
 							<select
 								id="teamRole"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 								bind:value={teamMember.role}
 							>
 								{#each roles as role (role)}
@@ -800,14 +803,14 @@
 						<div class="flex space-x-3 pt-4">
 							<button
 								type="button"
-								class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+								class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 motion-reduce:transition-none"
 								onclick={() => (showTeamModal = false)}
 							>
 								Close
 							</button>
 							<button
 								type="submit"
-								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 							>
 								Add Member
 							</button>

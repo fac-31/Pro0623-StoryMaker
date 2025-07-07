@@ -9,7 +9,57 @@
 		submit: UserPrompt;
 	}>();
 
+	let conceptError = '';
+	let numSlidesError = '';
+	let storyStyleError = '';
+	let targetAudienceError = '';
+	let genreError = '';
+
+	function validate(event: Event) {
+		const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+		const field = target.id;
+		const validity = target.validity;
+		let message = '';
+
+		if (!validity.valid) {
+			if (validity.valueMissing) {
+				message = 'This field is required.';
+			} else if (validity.typeMismatch) {
+				message = 'Please enter a valid value.';
+			} else if (validity.rangeUnderflow) {
+				message = `Value must be at least ${target.min}.`;
+			} else if (validity.rangeOverflow) {
+				message = `Value must be no more than ${target.max}.`;
+			} else {
+				message = 'The value you entered is not valid.';
+			}
+		}
+
+		if (field === 'concept') conceptError = message;
+		else if (field === 'numSlides') numSlidesError = message;
+		else if (field === 'storyStyle') storyStyleError = message;
+		else if (field === 'targetAudience') targetAudienceError = message;
+		else if (field === 'genre') genreError = message;
+	}
+
 	function handleSubmit() {
+		// Manually trigger validation for all fields to update error states
+		const fieldsToValidate = document.querySelectorAll(
+			'#concept, #numSlides, #storyStyle, #targetAudience, #genre'
+		);
+		fieldsToValidate.forEach(field => {
+			// Simulate an event object for the validate function
+			validate({ target: field as EventTarget & (HTMLInputElement | HTMLTextAreaElement) } as Event);
+		});
+
+		// Check if any error messages were set
+		if (conceptError || numSlidesError || storyStyleError || targetAudienceError || genreError) {
+			const firstInvalidField = document.querySelector('[aria-invalid="true"]');
+			if (firstInvalidField) {
+				(firstInvalidField as HTMLElement).focus();
+			}
+			return; // Prevent dispatch if errors exist
+		}
 		dispatch('submit', userPrompt);
 	}
 </script>
@@ -26,15 +76,16 @@
 			required
 			aria-describedby="concept-description"
 			aria-errormessage="concept-error"
-			aria-invalid="false"
+			aria-invalid={conceptError !== ''}
+			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		></textarea>
 		<span
 			id="concept-description"
-			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
+			class="sr-only"
 			>Clearly outline the main idea or plot of your story.</span
 		>
-		<span id="concept-error" class="error-message" role="alert"></span>
+		<span id="concept-error" class="error-message" role="alert">{conceptError}</span>
 	</div>
 
 	<div class="form-group">
@@ -48,15 +99,16 @@
 			required
 			aria-describedby="numSlides-description"
 			aria-errormessage="numSlides-error"
-			aria-invalid="false"
+			aria-invalid={numSlidesError !== ''}
+			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
 			id="numSlides-description"
-			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
+			class="sr-only"
 			>Enter a number between 1 and 20.</span
 		>
-		<span id="numSlides-error" class="error-message" role="alert"></span>
+		<span id="numSlides-error" class="error-message" role="alert">{numSlidesError}</span>
 	</div>
 
 	<div class="form-group">
@@ -69,15 +121,16 @@
 			required
 			aria-describedby="storyStyle-description"
 			aria-errormessage="storyStyle-error"
-			aria-invalid="false"
+			aria-invalid={storyStyleError !== ''}
+			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
 			id="storyStyle-description"
-			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
+			class="sr-only"
 			>Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon, realistic).</span
 		>
-		<span id="storyStyle-error" class="error-message" role="alert"></span>
+		<span id="storyStyle-error" class="error-message" role="alert">{storyStyleError}</span>
 	</div>
 
 	<div class="form-group">
@@ -90,15 +143,16 @@
 			required
 			aria-describedby="targetAudience-description"
 			aria-errormessage="targetAudience-error"
-			aria-invalid="false"
+			aria-invalid={targetAudienceError !== ''}
+			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
 			id="targetAudience-description"
-			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
+			class="sr-only"
 			>Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span
 		>
-		<span id="targetAudience-error" class="error-message" role="alert"></span>
+		<span id="targetAudience-error" class="error-message" role="alert">{targetAudienceError}</span>
 	</div>
 
 	<div class="form-group">
@@ -111,15 +165,16 @@
 			required
 			aria-describedby="genre-description"
 			aria-errormessage="genre-error"
-			aria-invalid="false"
+			aria-invalid={genreError !== ''}
+			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
 			id="genre-description"
-			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
+			class="sr-only"
 			>Define the genre of the story (e.g., adventure, comedy, drama, fantasy).</span
 		>
-		<span id="genre-error" class="error-message" role="alert"></span>
+		<span id="genre-error" class="error-message" role="alert">{genreError}</span>
 	</div>
 
 	<button type="submit" disabled={loading} class="focus:ring-2 focus:outline-none"
