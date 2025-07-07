@@ -126,7 +126,7 @@
 		{liveRegionMessage}
 	</div>
 	<div
-		class="modal-overlay focus:outline-none focus:ring-2 focus:ring-gray-300"
+		class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
 		role="button"
 		tabindex="0"
 		aria-label="Close modal"
@@ -136,7 +136,7 @@
 	>
 		<div
 			bind:this={modalContentElement}
-			class="modal-content focus:outline-none focus:ring-2 focus:ring-blue-500"
+			class="modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none"
 			role="dialog"
 			aria-modal="true"
 			tabindex="0"
@@ -144,7 +144,10 @@
 			on:click|stopPropagation
 			on:keydown={handleFocusTrap}
 		>
-			<button class="close-button focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700" on:click={closeModal}>&times;</button>
+			<button
+				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"
+				on:click={closeModal}>&times;</button
+			>
 
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
