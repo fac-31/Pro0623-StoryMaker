@@ -9,6 +9,8 @@ export interface User {
 
 export type NewUser = Omit<User, '_id'>;
 
+export type SafeUser = Omit<User, 'supabase'>;
+
 export interface UserSignup {
 	email: string;
 	password: string;

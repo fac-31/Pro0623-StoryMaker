@@ -1,8 +1,10 @@
 import type { ObjectId } from 'mongodb';
 
-export type TeamRole = 'user' | 'admin';
+export const teamRoles = ['user', 'admin'] as const;
 
-interface TeamUser {
+export type TeamRole = (typeof teamRoles)[number];
+
+export interface TeamUser {
 	user: ObjectId;
 	role: TeamRole;
 }
@@ -13,3 +15,5 @@ export interface Team {
 	users: TeamUser[];
 	projects: ObjectId[];
 }
+
+export type NewTeam = Omit<Team, '_id'>;
