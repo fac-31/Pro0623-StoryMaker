@@ -72,7 +72,8 @@
 			cols="60"
 			placeholder="Enter your story concept..."
 			required
-			aria-describedby="concept-description concept-error"
+			aria-describedby="concept-description"
+			aria-errormessage="concept-error"
 			aria-invalid={conceptError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -92,7 +93,8 @@
 			min="1"
 			max="20"
 			required
-			aria-describedby="numSlides-description numSlides-error"
+			aria-describedby="numSlides-description"
+			aria-errormessage="numSlides-error"
 			aria-invalid={numSlidesError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -109,7 +111,8 @@
 			bind:value={userPrompt.storyStyle}
 			placeholder="e.g., minimalist, detailed, cartoon, realistic..."
 			required
-			aria-describedby="storyStyle-description storyStyle-error"
+			aria-describedby="storyStyle-description"
+			aria-errormessage="storyStyle-error"
 			aria-invalid={storyStyleError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -128,7 +131,8 @@
 			bind:value={userPrompt.targetAudience}
 			placeholder="e.g., children, teens, adults, professionals..."
 			required
-			aria-describedby="targetAudience-description targetAudience-error"
+			aria-describedby="targetAudience-description"
+			aria-errormessage="targetAudience-error"
 			aria-invalid={targetAudienceError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -149,7 +153,8 @@
 			bind:value={userPrompt.genre}
 			placeholder="e.g., adventure, comedy, drama, fantasy..."
 			required
-			aria-describedby="genre-description genre-error"
+			aria-describedby="genre-description"
+			aria-errormessage="genre-error"
 			aria-invalid={genreError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"

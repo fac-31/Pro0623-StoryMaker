@@ -77,33 +77,47 @@
 		}
 	}
 
-	$: if (show) {
-		liveRegionMessage = 'Slide modal has been opened.';
-		if (typeof document !== 'undefined') {
-			triggerElement = document.activeElement as HTMLElement;
-			tick().then(() => {
-				if (modalContentElement) {
-					const firstInteractiveFocusable = Array.from(
-						modalContentElement.querySelectorAll(
-							'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
-						)
-					).filter((el) => (el as HTMLElement).offsetParent !== null)[0] as HTMLElement | null;
+	let prevShow = false; // Variable to track the previous state of show
 
-					if (firstInteractiveFocusable) {
-						firstInteractiveFocusable.focus();
-					} else {
-						modalContentElement.focus(); // Fallback to modal content itself
-					}
+	// Reactive block for managing live region message and focus
+	$: {
+		if (show) {
+			if (!prevShow) {
+				// Modal is just being opened
+				liveRegionMessage = `Slide modal opened. Now viewing Slide ${slideOutline.slideId}.`;
+				if (typeof document !== 'undefined') {
+					triggerElement = document.activeElement as HTMLElement;
+					tick().then(() => {
+						if (modalContentElement) {
+							const firstInteractiveFocusable = Array.from(
+								modalContentElement.querySelectorAll(
+									'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
+								)
+							).filter((el) => (el as HTMLElement).offsetParent !== null)[0] as HTMLElement | null;
+
+							if (firstInteractiveFocusable) {
+								firstInteractiveFocusable.focus();
+							} else {
+								modalContentElement.focus(); // Fallback to modal content itself
+							}
+						}
+					});
 				}
-			});
+			} else {
+				// Modal was already open, and selectedSlideIndex might have changed
+				if (slideOutline) { // Ensure slideOutline is available
+					liveRegionMessage = `Now viewing Slide ${slideOutline.slideId}.`;
+				}
+			}
+		} else {
+			liveRegionMessage = ''; // Clear message when modal is closed
 		}
-	} else {
-		liveRegionMessage = ''; // Clear message when modal is not shown
+		prevShow = show; // Update prevShow for the next reaction
 	}
 </script>
 
 {#if show}
-	<div role="status" aria-live="assertive" class="sr-only">
+	<div role="status" aria-live="polite" class="sr-only">
 		{liveRegionMessage}
 	</div>
 	<div
@@ -132,7 +146,7 @@
 
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
-				<div class="slide-details">
+				<article class="slide-details">
 					<h3 id="modal-title">Slide {slideOutline.slideId}</h3>
 
 					<div class="detail-section">
@@ -179,7 +193,7 @@
 							{/each}
 						</div>
 					{/if}
-				</div>
+				</article>
 
 				<!-- Right side - Image (80%) -->
 				<div class="slide-image">
