@@ -7,6 +7,7 @@ on:
 
 jobs:
   ai-accessibility-audit:
+    if: github.actor != 'google-labs-jules[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -31,9 +32,13 @@ jobs:
           name: ai-accessibility-report
           path: ai_accessibility_report.md
 
+      - name: Add note to accessibility report
+        run: |
+          echo -e "\n---\n**Note:** Any code created to fix the accessibility issues in this report must be good enough to pass the script \`prettier --write\` (which is called by \`npm run format\`) and also the script \`eslint\`. Please ensure your changes are formatted and linted before submitting a PR." >> ai_accessibility_report.md
+
       - name: Create GitHub Issue from Accessibility Report
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: 'Accessibility Audit Report for ${{ github.sha }}'
+          title: 'Accessibility Audit Report for PR #${{ steps.find_pr.outputs.number }}'
           content-filepath: ai_accessibility_report.md
           labels: accessibility, audit, jules
