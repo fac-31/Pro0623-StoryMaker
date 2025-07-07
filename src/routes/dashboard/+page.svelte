@@ -1,4 +1,6 @@
 <script lang="ts">
+	import NavBar from '$lib/components/NavBar.svelte';
+	import DashboardNav from '$lib/components/DashboardNav.svelte';
 	import {
 		Plus,
 		Search,
@@ -217,55 +219,9 @@
 
 <div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<!-- Header -->
-	<header class="sticky top-0 z-40 border-b border-gray-200/50 bg-white/80 backdrop-blur-md">
-		<div class="px-6 py-4">
-			<div class="flex items-center justify-between">
-				<div class="flex items-center space-x-4">
-					<div class="flex items-center space-x-2">
-						<div
-							class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
-						>
-							<Play class="h-4 w-4 text-white" />
-						</div>
-						<span
-							class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-xl font-bold text-transparent"
-						>
-							StoryMaker
-						</span>
-					</div>
-					<nav class="ml-8 hidden items-center space-x-6 md:flex">
-						<a href="/dashboard" class="font-medium text-purple-600">Dashboard</a>
-						<a href="/storyboard" class="text-gray-600 transition-colors hover:text-purple-600"
-							>Create Storyboard</a
-						>
-						<a href="/library" class="text-gray-600 transition-colors hover:text-purple-600"
-							>Library</a
-						>
-					</nav>
-				</div>
-
-				<div class="flex items-center space-x-4">
-					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
-						<Bell class="h-5 w-5" />
-					</button>
-					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
-						<Settings class="h-5 w-5" />
-					</button>
-					<div class="flex items-center space-x-2">
-						<div
-							class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
-						>
-							<span class="text-sm font-medium text-white">JD</span>
-						</div>
-						<span class="hidden text-sm font-medium text-gray-700 md:block">John Doe</span>
-					</div>
-					<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
-						<LogOut class="h-5 w-5" />
-					</button>
-				</div>
-			</div>
-		</div>
-	</header>
+	<NavBar type="dashboard">
+		<DashboardNav slot="nav" {mobileMenuOpen}/>
+	</NavBar>
 
 	<!-- Main Content -->
 	<main class="px-6 py-8">
