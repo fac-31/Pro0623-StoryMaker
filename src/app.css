@@ -48,7 +48,7 @@ form button[type='submit'] {
 }
 
 .slide-thumbnail {
-	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 transition-all duration-200 ease-in-out;
+	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
 }
 
 .slide-number {
@@ -56,7 +56,7 @@ form button[type='submit'] {
 }
 
 .slide-thumbnail:hover {
-	@apply scale-105 border-blue-600 shadow-md;
+	@apply motion-safe:scale-105 border-blue-600 shadow-md;
 }
 
 .slide-thumbnail img {

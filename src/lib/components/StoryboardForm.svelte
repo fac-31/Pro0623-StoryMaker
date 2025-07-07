@@ -24,7 +24,10 @@
 			cols="60"
 			placeholder="Enter your story concept..."
 			required
+			aria-describedby="concept-description"
+			class="focus:outline-none focus:ring-2"
 		></textarea>
+		<span id="concept-description" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;">Clearly outline the main idea or plot of your story.</span>
 	</div>
 
 	<div class="form-group">
@@ -36,7 +39,10 @@
 			min="1"
 			max="20"
 			required
+			aria-describedby="numSlides-description"
+			class="focus:outline-none focus:ring-2"
 		/>
+		<span id="numSlides-description" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;">Enter a number between 1 and 20.</span>
 	</div>
 
 	<div class="form-group">
@@ -47,7 +53,10 @@
 			bind:value={userPrompt.storyStyle}
 			placeholder="e.g., minimalist, detailed, cartoon, realistic..."
 			required
+			aria-describedby="storyStyle-description"
+			class="focus:outline-none focus:ring-2"
 		/>
+		<span id="storyStyle-description" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;">Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon, realistic).</span>
 	</div>
 
 	<div class="form-group">
@@ -58,7 +67,10 @@
 			bind:value={userPrompt.targetAudience}
 			placeholder="e.g., children, teens, adults, professionals..."
 			required
+			aria-describedby="targetAudience-description"
+			class="focus:outline-none focus:ring-2"
 		/>
+		<span id="targetAudience-description" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;">Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span>
 	</div>
 
 	<div class="form-group">
@@ -69,8 +81,17 @@
 			bind:value={userPrompt.genre}
 			placeholder="e.g., adventure, comedy, drama, fantasy..."
 			required
+			aria-describedby="genre-description"
+			class="focus:outline-none focus:ring-2"
 		/>
+		<span id="genre-description" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;">Define the genre of the story (e.g., adventure, comedy, drama, fantasy).</span>
 	</div>
 
-	<button type="submit" disabled={loading}>Start Storyboard</button>
+	<button type="submit" disabled={loading} class="focus:outline-none focus:ring-2">Start Storyboard</button>
+
+	<div role="status" aria-live="polite">
+		{#if loading}
+			<p>Submitting form...</p>
+		{/if}
+	</div>
 </form>
