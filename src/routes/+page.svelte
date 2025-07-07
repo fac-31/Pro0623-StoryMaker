@@ -93,7 +93,7 @@
 					>
 					<a
 						href="/signup"
-						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
+						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none motion-reduce:transform-none"
 					>
 						Start Creating
 					</a>

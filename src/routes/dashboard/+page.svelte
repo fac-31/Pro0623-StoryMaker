@@ -288,7 +288,7 @@
 				</div>
 
 				<button
-					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
+					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none motion-reduce:transform-none"
 					onclick={() => (showNewProjectModal = true)}
 				>
 					<Plus class="h-5 w-5" />
@@ -368,7 +368,7 @@
 								</div>
 								<div class="absolute top-3 right-3">
 									<button
-										class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 motion-reduce:transition-none"
+										class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 motion-reduce:transition-none motion-reduce:opacity-100"
 									>
 										<MoreHorizontal class="h-4 w-4 text-gray-600" />
 									</button>
@@ -390,7 +390,7 @@
 								<div class="mb-3 flex items-start justify-between">
 									<h3 class="truncate font-semibold text-gray-900">{project.concept}</h3>
 									<button
-										class="p-1 text-gray-400 transition-colors hover:text-purple-600"
+										class="p-1 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 										onclick={() => {
 											selectedProject = project;
 											showTeamModal = true;
@@ -456,7 +456,7 @@
 								<div class="mt-4 flex items-center space-x-2 border-t border-gray-100 pt-4">
 									<a
 										href="/storyboard"
-										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
+										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none motion-reduce:transform-none"
 									>
 										<Play class="mr-1 inline h-4 w-4" />
 										Continue
@@ -590,7 +590,7 @@
 					<h3 class="mb-2 text-lg font-medium text-gray-900">No storyboards found</h3>
 					<p class="mb-6 text-gray-500">Try adjusting your search or filter criteria</p>
 					<button
-						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
+						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none motion-reduce:transform-none"
 						onclick={() => {
 							searchQuery = '';
 							filterStatus = 'all';
@@ -728,7 +728,7 @@
 							</button>
 							<button
 								type="submit"
-								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
+								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none motion-reduce:transform-none"
 							>
 								Create Storyboard
 							</button>
@@ -832,7 +832,7 @@
 							</button>
 							<button
 								type="submit"
-								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
+								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none motion-reduce:transform-none"
 							>
 								Add Member
 							</button>

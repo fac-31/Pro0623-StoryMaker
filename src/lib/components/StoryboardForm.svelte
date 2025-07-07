@@ -72,8 +72,7 @@
 			cols="60"
 			placeholder="Enter your story concept..."
 			required
-			aria-describedby="concept-description"
-			aria-errormessage="concept-error"
+			aria-describedby="concept-description concept-error"
 			aria-invalid={conceptError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -81,7 +80,7 @@
 		<span id="concept-description" class="sr-only"
 			>Clearly outline the main idea or plot of your story.</span
 		>
-		<span id="concept-error" class="error-message" role="alert">{conceptError}</span>
+		<span id="concept-error" class="error-message" aria-live="polite">{conceptError}</span>
 	</div>
 
 	<div class="form-group">
@@ -93,14 +92,13 @@
 			min="1"
 			max="20"
 			required
-			aria-describedby="numSlides-description"
-			aria-errormessage="numSlides-error"
+			aria-describedby="numSlides-description numSlides-error"
 			aria-invalid={numSlidesError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="numSlides-description" class="sr-only">Enter a number between 1 and 20.</span>
-		<span id="numSlides-error" class="error-message" role="alert">{numSlidesError}</span>
+		<span id="numSlides-error" class="error-message" aria-live="polite">{numSlidesError}</span>
 	</div>
 
 	<div class="form-group">
@@ -111,8 +109,7 @@
 			bind:value={userPrompt.storyStyle}
 			placeholder="e.g., minimalist, detailed, cartoon, realistic..."
 			required
-			aria-describedby="storyStyle-description"
-			aria-errormessage="storyStyle-error"
+			aria-describedby="storyStyle-description storyStyle-error"
 			aria-invalid={storyStyleError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -120,7 +117,7 @@
 		<span id="storyStyle-description" class="sr-only"
 			>Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon, realistic).</span
 		>
-		<span id="storyStyle-error" class="error-message" role="alert">{storyStyleError}</span>
+		<span id="storyStyle-error" class="error-message" aria-live="polite">{storyStyleError}</span>
 	</div>
 
 	<div class="form-group">
@@ -131,8 +128,7 @@
 			bind:value={userPrompt.targetAudience}
 			placeholder="e.g., children, teens, adults, professionals..."
 			required
-			aria-describedby="targetAudience-description"
-			aria-errormessage="targetAudience-error"
+			aria-describedby="targetAudience-description targetAudience-error"
 			aria-invalid={targetAudienceError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -140,7 +136,7 @@
 		<span id="targetAudience-description" class="sr-only"
 			>Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span
 		>
-		<span id="targetAudience-error" class="error-message" role="alert">{targetAudienceError}</span>
+		<span id="targetAudience-error" class="error-message" aria-live="polite">{targetAudienceError}</span>
 	</div>
 
 	<div class="form-group">
@@ -151,8 +147,7 @@
 			bind:value={userPrompt.genre}
 			placeholder="e.g., adventure, comedy, drama, fantasy..."
 			required
-			aria-describedby="genre-description"
-			aria-errormessage="genre-error"
+			aria-describedby="genre-description genre-error"
 			aria-invalid={genreError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
@@ -160,7 +155,7 @@
 		<span id="genre-description" class="sr-only"
 			>Define the genre of the story (e.g., adventure, comedy, drama, fantasy).</span
 		>
-		<span id="genre-error" class="error-message" role="alert">{genreError}</span>
+		<span id="genre-error" class="error-message" aria-live="polite">{genreError}</span>
 	</div>
 
 	<button type="submit" disabled={loading} class="focus:ring-2 focus:outline-none"

@@ -111,7 +111,6 @@
 		role="button"
 		tabindex="0"
 		aria-label="Close modal"
-		aria-labelledby="modal-title"
 		on:click={handleOverlayClick}
 		on:keydown={handleOverlayKeydown}
 	>
@@ -127,7 +126,8 @@
 		>
 			<button
 				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"
-				on:click={closeModal}>&times;</button
+				on:click={closeModal}
+				aria-label="Close slide details">&times;</button
 			>
 
 			<div class="modal-body">
