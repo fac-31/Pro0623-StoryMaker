@@ -39,6 +39,9 @@ npm install
 # Start development server
 npm run dev
 
+# Serve over HTTPS for PWA testing
+npm run dev:https
+
 # Open in browser
 npm run dev -- --open
 ```
@@ -80,3 +83,16 @@ src/
 │   └── storyboard/         # Main storyboard interface
 └── static/                 # Static assets
 ```
+
+## Progressive Web App
+
+StoryMaker is a PWA. The service worker caches build assets and an offline fallback page so the app works without a network connection. A web manifest enables installability on desktop and mobile. Service workers run on `http://localhost`, but you can use HTTPS locally for a production-like install experience. The manifest reuses `static/favicon.png` for all icon sizes to avoid bundling extra binary assets.
+
+### Testing
+
+1. Run `npm run build` then `npm run preview` to serve the production build.
+   For a secure connection, use `npm run preview:https`.
+2. Visit the site in Chrome and open DevTools > Application > Service Workers to ensure it is registered.
+3. Use Lighthouse to verify the PWA audit passes.
+4. Disable your connection and reload the page to confirm the offline fallback displays.
+5. Click the install button in the address bar or "Add to Home Screen" on mobile.
