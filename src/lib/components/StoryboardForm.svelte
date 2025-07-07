@@ -136,7 +136,9 @@
 		<span id="targetAudience-description" class="sr-only"
 			>Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span
 		>
-		<span id="targetAudience-error" class="error-message" aria-live="polite">{targetAudienceError}</span>
+		<span id="targetAudience-error" class="error-message" aria-live="polite"
+			>{targetAudienceError}</span
+		>
 	</div>
 
 	<div class="form-group">
