@@ -39,6 +39,6 @@ jobs:
       - name: Create GitHub Issue from Accessibility Report
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: 'Accessibility Audit Report for PR #${{ steps.find_pr.outputs.number }}'
+          title: 'Accessibility Audit Report for ${{ github.sha }}'
           content-filepath: ai_accessibility_report.md
           labels: accessibility, audit, jules
