@@ -80,3 +80,14 @@ src/
 │   └── storyboard/         # Main storyboard interface
 └── static/                 # Static assets
 ```
+
+## Progressive Web App
+
+StoryMaker is a PWA. The app ships with a service worker that caches build assets for offline use and a web manifest so the site can be installed on desktop and mobile. The manifest reuses `static/favicon.png` for all icon sizes to avoid bundling extra binary assets.
+
+### Testing
+
+1. Run `npm run build` then `npm run preview` to serve the production build.
+2. Visit the site in Chrome and open DevTools > Application > Service Workers to ensure it is registered.
+3. Use Lighthouse to verify the PWA audit passes.
+4. Click the install button in the address bar or "Add to Home Screen" on mobile.
