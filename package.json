@@ -48,6 +48,8 @@
 		"vite-plugin-devtools-json": "^0.2.0"
 	},
 	"dependencies": {
+		"@ffmpeg/ffmpeg": "^0.12.15",
+		"@ffmpeg/util": "^0.12.2",
 		"@langchain/core": "^0.3.61",
 		"@langchain/langgraph": "^0.3.5",
 		"@langchain/openai": "^0.5.16",
@@ -55,9 +57,11 @@
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.50.2",
 		"dotenv": "^16.5.0",
+		"elevenlabs": "^1.59.0",
 		"histoire": "^1.0.0-alpha.2",
 		"langchain": "^0.3.29",
 		"langsmith": "^0.3.33",
+		"lucide-svelte": "^0.525.0",
 		"mongodb": "^6.17.0",
 		"openai": "^5.8.2",
 		"serpapi": "^2.1.0"
