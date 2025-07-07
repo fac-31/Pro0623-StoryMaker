@@ -25,6 +25,8 @@
 			placeholder="Enter your story concept..."
 			required
 			aria-describedby="concept-description"
+			aria-errormessage="concept-error"
+			aria-invalid="false"
 			class="focus:ring-2 focus:outline-none"
 		></textarea>
 		<span
@@ -32,6 +34,7 @@
 			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
 			>Clearly outline the main idea or plot of your story.</span
 		>
+		<span id="concept-error" class="error-message" role="alert"></span>
 	</div>
 
 	<div class="form-group">
@@ -44,6 +47,8 @@
 			max="20"
 			required
 			aria-describedby="numSlides-description"
+			aria-errormessage="numSlides-error"
+			aria-invalid="false"
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
@@ -51,6 +56,7 @@
 			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
 			>Enter a number between 1 and 20.</span
 		>
+		<span id="numSlides-error" class="error-message" role="alert"></span>
 	</div>
 
 	<div class="form-group">
@@ -62,6 +68,8 @@
 			placeholder="e.g., minimalist, detailed, cartoon, realistic..."
 			required
 			aria-describedby="storyStyle-description"
+			aria-errormessage="storyStyle-error"
+			aria-invalid="false"
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
@@ -69,6 +77,7 @@
 			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
 			>Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon, realistic).</span
 		>
+		<span id="storyStyle-error" class="error-message" role="alert"></span>
 	</div>
 
 	<div class="form-group">
@@ -80,6 +89,8 @@
 			placeholder="e.g., children, teens, adults, professionals..."
 			required
 			aria-describedby="targetAudience-description"
+			aria-errormessage="targetAudience-error"
+			aria-invalid="false"
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
@@ -87,6 +98,7 @@
 			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
 			>Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span
 		>
+		<span id="targetAudience-error" class="error-message" role="alert"></span>
 	</div>
 
 	<div class="form-group">
@@ -98,6 +110,8 @@
 			placeholder="e.g., adventure, comedy, drama, fantasy..."
 			required
 			aria-describedby="genre-description"
+			aria-errormessage="genre-error"
+			aria-invalid="false"
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span
@@ -105,6 +119,7 @@
 			style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border-width:0;"
 			>Define the genre of the story (e.g., adventure, comedy, drama, fantasy).</span
 		>
+		<span id="genre-error" class="error-message" role="alert"></span>
 	</div>
 
 	<button type="submit" disabled={loading} class="focus:ring-2 focus:outline-none"

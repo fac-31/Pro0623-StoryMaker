@@ -26,7 +26,7 @@
 </script>
 
 <div
-	class="slide-thumbnail"
+	class="slide-thumbnail focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none"
 	on:dblclick={handleDoubleClick}
 	role="button"
 	tabindex="0"
