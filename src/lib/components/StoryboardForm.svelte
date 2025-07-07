@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { UserPrompt } from '$lib/models/UserPrompt';
+	import type { UserPrompt } from '$lib/models/project.model';
 	import { createEventDispatcher } from 'svelte';
 
 	export let userPrompt: UserPrompt;

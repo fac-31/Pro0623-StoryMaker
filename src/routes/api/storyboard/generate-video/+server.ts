@@ -3,6 +3,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 // import { ElevenLabsClient } from 'elevenlabs';
 import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
 import 'dotenv/config';
+import type { VisualSlide, SlideDialogue } from '$lib/models/project.model';
 
 interface VideoGenerationRequest {
 	storyboard: StoryboardOutput;
@@ -40,7 +41,7 @@ export async function POST(event: RequestEvent) {
 
 		// Process each slide to generate audio
 		for (let i = 0; i < storyboard.visualSlides.length; i++) {
-			const slide = storyboard.visualSlides[i];
+			const slide: VisualSlide = storyboard.visualSlides[i];
 			const slideOutline = storyboard.storyOutline.slideOutlines[i];
 
 			if (!slide.imageUrl) {
@@ -55,7 +56,7 @@ export async function POST(event: RequestEvent) {
 			if (slideOutline.text.dialogue && slideOutline.text.dialogue.length > 0) {
 				try {
 					// Combine all dialogue for this slide
-					dialogue = slideOutline.text.dialogue.map((d) => `${d.character}: ${d.line}`).join('. ');
+					dialogue = slideOutline.text.dialogue.map((d: SlideDialogue) => `${d.character}: ${d.line}`).join('. ');
 
 					console.log(`Generating audio for slide ${i + 1}: ${dialogue.substring(0, 100)}...`);
 
@@ -94,7 +95,7 @@ export async function POST(event: RequestEvent) {
 		return json({
 			success: true,
 			audioSegments,
-			slides: storyboard.visualSlides.map((slide) => ({
+			slides: storyboard.visualSlides.map((slide: VisualSlide) => ({
 				slideNumber: slide.slideNumber,
 				imageUrl: slide.imageUrl,
 				sceneTitle: storyboard.storyOutline.slideOutlines[slide.slideNumber - 1]?.sceneTitle || ''

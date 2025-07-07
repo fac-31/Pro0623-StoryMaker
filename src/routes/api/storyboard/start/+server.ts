@@ -1,25 +1,21 @@
+import type { InsertOneResult } from 'mongodb';
+
 import { json } from '@sveltejs/kit';
-import { runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
-import { initDB } from '$lib/server/db';
+import { insertProject } from '$lib/server/projectService';
 import type { RequestHandler } from '@sveltejs/kit';
-import type { UserPrompt } from '$lib/models/UserPrompt';
-import type { StoryboardResponse } from '$lib/langgraph/storyboardGraph';
+import type { UserPrompt } from '$lib/models/project.model';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const userConcept: UserPrompt = await request.json();
-	const storyboardOutput = await runStoryboardCreation(userConcept);
+	const prompts: UserPrompt = await request.json();
 
-	const db = await initDB();
-	const result = await db.collection('storyboards').insertOne(storyboardOutput);
-
-	if (!result.acknowledged) {
-		return json({ error: 'Failed to save storyboard' }, { status: 500 });
+	try {
+		const result: InsertOneResult = await insertProject(prompts);
+		return json({
+			success: result.acknowledged,
+			insertedId: result.insertedId,
+		});
+	} catch (e) {
+		console.error('Insert project failed:', e);
+		return json({ error: 'Failed to insert project' }, { status: 500 });
 	}
-
-	const storyboardResponse: StoryboardResponse = {
-		storyboardOutput: storyboardOutput,
-		_id: result.insertedId.toString() // Convert ObjectId to string for JSON response
-	};
-
-	return json(storyboardResponse);
 };

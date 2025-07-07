@@ -37,10 +37,3 @@ export interface StoryOutline {
 	storyMetadata: StoryMetadata;
 	slideOutlines: SlideOutline[];
 }
-
-export interface VisualSlide {
-	slideNumber: number;
-	imageGenerated: boolean;
-	imagePrompt?: string;
-	imageUrl?: string;
-}

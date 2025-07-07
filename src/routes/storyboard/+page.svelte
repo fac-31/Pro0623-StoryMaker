@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
-	import type { UserPrompt } from '$lib/models/UserPrompt';
+	import type { Project, UserPrompt } from '$lib/models/project.model';
 	import StoryboardForm from '$lib/components/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/SlideThumbnail.svelte';
 	import MetadataContainer from '$lib/components/MetadataContainer.svelte';
@@ -24,8 +23,9 @@
 		genre: ''
 	};
 
-	let storyboard: (StoryboardOutput & { _id?: string }) | null = null;
+	let storyboard: Project | null = null;
 	let loading = false;
+	let progress = 0;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
 	let showModal = false;
@@ -54,7 +54,32 @@
 
 	async function startStoryboard() {
 		loading = true;
+		progress = 0;
 		error = '';
+/*
+		function start() {
+			const source = new EventSource('/api/storyboard/start');
+
+			source.onmessage = (event) => {
+				const data = JSON.parse(event.data);
+				progress = data;
+				console.log(progress);
+
+				// TODO replace false
+				if (false) {
+					source.close();
+				}
+			};
+
+			source.onerror = () => {
+				console.error('SSE connection error');
+				source.close();
+			};
+		}
+
+		start();
+		return;
+*/
 		try {
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
@@ -63,8 +88,8 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
-				const storyBoardResponse = data as StoryboardResponse;
-				storyboard = storyBoardResponse.storyboardOutput;
+				const storyBoardResponse = data as Project;
+				storyboard = storyBoardResponse;
 				//await fetchLogs();
 			} else {
 				error = data.error || 'Failed to start storyboard';
@@ -296,7 +321,7 @@
 				<div class="flex items-center justify-center py-12">
 					<div class="text-center">
 						<Loader2 class="mx-auto h-8 w-8 animate-spin text-purple-600" />
-						<p class="mt-4 text-gray-600">Creating your storyboard...</p>
+						<p class="mt-4 text-gray-600">Creating your storyboard... ({progress}%)</p>
 					</div>
 				</div>
 			{/if}
@@ -416,9 +441,11 @@
 						Visual Slides
 					</h2>
 					<div class="slides-flex">
+						<!--
 						{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
 							<SlideThumbnail {slide} {index} on:open={openSlideModal} />
 						{/each}
+						-->
 					</div>
 				</div>
 

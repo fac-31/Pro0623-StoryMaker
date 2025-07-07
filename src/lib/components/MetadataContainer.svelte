@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { Project } from '$lib/models/project.model';
 
-	export let storyboard: StoryboardOutput;
+	export let storyboard: Project;
 </script>
 
 <div class="metadata-container">
@@ -9,23 +9,25 @@
 	<div class="metadata-grid">
 		<div class="metadata-item">
 			<strong>Title:</strong>
-			{storyboard.storyOutline.storyMetadata.title}
+			{storyboard.prompts.concept}
 		</div>
 		<div class="metadata-item">
 			<strong>Genre:</strong>
-			{storyboard.storyOutline.storyMetadata.genre}
+			{storyboard.prompts.genre}
 		</div>
 		<div class="metadata-item">
 			<strong>Style:</strong>
-			{storyboard.storyOutline.storyMetadata.style}
+			{storyboard.prompts.storyStyle}
 		</div>
 		<div class="metadata-item">
 			<strong>Target Audience:</strong>
-			{storyboard.storyOutline.storyMetadata.targetAudience}
+			{storyboard.prompts.targetAudience}
 		</div>
+		<!--
 		<div class="metadata-item">
 			<strong>Total Duration:</strong>
 			{storyboard.storyOutline.storyMetadata.totalDuration}
 		</div>
+		-->
 	</div>
 </div>

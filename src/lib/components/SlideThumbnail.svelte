@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { Project } from '$lib/models/project.model';
 	import { createEventDispatcher } from 'svelte';
 
-	export let slide: StoryboardOutput['visualSlides'][0];
+	export let slide: Project['visualSlides'][0];
 	export let index: number;
 
 	const dispatch = createEventDispatcher<{

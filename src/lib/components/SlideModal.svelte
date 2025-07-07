@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { Project } from '$lib/models/project.model';
 	import { createEventDispatcher } from 'svelte';
 
-	export let storyboard: StoryboardOutput;
+	export let storyboard: Project;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
 
@@ -10,7 +10,6 @@
 		close: void;
 	}>();
 
-	$: slideOutline = storyboard.storyOutline.slideOutlines[selectedSlideIndex];
 	$: visualSlide = storyboard.visualSlides[selectedSlideIndex];
 
 	function closeModal() {
@@ -50,30 +49,30 @@
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
 				<div class="slide-details">
-					<h3>Slide {slideOutline.slideId}</h3>
+					<h3>Slide {visualSlide.slideNumber}</h3>
 
 					<div class="detail-section">
 						<h4>Scene</h4>
-						<p><strong>Title:</strong> {slideOutline.sceneTitle}</p>
-						<p><strong>Duration:</strong> {slideOutline.durationSeconds}s</p>
-						<p><strong>Timestamp:</strong> {slideOutline.timestamp}</p>
+						<p><strong>Title:</strong> {visualSlide.sceneTitle}</p>
+						<p><strong>Duration:</strong> {visualSlide.durationSeconds}s</p>
+						<p><strong>Timestamp:</strong> {visualSlide.timestamp}</p>
 					</div>
 
 					<div class="detail-section">
 						<h4>Description</h4>
-						<p>{slideOutline.sceneDescription}</p>
+						<p>{visualSlide.sceneDescription}</p>
 					</div>
 
 					<div class="detail-section">
 						<h4>Visual Style</h4>
-						<p>{slideOutline.visualStyle}</p>
-						<p><strong>Camera:</strong> {slideOutline.cameraAngle}</p>
+						<p>{visualSlide.visualStyle}</p>
+						<p><strong>Camera:</strong> {visualSlide.cameraAngle}</p>
 					</div>
 
-					{#if slideOutline.characters.length > 0}
+					{#if visualSlide.characters.length > 0}
 						<div class="detail-section">
 							<h4>Characters</h4>
-							{#each slideOutline.characters as character (slideOutline.slideId + character.name)}
+							{#each visualSlide.characters as character (visualSlide.slideNumber + character.name)}
 								<div class="character-info">
 									<strong>{character.name}</strong> ({character.role})
 									<p>{character.description}</p>
@@ -86,10 +85,10 @@
 						</div>
 					{/if}
 
-					{#if slideOutline.text.dialogue.length > 0}
+					{#if visualSlide.text.dialogue.length > 0}
 						<div class="detail-section">
 							<h4>Dialogue</h4>
-							{#each slideOutline.text.dialogue as dialogue (slideOutline.slideId + dialogue.line)}
+							{#each visualSlide.text.dialogue as dialogue (visualSlide.slideNumber + dialogue.line)}
 								<div class="dialogue-line">
 									<strong>{dialogue.character}:</strong> "{dialogue.line}"
 								</div>
