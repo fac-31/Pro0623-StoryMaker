@@ -36,4 +36,4 @@ jobs:
         with:
           title: 'Accessibility Audit Report for ${{ github.sha }}'
           content-filepath: ai_accessibility_report.md
-          labels: accessibility, audit
+          labels: accessibility, audit, jules
