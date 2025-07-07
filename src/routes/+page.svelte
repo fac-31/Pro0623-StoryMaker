@@ -49,7 +49,7 @@
 <div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<!-- Header -->
 	<header
-		class="relative sticky top-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-md"
+		class="sticky top-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-md"
 	>
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="flex items-center justify-between py-4">
@@ -223,13 +223,14 @@
 
 			<div class="grid gap-8 md:grid-cols-3">
 				{#each features as feature (feature.title)}
+				{@const Icon = feature.icon}
 					<div
 						class="group rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-8 transition-all duration-300 hover:border-purple-200 hover:shadow-xl"
 					>
 						<div
 							class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110"
 						>
-							<svelte:component this={feature.icon} class="h-6 w-6 text-white" />
+						    <Icon class="h-6 w-6 text-white" />
 						</div>
 						<h3 class="mb-3 text-xl font-semibold text-gray-900">{feature.title}</h3>
 						<p class="leading-relaxed text-gray-600">{feature.description}</p>
