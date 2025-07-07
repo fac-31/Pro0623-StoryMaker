@@ -56,12 +56,14 @@
 		const lastElement = focusableElements[focusableElements.length - 1];
 		const currentActiveElement = document.activeElement;
 
-		if (event.shiftKey) { // Shift + Tab
+		if (event.shiftKey) {
+			// Shift + Tab
 			if (currentActiveElement === firstElement || currentActiveElement === modalContentElement) {
 				lastElement.focus();
 				event.preventDefault();
 			}
-		} else { // Tab
+		} else {
+			// Tab
 			if (currentActiveElement === lastElement) {
 				firstElement.focus();
 				event.preventDefault();
@@ -81,9 +83,7 @@
 					modalContentElement.querySelectorAll(
 						'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
 					)
-				).filter(
-					(el) => (el as HTMLElement).offsetParent !== null
-				)[0] as HTMLElement | null;
+				).filter((el) => (el as HTMLElement).offsetParent !== null)[0] as HTMLElement | null;
 
 				if (firstInteractiveFocusable) {
 					firstInteractiveFocusable.focus();

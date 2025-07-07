@@ -56,7 +56,7 @@ form button[type='submit'] {
 }
 
 .slide-thumbnail:hover {
-	@apply motion-safe:scale-105 border-blue-600 shadow-md;
+	@apply border-blue-600 shadow-md motion-safe:scale-105;
 }
 
 .slide-thumbnail img {
