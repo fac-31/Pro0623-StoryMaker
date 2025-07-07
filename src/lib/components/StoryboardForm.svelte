@@ -15,10 +15,8 @@
 	let targetAudienceError = '';
 	let genreError = '';
 
-	function validate(event: Event) {
-		const target = event.target as HTMLInputElement | HTMLTextAreaElement;
-		const field = target.id;
-		const validity = target.validity;
+	function validateField(field: HTMLInputElement | HTMLTextAreaElement) {
+		const validity = field.validity;
 		let message = '';
 
 		if (!validity.valid) {
@@ -27,19 +25,20 @@
 			} else if (validity.typeMismatch) {
 				message = 'Please enter a valid value.';
 			} else if (validity.rangeUnderflow) {
-				message = `Value must be at least ${target.min}.`;
+				message = `Value must be at least ${'min' in field ? field.min : ''}.`;
 			} else if (validity.rangeOverflow) {
-				message = `Value must be no more than ${target.max}.`;
+				message = `Value must be no more than ${'max' in field ? field.max : ''}.`;
 			} else {
 				message = 'The value you entered is not valid.';
 			}
 		}
 
-		if (field === 'concept') conceptError = message;
-		else if (field === 'numSlides') numSlidesError = message;
-		else if (field === 'storyStyle') storyStyleError = message;
-		else if (field === 'targetAudience') targetAudienceError = message;
-		else if (field === 'genre') genreError = message;
+		const id = field.id;
+		if (id === 'concept') conceptError = message;
+		else if (id === 'numSlides') numSlidesError = message;
+		else if (id === 'storyStyle') storyStyleError = message;
+		else if (id === 'targetAudience') targetAudienceError = message;
+		else if (id === 'genre') genreError = message;
 	}
 
 	function handleSubmit() {
@@ -48,10 +47,7 @@
 			'#concept, #numSlides, #storyStyle, #targetAudience, #genre'
 		);
 		fieldsToValidate.forEach((field) => {
-			// Simulate an event object for the validate function
-			validate({
-				target: field as EventTarget & (HTMLInputElement | HTMLTextAreaElement)
-			} as Event);
+			validateField(field as HTMLInputElement | HTMLTextAreaElement);
 		});
 
 		// Check if any error messages were set
@@ -79,7 +75,7 @@
 			aria-describedby="concept-description"
 			aria-errormessage="concept-error"
 			aria-invalid={conceptError !== ''}
-			on:blur={validate}
+			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
 		></textarea>
 		<span id="concept-description" class="sr-only"
@@ -100,7 +96,7 @@
 			aria-describedby="numSlides-description"
 			aria-errormessage="numSlides-error"
 			aria-invalid={numSlidesError !== ''}
-			on:blur={validate}
+			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="numSlides-description" class="sr-only">Enter a number between 1 and 20.</span>
@@ -118,7 +114,7 @@
 			aria-describedby="storyStyle-description"
 			aria-errormessage="storyStyle-error"
 			aria-invalid={storyStyleError !== ''}
-			on:blur={validate}
+			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="storyStyle-description" class="sr-only"
@@ -138,7 +134,7 @@
 			aria-describedby="targetAudience-description"
 			aria-errormessage="targetAudience-error"
 			aria-invalid={targetAudienceError !== ''}
-			on:blur={validate}
+			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="targetAudience-description" class="sr-only"
@@ -158,7 +154,7 @@
 			aria-describedby="genre-description"
 			aria-errormessage="genre-error"
 			aria-invalid={genreError !== ''}
-			on:blur={validate}
+			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="genre-description" class="sr-only"
