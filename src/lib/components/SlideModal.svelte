@@ -6,6 +6,8 @@
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
 
+	let liveRegionMessage = ''; // New variable for the live region
+
 	const dispatch = createEventDispatcher<{
 		close: void;
 	}>();
@@ -75,6 +77,30 @@
 		}
 	}
 
+	$: if (show) {
+		liveRegionMessage = 'Slide modal has been opened.';
+		if (typeof document !== 'undefined') {
+			triggerElement = document.activeElement as HTMLElement;
+			tick().then(() => {
+				if (modalContentElement) {
+					const firstInteractiveFocusable = Array.from(
+						modalContentElement.querySelectorAll(
+							'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
+						)
+					).filter((el) => (el as HTMLElement).offsetParent !== null)[0] as HTMLElement | null;
+
+					if (firstInteractiveFocusable) {
+						firstInteractiveFocusable.focus();
+					} else {
+						modalContentElement.focus(); // Fallback to modal content itself
+					}
+				}
+			});
+		}
+	} else {
+		liveRegionMessage = ''; // Clear message when modal is not shown
+	}
+
 	$: if (show && typeof document !== 'undefined') {
 		triggerElement = document.activeElement as HTMLElement;
 		tick().then(() => {
@@ -96,17 +122,21 @@
 </script>
 
 {#if show}
+	<div role="status" aria-live="polite" class="sr-only">
+		{liveRegionMessage}
+	</div>
 	<div
-		class="modal-overlay"
+		class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
 		role="button"
 		tabindex="0"
 		aria-label="Close modal"
+		aria-labelledby="modal-title"
 		on:click={handleOverlayClick}
 		on:keydown={handleOverlayKeydown}
 	>
 		<div
 			bind:this={modalContentElement}
-			class="modal-content"
+			class="modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none"
 			role="dialog"
 			aria-modal="true"
 			tabindex="0"
@@ -114,7 +144,10 @@
 			on:click|stopPropagation
 			on:keydown={handleFocusTrap}
 		>
-			<button class="close-button" on:click={closeModal}>&times;</button>
+			<button
+				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"
+				on:click={closeModal}>&times;</button
+			>
 
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
