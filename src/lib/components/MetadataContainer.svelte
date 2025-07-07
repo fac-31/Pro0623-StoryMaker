@@ -4,7 +4,7 @@
 	export let storyboard: StoryboardOutput;
 </script>
 
-<div class="metadata-container">
+<section class="metadata-container">
 	<h2>Story Details</h2>
 	<div class="metadata-grid">
 		<div class="metadata-item">
@@ -28,4 +28,4 @@
 			{storyboard.storyOutline.storyMetadata.totalDuration}
 		</div>
 	</div>
-</div>
+</section>
