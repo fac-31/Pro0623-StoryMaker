@@ -287,7 +287,10 @@
 		</div>
 
 		<!-- Main Content -->
-		<section aria-label="Storyboard creation and display" class="rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm">
+		<section
+			aria-label="Storyboard creation and display"
+			class="rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm"
+		>
 			{#if !storyboard && !loading}
 				<StoryboardForm bind:userPrompt {loading} on:submit={handleFormSubmit} />
 			{/if}
@@ -295,7 +298,9 @@
 			{#if loading}
 				<div class="flex items-center justify-center py-12">
 					<div class="text-center">
-						<Loader2 class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none" />
+						<Loader2
+							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
+						/>
 						<p class="mt-4 text-gray-600">Creating your storyboard...</p>
 					</div>
 				</div>
@@ -331,7 +336,10 @@
 						aria-labelledby="player-heading"
 						class="mb-8 rounded-xl border border-gray-200/50 bg-white/50 p-6 shadow-lg backdrop-blur-sm"
 					>
-						<h3 id="player-heading" class="mb-4 flex items-center gap-2 text-xl font-semibold text-gray-900">
+						<h3
+							id="player-heading"
+							class="mb-4 flex items-center gap-2 text-xl font-semibold text-gray-900"
+						>
 							<Play class="h-5 w-5 text-purple-600" />
 							Storyboard Player
 						</h3>
@@ -412,7 +420,10 @@
 
 				<!-- Visual Slides Horizontal Container -->
 				<section aria-labelledby="visual-slides-heading" class="mb-8">
-					<h2 id="visual-slides-heading" class="mb-6 flex items-center gap-2 text-2xl font-bold text-gray-900">
+					<h2
+						id="visual-slides-heading"
+						class="mb-6 flex items-center gap-2 text-2xl font-bold text-gray-900"
+					>
 						<Sparkles class="h-6 w-6 text-purple-600" />
 						Visual Slides
 					</h2>

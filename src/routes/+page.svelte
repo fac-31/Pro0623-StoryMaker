@@ -68,19 +68,29 @@
 
 				<!-- Desktop Navigation -->
 				<nav class="hidden items-center space-x-8 md:flex">
-					<a href="#features" class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
+					<a
+						href="#features"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 						>Features</a
 					>
-					<a href="#how-it-works" class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
+					<a
+						href="#how-it-works"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 						>How it Works</a
 					>
-					<a href="#testimonials" class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
+					<a
+						href="#testimonials"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 						>Testimonials</a
 					>
 				</nav>
 
 				<div class="hidden items-center space-x-4 md:flex">
-					<a href="/login" class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none">Sign In</a>
+					<a
+						href="/login"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
+						>Sign In</a
+					>
 					<a
 						href="/signup"
 						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
@@ -259,7 +269,9 @@
 			<div class="grid gap-8 md:grid-cols-3">
 				{#each steps as step, index (step.step)}
 					<div class="relative">
-						<div class="rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl motion-reduce:transition-none">
+						<div
+							class="rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl motion-reduce:transition-none"
+						>
 							<div class="mb-4 text-4xl font-bold text-purple-600">{step.step}</div>
 							<h3 class="mb-3 text-xl font-semibold text-gray-900">{step.title}</h3>
 							<p class="leading-relaxed text-gray-600">{step.description}</p>
@@ -346,10 +358,24 @@
 				<div>
 					<h3 class="mb-4 font-semibold">Product</h3>
 					<ul class="space-y-2 text-gray-400">
-						<li><a href="#features" class="transition-colors hover:text-white motion-reduce:transition-none">Features</a></li>
-						<li><a href="/storyboard" class="transition-colors hover:text-white motion-reduce:transition-none">Storyboard</a></li>
 						<li>
-							<a href="/langchain-agent" class="transition-colors hover:text-white motion-reduce:transition-none">AI Agent</a>
+							<a
+								href="#features"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Features</a
+							>
+						</li>
+						<li>
+							<a
+								href="/storyboard"
+								class="transition-colors hover:text-white motion-reduce:transition-none"
+								>Storyboard</a
+							>
+						</li>
+						<li>
+							<a
+								href="/langchain-agent"
+								class="transition-colors hover:text-white motion-reduce:transition-none">AI Agent</a
+							>
 						</li>
 					</ul>
 				</div>
@@ -357,18 +383,49 @@
 				<div>
 					<h3 class="mb-4 font-semibold">Account</h3>
 					<ul class="space-y-2 text-gray-400">
-						<li><a href="/signup" class="transition-colors hover:text-white motion-reduce:transition-none">Sign Up</a></li>
-						<li><a href="/login" class="transition-colors hover:text-white motion-reduce:transition-none">Sign In</a></li>
-						<li><a href="/logout" class="transition-colors hover:text-white motion-reduce:transition-none">Sign Out</a></li>
+						<li>
+							<a
+								href="/signup"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Sign Up</a
+							>
+						</li>
+						<li>
+							<a
+								href="/login"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Sign In</a
+							>
+						</li>
+						<li>
+							<a
+								href="/logout"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Sign Out</a
+							>
+						</li>
 					</ul>
 				</div>
 
 				<div>
 					<h3 class="mb-4 font-semibold">Support</h3>
 					<ul class="space-y-2 text-gray-400">
-						<li><a href="/help" class="transition-colors hover:text-white motion-reduce:transition-none">Help Center</a></li>
-						<li><a href="/privacy" class="transition-colors hover:text-white motion-reduce:transition-none">Privacy</a></li>
-						<li><a href="/terms" class="transition-colors hover:text-white motion-reduce:transition-none">Terms</a></li>
+						<li>
+							<a
+								href="/help"
+								class="transition-colors hover:text-white motion-reduce:transition-none"
+								>Help Center</a
+							>
+						</li>
+						<li>
+							<a
+								href="/privacy"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Privacy</a
+							>
+						</li>
+						<li>
+							<a
+								href="/terms"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Terms</a
+							>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -378,13 +435,19 @@
 			>
 				<p class="text-gray-400">© 2024 StoryMaker. All rights reserved.</p>
 				<div class="mt-4 flex space-x-6 md:mt-0">
-					<a href="https://twitter.com" class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
+					<a
+						href="https://twitter.com"
+						class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
 						>Twitter</a
 					>
-					<a href="https://linkedin.com" class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
+					<a
+						href="https://linkedin.com"
+						class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
 						>LinkedIn</a
 					>
-					<a href="https://instagram.com" class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
+					<a
+						href="https://instagram.com"
+						class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
 						>Instagram</a
 					>
 				</div>

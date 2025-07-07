@@ -47,9 +47,11 @@
 		const fieldsToValidate = document.querySelectorAll(
 			'#concept, #numSlides, #storyStyle, #targetAudience, #genre'
 		);
-		fieldsToValidate.forEach(field => {
+		fieldsToValidate.forEach((field) => {
 			// Simulate an event object for the validate function
-			validate({ target: field as EventTarget & (HTMLInputElement | HTMLTextAreaElement) } as Event);
+			validate({
+				target: field as EventTarget & (HTMLInputElement | HTMLTextAreaElement)
+			} as Event);
 		});
 
 		// Check if any error messages were set
@@ -80,9 +82,7 @@
 			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		></textarea>
-		<span
-			id="concept-description"
-			class="sr-only"
+		<span id="concept-description" class="sr-only"
 			>Clearly outline the main idea or plot of your story.</span
 		>
 		<span id="concept-error" class="error-message" role="alert">{conceptError}</span>
@@ -103,11 +103,7 @@
 			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
-		<span
-			id="numSlides-description"
-			class="sr-only"
-			>Enter a number between 1 and 20.</span
-		>
+		<span id="numSlides-description" class="sr-only">Enter a number between 1 and 20.</span>
 		<span id="numSlides-error" class="error-message" role="alert">{numSlidesError}</span>
 	</div>
 
@@ -125,9 +121,7 @@
 			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
-		<span
-			id="storyStyle-description"
-			class="sr-only"
+		<span id="storyStyle-description" class="sr-only"
 			>Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon, realistic).</span
 		>
 		<span id="storyStyle-error" class="error-message" role="alert">{storyStyleError}</span>
@@ -147,9 +141,7 @@
 			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
-		<span
-			id="targetAudience-description"
-			class="sr-only"
+		<span id="targetAudience-description" class="sr-only"
 			>Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span
 		>
 		<span id="targetAudience-error" class="error-message" role="alert">{targetAudienceError}</span>
@@ -169,9 +161,7 @@
 			on:blur={validate}
 			class="focus:ring-2 focus:outline-none"
 		/>
-		<span
-			id="genre-description"
-			class="sr-only"
+		<span id="genre-description" class="sr-only"
 			>Define the genre of the story (e.g., adventure, comedy, drama, fantasy).</span
 		>
 		<span id="genre-error" class="error-message" role="alert">{genreError}</span>
