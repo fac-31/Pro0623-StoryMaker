@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
-	import StoryboardForm from '$lib/components/StoryboardForm.svelte';
-	import SlideThumbnail from '$lib/components/SlideThumbnail.svelte';
-	import MetadataContainer from '$lib/components/MetadataContainer.svelte';
-	import SlideModal from '$lib/components/SlideModal.svelte';
+	import StoryboardForm from '$lib/components/Storyboard/StoryboardForm.svelte';
+	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
+	import MetadataContainer from '$lib/components/Storyboard/MetadataContainer.svelte';
+	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import {
 		Play,
 		Video,

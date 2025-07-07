@@ -1,6 +1,6 @@
 <script lang="ts">
-	import NavBar from '$lib/components/NavBar.svelte';
-	import DashboardNav from '$lib/components/DashboardNav.svelte';
+	import NavBar from '$lib/components/NavBar/NavBar.svelte';
+	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
 	import {
 		Plus,
 		Search,
@@ -220,7 +220,7 @@
 <div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<!-- Header -->
 	<NavBar type="dashboard">
-		<DashboardNav slot="nav" {mobileMenuOpen}/>
+		<DashboardNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} />
 	</NavBar>
 
 	<!-- Main Content -->
@@ -230,7 +230,7 @@
 			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div>
 					<h1 class="text-3xl font-bold text-gray-900">My Storyboards</h1>
-					<p class="mt-1 text-gray-600">Create and manage your AI-powered storyboard projects</p>
+					<p class="text--600 mt-1">Create and manage your AI-powered storyboard projects</p>
 				</div>
 
 				<button
@@ -245,7 +245,7 @@
 
 		<!-- Filters and Search -->
 		<div
-			class="mb-8 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-xl backdrop-blur-sm"
+			class="bordergray-gray-200/50 mb-8 rounded-2xl border bg-white/80 p-6 shadow-xl backdrop-blur-sm"
 		>
 			<div class="flex flex-col gap-4 md:flex-row">
 				<!-- Search -->
