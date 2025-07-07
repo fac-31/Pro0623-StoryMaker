@@ -18,7 +18,7 @@ form {
 
 .form-group input,
 .form-group textarea {
-	@apply w-full rounded border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none;
+	@apply w-full rounded border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-700 focus:outline-none;
 }
 
 .form-group input[type='number'] {
@@ -160,5 +160,5 @@ form button[type='submit'] {
 }
 
 button {
-	@apply cursor-pointer rounded border-0 bg-blue-500 px-4 py-2 text-base text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-500 motion-reduce:transition-none;
+	@apply cursor-pointer rounded border-0 bg-blue-500 px-4 py-2 text-base text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-500 motion-reduce:transition-none;
 }
