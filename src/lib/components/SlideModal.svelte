@@ -100,29 +100,10 @@
 	} else {
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
-
-	$: if (show && typeof document !== 'undefined') {
-		triggerElement = document.activeElement as HTMLElement;
-		tick().then(() => {
-			if (modalContentElement) {
-				const firstInteractiveFocusable = Array.from(
-					modalContentElement.querySelectorAll(
-						'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
-					)
-				).filter((el) => (el as HTMLElement).offsetParent !== null)[0] as HTMLElement | null;
-
-				if (firstInteractiveFocusable) {
-					firstInteractiveFocusable.focus();
-				} else {
-					modalContentElement.focus(); // Fallback to modal content itself
-				}
-			}
-		});
-	}
 </script>
 
 {#if show}
-	<div role="status" aria-live="polite" class="sr-only">
+	<div role="status" aria-live="assertive" class="sr-only">
 		{liveRegionMessage}
 	</div>
 	<div

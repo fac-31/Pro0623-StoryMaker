@@ -46,7 +46,7 @@
 	];
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+<main class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<!-- Header -->
 	<header
 		class="relative sticky top-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-md"
@@ -68,22 +68,32 @@
 
 				<!-- Desktop Navigation -->
 				<nav class="hidden items-center space-x-8 md:flex">
-					<a href="#features" class="text-gray-600 transition-colors hover:text-purple-600"
+					<a
+						href="#features"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 						>Features</a
 					>
-					<a href="#how-it-works" class="text-gray-600 transition-colors hover:text-purple-600"
+					<a
+						href="#how-it-works"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 						>How it Works</a
 					>
-					<a href="#testimonials" class="text-gray-600 transition-colors hover:text-purple-600"
+					<a
+						href="#testimonials"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 						>Testimonials</a
 					>
 				</nav>
 
 				<div class="hidden items-center space-x-4 md:flex">
-					<a href="/login" class="text-gray-600 transition-colors hover:text-purple-600">Sign In</a>
+					<a
+						href="/login"
+						class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
+						>Sign In</a
+					>
 					<a
 						href="/signup"
-						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 					>
 						Start Creating
 					</a>
@@ -102,7 +112,7 @@
 
 		<!-- Mobile Navigation -->
 		{#if mobileMenuOpen}
-			<div class="border-t border-gray-200 bg-white md:hidden">
+			<nav class="border-t border-gray-200 bg-white md:hidden">
 				<div class="space-y-4 px-4 py-4">
 					<a href="#features" class="block text-gray-600 hover:text-purple-600">Features</a>
 					<a href="#how-it-works" class="block text-gray-600 hover:text-purple-600">How it Works</a>
@@ -117,7 +127,7 @@
 						</a>
 					</div>
 				</div>
-			</div>
+			</nav>
 		{/if}
 	</header>
 
@@ -150,14 +160,14 @@
 					<div class="flex flex-col gap-4 sm:flex-row">
 						<a
 							href="/signup"
-							class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700"
+							class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
 						>
 							<span>Start Creating Free</span>
 							<ArrowRight class="h-5 w-5" />
 						</a>
 						<a
 							href="/storyboard"
-							class="flex items-center justify-center space-x-2 rounded-lg border-2 border-gray-300 px-8 py-4 font-semibold text-gray-700 transition-all hover:border-purple-300 hover:text-purple-600"
+							class="flex items-center justify-center space-x-2 rounded-lg border-2 border-gray-300 px-8 py-4 font-semibold text-gray-700 transition-all hover:border-purple-300 hover:text-purple-600 motion-reduce:transition-none"
 						>
 							<Play class="h-5 w-5" />
 							<span>Try Demo</span>
@@ -178,7 +188,7 @@
 
 				<div class="relative">
 					<div
-						class="rotate-3 transform rounded-2xl bg-gradient-to-br from-purple-100 to-blue-100 p-8 transition-transform duration-300 hover:rotate-0"
+						class="rotate-3 transform rounded-2xl bg-gradient-to-br from-purple-100 to-blue-100 p-8 transition-transform duration-300 hover:rotate-0 motion-reduce:transform-none motion-reduce:transition-none"
 					>
 						<div
 							class="flex h-64 w-full items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-blue-200 shadow-2xl"
@@ -224,12 +234,15 @@
 			<div class="grid gap-8 md:grid-cols-3">
 				{#each features as feature (feature.title)}
 					<div
-						class="group rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-8 transition-all duration-300 hover:border-purple-200 hover:shadow-xl"
+						class="group rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-8 transition-all duration-300 hover:border-purple-200 hover:shadow-xl motion-reduce:transition-none"
 					>
 						<div
-							class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110"
+							class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110 motion-reduce:transform-none"
 						>
-							<svelte:component this={feature.icon} class="h-6 w-6 text-white" />
+							{#if feature.icon}
+								{@const Icon = feature.icon}
+								<Icon class="h-6 w-6 text-white" />
+							{/if}
 						</div>
 						<h3 class="mb-3 text-xl font-semibold text-gray-900">{feature.title}</h3>
 						<p class="leading-relaxed text-gray-600">{feature.description}</p>
@@ -259,7 +272,9 @@
 			<div class="grid gap-8 md:grid-cols-3">
 				{#each steps as step, index (step.step)}
 					<div class="relative">
-						<div class="rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+						<div
+							class="rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl motion-reduce:transition-none"
+						>
 							<div class="mb-4 text-4xl font-bold text-purple-600">{step.step}</div>
 							<h3 class="mb-3 text-xl font-semibold text-gray-900">{step.title}</h3>
 							<p class="leading-relaxed text-gray-600">{step.description}</p>
@@ -308,14 +323,14 @@
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
 					<a
 						href="/signup"
-						class="flex transform items-center justify-center space-x-2 rounded-lg bg-white px-8 py-4 font-semibold text-purple-600 transition-all hover:scale-105 hover:bg-gray-50"
+						class="flex transform items-center justify-center space-x-2 rounded-lg bg-white px-8 py-4 font-semibold text-purple-600 transition-all hover:scale-105 hover:bg-gray-50 motion-reduce:transform-none motion-reduce:transition-none"
 					>
 						<span>Start Creating Free</span>
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
 						href="/storyboard"
-						class="rounded-lg border-2 border-white px-8 py-4 font-semibold text-white transition-all hover:bg-white hover:text-purple-600"
+						class="rounded-lg border-2 border-white px-8 py-4 font-semibold text-white transition-all hover:bg-white hover:text-purple-600 motion-reduce:transition-none"
 					>
 						Try Demo
 					</a>
@@ -346,10 +361,24 @@
 				<div>
 					<h3 class="mb-4 font-semibold">Product</h3>
 					<ul class="space-y-2 text-gray-400">
-						<li><a href="#features" class="transition-colors hover:text-white">Features</a></li>
-						<li><a href="/storyboard" class="transition-colors hover:text-white">Storyboard</a></li>
 						<li>
-							<a href="/langchain-agent" class="transition-colors hover:text-white">AI Agent</a>
+							<a
+								href="#features"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Features</a
+							>
+						</li>
+						<li>
+							<a
+								href="/storyboard"
+								class="transition-colors hover:text-white motion-reduce:transition-none"
+								>Storyboard</a
+							>
+						</li>
+						<li>
+							<a
+								href="/langchain-agent"
+								class="transition-colors hover:text-white motion-reduce:transition-none">AI Agent</a
+							>
 						</li>
 					</ul>
 				</div>
@@ -357,18 +386,49 @@
 				<div>
 					<h3 class="mb-4 font-semibold">Account</h3>
 					<ul class="space-y-2 text-gray-400">
-						<li><a href="/signup" class="transition-colors hover:text-white">Sign Up</a></li>
-						<li><a href="/login" class="transition-colors hover:text-white">Sign In</a></li>
-						<li><a href="/logout" class="transition-colors hover:text-white">Sign Out</a></li>
+						<li>
+							<a
+								href="/signup"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Sign Up</a
+							>
+						</li>
+						<li>
+							<a
+								href="/login"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Sign In</a
+							>
+						</li>
+						<li>
+							<a
+								href="/logout"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Sign Out</a
+							>
+						</li>
 					</ul>
 				</div>
 
 				<div>
 					<h3 class="mb-4 font-semibold">Support</h3>
 					<ul class="space-y-2 text-gray-400">
-						<li><a href="/help" class="transition-colors hover:text-white">Help Center</a></li>
-						<li><a href="/privacy" class="transition-colors hover:text-white">Privacy</a></li>
-						<li><a href="/terms" class="transition-colors hover:text-white">Terms</a></li>
+						<li>
+							<a
+								href="/help"
+								class="transition-colors hover:text-white motion-reduce:transition-none"
+								>Help Center</a
+							>
+						</li>
+						<li>
+							<a
+								href="/privacy"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Privacy</a
+							>
+						</li>
+						<li>
+							<a
+								href="/terms"
+								class="transition-colors hover:text-white motion-reduce:transition-none">Terms</a
+							>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -378,17 +438,23 @@
 			>
 				<p class="text-gray-400">© 2024 StoryMaker. All rights reserved.</p>
 				<div class="mt-4 flex space-x-6 md:mt-0">
-					<a href="https://twitter.com" class="text-gray-400 transition-colors hover:text-white"
+					<a
+						href="https://twitter.com"
+						class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
 						>Twitter</a
 					>
-					<a href="https://linkedin.com" class="text-gray-400 transition-colors hover:text-white"
+					<a
+						href="https://linkedin.com"
+						class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
 						>LinkedIn</a
 					>
-					<a href="https://instagram.com" class="text-gray-400 transition-colors hover:text-white"
+					<a
+						href="https://instagram.com"
+						class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
 						>Instagram</a
 					>
 				</div>
 			</div>
 		</div>
 	</footer>
-</div>
+</main>
