@@ -19,15 +19,27 @@ export const GET: RequestHandler = async ({ params }) => {
 	const stream = new ReadableStream({
 		start(controller) {
 			registerStream(id, controller);
+
+			runAsyncStoryboard(storyboard).catch((err) => {
+				console.error('Storyboard error:', err);
+				endStream(id);
+			});
+		},
+
+		cancel() {
+			// Cleanup if the client disconnects
+			endStream(id);
 		}
 	});
 
-	const storyboardOutput: Storyboard = await runStoryboardCreation(id, storyboard.prompts);
+	async function runAsyncStoryboard(storyboard: Storyboard) {
+		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard);
 
-	await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
+		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
 
-	updateStream(id, storyboardOutput);
-	endStream(id);
+		updateStream(storyboard._id.toString(), storyboardOutput);
+		endStream(storyboard._id.toString());
+	}
 
 	return new Response(stream, {
 		headers: {

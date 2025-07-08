@@ -4,11 +4,15 @@ import type { UserPrompt } from '$lib/models/UserPrompt';
 import type { StoryOutline } from '$lib/models/story';
 import type { VisualSlide } from '$lib/models/story';
 
+export type StoryboardStatus = 'none' | 'done';
+
 export interface Storyboard {
 	_id: ObjectId;
+	status: StoryboardStatus;
 	prompts: UserPrompt;
 	storyOutline?: StoryOutline;
 	visualSlides?: VisualSlide[];
+	currentSlide?: number;
 	metadata?: {
 		// TODO remove this
 		totalSlides: number;

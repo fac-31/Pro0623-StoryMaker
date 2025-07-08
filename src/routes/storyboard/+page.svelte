@@ -87,11 +87,10 @@
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);
 
-				// TODO condition to end stream
-				//if () {
-				source.close();
-				resolve();
-				//}
+				if (storyboard && storyboard.status == 'done') {
+					source.close();
+					resolve();
+				}
 			};
 
 			source.onerror = (err) => {
