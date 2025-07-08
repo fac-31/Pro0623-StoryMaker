@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher, tick } from 'svelte';
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 
-	export let storyboard: StoryboardOutput;
+	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
 

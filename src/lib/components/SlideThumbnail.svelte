@@ -1,12 +1,11 @@
 <script lang="ts">
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import { createEventDispatcher } from 'svelte';
 
 	import { Loader2 } from 'lucide-svelte';
 
 	export let storyboard: Storyboard;
-	export let slide: StoryboardOutput['visualSlides'][0];
+	export let slide: Storyboard['visualSlides'][0];
 	export let index: number;
 
 	const dispatch = createEventDispatcher<{
