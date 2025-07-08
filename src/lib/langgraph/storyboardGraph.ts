@@ -26,6 +26,10 @@ const openai = new OpenAI({
 const generateStoryOutline = async (state: Storyboard): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] generateStoryOutline called with:', state.prompts);
 	addLog(`[LangGraph] generateStoryOutline called with: ${state.prompts}`);
+
+	state.status = 'generating-outline';
+	updateStream(state._id.toString(), state);
+
 	const prompt = ChatPromptTemplate.fromTemplate(`
 Create a detailed storyboard structure for: {userInput}
 
@@ -95,6 +99,9 @@ const generateImagePrompt = (slide: SlideOutline): string => {
 const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] generateImage called for slide :', state.currentSlide);
 	addLog(`[LangGraph] generateImage called for prompt: ${state.currentSlide}`);
+
+	state.status = 'generating-image';
+	updateStream(state._id.toString(), state);
 
 	//create prompt for image generation
 	const imagePrompt = generateImagePrompt(state.storyOutline.slideOutlines[state.currentSlide - 1]);

@@ -320,24 +320,26 @@
 				<StoryboardForm bind:userPrompt {loading} on:submit={handleFormSubmit} />
 			{/if}
 
-			{#if loading}
-				<div class="flex items-center justify-center py-12">
-					<div class="text-center">
-						<Loader2
-							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
-						/>
-						<p class="mt-4 text-gray-600">Creating your storyboard...</p>
-					</div>
-				</div>
-			{/if}
-
 			{#if error}
 				<div class="rounded-lg border border-red-200 bg-red-50 p-4">
 					<p class="text-sm text-red-600">{error}</p>
 				</div>
 			{/if}
 
-			{#if storyboard}
+			{#if loading && (!storyboard || storyboard.status == 'none' || storyboard.status == 'generating-outline')}
+				<div class="flex items-center justify-center py-12">
+					<div class="text-center">
+						<Loader2
+							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
+						/>
+						{#if storyboard && storyboard.status == 'generating-outline'}
+							<p class="mt-4 text-gray-600">Creating outlines...</p>
+						{:else}
+							<p class="mt-4 text-gray-600">Creating your storyboard...</p>
+						{/if}
+					</div>
+				</div>
+			{:else if storyboard}
 				<!-- Action Buttons -->
 				<div class="mb-8 flex flex-col gap-4 sm:flex-row">
 					<button
@@ -454,7 +456,7 @@
 					</h2>
 					<div class="slides-flex">
 						{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
-							<SlideThumbnail {slide} {index} on:open={openSlideModal} />
+							<SlideThumbnail {storyboard} {slide} {index} on:open={openSlideModal} />
 						{/each}
 					</div>
 				</section>

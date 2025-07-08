@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 	import { createEventDispatcher } from 'svelte';
 
+	import { Loader2 } from 'lucide-svelte';
+
+	export let storyboard: Storyboard;
 	export let slide: StoryboardOutput['visualSlides'][0];
 	export let index: number;
 
@@ -38,10 +42,18 @@
 		<img src={slide.imageUrl} alt={computedAltText} />
 	{:else}
 		<div class="placeholder-image">
+			
+		{#if storyboard.status == 'generating-image'}
+			<Loader2
+				class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
+			/>
+		{:else}
 			<span>No Image</span>
-			{#if slide.imagePrompt}
-				<small>{slide.imagePrompt.substring(0, 50)}...</small>
-			{/if}
+		{/if}
+
+		{#if slide.imagePrompt}
+			<small>{slide.imagePrompt.substring(0, 50)}...</small>
+		{/if}
 		</div>
 	{/if}
 </div>
