@@ -42,18 +42,15 @@
 		<img src={slide.imageUrl} alt={computedAltText} />
 	{:else}
 		<div class="placeholder-image">
-			
-		{#if storyboard.status == 'generating-image'}
-			<Loader2
-				class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
-			/>
-		{:else}
-			<span>No Image</span>
-		{/if}
+			{#if storyboard.status == 'generating-image'}
+				<Loader2 class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none" />
+			{:else}
+				<span>No Image</span>
+			{/if}
 
-		{#if slide.imagePrompt}
-			<small>{slide.imagePrompt.substring(0, 50)}...</small>
-		{/if}
+			{#if slide.imagePrompt}
+				<small>{slide.imagePrompt.substring(0, 50)}...</small>
+			{/if}
 		</div>
 	{/if}
 </div>

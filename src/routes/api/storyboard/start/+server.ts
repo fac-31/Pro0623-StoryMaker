@@ -9,7 +9,21 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const storyboard: NewStoryboard = {
 		status: 'none',
-		prompts
+		prompts,
+		currentSlide: 0,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+		storyOutline: {
+			storyMetadata: {
+				title: '',
+				totalDuration: '',
+				genre: '',
+				style: '',
+				targetAudience: ''
+			},
+			slideOutlines: []
+		},
+		visualSlides: []
 	};
 
 	const db = await initDB();

@@ -10,16 +10,11 @@ export interface Storyboard {
 	_id: ObjectId;
 	status: StoryboardStatus;
 	prompts: UserPrompt;
-	storyOutline?: StoryOutline;
-	visualSlides?: VisualSlide[];
-	currentSlide?: number;
-	metadata?: {
-		// TODO remove this
-		totalSlides: number;
-		createdAt: Date;
-		updatedAt: Date;
-		userConcept: UserPrompt;
-	};
+	currentSlide: number;
+	createdAt: Date;
+	updatedAt: Date;
+	storyOutline: StoryOutline;
+	visualSlides: VisualSlide[];
 }
 
 export type NewStoryboard = Omit<Storyboard, '_id'>;

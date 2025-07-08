@@ -31,7 +31,7 @@ const generateStoryOutline = async (state: Storyboard): Promise<Partial<Storyboa
 	updateStream(state._id.toString(), state);
 
 	const prompt = ChatPromptTemplate.fromTemplate(`
-Create a detailed storyboard structure for: {userInput}
+Create a detailed storyboard structure for: {concept}
 
 Requirements:
 - Create exactly {numSlides} slides
@@ -48,13 +48,9 @@ Genre: {genre}
 `);
 
 	const chain = prompt.pipe(llm);
-	const storyOutLine = (await chain.invoke({
-		userInput: state.prompts.concept,
-		numSlides: state.prompts.numSlides,
-		targetAudience: state.prompts.targetAudience,
-		storyStyle: state.prompts.storyStyle,
-		genre: state.prompts.genre
-	})) as StoryOutline;
+
+	type ChainInput = Parameters<typeof chain.invoke>[0];
+	const storyOutLine = (await chain.invoke(state.prompts as ChainInput)) as StoryOutline;
 
 	// Initialize visual slides structure
 	const slides: VisualSlide[] = storyOutLine.slideOutlines.map((part, index) => ({
@@ -179,9 +175,7 @@ export const createStoryboardGraph = () => {
 			prompts: null,
 			storyOutline: null,
 			currentSlide: null,
-			visualSlides: null,
-			generationReady: null,
-			generatedImages: null
+			visualSlides: null
 		}
 	});
 
@@ -208,44 +202,15 @@ export const runStoryboardCreation = async (storyboard: Storyboard): Promise<Sto
 	addLog(`[LangGraph] runStoryboardCreation called with: ${storyboard.prompts}`);
 	const app = createStoryboardGraph();
 
-	// TODO replace initialState with storyboard
-	const initialState: Storyboard = {
-		_id: storyboard._id,
-		status: 'none',
-		prompts: storyboard.prompts,
-		storyOutline: {
-			storyMetadata: {
-				title: '',
-				totalDuration: '',
-				genre: '',
-				style: '',
-				targetAudience: ''
-			},
-			slideOutlines: []
-		},
-		currentSlide: 1,
-		visualSlides: []
-	};
+	storyboard.currentSlide = 1;
 
-	const result = await app.invoke(initialState);
+	const result = await app.invoke(storyboard);
 	console.log('[LangGraph] runStoryboardCreation result:', result);
 	addLog(`[LangGraph] runStoryboardCreation result: ${JSON.stringify(result)}`);
 
-	const output: Storyboard = {
-		_id: storyboard._id,
-		status: 'done',
-		prompts: storyboard.prompts,
-		storyOutline: result.storyOutline,
-		visualSlides: result.visualSlides,
-		metadata: {
-			totalSlides: result.visualSlides.length,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			userConcept: storyboard.prompts
-		}
-	};
-
-	return output;
+	result.updatedAt = new Date();
+	result.status = 'done';
+	return result as Storyboard;
 };
 
 // // Interactive Functions for UI Integration
