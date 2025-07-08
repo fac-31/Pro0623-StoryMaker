@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 	import StoryboardForm from '$lib/components/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/SlideThumbnail.svelte';
@@ -24,7 +24,7 @@
 		genre: ''
 	};
 
-	let storyboard: (StoryboardOutput & { _id?: string }) | null = null;
+	let storyboard: Storyboard | null = null;
 	let loading = false;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
@@ -63,8 +63,12 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
-				const storyBoardResponse = data as StoryboardResponse;
-				storyboard = storyBoardResponse.storyboardOutput;
+				const id = data.insertedId;
+				console.log(id);
+
+				await progressStoryboard(id);
+
+				//storyboard = storyBoardResponse.storyboardOutput;
 				//await fetchLogs();
 			} else {
 				error = data.error || 'Failed to start storyboard';
@@ -74,6 +78,28 @@
 		} finally {
 			loading = false;
 		}
+	}
+
+	async function progressStoryboard(id: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const source = new EventSource('/api/storyboard/progress/' + id);
+
+			source.onmessage = (event) => {
+				storyboard = JSON.parse(event.data);
+
+				// TODO condition to end stream
+				//if () {
+				source.close();
+				resolve();
+				//}
+			};
+
+			source.onerror = (err) => {
+				console.error('SSE connection error', err);
+				source.close();
+				reject(new Error('SSE connection error'));
+			};
+		});
 	}
 
 	async function generateVideo() {
