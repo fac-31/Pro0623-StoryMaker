@@ -29,14 +29,15 @@
 			>
 				<span class="text-sm font-medium text-white">{user.user_metadata.display_name[0]}</span>
 			</div>
-			<span class="hidden text-sm font-medium text-gray-700 md:block">{user.user_metadata.display_name}</span>
+			<span class="hidden text-sm font-medium text-gray-700 md:block"
+				>{user.user_metadata.display_name}</span
+			>
 		</div>
-		<form action="/logout" method="POST" class=""> 
+		<form action="/logout" method="POST" class="">
 			<button type="submit" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 				<LogOut class="h-5 w-5" />
 			</button>
 		</form>
-
 	</div>
 </div>
 {#if mobileMenuOpen}

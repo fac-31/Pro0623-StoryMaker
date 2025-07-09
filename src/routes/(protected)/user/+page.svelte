@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { navigating } from '$app/state'
+	import { navigating } from '$app/state';
 	export let data: { user: any };
 	export let form: { success: boolean; error?: string };
 	let name = data.user.user_metadata.display_name;
@@ -64,21 +64,17 @@
 			</div>
 		</div>
 		<div>
-			      {#if form?.error}
-        <p class="text-red-600">{form.error}</p>
-      {/if}
+			{#if form?.error}
+				<p class="text-red-600">{form.error}</p>
+			{/if}
 
-      <button
-        type="submit"
-        disabled={navigating.to != null}
-        class="btn btn-primary"
-      >
-        {#if navigating.to}Updating…{:else}Update Details{/if}
-      </button>
+			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
+				{#if navigating.to}Updating…{:else}Update Details{/if}
+			</button>
 
-      {#if form?.success}
-        <p class="text-green-600">Details updated successfully!</p>
-      {/if}
+			{#if form?.success}
+				<p class="text-green-600">Details updated successfully!</p>
+			{/if}
 		</div>
 	</form>
 </div>

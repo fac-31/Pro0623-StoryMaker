@@ -72,7 +72,7 @@
 		</label>
 		<textarea
 			id="concept"
-			class="textarea textarea-bordered"
+			class="textarea textarea-bordered focus:ring-2 focus:outline-none"
 			bind:value={userPrompt.concept}
 			rows="3"
 			placeholder="Enter your story concept..."
@@ -80,7 +80,6 @@
 			aria-describedby="concept-description concept-error"
 			aria-invalid={conceptError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
-			class="focus:ring-2 focus:outline-none"
 		></textarea>
 		<span id="concept-description" class="sr-only"
 			>Clearly outline the main idea or plot of your story.</span
@@ -95,7 +94,7 @@
 		<input
 			type="number"
 			id="numSlides"
-			class="input input-bordered max-w-xs"
+			class="input input-bordered max-w-xs focus:ring-2 focus:outline-none"
 			bind:value={userPrompt.numSlides}
 			min="1"
 			max="20"
@@ -103,7 +102,6 @@
 			aria-describedby="numSlides-description numSlides-error"
 			aria-invalid={numSlidesError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
-			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="numSlides-description" class="sr-only">Enter a number between 1 and 20.</span>
 		<span id="numSlides-error" class="error-message" aria-live="polite">{numSlidesError}</span>
@@ -116,14 +114,13 @@
 		<input
 			type="text"
 			id="storyStyle"
-			class="input input-bordered"
+			class="input input-bordered focus:ring-2 focus:outline-none"
 			bind:value={userPrompt.storyStyle}
 			placeholder="e.g., minimalist, detailed, cartoon, realistic..."
 			required
 			aria-describedby="storyStyle-description storyStyle-error"
 			aria-invalid={storyStyleError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
-			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="storyStyle-description" class="sr-only"
 			>Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon, realistic).</span
@@ -138,14 +135,13 @@
 		<input
 			type="text"
 			id="targetAudience"
-			class="input input-bordered"
+			class="input input-bordered focus:ring-2 focus:outline-none"
 			bind:value={userPrompt.targetAudience}
 			placeholder="e.g., children, teens, adults, professionals..."
 			required
 			aria-describedby="targetAudience-description targetAudience-error"
 			aria-invalid={targetAudienceError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
-			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="targetAudience-description" class="sr-only"
 			>Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span
@@ -162,14 +158,13 @@
 		<input
 			type="text"
 			id="genre"
-			class="input input-bordered"
+			class="input input-bordered focus:ring-2 focus:outline-none"
 			bind:value={userPrompt.genre}
 			placeholder="e.g., adventure, comedy, drama, fantasy..."
 			required
 			aria-describedby="genre-description genre-error"
 			aria-invalid={genreError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
-			class="focus:ring-2 focus:outline-none"
 		/>
 		<span id="genre-description" class="sr-only"
 			>Define the genre of the story (e.g., adventure, comedy, drama, fantasy).</span

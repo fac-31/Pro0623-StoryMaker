@@ -38,7 +38,7 @@
 >
 	<div class="w-full max-w-md space-y-8">
 		<!-- Header -->
-		<AuthNav/>
+		<AuthNav />
 		<!-- Form -->
 		<div class="rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm">
 			<form on:submit|preventDefault={submit} class="space-y-6">

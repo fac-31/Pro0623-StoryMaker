@@ -1,7 +1,7 @@
 <script lang="ts">
-  const { data } = $props();
-  const { user } = data
-  console.log("From page: ", data);
+	const { data } = $props();
+	const { user } = data;
+	console.log('From page: ', data);
 	import NavBar from '$lib/components/NavBar/NavBar.svelte';
 	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
 	import {
@@ -223,7 +223,7 @@
 <div class="flex min-h-screen flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<!-- Header -->
 	<NavBar type="dashboard">
-		<DashboardNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} {user}/>
+		<DashboardNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} {user} />
 	</NavBar>
 
 	<!-- Main Content -->

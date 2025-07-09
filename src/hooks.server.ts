@@ -21,6 +21,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	event.locals.user = user ?? null;
 	const response = await resolve(event);
-	console.log(response.body)
+	console.log(response.body);
 	return response;
 };
