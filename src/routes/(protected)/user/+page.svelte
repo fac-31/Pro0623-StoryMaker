@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { navigating } from '$app/state';
-	export let data: { user: any };
+	export let data;
 	export let form: { success: boolean; error?: string };
-	let name = data.user.user_metadata.display_name;
-	let email = data.user.email;
+	let name = data.user?.user_metadata.display_name;
+	let email = data.user?.email;
 	let password = '';
 	$: if (form?.success) {
-		name = data.user.user_metadata.display_name;
-		email = data.user.email;
+		name = data.user?.user_metadata.display_name;
+		email = data.user?.email;
 		password = '';
 	}
 </script>

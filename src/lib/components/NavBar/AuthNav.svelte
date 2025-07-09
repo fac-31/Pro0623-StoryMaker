@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Play, ArrowLeft, Check } from 'lucide-svelte';
+	import { Play, ArrowLeft } from 'lucide-svelte';
 	export let mobileMenuOpen: boolean = false;
 </script>
 

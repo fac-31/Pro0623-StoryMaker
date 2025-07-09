@@ -2,7 +2,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { navigating } from '$app/state';
-	import { Play, ArrowLeft, Check } from 'lucide-svelte';
+	import { Check } from 'lucide-svelte';
 	import AuthNav from '$lib/components/NavBar/AuthNav.svelte';
 
 	let email = '';
