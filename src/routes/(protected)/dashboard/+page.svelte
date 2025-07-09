@@ -1,4 +1,9 @@
 <script lang="ts">
+	const { data } = $props();
+	const { user } = data;
+	console.log('From page: ', data);
+	import NavBar from '$lib/components/NavBar/NavBar.svelte';
+	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
 	import {
 		Plus,
 		Search,
@@ -7,9 +12,6 @@
 		Edit3,
 		Trash2,
 		UserPlus,
-		Settings,
-		Bell,
-		LogOut,
 		Grid3X3,
 		List,
 		Clock,
@@ -217,65 +219,9 @@
 
 <div class="flex min-h-screen flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<!-- Header -->
-	<header class="sticky top-0 z-40 border-b border-gray-200/50 bg-white/80 backdrop-blur-md">
-		<div class="px-6 py-4">
-			<div class="flex items-center justify-between">
-				<div class="flex items-center space-x-4">
-					<div class="flex items-center space-x-2">
-						<div
-							class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
-						>
-							<Play class="h-4 w-4 text-white" />
-						</div>
-						<span
-							class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-xl font-bold text-transparent"
-						>
-							StoryMaker
-						</span>
-					</div>
-					<nav class="ml-8 hidden items-center space-x-6 md:flex">
-						<a href="/dashboard" class="font-medium text-purple-600">Dashboard</a>
-						<a
-							href="/storyboard"
-							class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
-							>Create Storyboard</a
-						>
-						<a
-							href="/library"
-							class="text-gray-600 transition-colors hover:text-purple-600 motion-reduce:transition-none"
-							>Library</a
-						>
-					</nav>
-				</div>
-
-				<div class="flex items-center space-x-4">
-					<button
-						class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
-					>
-						<Bell class="h-5 w-5" />
-					</button>
-					<button
-						class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
-					>
-						<Settings class="h-5 w-5" />
-					</button>
-					<div class="flex items-center space-x-2">
-						<div
-							class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
-						>
-							<span class="text-sm font-medium text-white">JD</span>
-						</div>
-						<span class="hidden text-sm font-medium text-gray-700 md:block">John Doe</span>
-					</div>
-					<button
-						class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
-					>
-						<LogOut class="h-5 w-5" />
-					</button>
-				</div>
-			</div>
-		</div>
-	</header>
+	<NavBar type="dashboard">
+		<DashboardNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} {user} />
+	</NavBar>
 
 	<!-- Main Content -->
 	<main class="px-6 py-8">
@@ -284,7 +230,7 @@
 			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div>
 					<h1 class="text-3xl font-bold text-gray-900">My Storyboards</h1>
-					<p class="mt-1 text-gray-600">Create and manage your AI-powered storyboard projects</p>
+					<p class="text--600 mt-1">Create and manage your AI-powered storyboard projects</p>
 				</div>
 
 				<button

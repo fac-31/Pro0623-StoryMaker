@@ -1,9 +1,10 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+@plugin "daisyui";
 
 /* TODO: we need to set primary, secondary, emphassis colours for the app to be used consistently*/
-
+/*
 form {
 	@apply mx-auto max-w-2xl rounded-lg border border-gray-300 bg-gray-50 p-6;
 }
@@ -34,10 +35,10 @@ form {
 	@apply text-gray-500;
 }
 
-/* Form Submit Button */
 form button[type='submit'] {
 	@apply mt-4 w-full bg-blue-500 py-3 text-lg font-medium text-white hover:bg-blue-700 disabled:bg-gray-500;
 }
+*/
 
 .slides-container {
 	@apply my-8;
@@ -158,7 +159,8 @@ form button[type='submit'] {
 .dialogue-line {
 	@apply mb-2 rounded border-l-4 border-yellow-400 bg-white p-2 text-sm;
 }
-
+/*
 button {
 	@apply cursor-pointer rounded border-0 bg-blue-500 px-4 py-2 text-base text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-500 motion-reduce:transition-none;
 }
+*/

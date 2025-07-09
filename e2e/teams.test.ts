@@ -9,7 +9,7 @@ test('Creating a team', async ({ page }) => {
 	await page.getByRole('button', { name: 'Sign in' }).click();
 
 	// Wait for redirect or token to be set
-	await expect(page).toHaveURL('/');
+	await expect(page).toHaveURL('/dashboard');
 
 	// Get all of the needed cookie headers for auth
 	const cookies = await page.context().cookies();
