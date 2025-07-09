@@ -63,9 +63,11 @@
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-	<div class="form-group">
-		<label for="concept">Story Concept:</label><br />
-		<textarea
+	<fieldset class="mb-6 border-0 p-0">
+		<legend class="mb-2 block text-lg font-medium text-gray-800">Core Story Elements</legend>
+		<div class="form-group">
+			<label for="concept">Story Concept:</label><br />
+			<textarea
 			id="concept"
 			bind:value={userPrompt.concept}
 			rows="3"
@@ -100,10 +102,13 @@
 		<span id="numSlides-description" class="sr-only">Enter a number between 1 and 20.</span>
 		<span id="numSlides-error" class="error-message" aria-live="polite">{numSlidesError}</span>
 	</div>
+	</fieldset>
 
-	<div class="form-group">
-		<label for="storyStyle">Story Style:</label><br />
-		<input
+	<fieldset class="mb-6 border-0 p-0">
+		<legend class="mb-2 block text-lg font-medium text-gray-800">Story Characteristics</legend>
+		<div class="form-group">
+			<label for="storyStyle">Story Style:</label><br />
+			<input
 			type="text"
 			id="storyStyle"
 			bind:value={userPrompt.storyStyle}
@@ -159,6 +164,7 @@
 		>
 		<span id="genre-error" class="error-message" aria-live="polite">{genreError}</span>
 	</div>
+	</fieldset>
 
 	<button type="submit" disabled={loading} class="focus:ring-2 focus:outline-none"
 		>Start Storyboard</button
