@@ -2,6 +2,7 @@
 	import { Settings, Bell, LogOut } from 'lucide-svelte';
 	/** Is the mobile menu drawer open? */
 	export let mobileMenuOpen: boolean = false;
+	export let user;
 </script>
 
 <div class="px-6 py-4">
@@ -19,20 +20,23 @@
 		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 			<Bell class="h-5 w-5" />
 		</button>
-		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+		<a href="/user" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 			<Settings class="h-5 w-5" />
-		</button>
+		</a>
 		<div class="flex items-center space-x-2">
 			<div
 				class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
 			>
-				<span class="text-sm font-medium text-white">JD</span>
+				<span class="text-sm font-medium text-white">{user.user_metadata.display_name[0]}</span>
 			</div>
-			<span class="hidden text-sm font-medium text-gray-700 md:block">David Ogden</span>
+			<span class="hidden text-sm font-medium text-gray-700 md:block">{user.user_metadata.display_name}</span>
 		</div>
-		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
-			<LogOut class="h-5 w-5" />
-		</button>
+		<form action="/logout" method="POST" class=""> 
+			<button type="submit" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+				<LogOut class="h-5 w-5" />
+			</button>
+		</form>
+
 	</div>
 </div>
 {#if mobileMenuOpen}

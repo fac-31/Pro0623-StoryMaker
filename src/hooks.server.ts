@@ -20,7 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		console.error('Error in supabase.auth.getUser():', userError.message);
 	}
 	event.locals.user = user ?? null;
-
 	const response = await resolve(event);
+	console.log(response.body)
 	return response;
 };

@@ -24,6 +24,6 @@ export const actions: Actions = {
 			return fail(400, { error: error.message });
 		}
 
-		throw redirect(303, '/storyboard');
+		throw redirect(303, '/dashboard');
 	}
 };
