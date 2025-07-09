@@ -6,11 +6,13 @@ export interface Character {
 	position: 'left' | 'center' | 'right' | 'background' | 'foreground';
 }
 
+export interface SlideDialogue {
+	character: string;
+	line: string;
+}
+
 export interface SlideText {
-	dialogue: Array<{
-		character: string;
-		line: string;
-	}>;
+	dialogue: SlideDialogue[];
 }
 
 export interface SlideOutline {

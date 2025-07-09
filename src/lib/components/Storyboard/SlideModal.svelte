@@ -1,10 +1,12 @@
 <script lang="ts">
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, tick } from 'svelte';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 
-	export let storyboard: StoryboardOutput;
+	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
+
+	let liveRegionMessage = ''; // New variable for the live region
 
 	const dispatch = createEventDispatcher<{
 		close: void;
@@ -13,7 +15,13 @@
 	$: slideOutline = storyboard.storyOutline.slideOutlines[selectedSlideIndex];
 	$: visualSlide = storyboard.visualSlides[selectedSlideIndex];
 
+	let triggerElement: HTMLElement | null = null;
+	let modalContentElement: HTMLElement;
+
 	function closeModal() {
+		if (triggerElement && typeof triggerElement.focus === 'function') {
+			triggerElement.focus();
+		}
 		dispatch('close');
 	}
 
@@ -26,11 +34,80 @@
 			closeModal();
 		}
 	}
+
+	function handleFocusTrap(event: KeyboardEvent) {
+		if (event.key !== 'Tab' || !modalContentElement) return;
+
+		const focusableElements = Array.from(
+			modalContentElement.querySelectorAll(
+				'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
+			)
+		).filter(
+			(el) => (el as HTMLElement).offsetParent !== null // Check for visibility
+		) as HTMLElement[];
+
+		if (focusableElements.length === 0) {
+			if (document.activeElement !== modalContentElement) {
+				modalContentElement.focus();
+			}
+			event.preventDefault();
+			return;
+		}
+
+		const firstElement = focusableElements[0];
+		const lastElement = focusableElements[focusableElements.length - 1];
+		const currentActiveElement = document.activeElement;
+
+		if (event.shiftKey) {
+			// Shift + Tab
+			if (currentActiveElement === firstElement || currentActiveElement === modalContentElement) {
+				lastElement.focus();
+				event.preventDefault();
+			}
+		} else {
+			// Tab
+			if (currentActiveElement === lastElement) {
+				firstElement.focus();
+				event.preventDefault();
+			} else if (currentActiveElement === modalContentElement && focusableElements.length > 0) {
+				// If focus is on the modal container, move to the first actual interactive element
+				firstElement.focus();
+				event.preventDefault();
+			}
+		}
+	}
+
+	$: if (show) {
+		liveRegionMessage = 'Slide modal has been opened.';
+		if (typeof document !== 'undefined') {
+			triggerElement = document.activeElement as HTMLElement;
+			tick().then(() => {
+				if (modalContentElement) {
+					const firstInteractiveFocusable = Array.from(
+						modalContentElement.querySelectorAll(
+							'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
+						)
+					).filter((el) => (el as HTMLElement).offsetParent !== null)[0] as HTMLElement | null;
+
+					if (firstInteractiveFocusable) {
+						firstInteractiveFocusable.focus();
+					} else {
+						modalContentElement.focus(); // Fallback to modal content itself
+					}
+				}
+			});
+		}
+	} else {
+		liveRegionMessage = ''; // Clear message when modal is not shown
+	}
 </script>
 
 {#if show}
+	<div role="status" aria-live="assertive" class="sr-only">
+		{liveRegionMessage}
+	</div>
 	<div
-		class="modal-overlay"
+		class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
 		role="button"
 		tabindex="0"
 		aria-label="Close modal"
@@ -38,19 +115,25 @@
 		on:keydown={handleOverlayKeydown}
 	>
 		<div
-			class="modal-content"
+			bind:this={modalContentElement}
+			class="modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none"
 			role="dialog"
 			aria-modal="true"
 			tabindex="0"
+			aria-labelledby="modal-title"
 			on:click|stopPropagation
-			on:keydown|stopPropagation
+			on:keydown={handleFocusTrap}
 		>
-			<button class="close-button" on:click={closeModal}>&times;</button>
+			<button
+				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"
+				on:click={closeModal}
+				aria-label="Close slide details">&times;</button
+			>
 
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
 				<div class="slide-details">
-					<h3>Slide {slideOutline.slideId}</h3>
+					<h3 id="modal-title">Slide {slideOutline.slideId}</h3>
 
 					<div class="detail-section">
 						<h4>Scene</h4>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 	import StoryboardForm from '$lib/components/Storyboard/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
@@ -24,7 +24,7 @@
 		genre: ''
 	};
 
-	let storyboard: (StoryboardOutput & { _id?: string }) | null = null;
+	let storyboard: Storyboard | null = null;
 	let loading = false;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
@@ -63,8 +63,12 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
-				const storyBoardResponse = data as StoryboardResponse;
-				storyboard = storyBoardResponse.storyboardOutput;
+				const id = data.insertedId;
+				console.log(id);
+
+				await progressStoryboard(id);
+
+				//storyboard = storyBoardResponse.storyboardOutput;
 				//await fetchLogs();
 			} else {
 				error = data.error || 'Failed to start storyboard';
@@ -74,6 +78,27 @@
 		} finally {
 			loading = false;
 		}
+	}
+
+	async function progressStoryboard(id: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const source = new EventSource('/api/storyboard/progress/' + id);
+
+			source.onmessage = (event) => {
+				storyboard = JSON.parse(event.data);
+
+				if (storyboard && storyboard.status == 'done') {
+					source.close();
+					resolve();
+				}
+			};
+
+			source.onerror = (err) => {
+				console.error('SSE connection error', err);
+				source.close();
+				reject(new Error('SSE connection error'));
+			};
+		});
 	}
 
 	async function generateVideo() {
@@ -258,7 +283,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div
+<main
 	class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-12 sm:px-6 lg:px-8"
 >
 	<div class="mx-auto max-w-6xl space-y-8">
@@ -266,7 +291,7 @@
 		<div class="text-center">
 			<a
 				href="/"
-				class="mb-8 inline-flex items-center space-x-2 text-purple-600 transition-colors hover:text-purple-700"
+				class="mb-8 inline-flex items-center space-x-2 text-purple-600 transition-colors hover:text-purple-700 motion-reduce:transition-none"
 			>
 				<ArrowLeft class="h-5 w-5" />
 				<span>Back to Home</span>
@@ -287,18 +312,12 @@
 		</div>
 
 		<!-- Main Content -->
-		<div class="rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm">
+		<section
+			aria-label="Storyboard creation and display"
+			class="rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm"
+		>
 			{#if !storyboard && !loading}
 				<StoryboardForm bind:userPrompt {loading} on:submit={handleFormSubmit} />
-			{/if}
-
-			{#if loading}
-				<div class="flex items-center justify-center py-12">
-					<div class="text-center">
-						<Loader2 class="mx-auto h-8 w-8 animate-spin text-purple-600" />
-						<p class="mt-4 text-gray-600">Creating your storyboard...</p>
-					</div>
-				</div>
 			{/if}
 
 			{#if error}
@@ -307,16 +326,29 @@
 				</div>
 			{/if}
 
-			{#if storyboard}
+			{#if loading && (!storyboard || storyboard.status == 'none' || storyboard.status == 'generating-outline')}
+				<div class="flex items-center justify-center py-12">
+					<div class="text-center">
+						<Loader2
+							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
+						/>
+						{#if storyboard && storyboard.status == 'generating-outline'}
+							<p class="mt-4 text-gray-600">Creating outlines...</p>
+						{:else}
+							<p class="mt-4 text-gray-600">Creating your storyboard...</p>
+						{/if}
+					</div>
+				</div>
+			{:else if storyboard}
 				<!-- Action Buttons -->
 				<div class="mb-8 flex flex-col gap-4 sm:flex-row">
 					<button
 						onclick={generateVideo}
 						disabled={generatingVideo}
-						class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
 					>
 						{#if generatingVideo}
-							<Loader2 class="h-5 w-5 animate-spin" />
+							<Loader2 class="h-5 w-5 animate-spin motion-reduce:animate-none" />
 							<span>Generating Audio...</span>
 						{:else}
 							<Video class="h-5 w-5" />
@@ -327,10 +359,14 @@
 
 				<!-- Slideshow Player -->
 				{#if showPlayer && slides.length > 0}
-					<div
+					<section
+						aria-labelledby="player-heading"
 						class="mb-8 rounded-xl border border-gray-200/50 bg-white/50 p-6 shadow-lg backdrop-blur-sm"
 					>
-						<h3 class="mb-4 flex items-center gap-2 text-xl font-semibold text-gray-900">
+						<h3
+							id="player-heading"
+							class="mb-4 flex items-center gap-2 text-xl font-semibold text-gray-900"
+						>
 							<Play class="h-5 w-5 text-purple-600" />
 							Storyboard Player
 						</h3>
@@ -361,14 +397,14 @@
 							<button
 								onclick={previousSlide}
 								disabled={currentSlideIndex === 0}
-								class="flex items-center justify-center rounded-full bg-gray-200 p-3 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
+								class="flex items-center justify-center rounded-full bg-gray-200 p-3 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
 							>
 								<SkipBack class="h-5 w-5" />
 							</button>
 
 							<button
 								onclick={togglePlay}
-								class="flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-blue-600 p-4 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+								class="flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-blue-600 p-4 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 							>
 								{#if isPlaying}
 									<Pause class="h-6 w-6" />
@@ -380,7 +416,7 @@
 							<button
 								onclick={nextSlide}
 								disabled={currentSlideIndex === slides.length - 1}
-								class="flex items-center justify-center rounded-full bg-gray-200 p-3 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
+								class="flex items-center justify-center rounded-full bg-gray-200 p-3 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
 							>
 								<SkipForward class="h-5 w-5" />
 							</button>
@@ -394,13 +430,13 @@
 									class="flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors {currentSlideIndex ===
 									index
 										? 'bg-purple-600 text-white'
-										: 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
+										: 'bg-gray-200 text-gray-700 hover:bg-gray-300'} motion-reduce:transition-none"
 								>
 									{index + 1}
 								</button>
 							{/each}
 						</div>
-					</div>
+					</section>
 				{/if}
 
 				{#if videoError}
@@ -410,24 +446,29 @@
 				{/if}
 
 				<!-- Visual Slides Horizontal Container -->
-				<div class="mb-8">
-					<h2 class="mb-6 flex items-center gap-2 text-2xl font-bold text-gray-900">
+				<section aria-labelledby="visual-slides-heading" class="mb-8">
+					<h2
+						id="visual-slides-heading"
+						class="mb-6 flex items-center gap-2 text-2xl font-bold text-gray-900"
+					>
 						<Sparkles class="h-6 w-6 text-purple-600" />
 						Visual Slides
 					</h2>
 					<div class="slides-flex">
 						{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
-							<SlideThumbnail {slide} {index} on:open={openSlideModal} />
+							<SlideThumbnail {storyboard} {slide} {index} on:open={openSlideModal} />
 						{/each}
 					</div>
-				</div>
+				</section>
 
 				<!-- Story Metadata -->
-				<MetadataContainer {storyboard} />
+				<section aria-label="Story Metadata">
+					<MetadataContainer {storyboard} />
+				</section>
 			{/if}
-		</div>
+		</section>
 	</div>
-</div>
+</main>
 
 <!-- Modal for detailed slide view -->
 {#if selectedSlideIndex !== null && storyboard}

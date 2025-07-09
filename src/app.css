@@ -19,7 +19,7 @@ form {
 
 .form-group input,
 .form-group textarea {
-	@apply w-full rounded border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none;
+	@apply w-full rounded border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-700 focus:outline-none;
 }
 
 .form-group input[type='number'] {
@@ -49,7 +49,7 @@ form button[type='submit'] {
 }
 
 .slide-thumbnail {
-	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 transition-all duration-200 ease-in-out;
+	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
 }
 
 .slide-number {
@@ -57,7 +57,7 @@ form button[type='submit'] {
 }
 
 .slide-thumbnail:hover {
-	@apply scale-105 border-blue-600 shadow-md;
+	@apply border-blue-600 shadow-md motion-safe:scale-105;
 }
 
 .slide-thumbnail img {
@@ -128,6 +128,26 @@ form button[type='submit'] {
 	@apply my-1 text-sm leading-snug;
 }
 
+/* Visually hide an element while keeping it accessible to screen readers */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+.error-message {
+	color: red;
+	display: block; /* Ensures it takes up its own line if needed */
+	min-height: 1em; /* Ensures space is reserved even if empty, preventing layout shifts */
+	margin-top: 0.25rem; /* Adds a little space above the error message */
+}
+
 .character-info {
 	@apply mb-4 rounded border-l-4 border-green-500 bg-white p-3;
 }
@@ -141,6 +161,6 @@ form button[type='submit'] {
 }
 /*
 button {
-	@apply cursor-pointer rounded border-0 bg-blue-500 px-4 py-2 text-base text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-500;
+	@apply cursor-pointer rounded border-0 bg-blue-500 px-4 py-2 text-base text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-500 motion-reduce:transition-none;
 }
 */
