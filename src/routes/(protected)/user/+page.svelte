@@ -1,28 +1,33 @@
-<!-- profile edit form to handle new email, password etc -->
-<!-- Display info with edit buttons. Edit toggles form disabled then sends form data on submit? -->
-<script>
-	export let data;
-	export let form;
-	console.log(data.user);
-	// Display name, email, pasword
+<script lang="ts">
+	import { navigating } from '$app/state'
+	export let data: { user: any };
+	export let form: { success: boolean; error?: string };
+	let name = data.user.user_metadata.display_name;
+	let email = data.user.email;
+	let password = '';
+	$: if (form?.success) {
+		name = data.user.user_metadata.display_name;
+		email = data.user.email;
+		password = '';
+	}
 </script>
 
 <div class="flex flex-col items-center gap-4">
 	<h1><strong>Hello: </strong> {data.user?.user_metadata.display_name}</h1>
 	<h2>Check out and edit your account info!</h2>
 
-	<form method="post" class="w-full max-w-xl">
+	<form method="POST" class="w-full max-w-xl">
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Name: </span>
+					<span class="label-text"> Display name: </span>
 				</label>
 				<input
 					id="name"
 					name="name"
 					type="text"
 					autocomplete="name"
-					value={data.user?.user_metadata.display_name}
+					bind:value={name}
 					class="input input-bordered flex-1"
 				/>
 			</div>
@@ -37,7 +42,7 @@
 					name="email"
 					type="email"
 					autocomplete="email"
-					value={data.user?.email}
+					bind:value={email}
 					class="input input-bordered flex-1"
 				/>
 			</div>
@@ -53,15 +58,27 @@
 					type="password"
 					autocomplete="new-password"
 					placeholder="Leave blank if no change"
+					bind:value={password}
 					class="input input-bordered flex-1"
 				/>
 			</div>
 		</div>
 		<div>
-			<button type="submit" class="btn btn-primary">Update Details</button>
+			      {#if form?.error}
+        <p class="text-red-600">{form.error}</p>
+      {/if}
+
+      <button
+        type="submit"
+        disabled={navigating.to != null}
+        class="btn btn-primary"
+      >
+        {#if navigating.to}Updating…{:else}Update Details{/if}
+      </button>
+
+      {#if form?.success}
+        <p class="text-green-600">Details updated successfully!</p>
+      {/if}
 		</div>
 	</form>
 </div>
-{#if form?.success}
-	<p style="color: green;">Details updated successfully!</p>
-{/if}
