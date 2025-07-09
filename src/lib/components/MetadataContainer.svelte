@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 
-	export let storyboard: StoryboardOutput;
+	export let storyboard: Storyboard;
 </script>
 
 <div class="metadata-container">

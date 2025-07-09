@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher, tick } from 'svelte';
-	import type { StoryboardOutput } from '$lib/langgraph/storyboardGraph';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 
-	export let storyboard: StoryboardOutput;
+	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
 
@@ -19,9 +19,7 @@
 	let modalContentElement: HTMLElement;
 
 	function closeModal() {
-		if (triggerElement && typeof triggerElement.focus === 'function') {
-			triggerElement.focus();
-		}
+		// Focus will be handled by the reactive statement when 'show' becomes false.
 		dispatch('close');
 	}
 
@@ -80,8 +78,12 @@
 	$: if (show) {
 		liveRegionMessage = 'Slide modal has been opened.';
 		if (typeof document !== 'undefined') {
+			// Store the element that had focus before the modal opened.
+			// This needs to happen before any focus is programmatically moved into the modal.
 			triggerElement = document.activeElement as HTMLElement;
+
 			tick().then(() => {
+				// Ensure modal is rendered before trying to focus within it.
 				if (modalContentElement) {
 					const firstInteractiveFocusable = Array.from(
 						modalContentElement.querySelectorAll(
@@ -92,18 +94,29 @@
 					if (firstInteractiveFocusable) {
 						firstInteractiveFocusable.focus();
 					} else {
-						modalContentElement.focus(); // Fallback to modal content itself
+						modalContentElement.focus(); // Fallback to modal content itself if no interactive elements are found.
 					}
 				}
 			});
 		}
 	} else {
-		liveRegionMessage = ''; // Clear message when modal is not shown
+		// This block runs when 'show' becomes false (modal is closing).
+		liveRegionMessage = ''; // Clear message when modal is not shown.
+		if (triggerElement && typeof triggerElement.focus === 'function') {
+			// Wait for Svelte to update the DOM (remove the modal) before returning focus.
+			tick().then(() => {
+				triggerElement?.focus();
+				triggerElement = null; // Clear the stored element after focus is returned.
+			});
+		} else if (triggerElement) {
+			// If it exists but can't be focused (e.g., it was removed from DOM for other reasons), just clear it.
+			triggerElement = null;
+		}
 	}
 </script>
 
 {#if show}
-	<div role="status" aria-live="assertive" class="sr-only">
+	<div role="status" aria-live="polite" class="sr-only">
 		{liveRegionMessage}
 	</div>
 	<div

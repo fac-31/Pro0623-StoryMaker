@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { StoryboardOutput, StoryboardResponse } from '$lib/langgraph/storyboardGraph';
+	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 	import StoryboardForm from '$lib/components/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/SlideThumbnail.svelte';
@@ -24,7 +24,7 @@
 		genre: ''
 	};
 
-	let storyboard: (StoryboardOutput & { _id?: string }) | null = null;
+	let storyboard: Storyboard | null = null;
 	let loading = false;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
@@ -63,8 +63,12 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
-				const storyBoardResponse = data as StoryboardResponse;
-				storyboard = storyBoardResponse.storyboardOutput;
+				const id = data.insertedId;
+				console.log(id);
+
+				await progressStoryboard(id);
+
+				//storyboard = storyBoardResponse.storyboardOutput;
 				//await fetchLogs();
 			} else {
 				error = data.error || 'Failed to start storyboard';
@@ -74,6 +78,27 @@
 		} finally {
 			loading = false;
 		}
+	}
+
+	async function progressStoryboard(id: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const source = new EventSource('/api/storyboard/progress/' + id);
+
+			source.onmessage = (event) => {
+				storyboard = JSON.parse(event.data);
+
+				if (storyboard && storyboard.status == 'done') {
+					source.close();
+					resolve();
+				}
+			};
+
+			source.onerror = (err) => {
+				console.error('SSE connection error', err);
+				source.close();
+				reject(new Error('SSE connection error'));
+			};
+		});
 	}
 
 	async function generateVideo() {
@@ -295,24 +320,26 @@
 				<StoryboardForm bind:userPrompt {loading} on:submit={handleFormSubmit} />
 			{/if}
 
-			{#if loading}
-				<div class="flex items-center justify-center py-12">
-					<div class="text-center">
-						<Loader2
-							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
-						/>
-						<p class="mt-4 text-gray-600">Creating your storyboard...</p>
-					</div>
-				</div>
-			{/if}
-
 			{#if error}
 				<div class="rounded-lg border border-red-200 bg-red-50 p-4">
 					<p class="text-sm text-red-600">{error}</p>
 				</div>
 			{/if}
 
-			{#if storyboard}
+			{#if loading && (!storyboard || storyboard.status == 'none' || storyboard.status == 'generating-outline')}
+				<div class="flex items-center justify-center py-12">
+					<div class="text-center">
+						<Loader2
+							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
+						/>
+						{#if storyboard && storyboard.status == 'generating-outline'}
+							<p class="mt-4 text-gray-600">Creating outlines...</p>
+						{:else}
+							<p class="mt-4 text-gray-600">Creating your storyboard...</p>
+						{/if}
+					</div>
+				</div>
+			{:else if storyboard}
 				<!-- Action Buttons -->
 				<div class="mb-8 flex flex-col gap-4 sm:flex-row">
 					<button
@@ -429,7 +456,7 @@
 					</h2>
 					<div class="slides-flex">
 						{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
-							<SlideThumbnail {slide} {index} on:open={openSlideModal} />
+							<SlideThumbnail {storyboard} {slide} {index} on:open={openSlideModal} />
 						{/each}
 					</div>
 				</section>

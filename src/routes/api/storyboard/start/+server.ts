@@ -1,25 +1,37 @@
 import { json } from '@sveltejs/kit';
-import { runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { UserPrompt } from '$lib/models/UserPrompt';
-import type { StoryboardResponse } from '$lib/langgraph/storyboardGraph';
+import type { NewStoryboard } from '$lib/models/storyboard.model';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const userConcept: UserPrompt = await request.json();
-	const storyboardOutput = await runStoryboardCreation(userConcept);
+	const prompts: UserPrompt = await request.json();
+
+	const storyboard: NewStoryboard = {
+		status: 'none',
+		prompts,
+		currentSlide: 0,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+		storyOutline: {
+			storyMetadata: {
+				title: '',
+				totalDuration: '',
+				genre: '',
+				style: '',
+				targetAudience: ''
+			},
+			slideOutlines: []
+		},
+		visualSlides: []
+	};
 
 	const db = await initDB();
-	const result = await db.collection('storyboards').insertOne(storyboardOutput);
+	const result = await db.collection('storyboards').insertOne(storyboard);
 
 	if (!result.acknowledged) {
 		return json({ error: 'Failed to save storyboard' }, { status: 500 });
 	}
 
-	const storyboardResponse: StoryboardResponse = {
-		storyboardOutput: storyboardOutput,
-		_id: result.insertedId.toString() // Convert ObjectId to string for JSON response
-	};
-
-	return json(storyboardResponse);
+	return json(result);
 };
