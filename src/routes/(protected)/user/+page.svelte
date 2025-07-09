@@ -12,7 +12,7 @@
 	}
 </script>
 
-<div class="flex flex-col items-center gap-4">
+<section class="flex flex-col items-center gap-4">
 	<h1><strong>Hello: </strong> {data.user?.user_metadata.display_name}</h1>
 	<h2>Check out and edit your account info!</h2>
 
@@ -29,6 +29,8 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
+					aria-describedby="form-error-message"
+					required
 				/>
 			</div>
 		</div>
@@ -44,6 +46,8 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
+					aria-describedby="form-error-message"
+					required
 				/>
 			</div>
 		</div>
@@ -60,12 +64,14 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
+					aria-describedby="form-error-message"
+					minlength="8"
 				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<p class="text-red-600">{form.error}</p>
+				<p id="form-error-message" class="text-red-600" aria-live="assertive">{form.error}</p>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
@@ -73,8 +79,8 @@
 			</button>
 
 			{#if form?.success}
-				<p class="text-green-600">Details updated successfully!</p>
+				<p id="form-success-message" class="text-green-600" aria-live="polite">Details updated successfully!</p>
 			{/if}
 		</div>
 	</form>
-</div>
+</section>
