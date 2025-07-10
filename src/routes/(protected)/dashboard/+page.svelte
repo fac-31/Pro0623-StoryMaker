@@ -5,6 +5,7 @@
 	import NavBar from '$lib/components/NavBar/NavBar.svelte';
 	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import { storyboardStore } from '$lib/stores/storyboard';
 	import {
 		Plus,
 		Search,
@@ -24,7 +25,7 @@
 
 	// State management
 	//let showNewProjectModal = $state(false);
-	let showTeamModal = $state(false);
+	//let showTeamModal = $state(false);
 	let selectedStoryboard = $state<(Storyboard) | null>(null);
 	let viewMode = $state('grid'); // 'grid' or 'list'
 	let searchQuery = $state('');
@@ -166,7 +167,12 @@
 
 				<button
 					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-					onclick={() => (goto('/storyboard'))}
+					onclick={() => 
+					{
+						selectedStoryboard = null;
+						goto('/storyboard');
+					}
+					}
 				>
 					<Plus class="h-5 w-5" />
 					<span>New Storyboard</span>
@@ -273,7 +279,11 @@
 										class="p-1 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 										onclick={() => {
 											selectedStoryboard = storyboard;
-											showTeamModal = true;
+											//showTeamModal = true;
+											storyboardStore.set(selectedStoryboard); 
+											goto('/storyboard');
+
+
 										}}
 									>
 										<UserPlus class="h-4 w-4" />
@@ -335,13 +345,25 @@
 
 								<!-- Action Buttons -->
 								<div class="mt-4 flex items-center space-x-2 border-t border-gray-100 pt-4">
-									<a
+									<button
+										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
+										onclick={() => {
+											selectedStoryboard = storyboard;
+											//showTeamModal = true;
+											storyboardStore.set(selectedStoryboard); 
+											goto('/storyboard');
+										}}
+										aria-label="Open storyboard"
+									>
+										Continue
+									</button>
+									<!-- <a
 										href="/storyboard"
 										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
 									>
 										<Play class="mr-1 inline h-4 w-4" />
 										Continue
-									</a>
+									</a> -->
 									<button
 										class="p-2 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 									>
