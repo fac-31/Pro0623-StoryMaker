@@ -2,11 +2,10 @@
 	const { data } = $props();
 	const { user, storyboards } = data;
 
-	import NavBar from '$lib/components/NavBar/NavBar.svelte';
-	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import { storyboardStore } from '$lib/stores/storyboard';
 	import {
+		Bell,
 		Plus,
 		Search,
 		MoreHorizontal,
@@ -14,574 +13,623 @@
 		UserPlus,
 		Grid3X3,
 		List,
-		Video
+		Video,
+		Users,
+		Settings,
+		Home,
+		LogOut,
+		Crown,
+		Shield,
+		Eye,
+		Copy,
+		Check,
+		X,
+		Mail,
+		ChevronRight,
+		ChevronDown
 	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
 	// State management
-	//let showNewProjectModal = $state(false);
-	//let showTeamModal = $state(false);
 	let selectedStoryboard = $state<Storyboard | null>(null);
-	let viewMode = $state('grid'); // 'grid' or 'list'
+	let viewMode = $state('grid');
 	let searchQuery = $state('');
-	//let filterStatus = $state('all');
+	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
+	let selectedTeam = $state<any>(null);
+	let sidebarCollapsed = $state(false);
+	
+	// Team management modals
+	let showCreateTeamModal = $state(false);
+	let showJoinTeamModal = $state(false);
+	let showTeamSettingsModal = $state(false);
+	let showInviteMemberModal = $state(false);
+	
+	// Form states
+	let newTeam = $state({ name: '', description: '' });
+	let joinTeamCode = $state('');
+	let inviteEmail = $state('');
+	let inviteRole = $state('viewer');
+	let copiedInviteCode = $state(false);
+
+	// Mock team data (replace with actual data)
+	let userTeams = $state([
+		{
+			id: 1,
+			name: 'Creative Agency',
+			description: 'Our main creative team',
+			role: 'owner',
+			members: 8,
+			inviteCode: 'CREA-2024-XYZ',
+			storyboards: 12
+		},
+		{
+			id: 2,
+			name: 'Marketing Team',
+			description: 'Marketing campaigns and content',
+			role: 'editor',
+			members: 5,
+			inviteCode: 'MARK-2024-ABC',
+			storyboards: 7
+		}
+	]);
 
 	console.log('Storyboards:', storyboards);
 
-	// let teamMember = $state({
-	// 	email: '',
-	// 	role: 'viewer'
-	// });
+	// Navigation items
+	const navItems = [
+		{ id: 'my-storyboards', label: 'My Storyboards', icon: Home },
+		{ id: 'teams', label: 'Teams', icon: Users },
+		{ id: 'settings', label: 'Settings', icon: Settings },
+		{ id: 'notifications', label: 'Notifications', icon: Bell },
+		{ id: 'logout', label: 'Logout', icon: LogOut }];
+
+
+	// Role definitions
+	const roles = [
+		{ value: 'viewer', label: 'Viewer', icon: Eye },
+		{ value: 'editor', label: 'Editor', icon: Settings },
+		{ value: 'admin', label: 'Admin', icon: Shield }
+	];
 
 	// Computed values
 	const filteredProjects = () => {
-		return storyboards.filter((storyboard) => {
+		let projectsToFilter = storyboards;
+		
+		// If viewing team storyboards, filter by team
+		if (currentView === 'team-storyboards' && selectedTeam) {
+			projectsToFilter = selectedTeam.storyboards || [];
+		}
+		
+		return projectsToFilter.filter((storyboard) => {
 			const matchesSearch =
 				storyboard.prompts.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				storyboard.storyOutline.storyMetadata.title
 					.toLowerCase()
 					.includes(searchQuery.toLowerCase());
-			//const matchesFilter = filterStatus === 'all' || project.status === filterStatus;
 			return matchesSearch;
 		});
 	};
 
 	// Functions
-	/*
-	function createProject() {
-		if (newProject.concept.trim()) {
-			const project = {
+	function createTeam() {
+		if (newTeam.name.trim()) {
+			const team = {
 				id: Date.now(),
-				...newProject,
-				status: 'draft',
-				progress: 0,
-				lastModified: 'Just now',
-				teamMembers: [{ name: 'You', role: 'owner' }],
-				scenes: 0,
-				totalScenes: newProject.numSlides
+				name: newTeam.name,
+				description: newTeam.description,
+				role: 'owner',
+				members: 1,
+				inviteCode: `${newTeam.name.substring(0, 4).toUpperCase()}-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
+				storyboards: 0
 			};
-			projects.push(project);
+			
+			userTeams.push(team);
+			newTeam = { name: '', description: '' };
+			showCreateTeamModal = false;
+		}
+	}
 
-			// Reset form
-			newProject = {
-				concept: '',
-				description: '',
-				genre: '',
-				targetAudience: '',
-				storyStyle: '',
-				numSlides: 6
+	function joinTeam() {
+		if (joinTeamCode.trim()) {
+			// Mock join team logic
+			const team = {
+				id: Date.now(),
+				name: 'Joined Team',
+				description: 'Team joined via invite code',
+				role: 'viewer',
+				members: 12,
+				inviteCode: joinTeamCode,
+				storyboards: 5
 			};
-			showNewProjectModal = false;
+			
+			userTeams.push(team);
+			joinTeamCode = '';
+			showJoinTeamModal = false;
 		}
 	}
 
-	function addTeamMember() {
-		if (teamMember.email.trim() && selectedProject) {
-			const project = projects.find((p) => p.id === selectedProject!.id);
-			if (project) {
-				project.teamMembers.push({
-					name: teamMember.email.split('@')[0],
-					role: teamMember.role
-				});
-			}
+	function leaveTeam(teamId: number) {
+		userTeams = userTeams.filter(team => team.id !== teamId);
+	}
 
-			teamMember = { email: '', role: 'viewer' };
-			showTeamModal = false;
+	function copyInviteCode(code: string) {
+		navigator.clipboard.writeText(code);
+		copiedInviteCode = true;
+		setTimeout(() => copiedInviteCode = false, 2000);
+	}
+
+	function getRoleIcon(role: string) {
+		switch (role) {
+			case 'owner': return Crown;
+			case 'admin': return Shield;
+			case 'editor': return Settings;
+			default: return Eye;
 		}
 	}
 
-	function getStatusColor(status: string) {
-		switch (status) {
-			case 'completed':
-				return 'text-green-600 bg-green-100';
-			case 'in-progress':
-				return 'text-blue-600 bg-blue-100';
-			case 'review':
-				return 'text-yellow-600 bg-yellow-100';
-			case 'draft':
-				return 'text-gray-600 bg-gray-100';
-			default:
-				return 'text-gray-600 bg-gray-100';
+	function getRoleColor(role: string) {
+		switch (role) {
+			case 'owner': return 'text-yellow-600 bg-yellow-100';
+			case 'admin': return 'text-red-600 bg-red-100';
+			case 'editor': return 'text-blue-600 bg-blue-100';
+			default: return 'text-gray-600 bg-gray-100';
 		}
 	}
 
-	function getStatusIcon(status: string) {
-		switch (status) {
-			case 'completed':
-				return CheckCircle;
-			case 'in-progress':
-				return Play;
-			case 'review':
-				return AlertCircle;
-			case 'draft':
-				return Edit3;
-			default:
-				return Clock;
-		}
+	function viewTeamStoryboards(team: any) {
+		selectedTeam = team;
+		currentView = 'team-storyboards';
 	}
-		*/
 </script>
 
-<div class="flex min-h-screen flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50">
-	<!-- Header -->
-	<NavBar type="dashboard">
-		<DashboardNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} {user} />
-	</NavBar>
-
-	<!-- Main Content -->
-	<main class="px-6 py-8">
-		<!-- Page Header -->
-		<div class="mb-8">
-			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-				<div>
-					<h1 class="text-3xl font-bold text-gray-900">My Storyboards</h1>
-					<p class="text--600 mt-1">Create and manage your AI-powered storyboard projects</p>
+<div class="flex min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+	<!-- Sidebar -->
+	<aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white/80 backdrop-blur-sm border-r border-gray-200/50 transition-transform duration-300 {sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'} lg:translate-x-0">
+		<div class="flex h-full flex-col">
+			<!-- Sidebar Header -->
+			<div class="flex items-center justify-between p-6 border-b border-gray-200/50">
+				<div class="flex items-center space-x-3">
+					<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
+						<Play class="h-5 w-5 text-white" />
+					</div>
+					<span class="font-semibold text-gray-900">Story Maker</span>
 				</div>
-
 				<button
-					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-					onclick={() => {
-						selectedStoryboard = null;
-						goto('/storyboard');
-					}}
+					class="p-1 rounded-lg hover:bg-gray-100 lg:hidden"
+					onclick={() => sidebarCollapsed = !sidebarCollapsed}
 				>
-					<Plus class="h-5 w-5" />
-					<span>New Storyboard</span>
+					<X class="h-5 w-5 text-gray-500" />
 				</button>
 			</div>
-		</div>
 
-		<!-- Filters and Search -->
-		<section
-			aria-label="Filters and Search"
-			class="mb-8 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-xl backdrop-blur-sm"
+			<!-- Navigation -->
+			<nav class="flex-1 px-4 py-6 space-y-2">
+				{#each navItems as item}
+	{@const IconComponent = item.icon}
+
+	{#if item.id === 'logout'}
+		<!-- Logout form -->
+		<form action="/logout" method="POST">
+			<button
+				type="submit"
+				class="flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left text-gray-700 hover:bg-gray-100"
+			>
+				<IconComponent class="h-5 w-5" />
+				<span class="font-medium">{item.label}</span>
+			</button>
+		</form>
+	{:else}
+		<button
+			class="flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left transition-colors {currentView === item.id ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100'}"
+			onclick={() => {
+				if (item.id === 'settings') {
+					goto('/user');
+				} else {
+					currentView = item.id;
+					selectedTeam = null;
+				}
+			}}
 		>
-			<div class="flex flex-col gap-4 md:flex-row">
-				<!-- Search -->
-				<div class="relative flex-1">
-					<Search
-						class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400"
-					/>
-					<input
-						type="text"
-						placeholder="Search storyboards..."
-						class="w-full rounded-lg border border-gray-300 py-3 pr-4 pl-10 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-						bind:value={searchQuery}
-					/>
-				</div>
+			<IconComponent class="h-5 w-5" />
+			<span class="font-medium">{item.label}</span>
+		</button>
+	{/if}
+{/each}
+			</nav>
 
-				<!-- Status Filter 
-				
-				<select
-					class="rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-					bind:value={filterStatus}
-				>
-					<option value="all">All Status</option>
-					<option value="draft">Draft</option>
-					<option value="in-progress">In Progress</option>
-					<option value="review">Under Review</option>
-					<option value="completed">Completed</option>
-				</select> -->
-
-				<!-- View Toggle -->
-				<div class="flex items-center rounded-lg bg-gray-100 p-1">
-					<button
-						class="rounded-md p-2 transition-colors {viewMode === 'grid'
-							? 'bg-white text-purple-600 shadow-sm'
-							: 'text-gray-600 hover:text-gray-900'} motion-reduce:transition-none"
-						onclick={() => (viewMode = 'grid')}
-					>
-						<Grid3X3 class="h-4 w-4" />
-					</button>
-					<button
-						class="rounded-md p-2 transition-colors {viewMode === 'list'
-							? 'bg-white text-purple-600 shadow-sm'
-							: 'text-gray-600 hover:text-gray-900'} motion-reduce:transition-none"
-						onclick={() => (viewMode = 'list')}
-					>
-						<List class="h-4 w-4" />
-					</button>
+			<!-- User Section -->
+			<div class="p-4 border-t border-gray-200/50">
+				<div class="flex items-center space-x-3">
+					<div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600">
+						<span class="text-sm font-medium text-white">{user.user_metadata.display_name.charAt(0) || 'U'}</span>
+					</div>
+					<div class="flex-1 min-w-0">
+						<p class="text-sm font-medium text-gray-900 truncate">{user.user_metadata.display_name || 'User'}</p>
+						<p class="text-xs text-gray-500 truncate">{user.email || 'user@example.com'}</p>
+					</div>
 				</div>
 			</div>
-		</section>
+		</div>
+	</aside>
 
-		<!-- Projects Grid/List -->
-		<section aria-label="Projects">
-			{#if viewMode === 'grid'}
-				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-					{#each filteredProjects() as storyboard (storyboard._id)}
-						<!--{@const SvelteComponent = getStatusIcon(project.status)} -->
-						<div
-							class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl motion-reduce:transition-none"
+	<!-- Main Content -->
+	<div class="flex-1 lg:ml-64">
+
+		<!-- Mobile sidebar toggle -->
+		<button
+			class="fixed top-4 left-4 z-40 p-2 rounded-lg bg-white/80 backdrop-blur-sm border border-gray-200/50 lg:hidden"
+			onclick={() => sidebarCollapsed = !sidebarCollapsed}
+		>
+			<Users class="h-5 w-5 text-gray-600" />
+		</button>
+
+		<main class="px-6 py-8">
+			<!-- My Storyboards View -->
+			{#if currentView === 'my-storyboards'}
+				<!-- Page Header -->
+				<div class="mb-8">
+					<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+						<div>
+							<h1 class="text-3xl font-bold text-gray-900">My Storyboards</h1>
+							<p class="text-gray-600 mt-1">Create and manage your AI-powered storyboard projects</p>
+						</div>
+
+						<button
+							class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+							onclick={() => {
+								selectedStoryboard = null;
+								goto('/storyboard');
+							}}
 						>
-							<!-- storyboard Thumbnail -->
-							<div class="relative">
-								<div
-									class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600"
-								>
-									<Play class="h-12 w-12 text-white" />
-								</div>
-								<div class="absolute top-3 right-3">
-									<button
-										class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 motion-reduce:opacity-100 motion-reduce:transition-none"
-									>
-										<MoreHorizontal class="h-4 w-4 text-gray-600" />
-									</button>
-								</div>
-								<!--
-								<div class="absolute bottom-3 left-3">
-									<span
-										class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {getStatusColor(
-											storyboard.status
-										)}"
-									>
-										<SvelteComponent class="mr-1 h-3 w-3" />
-										{storyboard.status.replace('-', ' ')}
-									</span>
-								</div>
-								-->
-							</div>
+							<Plus class="h-5 w-5" />
+							<span>New Storyboard</span>
+						</button>
+					</div>
+				</div>
 
-							<!-- Project Info -->
+				<!-- Filters and Search -->
+				<section class="mb-8 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
+					<div class="flex flex-col gap-4 md:flex-row">
+						<div class="relative flex-1">
+							<Search class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
+							<input
+								type="text"
+								placeholder="Search storyboards..."
+								class="w-full rounded-lg border border-gray-300 py-3 pr-4 pl-10 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+								bind:value={searchQuery}
+							/>
+						</div>
+
+						<div class="flex items-center rounded-lg bg-gray-100 p-1">
+							<button
+								class="rounded-md p-2 transition-colors {viewMode === 'grid' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'}"
+								onclick={() => (viewMode = 'grid')}
+							>
+								<Grid3X3 class="h-4 w-4" />
+							</button>
+							<button
+								class="rounded-md p-2 transition-colors {viewMode === 'list' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'}"
+								onclick={() => (viewMode = 'list')}
+							>
+								<List class="h-4 w-4" />
+							</button>
+						</div>
+					</div>
+				</section>
+
+				<!-- Storyboards Grid/List (existing code) -->
+				<section aria-label="Projects">
+					{#if viewMode === 'grid'}
+						<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+							{#each filteredProjects() as storyboard (storyboard._id)}
+								<div class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl">
+									<div class="relative">
+										<div class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600">
+											<Play class="h-12 w-12 text-white" />
+										</div>
+										<div class="absolute top-3 right-3">
+											<button class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+												<MoreHorizontal class="h-4 w-4 text-gray-600" />
+											</button>
+										</div>
+									</div>
+
+									<div class="p-6">
+										<div class="mb-3 flex items-start justify-between">
+											<h3 class="truncate font-semibold text-gray-900">
+												{storyboard.storyOutline.storyMetadata.title}
+											</h3>
+											<button
+												class="p-1 text-gray-400 transition-colors hover:text-purple-600"
+												onclick={() => {
+													selectedStoryboard = storyboard;
+													storyboardStore.set(selectedStoryboard);
+													goto('/storyboard');
+												}}
+											>
+												<UserPlus class="h-4 w-4" />
+											</button>
+										</div>
+
+										<p class="mb-4 line-clamp-2 text-sm text-gray-600">{storyboard.prompts.concept}</p>
+
+										<div class="mb-4 flex items-center justify-between text-xs text-gray-500">
+											<span>{storyboard.visualSlides.length} slides</span>
+											<span>{storyboard.updatedAt}</span>
+										</div>
+
+										<div class="mt-4 flex items-center space-x-2 border-t border-gray-100 pt-4">
+											<button
+												class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700"
+												onclick={() => {
+													selectedStoryboard = storyboard;
+													storyboardStore.set(selectedStoryboard);
+													goto('/storyboard');
+												}}
+											>
+												Continue
+											</button>
+											<button class="p-2 text-gray-400 transition-colors hover:text-purple-600">
+												<Video class="h-4 w-4" />
+											</button>
+										</div>
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else}
+						<!-- List view implementation similar to original -->
+						<div class="overflow-hidden rounded-2xl border border-gray-200/50 bg-white/80 shadow-xl backdrop-blur-sm">
+							<!-- List view content -->
+						</div>
+					{/if}
+				</section>
+
+			<!-- Teams View -->
+			{:else if currentView === 'teams'}
+				<div class="mb-8">
+					<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+						<div>
+							<h1 class="text-3xl font-bold text-gray-900">Teams</h1>
+							<p class="text-gray-600 mt-1">Collaborate with your team members on storyboard projects</p>
+						</div>
+
+						<div class="flex items-center space-x-3">
+							<button
+								class="flex items-center space-x-2 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
+								onclick={() => showJoinTeamModal = true}
+							>
+								<UserPlus class="h-5 w-5" />
+								<span>Join Team</span>
+							</button>
+							<button
+								class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+								onclick={() => showCreateTeamModal = true}
+							>
+								<Plus class="h-5 w-5" />
+								<span>Create Team</span>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Teams Grid -->
+				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{#each userTeams as team (team.id)}
+						{@const RoleIcon = getRoleIcon(team.role)}
+						<div class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl">
 							<div class="p-6">
-								<div class="mb-3 flex items-start justify-between">
-									<h3 class="truncate font-semibold text-gray-900">
-										{storyboard.storyOutline.storyMetadata.title}
-									</h3>
-									<button
-										class="p-1 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
-										onclick={() => {
-											selectedStoryboard = storyboard;
-											//showTeamModal = true;
-											storyboardStore.set(selectedStoryboard);
-											goto('/storyboard');
-										}}
-									>
-										<UserPlus class="h-4 w-4" />
+								<div class="mb-4 flex items-start justify-between">
+									<div class="flex items-center space-x-3">
+										<div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600">
+											<Users class="h-6 w-6 text-white" />
+										</div>
+										<div>
+											<h3 class="font-semibold text-gray-900">{team.name}</h3>
+											<p class="text-sm text-gray-600">{team.description}</p>
+										</div>
+									</div>
+									<button class="p-1 text-gray-400 transition-colors hover:text-gray-600">
+										<MoreHorizontal class="h-4 w-4" />
 									</button>
 								</div>
 
-								<p class="mb-4 line-clamp-2 text-sm text-gray-600">{storyboard.prompts.concept}</p>
-
-								<!-- Progress Bar 
-								<div class="mb-4">
-									<div class="mb-2 flex items-center justify-between text-xs text-gray-500">
-										<span>Progress</span>
-										<span>{project.progress}%</span>
+								<div class="mb-4 flex items-center justify-between">
+									<span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {getRoleColor(team.role)}">
+										<RoleIcon class="mr-1 h-3 w-3" />
+										{team.role}
+									</span>
+									<div class="flex items-center space-x-4 text-sm text-gray-500">
+										<span>{team.members} members</span>
+										<span>{team.storyboards} storyboards</span>
 									</div>
-									<div class="h-2 w-full rounded-full bg-gray-200">
-										<div
-											class="h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 transition-all motion-reduce:transition-none"
-											style="width: {project.progress}%"
-										></div>
-									</div>
-								</div> -->
-
-								<!-- Project Meta -->
-								<div class="mb-4 flex items-center justify-between text-xs text-gray-500">
-									<span>{storyboard.visualSlides.length} slides</span>
-									<span>{storyboard.updatedAt}</span>
 								</div>
 
-								<!-- Team Members 
-								<div class="flex items-center justify-between">
-									<div class="flex -space-x-2">
-										{#each project.teamMembers.slice(0, 3) as member (member.name)}
-											<div
-												class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-purple-600 to-blue-600"
-												title={member.name}
-											>
-												<span class="text-xs font-medium text-white"
-													>{member.name
-														.split(' ')
-														.map((n) => n[0])
-														.join('')}</span
-												>
-											</div>
-										{/each}
-										{#if project.teamMembers.length > 3}
-											<div
-												class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gray-200"
-											>
-												<span class="text-xs text-gray-600">+{project.teamMembers.length - 3}</span>
-											</div>
+								<div class="flex items-center space-x-2 border-t border-gray-100 pt-4">
+									<button
+										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700"
+										onclick={() => viewTeamStoryboards(team)}
+									>
+										View Storyboards
+									</button>
+									<button
+										class="p-2 text-gray-400 transition-colors hover:text-purple-600"
+										onclick={() => copyInviteCode(team.inviteCode)}
+									>
+										{#if copiedInviteCode}
+											<Check class="h-4 w-4" />
+										{:else}
+											<Copy class="h-4 w-4" />
 										{/if}
-									</div>
-
-									<div class="flex items-center space-x-1">
-										<span class="text-xs text-gray-500">{project.genre}</span>
-									</div>
-								</div>
-								-->
-
-								<!-- Action Buttons -->
-								<div class="mt-4 flex items-center space-x-2 border-t border-gray-100 pt-4">
-									<button
-										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-										onclick={() => {
-											selectedStoryboard = storyboard;
-											//showTeamModal = true;
-											storyboardStore.set(selectedStoryboard);
-											goto('/storyboard');
-										}}
-										aria-label="Open storyboard"
-									>
-										Continue
 									</button>
-									<!-- <a
-										href="/storyboard"
-										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-									>
-										<Play class="mr-1 inline h-4 w-4" />
-										Continue
-									</a> -->
-									<button
-										class="p-2 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
-									>
-										<Video class="h-4 w-4" />
-									</button>
+									{#if team.role !== 'owner'}
+										<button
+											class="p-2 text-gray-400 transition-colors hover:text-red-600"
+											onclick={() => leaveTeam(team.id)}
+										>
+											<LogOut class="h-4 w-4" />
+										</button>
+									{/if}
 								</div>
 							</div>
 						</div>
 					{/each}
 				</div>
-			{:else}
-				<!-- List View -->
-				<div
-					class="overflow-hidden rounded-2xl border border-gray-200/50 bg-white/80 shadow-xl backdrop-blur-sm"
-				>
-					<div class="border-b border-gray-200/50 bg-gray-50/50 px-6 py-4">
-						<div
-							class="grid grid-cols-12 gap-4 text-xs font-medium tracking-wider text-gray-500 uppercase"
+
+			<!-- Team Storyboards View -->
+			{:else if currentView === 'team-storyboards' && selectedTeam}
+				<div class="mb-8">
+					<div class="flex items-center space-x-2 mb-4">
+						<button
+							class="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+							onclick={() => currentView = 'teams'}
 						>
-							<div class="col-span-4">Storyboard</div>
-							<div class="col-span-2">Status</div>
-							<div class="col-span-2">Progress</div>
-							<div class="col-span-2">Team</div>
-							<div class="col-span-2">Modified</div>
-						</div>
+							<span>Teams</span>
+							<ChevronRight class="h-4 w-4" />
+						</button>
+						<span class="font-medium text-gray-900">{selectedTeam.name}</span>
 					</div>
 
-					<div class="divide-y divide-gray-200/50">
-						{#each filteredProjects() as storyboard (storyboard._id)}
-							<!-- {@const SvelteComponent_1 = getStatusIcon(project.status)}-->
-							<div
-								class="px-6 py-4 transition-colors hover:bg-gray-50/50 motion-reduce:transition-none"
-							>
-								<div class="grid grid-cols-12 items-center gap-4">
-									<!-- Project Info -->
-									<div class="col-span-4 flex items-center space-x-3">
-										<div
-											class="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
-										>
-											<Play class="h-6 w-6 text-white" />
-										</div>
-										<div>
-											<h3 class="font-medium text-gray-900">
-												{storyboard.storyOutline.storyMetadata.title}
-											</h3>
-											<p class="text-sm text-gray-500">
-												{storyboard.storyOutline.storyMetadata.genre} • {storyboard.storyOutline
-													.storyMetadata.targetAudience}
-											</p>
-										</div>
-									</div>
+					<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+						<div>
+							<h1 class="text-3xl font-bold text-gray-900">{selectedTeam.name} Storyboards</h1>
+							<p class="text-gray-600 mt-1">Collaborative storyboard projects for your team</p>
+						</div>
 
-									<!-- Status
-									<div class="col-span-2">
-										<span
-											class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {getStatusColor(
-												project.status
-											)}"
-										>
-											<SvelteComponent_1 class="mr-1 h-3 w-3" />
-											{project.status.replace('-', ' ')}
-										</span>
-									</div> -->
-
-									<!-- Progress 
-									<div class="col-span-2">
-										<div class="flex items-center space-x-2">
-											<div class="h-2 flex-1 rounded-full bg-gray-200">
-												<div
-													class="h-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
-													style="width: {project.progress}%"
-												></div>
-											</div>
-											<span class="text-sm text-gray-600">{project.progress}%</span>
-										</div>
-									</div> -->
-
-									<!-- Team 
-									<div class="col-span-2">
-										<div class="flex -space-x-2">
-											{#each project.teamMembers.slice(0, 3) as member (member.name)}
-												<div
-													class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-purple-600 to-blue-600"
-													title={member.name}
-												>
-													<span class="text-xs font-medium text-white"
-														>{member.name
-															.split(' ')
-															.map((n) => n[0])
-															.join('')}</span
-													>
-												</div>
-											{/each}
-											{#if project.teamMembers.length > 3}
-												<div
-													class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-gray-200"
-												>
-													<span class="text-xs text-gray-600"
-														>+{project.teamMembers.length - 3}</span
-													>
-												</div>
-											{/if}
-										</div>
-									</div> -->
-
-									<!-- Modified -->
-									<div class="col-span-2 flex items-center justify-between">
-										<span class="text-sm text-gray-500">{storyboard.updatedAt}</span>
-										<button
-											class="p-1 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
-										>
-											<MoreHorizontal class="h-4 w-4" />
-										</button>
-									</div>
-								</div>
-							</div>
-						{/each}
+						<button
+							class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+							onclick={() => {
+								selectedStoryboard = null;
+								goto('/storyboard');
+							}}
+						>
+							<Plus class="h-5 w-5" />
+							<span>New Team Storyboard</span>
+						</button>
 					</div>
 				</div>
-			{/if}
 
-			<!-- Empty State -->
-			{#if filteredProjects().length === 0}
-				<div class="py-12 text-center">
-					<div
-						class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100"
-					>
-						<Search class="h-8 w-8 text-gray-400" />
+				<!-- Team storyboards would be displayed here similar to my-storyboards -->
+				<div class="text-center py-12">
+					<div class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100">
+						<Users class="h-8 w-8 text-gray-400" />
 					</div>
-					<h3 class="mb-2 text-lg font-medium text-gray-900">No storyboards found</h3>
-					<p class="mb-6 text-gray-500">Try adjusting your search or filter criteria</p>
+					<h3 class="mb-2 text-lg font-medium text-gray-900">No team storyboards yet</h3>
+					<p class="mb-6 text-gray-500">Start creating collaborative storyboards with your team</p>
 					<button
-						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-						onclick={() => {
-							searchQuery = '';
-							//filterStatus = 'all';
-						}}
+						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+						onclick={() => goto('/storyboard')}
 					>
-						Clear Filters
+						Create First Storyboard
 					</button>
 				</div>
 			{/if}
-		</section>
-	</main>
+		</main>
+	</div>
 
-	<!-- Team Management Modal 
-	{#if showTeamModal && selectedStoryboard}
+	<!-- Create Team Modal -->
+	{#if showCreateTeamModal}
 		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-			<div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white">
-				<div class="p-6">
-					<div class="mb-6 flex items-center justify-between">
-						<h2 class="text-xl font-semibold text-gray-900">Manage Team</h2>
+			<div class="w-full max-w-md rounded-2xl bg-white p-6">
+				<div class="mb-6 flex items-center justify-between">
+					<h2 class="text-xl font-semibold text-gray-900">Create New Team</h2>
+					<button
+						class="p-2 text-gray-400 transition-colors hover:text-gray-600"
+						onclick={() => showCreateTeamModal = false}
+					>
+						<X class="h-5 w-5" />
+					</button>
+				</div>
+
+				<form onsubmit={(e) => { e.preventDefault(); createTeam(); }} class="space-y-4">
+					<div>
+						<label for="team-name" class="mb-2 block text-sm font-medium text-gray-700">Team Name</label>
+						<input
+							id="team-name"
+							type="text"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+							placeholder="Enter team name..."
+							bind:value={newTeam.name}
+							required
+						/>
+					</div>
+
+					<div>
+						<label for="team-description" class="mb-2 block text-sm font-medium text-gray-700">Description</label>
+						<textarea
+							id="team-description"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+							placeholder="Team description..."
+							rows="3"
+							bind:value={newTeam.description}
+						></textarea>
+					</div>
+
+					<div class="flex space-x-3 pt-4">
 						<button
-							class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
-							onclick={() => (showTeamModal = false)}
+							type="button"
+							class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+							onclick={() => showCreateTeamModal = false}
 						>
-							<Plus class="h-5 w-5 rotate-45" />
+							Cancel
+						</button>
+						<button
+							type="submit"
+							class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+						>
+							Create Team
 						</button>
 					</div>
-
-					<div class="mb-6">
-						<h3 class="mb-3 font-medium text-gray-900">Current Team Members</h3>
-						<div class="space-y-3">
-							{#each selectedStoryboard.teamMembers as member (member.name)}
-								<div class="flex items-center justify-between rounded-lg bg-gray-50 p-3">
-									<div class="flex items-center space-x-3">
-										<div
-											class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
-										>
-											<span class="text-sm font-medium text-white"
-												>{member.name
-													.split(' ')
-													.map((n) => n[0])
-													.join('')}</span
-											>
-										</div>
-										<div>
-											<div class="font-medium text-gray-900">{member.name}</div>
-											<div class="text-sm text-gray-500 capitalize">{member.role}</div>
-										</div>
-									</div>
-									{#if member.role !== 'owner'}
-										<button
-											class="p-1 text-gray-400 transition-colors hover:text-red-600 motion-reduce:transition-none"
-										>
-											<Trash2 class="h-4 w-4" />
-										</button>
-									{/if}
-								</div>
-							{/each}
-						</div>
-					</div>
-
-					<form
-						onsubmit={(e) => {
-							e.preventDefault();
-							addTeamMember();
-						}}
-						class="space-y-4"
-					>
-						<div>
-							<label for="teamEmail" class="mb-2 block text-sm font-medium text-gray-700"
-								>Email Address</label
-							>
-							<input
-								id="teamEmail"
-								type="email"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-								placeholder="Enter email address..."
-								bind:value={teamMember.email}
-								required
-							/>
-						</div>
-
-						<div>
-							<label for="teamRole" class="mb-2 block text-sm font-medium text-gray-700">Role</label
-							>
-							<select
-								id="teamRole"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-								bind:value={teamMember.role}
-							>
-								{#each roles as role (role)}
-									<option value={role} class="capitalize">{role}</option>
-								{/each}
-							</select>
-						</div>
-
-						<div class="flex space-x-3 pt-4">
-							<button
-								type="button"
-								class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 motion-reduce:transition-none"
-								onclick={() => (showTeamModal = false)}
-							>
-								Close
-							</button>
-							<button
-								type="submit"
-								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-							>
-								Add Member
-							</button>
-						</div>
-					</form>
-				</div>
+				</form>
 			</div>
 		</div>
 	{/if}
-	-->
+
+	<!-- Join Team Modal -->
+	{#if showJoinTeamModal}
+		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+			<div class="w-full max-w-md rounded-2xl bg-white p-6">
+				<div class="mb-6 flex items-center justify-between">
+					<h2 class="text-xl font-semibold text-gray-900">Join Team</h2>
+					<button
+						class="p-2 text-gray-400 transition-colors hover:text-gray-600"
+						onclick={() => showJoinTeamModal = false}
+					>
+						<X class="h-5 w-5" />
+					</button>
+				</div>
+
+				<form onsubmit={(e) => { e.preventDefault(); joinTeam(); }} class="space-y-4">
+					<div>
+						<label for="team-invite-code" class="mb-2 block text-sm font-medium text-gray-700">Team Invite Code</label>
+						<input
+							id="team-invite-code"
+							type="text"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+							placeholder="Enter invite code..."
+							bind:value={joinTeamCode}
+							required
+						/>
+						<p class="mt-2 text-sm text-gray-500">Ask your team leader for the invite code</p>
+					</div>
+
+					<div class="flex space-x-3 pt-4">
+						<button
+							type="button"
+							class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+							onclick={() => showJoinTeamModal = false}
+						>
+							Cancel
+						</button>
+						<button
+							type="submit"
+							class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+						>
+							Join Team
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	{/if}
 </div>
