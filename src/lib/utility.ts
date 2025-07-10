@@ -11,3 +11,4 @@
 export function calculateTotal(basePrice: number, taxRate: number): number {
 	return basePrice * (1 + taxRate);
 }
+

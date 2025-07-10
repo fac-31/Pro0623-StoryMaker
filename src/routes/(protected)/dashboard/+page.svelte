@@ -1,7 +1,7 @@
 <script lang="ts">
 	const { data } = $props();
-	const { user } = data;
-	console.log('From page: ', data);
+	const { user, storyboards} = data;
+
 	import NavBar from '$lib/components/NavBar/NavBar.svelte';
 	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
 	import {
@@ -27,6 +27,8 @@
 	let viewMode = $state('grid'); // 'grid' or 'list'
 	let searchQuery = $state('');
 	let filterStatus = $state('all');
+
+	console.log('Storyboards:', storyboards);
 
 	// Form states
 	let newProject = $state({
