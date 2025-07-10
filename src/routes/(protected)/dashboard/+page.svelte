@@ -24,7 +24,7 @@
 	let selectedStoryboard = $state<Storyboard | null>(null);
 	let viewMode = $state('grid'); // 'grid' or 'list'
 	let searchQuery = $state('');
-	let filterStatus = $state('all');
+	//let filterStatus = $state('all');
 
 	console.log('Storyboards:', storyboards);
 
@@ -470,7 +470,7 @@
 						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
 						onclick={() => {
 							searchQuery = '';
-							filterStatus = 'all';
+							//filterStatus = 'all';
 						}}
 					>
 						Clear Filters

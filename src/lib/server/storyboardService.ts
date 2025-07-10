@@ -56,7 +56,6 @@ export async function getAllStoryboardsIds(): Promise<string[]> {
 
 export async function getStoryboardsOfUser(supabaseUserId: string): Promise<Storyboard[]> {
 	const db = getDB();
-	const users = db.collection('users');
 
 	try {
 		const userDoc = await await db.collection('users').findOne({
