@@ -4,7 +4,7 @@
 	import { get } from 'svelte/store';
 	import StoryboardPage from '$lib/components/Storyboard/StoryboardPage.svelte';
 
-	let storyboard = get(storyboardStore); 
+	let storyboard = get(storyboardStore);
 	storyboardStore.set(null);
 
 	// Receive data from server load

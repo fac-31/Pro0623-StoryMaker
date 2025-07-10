@@ -6,8 +6,7 @@ import type { NewStoryboard } from '$lib/models/storyboard.model';
 import { getUserById } from '$lib/server/userService';
 
 export const POST: RequestHandler = async ({ request }) => {
-
-	const { userPrompt, userId } = await request.json() as {
+	const { userPrompt, userId } = (await request.json()) as {
 		userPrompt: UserPrompt;
 		userId: string;
 	};
@@ -41,7 +40,6 @@ export const POST: RequestHandler = async ({ request }) => {
 	const user = await getUserById(userId);
 	if (!user) {
 		return json({ error: 'User not found' }, { status: 404 });
-	
 	}
 	if (!user.projects) {
 		user.projects = [];
@@ -49,10 +47,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	user.projects.push(result.insertedId);
 
-	await db.collection('users').updateOne(
-		{ _id: user._id },
-		{ $set: { projects: user.projects } }
-	);
+	await db.collection('users').updateOne({ _id: user._id }, { $set: { projects: user.projects } });
 
 	return json(result);
 };

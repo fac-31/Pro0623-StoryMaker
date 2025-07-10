@@ -39,7 +39,7 @@
 	onMount(() => {
 		console.log('userId', userId);
 	});
-	
+
 	// Slideshow player state
 	let currentSlideIndex = 0;
 	let isPlaying = false;
@@ -64,7 +64,7 @@
 		try {
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
-				body: JSON.stringify({userPrompt, userId})
+				body: JSON.stringify({ userPrompt, userId })
 			});
 			const data = await res.json();
 			if (res.ok) {

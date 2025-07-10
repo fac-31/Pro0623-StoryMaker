@@ -1,6 +1,6 @@
 <script lang="ts">
 	const { data } = $props();
-	const { user, storyboards} = data;
+	const { user, storyboards } = data;
 
 	import NavBar from '$lib/components/NavBar/NavBar.svelte';
 	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
@@ -11,14 +11,9 @@
 		Search,
 		MoreHorizontal,
 		Play,
-		Edit3,
-		Trash2,
 		UserPlus,
 		Grid3X3,
 		List,
-		Clock,
-		CheckCircle,
-		AlertCircle,
 		Video
 	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
@@ -26,48 +21,26 @@
 	// State management
 	//let showNewProjectModal = $state(false);
 	//let showTeamModal = $state(false);
-	let selectedStoryboard = $state<(Storyboard) | null>(null);
+	let selectedStoryboard = $state<Storyboard | null>(null);
 	let viewMode = $state('grid'); // 'grid' or 'list'
 	let searchQuery = $state('');
 	let filterStatus = $state('all');
 
 	console.log('Storyboards:', storyboards);
 
-	// Form states
-	let newProject = $state({
-		concept: '',
-		description: '',
-		genre: '',
-		targetAudience: '',
-		storyStyle: '',
-		numSlides: 6
-	});
-
-	let teamMember = $state({
-		email: '',
-		role: 'viewer'
-	});
-
-	const genres = [
-		'Science Fiction',
-		'Mystery',
-		'Fantasy',
-		'Romance',
-		'Horror',
-		'Comedy',
-		'Drama',
-		'Educational'
-	];
-	const audiences = ['Children', 'Teens', 'Young Adults', 'Adults', 'Professionals'];
-	const styles = ['Cinematic', 'Animated', 'Sketchy', 'Comic Book', 'Film Noir', 'Clean & Modern'];
-	const roles = ['viewer', 'editor', 'reviewer', 'admin'];
+	// let teamMember = $state({
+	// 	email: '',
+	// 	role: 'viewer'
+	// });
 
 	// Computed values
 	const filteredProjects = () => {
 		return storyboards.filter((storyboard) => {
 			const matchesSearch =
 				storyboard.prompts.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				storyboard.storyOutline.storyMetadata.title.toLowerCase().includes(searchQuery.toLowerCase());
+				storyboard.storyOutline.storyMetadata.title
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase());
 			//const matchesFilter = filterStatus === 'all' || project.status === filterStatus;
 			return matchesSearch;
 		});
@@ -167,12 +140,10 @@
 
 				<button
 					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-					onclick={() => 
-					{
+					onclick={() => {
 						selectedStoryboard = null;
 						goto('/storyboard');
-					}
-					}
+					}}
 				>
 					<Plus class="h-5 w-5" />
 					<span>New Storyboard</span>
@@ -274,16 +245,16 @@
 							<!-- Project Info -->
 							<div class="p-6">
 								<div class="mb-3 flex items-start justify-between">
-									<h3 class="truncate font-semibold text-gray-900">{storyboard.storyOutline.storyMetadata.title}</h3>
+									<h3 class="truncate font-semibold text-gray-900">
+										{storyboard.storyOutline.storyMetadata.title}
+									</h3>
 									<button
 										class="p-1 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 										onclick={() => {
 											selectedStoryboard = storyboard;
 											//showTeamModal = true;
-											storyboardStore.set(selectedStoryboard); 
+											storyboardStore.set(selectedStoryboard);
 											goto('/storyboard');
-
-
 										}}
 									>
 										<UserPlus class="h-4 w-4" />
@@ -350,7 +321,7 @@
 										onclick={() => {
 											selectedStoryboard = storyboard;
 											//showTeamModal = true;
-											storyboardStore.set(selectedStoryboard); 
+											storyboardStore.set(selectedStoryboard);
 											goto('/storyboard');
 										}}
 										aria-label="Open storyboard"
@@ -406,9 +377,12 @@
 											<Play class="h-6 w-6 text-white" />
 										</div>
 										<div>
-											<h3 class="font-medium text-gray-900">{storyboard.storyOutline.storyMetadata.title}</h3>
+											<h3 class="font-medium text-gray-900">
+												{storyboard.storyOutline.storyMetadata.title}
+											</h3>
 											<p class="text-sm text-gray-500">
-												{storyboard.storyOutline.storyMetadata.genre} • {storyboard.storyOutline.storyMetadata.targetAudience}
+												{storyboard.storyOutline.storyMetadata.genre} • {storyboard.storyOutline
+													.storyMetadata.targetAudience}
 											</p>
 										</div>
 									</div>
