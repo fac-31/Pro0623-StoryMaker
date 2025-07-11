@@ -17,55 +17,66 @@
 	<h2>Check out and edit your account info!</h2>
 
 	<form method="POST" class="w-full max-w-xl">
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="name" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Display name: </span>
-				</label>
-				<input
-					id="name"
-					name="name"
-					type="text"
-					autocomplete="name"
-					bind:value={name}
-					class="input input-bordered flex-1"
-				/>
+		<fieldset class="mb-4">
+			<legend class="text-lg font-semibold mb-2">User Details</legend>
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="name" class="label max-w-[60px] flex-auto">
+						<span class="label-text"> Display name: </span>
+					</label>
+					<input
+						id="name"
+						name="name"
+						type="text"
+						autocomplete="name"
+						bind:value={name}
+						class="input input-bordered flex-1"
+						aria-describedby="form-error-message form-success-message"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="email" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Email: </span>
-				</label>
-				<input
-					id="email"
-					name="email"
-					type="email"
-					autocomplete="email"
-					bind:value={email}
-					class="input input-bordered flex-1"
-				/>
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="email" class="label max-w-[60px] flex-auto">
+						<span class="label-text"> Email: </span>
+					</label>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						autocomplete="email"
+						bind:value={email}
+						class="input input-bordered flex-1"
+						aria-describedby="form-error-message form-success-message"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="password" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Password: </span>
-				</label>
-				<input
-					id="password"
-					name="password"
-					type="password"
-					autocomplete="new-password"
-					placeholder="Leave blank if no change"
-					bind:value={password}
-					class="input input-bordered flex-1"
-				/>
+		</fieldset>
+
+		<fieldset class="mb-4">
+			<legend class="text-lg font-semibold mb-2">Update Password</legend>
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="password" class="label max-w-[60px] flex-auto">
+						<span class="label-text"> Password: </span>
+					</label>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						autocomplete="new-password"
+						placeholder="Leave blank if no change"
+						bind:value={password}
+						class="input input-bordered flex-1"
+						aria-describedby="form-error-message form-success-message"
+					/>
+				</div>
 			</div>
-		</div>
+		</fieldset>
+
 		<div>
 			{#if form?.error}
-				<p class="text-red-600">{form.error}</p>
+				<p id="form-error-message" class="text-red-600" aria-live="polite">{form.error}</p>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
@@ -73,7 +84,9 @@
 			</button>
 
 			{#if form?.success}
-				<p class="text-green-600">Details updated successfully!</p>
+				<p id="form-success-message" class="text-green-600" aria-live="polite">
+					Details updated successfully!
+				</p>
 			{/if}
 		</div>
 	</form>

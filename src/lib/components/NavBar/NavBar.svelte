@@ -1,10 +1,43 @@
 <script lang="ts">
 	import { Menu, X, Play } from 'lucide-svelte';
+	import { tick } from 'svelte'; // Import tick
+
 	type NavType = 'home' | 'auth' | 'dashboard';
 	/** Which variant of the navbar to render */
 	export let type: NavType = 'home';
 	/** Mobile menu open state */
 	let mobileMenuOpen = false;
+	let mobileMenuButtonElement: HTMLButtonElement; // For binding to the button
+
+	$: if (typeof document !== 'undefined') {
+		// Ensure code runs only in browser
+		if (mobileMenuOpen) {
+			tick().then(() => {
+				const menuId = type === 'home' || type === 'auth' ? 'mobile-menu-marketing' : 'mobile-menu-dashboard';
+				const menuElement = document.getElementById(menuId);
+				if (menuElement) {
+					// Make the menu container focusable if it isn't already
+					menuElement.setAttribute('tabindex', '-1');
+					// Try to focus the first interactive element, or the container itself
+					const firstFocusable = menuElement.querySelector<HTMLElement>(
+						'a[href], button:not([disabled])'
+					);
+					if (firstFocusable) {
+						firstFocusable.focus();
+					} else {
+						menuElement.focus();
+					}
+				}
+			});
+		} else {
+			// Only try to focus if mobileMenuButtonElement is available (it might not be on initial load server-side)
+			if (mobileMenuButtonElement) {
+				tick().then(() => {
+					mobileMenuButtonElement.focus();
+				});
+			}
+		}
+	}
 </script>
 
 <header class="sticky top-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-md">
@@ -22,9 +55,15 @@
 					StoryMaker
 				</span>
 			</div>
+
+			<!-- Mobile Menu Button -->
 			<button
+				bind:this={mobileMenuButtonElement}
 				class="p-2 text-gray-500 hover:text-gray-800 md:hidden"
 				on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
+				aria-expanded={mobileMenuOpen}
+				aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+				aria-controls={type === 'home' || type === 'auth' ? 'mobile-menu-marketing' : 'mobile-menu-dashboard'}
 			>
 				{#if mobileMenuOpen}
 					<X class="h-6 w-6" />
