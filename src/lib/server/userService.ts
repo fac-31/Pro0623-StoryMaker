@@ -1,6 +1,5 @@
 import type { InsertOneResult } from 'mongodb';
 import type { RequestEvent } from '@sveltejs/kit';
-
 import { getDB } from './db';
 
 import type { User, NewUser, SafeUser } from '$lib/models/user.model';

@@ -1,149 +1,53 @@
 <script lang="ts">
 	const { data } = $props();
-	const { user } = data;
-	console.log('From page: ', data);
+	const { user, storyboards } = data;
+
 	import NavBar from '$lib/components/NavBar/NavBar.svelte';
 	import DashboardNav from '$lib/components/NavBar/DashboardNav.svelte';
+	import type { Storyboard } from '$lib/models/storyboard.model';
+	import { storyboardStore } from '$lib/stores/storyboard';
 	import {
 		Plus,
 		Search,
 		MoreHorizontal,
 		Play,
-		Edit3,
-		Trash2,
 		UserPlus,
 		Grid3X3,
 		List,
-		Clock,
-		CheckCircle,
-		AlertCircle,
 		Video
 	} from 'lucide-svelte';
+	import { goto } from '$app/navigation';
 
 	// State management
-	let showNewProjectModal = $state(false);
-	let showTeamModal = $state(false);
-	let selectedProject = $state<(typeof projects)[0] | null>(null);
+	//let showNewProjectModal = $state(false);
+	//let showTeamModal = $state(false);
+	let selectedStoryboard = $state<Storyboard | null>(null);
 	let viewMode = $state('grid'); // 'grid' or 'list'
 	let searchQuery = $state('');
-	let filterStatus = $state('all');
+	//let filterStatus = $state('all');
 
-	// Form states
-	let newProject = $state({
-		concept: '',
-		description: '',
-		genre: '',
-		targetAudience: '',
-		storyStyle: '',
-		numSlides: 6
-	});
+	console.log('Storyboards:', storyboards);
 
-	let teamMember = $state({
-		email: '',
-		role: 'viewer'
-	});
-
-	// Mock data - this would come from your database
-	const projects = [
-		{
-			id: 1,
-			concept: 'The Space Adventure',
-			description: 'A thrilling sci-fi story about exploring distant galaxies',
-			genre: 'Science Fiction',
-			targetAudience: 'Young Adults',
-			storyStyle: 'Cinematic',
-			status: 'in-progress',
-			progress: 65,
-			lastModified: '2 hours ago',
-			teamMembers: [
-				{ name: 'John Doe', role: 'owner' },
-				{ name: 'Jane Smith', role: 'editor' },
-				{ name: 'Mike Johnson', role: 'viewer' }
-			],
-			scenes: 12,
-			totalScenes: 18,
-			numSlides: 18
-		},
-		{
-			id: 2,
-			concept: 'Mystery at Midnight',
-			description: 'A detective story set in 1940s New York',
-			genre: 'Mystery',
-			targetAudience: 'Adults',
-			storyStyle: 'Film Noir',
-			status: 'completed',
-			progress: 100,
-			lastModified: '1 day ago',
-			teamMembers: [
-				{ name: 'Sarah Wilson', role: 'owner' },
-				{ name: 'Tom Brown', role: 'editor' }
-			],
-			scenes: 24,
-			totalScenes: 24,
-			numSlides: 24
-		},
-		{
-			id: 3,
-			concept: 'Fairy Tale Kingdom',
-			description: 'A magical adventure for children',
-			genre: 'Fantasy',
-			targetAudience: 'Children',
-			storyStyle: 'Animated',
-			status: 'draft',
-			progress: 25,
-			lastModified: '3 days ago',
-			teamMembers: [{ name: 'Emma Davis', role: 'owner' }],
-			scenes: 5,
-			totalScenes: 20,
-			numSlides: 20
-		},
-		{
-			id: 4,
-			concept: 'Corporate Training Video',
-			description: 'Educational content for employee onboarding',
-			genre: 'Educational',
-			targetAudience: 'Professionals',
-			storyStyle: 'Clean & Modern',
-			status: 'review',
-			progress: 90,
-			lastModified: '5 hours ago',
-			teamMembers: [
-				{ name: 'Alex Chen', role: 'owner' },
-				{ name: 'Lisa Park', role: 'editor' },
-				{ name: 'David Kim', role: 'reviewer' }
-			],
-			scenes: 15,
-			totalScenes: 16,
-			numSlides: 16
-		}
-	];
-
-	const genres = [
-		'Science Fiction',
-		'Mystery',
-		'Fantasy',
-		'Romance',
-		'Horror',
-		'Comedy',
-		'Drama',
-		'Educational'
-	];
-	const audiences = ['Children', 'Teens', 'Young Adults', 'Adults', 'Professionals'];
-	const styles = ['Cinematic', 'Animated', 'Sketchy', 'Comic Book', 'Film Noir', 'Clean & Modern'];
-	const roles = ['viewer', 'editor', 'reviewer', 'admin'];
+	// let teamMember = $state({
+	// 	email: '',
+	// 	role: 'viewer'
+	// });
 
 	// Computed values
 	const filteredProjects = () => {
-		return projects.filter((project) => {
+		return storyboards.filter((storyboard) => {
 			const matchesSearch =
-				project.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				project.description.toLowerCase().includes(searchQuery.toLowerCase());
-			const matchesFilter = filterStatus === 'all' || project.status === filterStatus;
-			return matchesSearch && matchesFilter;
+				storyboard.prompts.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				storyboard.storyOutline.storyMetadata.title
+					.toLowerCase()
+					.includes(searchQuery.toLowerCase());
+			//const matchesFilter = filterStatus === 'all' || project.status === filterStatus;
+			return matchesSearch;
 		});
 	};
 
 	// Functions
+	/*
 	function createProject() {
 		if (newProject.concept.trim()) {
 			const project = {
@@ -215,6 +119,7 @@
 				return Clock;
 		}
 	}
+		*/
 </script>
 
 <div class="flex min-h-screen flex-col bg-gradient-to-br from-purple-50 via-white to-blue-50">
@@ -235,7 +140,10 @@
 
 				<button
 					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-					onclick={() => (showNewProjectModal = true)}
+					onclick={() => {
+						selectedStoryboard = null;
+						goto('/storyboard');
+					}}
 				>
 					<Plus class="h-5 w-5" />
 					<span>New Storyboard</span>
@@ -262,7 +170,8 @@
 					/>
 				</div>
 
-				<!-- Status Filter -->
+				<!-- Status Filter 
+				
 				<select
 					class="rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 					bind:value={filterStatus}
@@ -272,7 +181,7 @@
 					<option value="in-progress">In Progress</option>
 					<option value="review">Under Review</option>
 					<option value="completed">Completed</option>
-				</select>
+				</select> -->
 
 				<!-- View Toggle -->
 				<div class="flex items-center rounded-lg bg-gray-100 p-1">
@@ -300,12 +209,12 @@
 		<section aria-label="Projects">
 			{#if viewMode === 'grid'}
 				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-					{#each filteredProjects() as project (project.id)}
-						{@const SvelteComponent = getStatusIcon(project.status)}
+					{#each filteredProjects() as storyboard (storyboard._id)}
+						<!--{@const SvelteComponent = getStatusIcon(project.status)} -->
 						<div
 							class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl motion-reduce:transition-none"
 						>
-							<!-- Project Thumbnail -->
+							<!-- storyboard Thumbnail -->
 							<div class="relative">
 								<div
 									class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600"
@@ -319,36 +228,42 @@
 										<MoreHorizontal class="h-4 w-4 text-gray-600" />
 									</button>
 								</div>
+								<!--
 								<div class="absolute bottom-3 left-3">
 									<span
 										class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {getStatusColor(
-											project.status
+											storyboard.status
 										)}"
 									>
 										<SvelteComponent class="mr-1 h-3 w-3" />
-										{project.status.replace('-', ' ')}
+										{storyboard.status.replace('-', ' ')}
 									</span>
 								</div>
+								-->
 							</div>
 
 							<!-- Project Info -->
 							<div class="p-6">
 								<div class="mb-3 flex items-start justify-between">
-									<h3 class="truncate font-semibold text-gray-900">{project.concept}</h3>
+									<h3 class="truncate font-semibold text-gray-900">
+										{storyboard.storyOutline.storyMetadata.title}
+									</h3>
 									<button
 										class="p-1 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 										onclick={() => {
-											selectedProject = project;
-											showTeamModal = true;
+											selectedStoryboard = storyboard;
+											//showTeamModal = true;
+											storyboardStore.set(selectedStoryboard);
+											goto('/storyboard');
 										}}
 									>
 										<UserPlus class="h-4 w-4" />
 									</button>
 								</div>
 
-								<p class="mb-4 line-clamp-2 text-sm text-gray-600">{project.description}</p>
+								<p class="mb-4 line-clamp-2 text-sm text-gray-600">{storyboard.prompts.concept}</p>
 
-								<!-- Progress Bar -->
+								<!-- Progress Bar 
 								<div class="mb-4">
 									<div class="mb-2 flex items-center justify-between text-xs text-gray-500">
 										<span>Progress</span>
@@ -360,15 +275,15 @@
 											style="width: {project.progress}%"
 										></div>
 									</div>
-								</div>
+								</div> -->
 
 								<!-- Project Meta -->
 								<div class="mb-4 flex items-center justify-between text-xs text-gray-500">
-									<span>{project.scenes}/{project.totalScenes} slides</span>
-									<span>{project.lastModified}</span>
+									<span>{storyboard.visualSlides.length} slides</span>
+									<span>{storyboard.updatedAt}</span>
 								</div>
 
-								<!-- Team Members -->
+								<!-- Team Members 
 								<div class="flex items-center justify-between">
 									<div class="flex -space-x-2">
 										{#each project.teamMembers.slice(0, 3) as member (member.name)}
@@ -397,16 +312,29 @@
 										<span class="text-xs text-gray-500">{project.genre}</span>
 									</div>
 								</div>
+								-->
 
 								<!-- Action Buttons -->
 								<div class="mt-4 flex items-center space-x-2 border-t border-gray-100 pt-4">
-									<a
+									<button
+										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
+										onclick={() => {
+											selectedStoryboard = storyboard;
+											//showTeamModal = true;
+											storyboardStore.set(selectedStoryboard);
+											goto('/storyboard');
+										}}
+										aria-label="Open storyboard"
+									>
+										Continue
+									</button>
+									<!-- <a
 										href="/storyboard"
 										class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
 									>
 										<Play class="mr-1 inline h-4 w-4" />
 										Continue
-									</a>
+									</a> -->
 									<button
 										class="p-2 text-gray-400 transition-colors hover:text-purple-600 motion-reduce:transition-none"
 									>
@@ -435,8 +363,8 @@
 					</div>
 
 					<div class="divide-y divide-gray-200/50">
-						{#each filteredProjects() as project (project.id)}
-							{@const SvelteComponent_1 = getStatusIcon(project.status)}
+						{#each filteredProjects() as storyboard (storyboard._id)}
+							<!-- {@const SvelteComponent_1 = getStatusIcon(project.status)}-->
 							<div
 								class="px-6 py-4 transition-colors hover:bg-gray-50/50 motion-reduce:transition-none"
 							>
@@ -449,14 +377,17 @@
 											<Play class="h-6 w-6 text-white" />
 										</div>
 										<div>
-											<h3 class="font-medium text-gray-900">{project.concept}</h3>
+											<h3 class="font-medium text-gray-900">
+												{storyboard.storyOutline.storyMetadata.title}
+											</h3>
 											<p class="text-sm text-gray-500">
-												{project.genre} • {project.targetAudience}
+												{storyboard.storyOutline.storyMetadata.genre} • {storyboard.storyOutline
+													.storyMetadata.targetAudience}
 											</p>
 										</div>
 									</div>
 
-									<!-- Status -->
+									<!-- Status
 									<div class="col-span-2">
 										<span
 											class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {getStatusColor(
@@ -466,9 +397,9 @@
 											<SvelteComponent_1 class="mr-1 h-3 w-3" />
 											{project.status.replace('-', ' ')}
 										</span>
-									</div>
+									</div> -->
 
-									<!-- Progress -->
+									<!-- Progress 
 									<div class="col-span-2">
 										<div class="flex items-center space-x-2">
 											<div class="h-2 flex-1 rounded-full bg-gray-200">
@@ -479,9 +410,9 @@
 											</div>
 											<span class="text-sm text-gray-600">{project.progress}%</span>
 										</div>
-									</div>
+									</div> -->
 
-									<!-- Team -->
+									<!-- Team 
 									<div class="col-span-2">
 										<div class="flex -space-x-2">
 											{#each project.teamMembers.slice(0, 3) as member (member.name)}
@@ -507,11 +438,11 @@
 												</div>
 											{/if}
 										</div>
-									</div>
+									</div> -->
 
 									<!-- Modified -->
 									<div class="col-span-2 flex items-center justify-between">
-										<span class="text-sm text-gray-500">{project.lastModified}</span>
+										<span class="text-sm text-gray-500">{storyboard.updatedAt}</span>
 										<button
 											class="p-1 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
 										>
@@ -539,7 +470,7 @@
 						class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
 						onclick={() => {
 							searchQuery = '';
-							filterStatus = 'all';
+							//filterStatus = 'all';
 						}}
 					>
 						Clear Filters
@@ -549,144 +480,8 @@
 		</section>
 	</main>
 
-	<!-- New Project Modal -->
-	{#if showNewProjectModal}
-		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-			<div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white">
-				<div class="p-6">
-					<div class="mb-6 flex items-center justify-between">
-						<h2 class="text-xl font-semibold text-gray-900">Create New Storyboard</h2>
-						<button
-							class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none"
-							onclick={() => (showNewProjectModal = false)}
-						>
-							<Plus class="h-5 w-5 rotate-45" />
-						</button>
-					</div>
-
-					<form
-						onsubmit={(e) => {
-							e.preventDefault();
-							createProject();
-						}}
-						class="space-y-4"
-					>
-						<div>
-							<label for="projectConcept" class="mb-2 block text-sm font-medium text-gray-700"
-								>Story Concept</label
-							>
-							<input
-								id="projectConcept"
-								type="text"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-								placeholder="Enter your story concept..."
-								bind:value={newProject.concept}
-								required
-							/>
-						</div>
-
-						<div>
-							<label for="projectDescription" class="mb-2 block text-sm font-medium text-gray-700"
-								>Description</label
-							>
-							<textarea
-								id="projectDescription"
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-								rows="3"
-								placeholder="Describe your story..."
-								bind:value={newProject.description}
-							></textarea>
-						</div>
-
-						<div class="grid grid-cols-2 gap-4">
-							<div>
-								<label for="projectGenre" class="mb-2 block text-sm font-medium text-gray-700"
-									>Genre</label
-								>
-								<select
-									id="projectGenre"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-									bind:value={newProject.genre}
-								>
-									<option value="">Select genre...</option>
-									{#each genres as genre (genre)}
-										<option value={genre}>{genre}</option>
-									{/each}
-								</select>
-							</div>
-
-							<div>
-								<label for="projectAudience" class="mb-2 block text-sm font-medium text-gray-700"
-									>Target Audience</label
-								>
-								<select
-									id="projectAudience"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-									bind:value={newProject.targetAudience}
-								>
-									<option value="">Select audience...</option>
-									{#each audiences as audience (audience)}
-										<option value={audience}>{audience}</option>
-									{/each}
-								</select>
-							</div>
-						</div>
-
-						<div class="grid grid-cols-2 gap-4">
-							<div>
-								<label for="projectStyle" class="mb-2 block text-sm font-medium text-gray-700"
-									>Visual Style</label
-								>
-								<select
-									id="projectStyle"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-									bind:value={newProject.storyStyle}
-								>
-									<option value="">Select style...</option>
-									{#each styles as style (style)}
-										<option value={style}>{style}</option>
-									{/each}
-								</select>
-							</div>
-
-							<div>
-								<label for="projectSlides" class="mb-2 block text-sm font-medium text-gray-700"
-									>Number of Slides</label
-								>
-								<input
-									id="projectSlides"
-									type="number"
-									min="1"
-									max="50"
-									class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
-									bind:value={newProject.numSlides}
-								/>
-							</div>
-						</div>
-
-						<div class="flex space-x-3 pt-4">
-							<button
-								type="button"
-								class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50 motion-reduce:transition-none"
-								onclick={() => (showNewProjectModal = false)}
-							>
-								Cancel
-							</button>
-							<button
-								type="submit"
-								class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
-							>
-								Create Storyboard
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	{/if}
-
-	<!-- Team Management Modal -->
-	{#if showTeamModal && selectedProject}
+	<!-- Team Management Modal 
+	{#if showTeamModal && selectedStoryboard}
 		<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
 			<div class="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white">
 				<div class="p-6">
@@ -703,7 +498,7 @@
 					<div class="mb-6">
 						<h3 class="mb-3 font-medium text-gray-900">Current Team Members</h3>
 						<div class="space-y-3">
-							{#each selectedProject.teamMembers as member (member.name)}
+							{#each selectedStoryboard.teamMembers as member (member.name)}
 								<div class="flex items-center justify-between rounded-lg bg-gray-50 p-3">
 									<div class="flex items-center space-x-3">
 										<div
@@ -788,4 +583,5 @@
 			</div>
 		</div>
 	{/if}
+	-->
 </div>
