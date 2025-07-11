@@ -5,22 +5,12 @@
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
 	import MyStoryboards from '$lib/components/Dashboard/MyStoryboards.svelte';
 	import Teams from '$lib/components/Dashboard/Teams.svelte';
-	import { Bell, Home, LogOut, Settings, Users } from 'lucide-svelte';
 
 	// State management
 	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
 	let selectedTeam = $state<any>(null);
 	let sidebarCollapsed = $state(false);
 	
-	// Navigation items
-	const navItems = [
-		{ id: 'my-storyboards', label: 'My Storyboards', icon: Home },
-		{ id: 'teams', label: 'Teams', icon: Users },
-		{ id: 'settings', label: 'Settings', icon: Settings },
-		{ id: 'notifications', label: 'Notifications', icon: Bell },
-		{ id: 'logout', label: 'Logout', icon: LogOut }];
-
-
 	function handleViewChange(view: string, team?: any) {
 		currentView = view;
 		if (team) {
@@ -67,8 +57,10 @@
 					{selectedTeam}
 					{currentView}
 				/>
-			{:else if currentView === 'settings'}
-				<Settings />
+			<!-- assumption: when user presses settings (currentView=="settings") 
+			 we goto "\user" route from the navbar itself.
+			 same with logout, we handle it in the sidebar component.	 
+			 TODO: consider changing this in the future -->
 			{/if}
 		</main>
 	</div>

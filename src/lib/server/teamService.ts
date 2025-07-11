@@ -5,29 +5,61 @@ import { getDB } from './db';
 
 import type { Team, NewTeam, TeamUser, TeamRole } from '$lib/models/team.model';
 import type { User } from '$lib/models/user.model';
+import { MongoClient } from 'mongodb';
 
 export async function insertTeam(name: string, owner: User): Promise<InsertOneResult> {
 	const db = getDB();
-	const teams = db.collection<NewTeam>('teams');
+	const teamsCollection = db.collection<NewTeam>('teams');
+	const usersCollection = db.collection<User>('users');
 
-	const teamuser: TeamUser = {
-		user: owner._id,
-		role: 'admin'
-	};
 
-	const team: NewTeam = {
-		name: name,
-		users: [teamuser],
-		projects: []
-	};
+	const client: MongoClient = (db as any).client || (db as any).s.client; // Adjust based on your getDB implementation
+	const session = client.startSession();
+	let insertResult: InsertOneResult | null = null;
 
+	//session is used to ensure atomicity. when we create a team, we also add the team to the user's teams array
 	try {
-		return await teams.insertOne(team);
+		await session.withTransaction(async () => {
+			const teamuser: TeamUser = {
+				user: owner._id,
+				role: 'admin'
+			};
+
+			const team: NewTeam = {
+				name,
+				users: [teamuser],
+				projects: []
+			};
+
+			// Insert team
+			insertResult = await teamsCollection.insertOne(team, { session });
+
+			// Update user
+			const updateResult = await usersCollection.updateOne(
+				{ _id: owner._id },
+				{ $addToSet: { teams: insertResult.insertedId } },
+				{ session }
+			);
+
+			// Ensure update was successful, else abort
+			if (updateResult.modifiedCount === 0 && updateResult.matchedCount === 0) {
+				throw new Error('Failed to update user with team ID');
+			}
+		});
+
+		if (!insertResult) {
+			throw new Error('Transaction failed, insertResult missing');
+		}
+
+		return insertResult;
 	} catch (err) {
-		console.error('Failed to insert user:', err);
-		throw new Error('Database insert failed');
+		console.error('Transaction failed:', err);
+		throw new Error('Transaction failed');
+	} finally {
+		await session.endSession();
 	}
 }
+
 
 export async function getAllTeams(): Promise<Team[]> {
 	const db = getDB();

@@ -29,7 +29,7 @@ let { onViewChange, currentView, selectedTeam }: Props = $props();
 	let showJoinTeamModal = $state(false);
 	
 	// Form states
-	let newTeam = $state({ name: '', description: '' });
+	let newTeam = $state({ name: '' });
 	let joinTeamCode = $state('');
 	let copiedInviteCode = $state(false);
 
@@ -55,23 +55,33 @@ let { onViewChange, currentView, selectedTeam }: Props = $props();
 		}
 	]);
 
+	// Error state
+	let error: string | null = null;
+
 	// Functions
-	function createTeam() {
-		if (newTeam.name.trim()) {
-			const team = {
-				id: Date.now(),
-				name: newTeam.name,
-				description: newTeam.description,
-				role: 'owner',
-				members: 1,
-				inviteCode: `${newTeam.name.substring(0, 4).toUpperCase()}-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
-				storyboards: 0
-			};
-			
-			userTeams.push(team);
-			newTeam = { name: '', description: '' };
-			showCreateTeamModal = false;
+	async function createTeam() {
+
+		try {
+			const res = await fetch('/api/teams/create', {
+				method: 'POST',
+				body: JSON.stringify(newTeam)
+			});
+			const data = await res.json();
+			if (res.ok) {
+				const id = data.insertedId;
+				console.log('Team created with ID:', id);
+			} else {
+				error = data.error || 'Failed to create a team';
+			}
+		} catch (e) {
+			error = e instanceof Error ? e.message : String(e);
 		}
+
+
+		// Reset form
+		newTeam = { name: ''};
+		showCreateTeamModal = false;
+		
 	}
 
 	function joinTeam() {
@@ -244,16 +254,7 @@ let { onViewChange, currentView, selectedTeam }: Props = $props();
 					/>
 				</div>
 
-				<div>
-					<label for="team-description" class="mb-2 block text-sm font-medium text-gray-700">Description</label>
-					<textarea
-						id="team-description"
-						class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
-						placeholder="Team description..."
-						rows="3"
-						bind:value={newTeam.description}
-					></textarea>
-				</div>
+				
 
 				<div class="flex space-x-3 pt-4">
 					<button
