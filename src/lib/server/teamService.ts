@@ -1,8 +1,7 @@
 import { ObjectId } from 'mongodb';
 import type { InsertOneResult } from 'mongodb';
-
+import { serializeMongoDocument } from '$lib/server/utils.js';
 import { getDB } from './db';
-
 import type { Team, NewTeam, TeamUser, TeamRole } from '$lib/models/team.model';
 import type { User } from '$lib/models/user.model';
 import { MongoClient } from 'mongodb';
@@ -11,7 +10,6 @@ export async function insertTeam(name: string, owner: User): Promise<InsertOneRe
 	const db = getDB();
 	const teamsCollection = db.collection<NewTeam>('teams');
 	const usersCollection = db.collection<User>('users');
-
 
 	const client: MongoClient = (db as any).client || (db as any).s.client; // Adjust based on your getDB implementation
 	const session = client.startSession();
@@ -60,13 +58,39 @@ export async function insertTeam(name: string, owner: User): Promise<InsertOneRe
 	}
 }
 
-
 export async function getAllTeams(): Promise<Team[]> {
 	const db = getDB();
 	const teams = db.collection<Team>('teams');
 
 	try {
 		return await teams.find({}).toArray();
+	} catch (err) {
+		console.error('Failed to get all teams:', err);
+		throw new Error('Database find failed');
+	}
+}
+
+export async function getTeamsOfUser(supabaseUserId: string): Promise<Team[]> {
+	const db = getDB();
+
+	try {
+		const userDoc = await await db.collection('users').findOne({
+			supabase: supabaseUserId // Use supabase field
+		});
+		const user = userDoc as User;
+		if (!user) {
+			console.log('User not found:', supabaseUserId);
+			return [];
+		}
+
+		const teamsCollection = db.collection('teams');
+
+		const teams = await teamsCollection
+			.find({ _id: { $in: user.teams.map((id) => new ObjectId(id)) } })
+			.toArray();
+
+		const serialized = serializeMongoDocument(teams);
+		return serialized as Team[];
 	} catch (err) {
 		console.error('Failed to get all teams:', err);
 		throw new Error('Database find failed');

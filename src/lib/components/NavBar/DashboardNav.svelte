@@ -6,7 +6,6 @@
 </script>
 
 <div class="px-6 py-4">
-
 	<div class="flex items-center space-x-4">
 		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 			<Bell class="h-5 w-5" />

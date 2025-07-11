@@ -1,9 +1,5 @@
 <script lang="ts">
-	import { 
-		Plus, 
-		Users, 
-		ChevronRight 
-	} from 'lucide-svelte';
+	import { Plus, Users, ChevronRight } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
 	interface Props {
@@ -25,7 +21,7 @@
 <div>
 	<!-- Breadcrumb and Header -->
 	<div class="mb-8">
-		<div class="flex items-center space-x-2 mb-4">
+		<div class="mb-4 flex items-center space-x-2">
 			<button
 				class="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
 				onclick={handleBackToTeams}
@@ -39,7 +35,7 @@
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
 				<h1 class="text-3xl font-bold text-gray-900">{selectedTeam.name} Storyboards</h1>
-				<p class="text-gray-600 mt-1">Collaborative storyboard projects for your team</p>
+				<p class="mt-1 text-gray-600">Collaborative storyboard projects for your team</p>
 			</div>
 
 			<button
@@ -53,7 +49,7 @@
 	</div>
 
 	<!-- Empty State -->
-	<div class="text-center py-12">
+	<div class="py-12 text-center">
 		<div class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100">
 			<Users class="h-8 w-8 text-gray-400" />
 		</div>

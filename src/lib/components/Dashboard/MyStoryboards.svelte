@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { 
-		Plus, 
-		Search, 
-		Grid3X3, 
-		List, 
-		Play, 
-		MoreHorizontal, 
-		UserPlus, 
-		Video 
+	import {
+		Plus,
+		Search,
+		Grid3X3,
+		List,
+		Play,
+		MoreHorizontal,
+		UserPlus,
+		Video
 	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import { storyboardStore } from '$lib/stores/storyboard';
@@ -54,7 +54,7 @@
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
 				<h1 class="text-3xl font-bold text-gray-900">My Storyboards</h1>
-				<p class="text-gray-600 mt-1">Create and manage your AI-powered storyboard projects</p>
+				<p class="mt-1 text-gray-600">Create and manage your AI-powered storyboard projects</p>
 			</div>
 
 			<button
@@ -68,7 +68,9 @@
 	</div>
 
 	<!-- Filters and Search -->
-	<section class="mb-8 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
+	<section
+		class="mb-8 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-xl backdrop-blur-sm"
+	>
 		<div class="flex flex-col gap-4 md:flex-row">
 			<div class="relative flex-1">
 				<Search class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
@@ -82,13 +84,17 @@
 
 			<div class="flex items-center rounded-lg bg-gray-100 p-1">
 				<button
-					class="rounded-md p-2 transition-colors {viewMode === 'grid' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'}"
+					class="rounded-md p-2 transition-colors {viewMode === 'grid'
+						? 'bg-white text-purple-600 shadow-sm'
+						: 'text-gray-600 hover:text-gray-900'}"
 					onclick={() => (viewMode = 'grid')}
 				>
 					<Grid3X3 class="h-4 w-4" />
 				</button>
 				<button
-					class="rounded-md p-2 transition-colors {viewMode === 'list' ? 'bg-white text-purple-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'}"
+					class="rounded-md p-2 transition-colors {viewMode === 'list'
+						? 'bg-white text-purple-600 shadow-sm'
+						: 'text-gray-600 hover:text-gray-900'}"
 					onclick={() => (viewMode = 'list')}
 				>
 					<List class="h-4 w-4" />
@@ -102,13 +108,19 @@
 		{#if viewMode === 'grid'}
 			<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{#each filteredProjects() as storyboard (storyboard._id)}
-					<div class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl">
+					<div
+						class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl"
+					>
 						<div class="relative">
-							<div class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600">
+							<div
+								class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600"
+							>
 								<Play class="h-12 w-12 text-white" />
 							</div>
 							<div class="absolute top-3 right-3">
-								<button class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
+								<button
+									class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100"
+								>
 									<MoreHorizontal class="h-4 w-4 text-gray-600" />
 								</button>
 							</div>
@@ -151,7 +163,9 @@
 			</div>
 		{:else}
 			<!-- List view implementation -->
-			<div class="overflow-hidden rounded-2xl border border-gray-200/50 bg-white/80 shadow-xl backdrop-blur-sm">
+			<div
+				class="overflow-hidden rounded-2xl border border-gray-200/50 bg-white/80 shadow-xl backdrop-blur-sm"
+			>
 				<div class="p-6">
 					<p class="text-gray-500">List view implementation here</p>
 				</div>
