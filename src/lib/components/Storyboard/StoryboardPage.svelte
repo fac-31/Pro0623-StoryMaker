@@ -5,7 +5,6 @@
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import MetadataContainer from '$lib/components/Storyboard/MetadataContainer.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
-	import { onMount } from 'svelte';
 	import {
 		Play,
 		Video,
@@ -26,7 +25,6 @@
 	};
 
 	export let storyboard: Storyboard | null = null;
-	export let userId: string = '';
 	let loading = false;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
@@ -35,10 +33,6 @@
 	// Video generation state
 	let generatingVideo = false;
 	let videoError = '';
-
-	onMount(() => {
-		console.log('userId', userId);
-	});
 
 	// Slideshow player state
 	let currentSlideIndex = 0;
@@ -64,7 +58,7 @@
 		try {
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
-				body: JSON.stringify({ userPrompt, userId })
+				body: JSON.stringify(userPrompt)
 			});
 			const data = await res.json();
 			if (res.ok) {
