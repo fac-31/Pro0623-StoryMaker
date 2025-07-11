@@ -25,7 +25,7 @@
 
 <!-- Mobile Navigation -->
 {#if mobileMenuOpen}
-	<div class="border-t border-gray-200 bg-white md:hidden">
+	<div id="mobile-menu-marketing" tabindex="-1" class="border-t border-gray-200 bg-white md:hidden">
 		<div class="space-y-4 px-4 py-4">
 			<a href="#features" class="block text-gray-600 hover:text-purple-600">Features</a>
 			<a href="#how-it-works" class="block text-gray-600 hover:text-purple-600">How it Works</a>

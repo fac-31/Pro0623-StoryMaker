@@ -320,13 +320,13 @@
 			{/if}
 
 			{#if error}
-				<div class="rounded-lg border border-red-200 bg-red-50 p-4">
+				<div role="alert" class="rounded-lg border border-red-200 bg-red-50 p-4">
 					<p class="text-sm text-red-600">{error}</p>
 				</div>
 			{/if}
 
 			{#if loading && (!storyboard || storyboard.status == 'none' || storyboard.status == 'generating-outline')}
-				<div class="flex items-center justify-center py-12">
+				<div aria-live="polite" aria-busy="true" class="flex items-center justify-center py-12">
 					<div class="text-center">
 						<Loader2
 							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
@@ -394,6 +394,7 @@
 						<!-- Player Controls -->
 						<div class="flex items-center justify-center space-x-4">
 							<button
+								aria-label="Previous slide"
 								onclick={previousSlide}
 								disabled={currentSlideIndex === 0}
 								class="flex items-center justify-center rounded-full bg-gray-200 p-3 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
@@ -402,6 +403,7 @@
 							</button>
 
 							<button
+								aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
 								onclick={togglePlay}
 								class="flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-blue-600 p-4 text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 							>
@@ -413,6 +415,7 @@
 							</button>
 
 							<button
+								aria-label="Next slide"
 								onclick={nextSlide}
 								disabled={currentSlideIndex === slides.length - 1}
 								class="flex items-center justify-center rounded-full bg-gray-200 p-3 transition-colors hover:bg-gray-300 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none"
@@ -425,6 +428,8 @@
 						<div class="mt-6 flex flex-wrap justify-center space-x-2">
 							{#each slides as slide, index (slide.slideNumber)}
 								<button
+									aria-label={'Go to slide ' + (index + 1)}
+									aria-current={currentSlideIndex === index ? 'true' : 'false'}
 									onclick={() => goToSlide(index)}
 									class="flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors {currentSlideIndex ===
 									index
@@ -439,7 +444,7 @@
 				{/if}
 
 				{#if videoError}
-					<div class="mb-8 rounded-lg border border-red-200 bg-red-50 p-4">
+					<div role="alert" class="mb-8 rounded-lg border border-red-200 bg-red-50 p-4">
 						<p class="text-red-600">Audio generation failed: {videoError}</p>
 					</div>
 				{/if}
