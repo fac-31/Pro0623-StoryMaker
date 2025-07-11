@@ -17,10 +17,10 @@
 	</div>
 
 	<div class="flex items-center space-x-4">
-		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+		<button aria-label="View notifications" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 			<Bell class="h-5 w-5" />
 		</button>
-		<a href="/user" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+		<a href="/user" aria-label="User settings" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 			<Settings class="h-5 w-5" />
 		</a>
 		<div class="flex items-center space-x-2">
@@ -34,14 +34,14 @@
 			>
 		</div>
 		<form action="/logout" method="POST" class="">
-			<button type="submit" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+			<button type="submit" aria-label="Log out" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 				<LogOut class="h-5 w-5" />
 			</button>
 		</form>
 	</div>
 </div>
 {#if mobileMenuOpen}
-	<div class="border-t border-gray-200 bg-white md:hidden">
+	<div id="mobile-menu-dashboard" tabindex="-1" class="border-t border-gray-200 bg-white md:hidden">
 		<div class="space-y-4 px-4 py-4">
 			<a href="#features" class="block text-gray-600 hover:text-purple-600">Features</a>
 			<a href="#how-it-works" class="block text-gray-600 hover:text-purple-600">How it Works</a>
