@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Plus, Users, ChevronRight } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
-
+	import type { Team } from '$lib/models/team.model';
 	interface Props {
-		selectedTeam: any;
+		selectedTeam: Team;
 		onViewChange: (view: string) => void;
 	}
 

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Play, X, Home, Users, Settings, Bell, LogOut } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
+	import type { User } from '@supabase/supabase-js';
 
 	interface Props {
-		user: any;
+		user: User;
 		currentView: string;
 		sidebarCollapsed: boolean;
 		onViewChange: (view: string) => void;
@@ -53,7 +54,7 @@
 
 		<!-- Navigation -->
 		<nav class="flex-1 space-y-2 px-4 py-6">
-			{#each navItems as item}
+			{#each navItems as item (item.id)}
 				{@const IconComponent = item.icon}
 
 				{#if item.id === 'logout'}

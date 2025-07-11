@@ -1,26 +1,15 @@
 <script lang="ts">
-	import {
-		Plus,
-		UserPlus,
-		Users,
-		MoreHorizontal,
-		Crown,
-		Shield,
-		Settings,
-		Eye,
-		X
-	} from 'lucide-svelte';
+	import { Plus, UserPlus, Users, MoreHorizontal, X } from 'lucide-svelte';
 	import type { Team } from '$lib/models/team.model';
 	import { enhance } from '$app/forms';
 
 	interface Props {
 		teams: Team[];
-		onViewChange: (view: string, team?: any) => void;
-		currentView?: string;
-		selectedTeam?: any;
+		onViewChange: (view: string, team?: Team | null) => void;
+		selectedTeam?: Team | null;
 	}
 
-	let { teams, onViewChange, currentView, selectedTeam }: Props = $props();
+	let { teams, onViewChange, selectedTeam }: Props = $props();
 
 	// Team management modals
 	let showCreateTeamModal = $state(false);
@@ -85,8 +74,10 @@
 	// 	}
 	// }
 
-	function viewTeamStoryboards(team: any) {
+	function viewTeamStoryboards(team: Team | null) {
+		selectedTeam = team;
 		onViewChange('team-storyboards', team);
+		console.log('Viewing storyboards for team:', selectedTeam);
 	}
 </script>
 

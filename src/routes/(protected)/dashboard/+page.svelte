@@ -8,13 +8,14 @@
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
 	import MyStoryboards from '$lib/components/Dashboard/MyStoryboards.svelte';
 	import MyTeams from '$lib/components/Dashboard/MyTeams.svelte';
+	import type { Team } from '$lib/models/team.model.js';
 
 	// State management
 	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
-	let selectedTeam = $state<any>(null);
+	let selectedTeam = $state<Team | null>(null);
 	let sidebarCollapsed = $state(false);
 
-	function handleViewChange(view: string, team?: any) {
+	function handleViewChange(view: string, team?: Team | null) {
 		currentView = view;
 		if (team) {
 			selectedTeam = team;
@@ -61,7 +62,7 @@
 			{#if currentView === 'my-storyboards'}
 				<MyStoryboards {storyboards} />
 			{:else if currentView === 'my-teams' || currentView === 'team-storyboards'}
-				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} {currentView} />
+				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} />
 				<!-- assumption: when user presses settings (currentView=="settings") 
 			 we goto "\user" route from the navbar itself.
 			 same with logout, we handle it in the sidebar component.	 
