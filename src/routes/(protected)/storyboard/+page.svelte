@@ -7,13 +7,6 @@
 	let storyboard = get(storyboardStore);
 	storyboardStore.set(null);
 
-	// Receive data from server load
-	export let data: {
-		userId: string;
-	};
-
-	let userId = data.userId;
-
 	// Optionally listen for updates (e.g. in case this page stays alive between navigations)
 	// onMount(() => {
 	//   const unsubscribe = storyboardStore.subscribe(value => {
@@ -23,4 +16,4 @@
 	// });
 </script>
 
-<StoryboardPage {storyboard} {userId} />
+<StoryboardPage {storyboard} />

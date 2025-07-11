@@ -3,16 +3,14 @@ import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { UserPrompt } from '$lib/models/UserPrompt';
 import type { NewStoryboard } from '$lib/models/storyboard.model';
-import { getUserById } from '$lib/server/userService';
+import { getUserFromEvent } from '$lib/server/userService';
 
-export const POST: RequestHandler = async ({ request }) => {
-	const { userPrompt, userId } = (await request.json()) as {
-		userPrompt: UserPrompt;
-		userId: string;
-	};
+export const POST: RequestHandler = async (event) => {
+	const prompts: UserPrompt = await event.request.json();
+
 	const storyboard: NewStoryboard = {
 		status: 'none',
-		prompts: userPrompt,
+		prompts,
 		currentSlide: 0,
 		createdAt: new Date(),
 		updatedAt: new Date(),
@@ -37,7 +35,8 @@ export const POST: RequestHandler = async ({ request }) => {
 	}
 
 	// Update user to include this storyboard
-	const user = await getUserById(userId);
+	const user = await getUserFromEvent(event);
+
 	if (!user) {
 		return json({ error: 'User not found' }, { status: 404 });
 	}

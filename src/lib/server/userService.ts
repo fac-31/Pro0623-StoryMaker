@@ -35,25 +35,15 @@ export async function getAllUsers(): Promise<User[]> {
 	}
 }
 
-export async function getUserById(id: string): Promise<User | null> {
-	const db = getDB();
-	const users = db.collection<User>('users');
-
-	try {
-		return await users.findOne({ supabase: id });
-	} catch (err) {
-		// Should be expecting every supabase users have mongodb user?
-		console.error('Failed to find user:', err);
-		throw new Error('Database find failed');
-	}
-}
-
 export async function getUserFromEvent(event: RequestEvent): Promise<User | null> {
 	const supabase = event.locals.user;
 	if (!supabase) return null;
 
+	const db = getDB();
+	const users = db.collection<User>('users');
+
 	try {
-		return await getUserById(supabase.id);
+		return await users.findOne({ supabase: supabase.id });
 	} catch (err) {
 		// Should be expecting every supabase users have mongodb user?
 		console.error('Failed to find user:', err);
