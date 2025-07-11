@@ -12,7 +12,8 @@ export async function insertUser(supabase: string, name: string): Promise<Insert
 		const user: NewUser = {
 			supabase: supabase,
 			name: name,
-			projects: []
+			projects: [],
+			teams: []
 		};
 
 		return await users.insertOne(user);

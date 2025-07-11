@@ -6,16 +6,6 @@
 </script>
 
 <div class="px-6 py-4">
-	<div class="flex items-center justify-between">
-		<nav class="ml-8 hidden items-center space-x-6 md:flex">
-			<a href="/dashboard" class="font-medium text-purple-600">Dashboard</a>
-			<a href="/storyboard" class="text-gray-600 transition-colors hover:text-purple-600"
-				>Create Storyboard</a
-			>
-			<a href="/library" class="text-gray-600 transition-colors hover:text-purple-600">Library</a>
-		</nav>
-	</div>
-
 	<div class="flex items-center space-x-4">
 		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
 			<Bell class="h-5 w-5" />

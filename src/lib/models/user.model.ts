@@ -5,6 +5,7 @@ export interface User {
 	supabase: string;
 	name: string;
 	projects: ObjectId[];
+	teams: ObjectId[];
 }
 
 export type NewUser = Omit<User, '_id'>;
