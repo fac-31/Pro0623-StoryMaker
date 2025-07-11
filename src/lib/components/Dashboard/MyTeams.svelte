@@ -28,9 +28,8 @@
 
 	// Form states
 	// let newTeam = $state({ name: '' });
-	 let joinTeamCode = $state('');
+	let joinTeamCode = $state('');
 	// let copiedInviteCode = $state(false);
-
 
 	function joinTeam() {
 		if (joinTeamCode.trim()) {
