@@ -16,6 +16,7 @@
 				type="email"
 				required
 				class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500"
+				aria-describedby="login-form-error-message"
 			/>
 		</div>
 
@@ -27,11 +28,12 @@
 				type="password"
 				required
 				class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500"
+				aria-describedby="login-form-error-message"
 			/>
 		</div>
 
 		{#if error}
-			<div class="rounded-lg border border-red-200 bg-red-50 p-4">
+			<div id="login-form-error-message" class="rounded-lg border border-red-200 bg-red-50 p-4" aria-live="polite">
 				<p class="text-sm text-red-600">{error}</p>
 			</div>
 		{/if}
