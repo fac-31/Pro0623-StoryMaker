@@ -26,7 +26,7 @@ export async function initDB() {
 		db = client.db(env.DB_NAME);
 		console.log('✅ MongoDB connected');
 	}
-	return { db, client };
+	return db;
 }
 
 export function getDB() {
