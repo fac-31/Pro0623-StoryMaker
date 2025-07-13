@@ -49,7 +49,7 @@ form button[type='submit'] {
 }
 
 .slide-thumbnail {
-	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
+	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out motion-reduce:transition-none;
 }
 
 .slide-number {
@@ -57,7 +57,7 @@ form button[type='submit'] {
 }
 
 .slide-thumbnail:hover {
-	@apply border-blue-600 shadow-md motion-safe:scale-105;
+	@apply border-blue-600 shadow-md motion-safe:scale-105 motion-reduce:transform-none;
 }
 
 .slide-thumbnail img {

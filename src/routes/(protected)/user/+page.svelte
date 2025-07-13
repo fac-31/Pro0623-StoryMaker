@@ -17,55 +17,62 @@
 	<h2>Check out and edit your account info!</h2>
 
 	<form method="POST" class="w-full max-w-xl">
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="name" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Display name: </span>
-				</label>
-				<input
-					id="name"
-					name="name"
-					type="text"
-					autocomplete="name"
-					bind:value={name}
-					class="input input-bordered flex-1"
-				/>
+		<div role="group">
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="name" class="label max-w-[60px] flex-auto">
+						<span id="name-label" class="label-text"> Display name: </span>
+					</label>
+					<input
+						id="name"
+						name="name"
+						type="text"
+						autocomplete="name"
+						bind:value={name}
+						class="input input-bordered flex-1"
+						aria-describedby="name-label"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="email" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Email: </span>
-				</label>
-				<input
-					id="email"
-					name="email"
-					type="email"
-					autocomplete="email"
-					bind:value={email}
-					class="input input-bordered flex-1"
-				/>
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="email" class="label max-w-[60px] flex-auto">
+						<span id="email-label" class="label-text"> Email: </span>
+					</label>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						autocomplete="email"
+						bind:value={email}
+						class="input input-bordered flex-1"
+						aria-describedby="email-label"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="password" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Password: </span>
-				</label>
-				<input
-					id="password"
-					name="password"
-					type="password"
-					autocomplete="new-password"
-					placeholder="Leave blank if no change"
-					bind:value={password}
-					class="input input-bordered flex-1"
-				/>
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="password" class="label max-w-[60px] flex-auto">
+						<span class="label-text"> Password: </span>
+					</label>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						autocomplete="new-password"
+						bind:value={password}
+						class="input input-bordered flex-1"
+						aria-describedby="password-helper"
+					/>
+				</div>
+				<p id="password-helper">Leave blank if no change</p>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<p class="text-red-600">{form.error}</p>
+				<div aria-live="assertive" aria-atomic="true">
+					<p class="text-red-600">{form.error}</p>
+				</div>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
