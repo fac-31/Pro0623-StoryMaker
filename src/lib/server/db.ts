@@ -2,6 +2,7 @@ import { Db, MongoClient } from 'mongodb';
 import { env } from '$env/dynamic/private';
 
 let db: Db;
+let client: MongoClient | null = null;
 
 export async function initDB() {
 	if (!db) {
@@ -12,7 +13,7 @@ export async function initDB() {
 			throw new Error('DB_NAME environment variable not set.');
 		}
 
-		const client = new MongoClient(env.DB_CONN_STRING, {
+		client = new MongoClient(env.DB_CONN_STRING, {
 			tls: true,
 			tlsAllowInvalidCertificates: true, // Only for development
 			serverSelectionTimeoutMS: 5000,
@@ -31,4 +32,9 @@ export async function initDB() {
 export function getDB() {
 	if (!db) throw new Error('❌ DB not initialized');
 	return db;
+}
+
+export function getDBAndClient(): { db: Db; client: MongoClient } {
+	if (!db || !client) throw new Error('❌ DB not initialized');
+	return { db, client };
 }

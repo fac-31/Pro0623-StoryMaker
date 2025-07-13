@@ -1,31 +1,58 @@
 import { ObjectId } from 'mongodb';
 import type { InsertOneResult } from 'mongodb';
-
-import { getDB } from './db';
-
+import { serializeMongoDocument } from '$lib/server/utils.js';
+import { getDB, getDBAndClient } from './db';
 import type { Team, NewTeam, TeamUser, TeamRole } from '$lib/models/team.model';
 import type { User } from '$lib/models/user.model';
 
 export async function insertTeam(name: string, owner: User): Promise<InsertOneResult> {
-	const db = getDB();
-	const teams = db.collection<NewTeam>('teams');
+	const { db, client } = getDBAndClient();
+	const teamsCollection = db.collection<NewTeam>('teams');
+	const usersCollection = db.collection<User>('users');
 
-	const teamuser: TeamUser = {
-		user: owner._id,
-		role: 'admin'
-	};
+	const session = client.startSession();
+	let insertResult: InsertOneResult | null = null;
 
-	const team: NewTeam = {
-		name: name,
-		users: [teamuser],
-		projects: []
-	};
-
+	//session is used to ensure atomicity. when we create a team, we also add the team to the user's teams array
 	try {
-		return await teams.insertOne(team);
+		await session.withTransaction(async () => {
+			const teamuser: TeamUser = {
+				user: owner._id,
+				role: 'admin'
+			};
+
+			const team: NewTeam = {
+				name,
+				users: [teamuser],
+				projects: []
+			};
+
+			// Insert team
+			insertResult = await teamsCollection.insertOne(team, { session });
+
+			// Update user
+			const updateResult = await usersCollection.updateOne(
+				{ _id: owner._id },
+				{ $addToSet: { teams: insertResult.insertedId } },
+				{ session }
+			);
+
+			// Ensure update was successful, else abort
+			if (updateResult.modifiedCount === 0 && updateResult.matchedCount === 0) {
+				throw new Error('Failed to update user with team ID');
+			}
+		});
+
+		if (!insertResult) {
+			throw new Error('Transaction failed, insertResult missing');
+		}
+
+		return insertResult;
 	} catch (err) {
-		console.error('Failed to insert user:', err);
-		throw new Error('Database insert failed');
+		console.error('Transaction failed:', err);
+		throw new Error('Transaction failed');
+	} finally {
+		await session.endSession();
 	}
 }
 
@@ -35,6 +62,33 @@ export async function getAllTeams(): Promise<Team[]> {
 
 	try {
 		return await teams.find({}).toArray();
+	} catch (err) {
+		console.error('Failed to get all teams:', err);
+		throw new Error('Database find failed');
+	}
+}
+
+export async function getTeamsOfUser(supabaseUserId: string): Promise<Team[]> {
+	const db = getDB();
+
+	try {
+		const userDoc = await await db.collection('users').findOne({
+			supabase: supabaseUserId // Use supabase field
+		});
+		const user = userDoc as User;
+		if (!user) {
+			console.log('User not found:', supabaseUserId);
+			return [];
+		}
+
+		const teamsCollection = db.collection('teams');
+
+		const teams = await teamsCollection
+			.find({ _id: { $in: user.teams.map((id) => new ObjectId(id)) } })
+			.toArray();
+
+		const serialized = serializeMongoDocument(teams);
+		return serialized as Team[];
 	} catch (err) {
 		console.error('Failed to get all teams:', err);
 		throw new Error('Database find failed');
