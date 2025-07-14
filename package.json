@@ -14,6 +14,7 @@
 		"lint": "prettier --check . && eslint .",
 		"test:e2e": "playwright test",
 		"test": "npm run test:e2e",
+		"test:dev": "playwright test --ui",
 		"docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
 		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts"
 	},
