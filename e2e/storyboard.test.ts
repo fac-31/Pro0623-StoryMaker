@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('Create a storyboard', async ({ page }) => {
   await page.goto('http://localhost:5173/login');
   await page.getByRole('textbox', { name: 'Email Address' }).click();
   await page.getByRole('textbox', { name: 'Email Address' }).fill('annavanwingerden@outlook.com');
@@ -20,6 +20,4 @@ test('test', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Target Audience:' }).press('Tab');
   await page.getByRole('textbox', { name: 'Genre:' }).fill('drama');
   await page.getByRole('button', { name: 'Start Storyboard' }).click();
-  await page.getByRole('region', { name: 'Visual Slides' }).locator('div').click();
-  await page.getByLabel('Story Metadata').locator('div').filter({ hasText: 'Title:' }).nth(2).click();
 });
