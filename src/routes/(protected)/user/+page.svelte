@@ -17,62 +17,58 @@
 	<h2>Check out and edit your account info!</h2>
 
 	<form method="POST" class="w-full max-w-xl">
-		<div role="group">
-			<div class="form-control mb-4">
-				<div class="flex items-center gap-4">
-					<label for="name" class="label max-w-[60px] flex-auto">
-						<span id="name-label" class="label-text"> Display name: </span>
-					</label>
-					<input
-						id="name"
-						name="name"
-						type="text"
-						autocomplete="name"
-						bind:value={name}
-						class="input input-bordered flex-1"
-						aria-describedby="name-label"
-					/>
-				</div>
+		<div class="form-control mb-4">
+			<div class="flex items-center gap-4">
+				<label for="name" class="label max-w-[60px] flex-auto">
+					<span class="label-text"> Display name: </span>
+				</label>
+				<input
+					id="name"
+					name="name"
+					type="text"
+					autocomplete="name"
+					bind:value={name}
+					class="input input-bordered flex-1 focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+					aria-describedby="form-error form-success"
+				/>
 			</div>
-			<div class="form-control mb-4">
-				<div class="flex items-center gap-4">
-					<label for="email" class="label max-w-[60px] flex-auto">
-						<span id="email-label" class="label-text"> Email: </span>
-					</label>
-					<input
-						id="email"
-						name="email"
-						type="email"
-						autocomplete="email"
-						bind:value={email}
-						class="input input-bordered flex-1"
-						aria-describedby="email-label"
-					/>
-				</div>
+		</div>
+		<div class="form-control mb-4">
+			<div class="flex items-center gap-4">
+				<label for="email" class="label max-w-[60px] flex-auto">
+					<span class="label-text"> Email: </span>
+				</label>
+				<input
+					id="email"
+					name="email"
+					type="email"
+					autocomplete="email"
+					bind:value={email}
+					class="input input-bordered flex-1 focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+					aria-describedby="form-error form-success"
+				/>
 			</div>
-			<div class="form-control mb-4">
-				<div class="flex items-center gap-4">
-					<label for="password" class="label max-w-[60px] flex-auto">
-						<span class="label-text"> Password: </span>
-					</label>
-					<input
-						id="password"
-						name="password"
-						type="password"
-						autocomplete="new-password"
-						bind:value={password}
-						class="input input-bordered flex-1"
-						aria-describedby="password-helper"
-					/>
-				</div>
-				<p id="password-helper">Leave blank if no change</p>
+		</div>
+		<div class="form-control mb-4">
+			<div class="flex items-center gap-4">
+				<label for="password" class="label max-w-[60px] flex-auto">
+					<span class="label-text"> Password: </span>
+				</label>
+				<input
+					id="password"
+					name="password"
+					type="password"
+					autocomplete="new-password"
+					placeholder="Leave blank if no change"
+					bind:value={password}
+					class="input input-bordered flex-1 focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+					aria-describedby="form-error form-success"
+				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<div aria-live="assertive" aria-atomic="true">
-					<p class="text-red-600">{form.error}</p>
-				</div>
+				<p id="form-error" class="text-red-600" aria-live="polite">{form.error}</p>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
@@ -80,7 +76,9 @@
 			</button>
 
 			{#if form?.success}
-				<p class="text-green-600">Details updated successfully!</p>
+				<p id="form-success" class="text-green-600" aria-live="polite">
+					Details updated successfully!
+				</p>
 			{/if}
 		</div>
 	</form>
