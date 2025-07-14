@@ -16,7 +16,10 @@
 		"test": "npm run test:e2e",
 		"test:dev": "playwright test --ui",
 		"docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
-		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts"
+		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
+		"generate-docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
+		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
+		"generate-swagger": "node swagger.js"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -61,11 +64,14 @@
 		"dotenv": "^16.5.0",
 		"elevenlabs": "^1.59.0",
 		"histoire": "^1.0.0-alpha.2",
+		"js-yaml": "^4.1.0",
 		"langchain": "^0.3.29",
 		"langsmith": "^0.3.33",
 		"lucide-svelte": "^0.525.0",
 		"mongodb": "^6.17.0",
 		"openai": "^5.8.2",
-		"serpapi": "^2.1.0"
+		"serpapi": "^2.1.0",
+		"swagger-ui-express": "^5.0.1",
+		"yamljs": "^0.3.0"
 	}
 }

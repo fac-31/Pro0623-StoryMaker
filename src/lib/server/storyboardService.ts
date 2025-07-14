@@ -4,6 +4,11 @@ import type { User } from '$lib/models/user.model';
 import type { Storyboard } from '$lib/models/storyboard.model';
 import { serializeMongoDocument } from '$lib/server/utils.js';
 
+/**
+ * Retrieves the IDs of all storyboards in the database.
+ * @returns {Promise<string[]>} A promise that resolves to an array of storyboard IDs.
+ * @throws {Error} If the database find operation fails.
+ */
 export async function getAllStoryboardsIds(): Promise<string[]> {
 	const db = getDB();
 	const collection = db.collection('storyboards');
@@ -17,11 +22,17 @@ export async function getAllStoryboardsIds(): Promise<string[]> {
 	}
 }
 
+/**
+ * Retrieves all storyboards associated with a specific user.
+ * @param {string} supabaseUserId - The Supabase ID of the user.
+ * @returns {Promise<Storyboard[]>} A promise that resolves to an array of Storyboard objects.
+ * @throws {Error} If the database find operation fails.
+ */
 export async function getStoryboardsOfUser(supabaseUserId: string): Promise<Storyboard[]> {
 	const db = getDB();
 
 	try {
-		const userDoc = await await db.collection('users').findOne({
+		const userDoc = await db.collection('users').findOne({
 			supabase: supabaseUserId // Use supabase field
 		});
 		const user = userDoc as User;
