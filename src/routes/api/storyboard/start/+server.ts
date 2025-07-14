@@ -5,6 +5,26 @@ import type { UserPrompt } from '$lib/models/UserPrompt';
 import type { NewStoryboard } from '$lib/models/storyboard.model';
 import { getUserFromEvent } from '$lib/server/userService';
 
+/**
+ * Handles POST requests to start a new storyboard.
+ *
+ * @type {RequestHandler}
+ * @async
+ * @param {import('@sveltejs/kit').RequestEvent} event - The SvelteKit request event object.
+ * @returns {Promise<import('@sveltejs/kit').JSONResponse>} A JSON response with the result of the storyboard creation or an error message.
+ *
+ * @description
+ * This function:
+ * 1. Extracts user prompts from the request body.
+ * 2. Creates a new storyboard object with initial values.
+ * 3. Saves the new storyboard to the database.
+ * 4. Updates the user's projects list with the new storyboard ID.
+ * 5. Returns the result of the storyboard creation.
+ *
+ * @throws {import('@sveltejs/kit').JSONResponse}
+ * - Returns a 500 status if saving the storyboard fails.
+ * - Returns a 404 status if the user is not found.
+ */
 export const POST: RequestHandler = async (event) => {
 	const prompts: UserPrompt = await event.request.json();
 

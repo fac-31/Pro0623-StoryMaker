@@ -17,7 +17,7 @@
 	<h2>Check out and edit your account info!</h2>
 
 	<form method="POST" class="w-full max-w-xl">
-		<div class="form-control mb-4" role="group">
+		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Display name: </span>
@@ -28,11 +28,16 @@
 					type="text"
 					autocomplete="name"
 					bind:value={name}
-					class="input input-bordered flex-1"
+					class="input input-bordered flex-1 focus-visible:ring-2"
+					aria-label="Display name"
+					aria-describedby="name-description"
 				/>
 			</div>
+			<p id="name-description" class="text-sm text-gray-500 mt-1">
+				This will be your public display name.
+			</p>
 		</div>
-		<div class="form-control mb-4" role="group">
+		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="email" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Email: </span>
@@ -43,11 +48,16 @@
 					type="email"
 					autocomplete="email"
 					bind:value={email}
-					class="input input-bordered flex-1"
+					class="input input-bordered flex-1 focus-visible:ring-2"
+					aria-label="Email address"
+					aria-describedby="email-description"
 				/>
 			</div>
+			<p id="email-description" class="text-sm text-gray-500 mt-1">
+				We will never share your email address.
+			</p>
 		</div>
-		<div class="form-control mb-4" role="group">
+		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="password" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Password: </span>
@@ -59,24 +69,24 @@
 					autocomplete="new-password"
 					placeholder="Leave blank if no change"
 					bind:value={password}
-					class="input input-bordered flex-1"
-					aria-describedby="password-hint"
+					class="input input-bordered flex-1 focus-visible:ring-2"
+					aria-label="Password"
+					aria-describedby="password-description"
 				/>
 			</div>
-			<div id="password-hint" class="text-sm text-gray-500 mt-2">
-				Leave blank if you do not wish to change your password.
-			</div>
+			<p id="password-description" class="text-sm text-gray-500 mt-1">
+				Leave blank if you do not want to change your password.
+			</p>
 		</div>
 		<div>
 			{#if form?.error}
-				<div id="form-error" class="text-red-600" aria-live="assertive">{form.error}</div>
+				<p class="text-red-600" aria-live="polite">{form.error}</p>
 			{/if}
 
 			<button
 				type="submit"
 				disabled={navigating.to != null}
-				class="btn btn-primary"
-				aria-describedby={form?.error ? 'form-error' : ''}
+				class="btn btn-primary focus-visible:ring-2"
 			>
 				{#if navigating.to}Updating…{:else}Update Details{/if}
 			</button>
