@@ -23,6 +23,12 @@ const openai = new OpenAI({
 });
 
 // Node Functions
+
+/**
+ * Generates a story outline based on the given storyboard state.
+ * @param {Storyboard} state - The current state of the storyboard.
+ * @returns {Promise<Partial<Storyboard>>} A promise that resolves to a partial storyboard with the generated outline.
+ */
 const generateStoryOutline = async (state: Storyboard): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] generateStoryOutline called with:', state.prompts);
 	addLog(`[LangGraph] generateStoryOutline called with: ${state.prompts}`);
@@ -67,6 +73,11 @@ Genre: {genre}
 	};
 };
 
+/**
+ * Generates an image prompt based on a slide outline.
+ * @param {SlideOutline} slide - The outline of the slide.
+ * @returns {string} The generated image prompt.
+ */
 const generateImagePrompt = (slide: SlideOutline): string => {
 	const promptParts: string[] = [];
 
@@ -92,6 +103,11 @@ const generateImagePrompt = (slide: SlideOutline): string => {
 	return fullPrompt;
 };
 
+/**
+ * Generates an image for the current slide in the storyboard.
+ * @param {Storyboard} state - The current state of the storyboard.
+ * @returns {Promise<Partial<Storyboard>>} A promise that resolves to a partial storyboard with the generated image.
+ */
 const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] generateImage called for slide :', state.currentSlide);
 	addLog(`[LangGraph] generateImage called for prompt: ${state.currentSlide}`);
@@ -139,6 +155,11 @@ const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> =>
 	}
 };
 
+/**
+ * Saves the current slide and advances to the next one.
+ * @param {Storyboard} state - The current state of the storyboard.
+ * @returns {Promise<Partial<Storyboard>>} A promise that resolves to a partial storyboard with the updated current slide.
+ */
 const saveSlideAndAdvance = async (state: Storyboard): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] saveSlideAndAdvance called for slide:', state.currentSlide);
 	addLog(`[LangGraph] saveSlideAndAdvance called for slide: ${state.currentSlide}`);
@@ -157,13 +178,21 @@ const saveSlideAndAdvance = async (state: Storyboard): Promise<Partial<Storyboar
 	};
 };
 
+/**
+ * Determines whether to continue to the next slide or complete the storyboard.
+ * @param {Storyboard} state - The current state of the storyboard.
+ * @returns {'nextSlide' | 'complete'} The decision to move to the next slide or complete the storyboard.
+ */
 const shouldContinue = (state: Storyboard): 'nextSlide' | 'complete' => {
 	return state.currentSlide && state.currentSlide <= state.storyOutline.slideOutlines.length
 		? 'nextSlide'
 		: 'complete';
 };
 
-// Build the Graph
+/**
+ * Creates and compiles the storyboard graph workflow.
+ * @returns {StateGraph} The compiled storyboard graph workflow.
+ */
 export const createStoryboardGraph = () => {
 	console.log('[LangGraph] createStoryboardGraph called');
 	addLog('[LangGraph] createStoryboardGraph called');
@@ -196,7 +225,11 @@ export const createStoryboardGraph = () => {
 	return workflow.compile();
 };
 
-// Main execution function
+/**
+ * Runs the storyboard creation process.
+ * @param {Storyboard} storyboard - The initial storyboard state.
+ * @returns {Promise<Storyboard>} A promise that resolves to the completed storyboard.
+ */
 export const runStoryboardCreation = async (storyboard: Storyboard): Promise<Storyboard> => {
 	console.log('[LangGraph] runStoryboardCreation called with:', storyboard.prompts);
 	addLog(`[LangGraph] runStoryboardCreation called with: ${storyboard.prompts}`);
@@ -214,10 +247,21 @@ export const runStoryboardCreation = async (storyboard: Storyboard): Promise<Sto
 };
 
 // // Interactive Functions for UI Integration
+// /**
+//  * Gets the current slide draft from the storyboard state.
+//  * @param {StoryboardState} state - The current state of the storyboard.
+//  * @returns {SlideContent | null} The current slide draft or null if not available.
+//  */
 // export const getCurrentSlideDraft = (state: StoryboardState): SlideContent | null => {
 // 	return state.currentSlideDraft;
 // };
 
+// /**
+//  * Submits refinement feedback for the current slide.
+//  * @param {StoryboardState} state - The current state of the storyboard.
+//  * @param {string} feedback - The refinement feedback.
+//  * @returns {Partial<StoryboardState>} A partial storyboard state with the updated feedback.
+//  */
 // export const submitRefinementFeedback = (
 // 	state: StoryboardState,
 // 	feedback: string
@@ -225,6 +269,10 @@ export const runStoryboardCreation = async (storyboard: Storyboard): Promise<Sto
 // 	return { refinementFeedback: feedback };
 // };
 
+// /**
+//  * Approves the current slide for generation.
+//  * @returns {Partial<StoryboardState>} A partial storyboard state indicating generation readiness.
+//  */
 // export const approveSlideForGeneration = (): Partial<StoryboardState> => {
 // 	return { generationReady: true };
 // };
