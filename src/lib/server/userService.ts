@@ -15,7 +15,6 @@ export async function insertUser(supabase: string, name: string): Promise<Insert
 	const db = getDB();
 	const users = db.collection<NewUser>('users');
 
-
 	try {
 		const user: NewUser = {
 			supabase: supabase,
@@ -40,7 +39,6 @@ export async function getAllUsers(): Promise<User[]> {
 	const db = getDB();
 	const users = db.collection<User>('users');
 
-
 	try {
 		return await users.find({}).toArray();
 	} catch (err) {
@@ -62,7 +60,6 @@ export async function getUserFromEvent(event: RequestEvent): Promise<User | null
 
 	const db = getDB();
 	const users = db.collection<User>('users');
-
 
 	try {
 		return await users.findOne({ supabase: supabase.id });
