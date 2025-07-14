@@ -76,7 +76,7 @@
 			</button>
 
 			{#if form?.success}
-				<p class="text-green-600">Details updated successfully!</p>
+				<p class="text-green-600" aria-live="assertive">Details updated successfully!</p>
 			{/if}
 		</div>
 	</form>

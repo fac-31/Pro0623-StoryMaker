@@ -15,21 +15,23 @@
 			<MarketingNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} />
 		</NavBar>
 	</header>
-	<section>
-		<HeroSection />
-	</section>
-	<section>
-		<FeatureSection />
-	</section>
-	<section>
-		<StepSection />
-	</section>
-	<section>
-		<TestimonialSection />
-	</section>
-	<aside>
-		<CtaSection />
-	</aside>
+	<main>
+		<section>
+			<HeroSection />
+		</section>
+		<section>
+			<FeatureSection />
+		</section>
+		<section>
+			<StepSection />
+		</section>
+		<section>
+			<TestimonialSection />
+		</section>
+		<aside>
+			<CtaSection />
+		</aside>
+	</main>
 	<footer>
 		<Footer />
 	</footer>
