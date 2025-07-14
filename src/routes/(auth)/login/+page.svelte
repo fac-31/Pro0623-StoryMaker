@@ -12,6 +12,7 @@
 		<AuthNav />
 
 		<!-- Login Form Component -->
+		<h1>Sign In to Your Account</h1>
 		<LoginForm error={data?.form?.error ?? ''} />
 	</div>
 </div>

@@ -12,64 +12,66 @@
 	}
 </script>
 
-<section class="flex flex-col items-center gap-4">
-	<header>
-		<h1><strong>Hello: </strong> {data.user?.user_metadata.display_name}</h1>
-		<h2>Check out and edit your account info!</h2>
-	</header>
+<div class="flex flex-col items-center gap-4">
+	<h1><strong>Hello: </strong> {data.user?.user_metadata.display_name}</h1>
+	<h2>Check out and edit your account info!</h2>
 
 	<form method="POST" class="w-full max-w-xl">
-		<div role="group">
-			<div class="form-control mb-4">
-				<div class="flex items-center gap-4">
-					<label for="name" class="label max-w-[60px] flex-auto">
-						<span class="label-text"> Display name: </span>
-					</label>
-					<input
-						id="name"
-						name="name"
-						type="text"
-						autocomplete="name"
-						bind:value={name}
-						class="input input-bordered flex-1 focus:ring-2 focus:ring-blue-500"
-					/>
-				</div>
+		<div class="form-control mb-4">
+			<div class="flex items-center gap-4">
+				<label for="name" class="label max-w-[60px] flex-auto">
+					<span class="label-text"> Display name: </span>
+				</label>
+				<input
+					id="name"
+					name="name"
+					type="text"
+					autocomplete="name"
+					bind:value={name}
+					class="input input-bordered flex-1 focus-visible:ring-2"
+					aria-describedby="error-message"
+					aria-invalid={!!form?.error}
+				/>
 			</div>
-			<div class="form-control mb-4">
-				<div class="flex items-center gap-4">
-					<label for="email" class="label max-w-[60px] flex-auto">
-						<span class="label-text"> Email: </span>
-					</label>
-					<input
-						id="email"
-						name="email"
-						type="email"
-						autocomplete="email"
-						bind:value={email}
-						class="input input-bordered flex-1 focus:ring-2 focus:ring-blue-500"
-					/>
-				</div>
+		</div>
+		<div class="form-control mb-4">
+			<div class="flex items-center gap-4">
+				<label for="email" class="label max-w-[60px] flex-auto">
+					<span class="label-text"> Email: </span>
+				</label>
+				<input
+					id="email"
+					name="email"
+					type="email"
+					autocomplete="email"
+					bind:value={email}
+					class="input input-bordered flex-1 focus-visible:ring-2"
+					aria-describedby="error-message"
+					aria-invalid={!!form?.error}
+				/>
 			</div>
-			<div class="form-control mb-4">
-				<div class="flex items-center gap-4">
-					<label for="password" class="label max-w-[60px] flex-auto">
-						<span class="label-text"> Password: </span>
-					</label>
-					<input
-						id="password"
-						name="password"
-						type="password"
-						autocomplete="new-password"
-						placeholder="Leave blank if no change"
-						bind:value={password}
-						class="input input-bordered flex-1 focus:ring-2 focus:ring-blue-500"
-					/>
-				</div>
+		</div>
+		<div class="form-control mb-4">
+			<div class="flex items-center gap-4">
+				<label for="password" class="label max-w-[60px] flex-auto">
+					<span class="label-text"> Password: </span>
+				</label>
+				<input
+					id="password"
+					name="password"
+					type="password"
+					autocomplete="new-password"
+					placeholder="Leave blank if no change"
+					bind:value={password}
+					class="input input-bordered flex-1 focus-visible:ring-2"
+					aria-describedby="error-message"
+					aria-invalid={!!form?.error}
+				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<p class="text-red-600" aria-live="polite">{form.error}</p>
+				<p id="error-message" class="text-red-600" aria-live="assertive">{form.error}</p>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
@@ -77,8 +79,8 @@
 			</button>
 
 			{#if form?.success}
-				<p class="text-green-600" aria-live="polite">Details updated successfully!</p>
+				<p class="text-green-600">Details updated successfully!</p>
 			{/if}
 		</div>
 	</form>
-</section>
+</div>
