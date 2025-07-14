@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import dotenv from 'dotenv';
+dotenv.config();
 
 test.describe('Authentication', () => {
   const uniqueId = Date.now();
@@ -15,7 +17,11 @@ test.describe('Authentication', () => {
     await page.getByRole('textbox', { name: 'Password' }).fill(password);
     await page.getByRole('textbox', { name: 'Full Name' }).fill(fullName);
     await page.getByRole('textbox', { name: 'Display Name' }).fill(displayName);
-    await page.getByRole('button', { name: 'Create Account' }).click();
+
+    const createAccountButton = page.getByRole('button', { name: 'Create Account' });
+    await expect(createAccountButton).toBeVisible();
+    await expect(createAccountButton).toBeEnabled();
+    await createAccountButton.click();
 
     // Verify redirection to login page after signup
     await page.waitForURL('/login');
@@ -34,26 +40,32 @@ test.describe('Authentication', () => {
   });
 
   test('should allow a user to log out', async ({ page }) => {
-    // This test assumes a user is already logged in or signs up/logs in as part of its setup.
-    // For simplicity, we'll re-use the signup/login flow from the previous test.
+    // --- 1. Sign up a new user to test with ---
     const logoutEmail = `logout-${uniqueId}@example.com`;
     const logoutPassword = 'password123';
     const logoutFullName = 'Logout Test User';
     const logoutDisplayName = `LogoutDisplay${uniqueId}`;
 
-    // Sign up and log in the user first
     await page.goto('/signup');
     await page.getByRole('textbox', { name: 'Email Address' }).fill(logoutEmail);
     await page.getByRole('textbox', { name: 'Password' }).fill(logoutPassword);
     await page.getByRole('textbox', { name: 'Full Name' }).fill(logoutFullName);
     await page.getByRole('textbox', { name: 'Display Name' }).fill(logoutDisplayName);
-    await page.getByRole('button', { name: 'Create Account' }).click();
-    await page.waitForURL('/login');
 
+    const createAccountButton = page.getByRole('button', { name: 'Create Account' });
+    await expect(createAccountButton).toBeVisible();
+    await expect(createAccountButton).toBeEnabled();
+    await createAccountButton.click();
+
+    await page.waitForURL('/login');
+    await expect(page).toHaveURL('/login');
+
+    // --- 2. Log in ---
     await page.getByRole('textbox', { name: 'Email Address' }).fill(logoutEmail);
     await page.getByRole('textbox', { name: 'Password' }).fill(logoutPassword);
     await page.getByRole('button', { name: 'Sign in' }).click();
     await page.waitForURL('/dashboard');
+    await expect(page).toHaveURL('/dashboard');
 
     // --- Now, log out ---
     await page.getByRole('button', { name: 'Logout' }).click();
