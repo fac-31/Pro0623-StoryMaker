@@ -39,6 +39,7 @@ export const actions: Actions = {
 		const { error } = await supabase.auth.signUp({ email, password });
 
 		if (error) {
+			console.log(error);
 			return fail(400, { error: error.message });
 		}
 
