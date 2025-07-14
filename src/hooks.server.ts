@@ -24,7 +24,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	} = await event.locals.supabase.auth.getUser();
 
 	if (userError) {
-		console.error(`[${new Date().toISOString()}] [hooks.server.ts] Error in supabase.auth.getUser():`, userError.message);
+		console.error(
+			`[${new Date().toISOString()}] [hooks.server.ts] Error in supabase.auth.getUser():`,
+			userError.message
+		);
 	}
 	event.locals.user = user ?? null;
 
