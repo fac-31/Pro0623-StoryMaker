@@ -17,7 +17,7 @@
 		"test:dev": "playwright test --ui",
 		"docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
 		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
-		"generate-docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
+		"generate-docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs/typedoc",
 		"generate-swagger": "node swagger.js"
 	},
 	"devDependencies": {
@@ -72,6 +72,7 @@
 		"mongodb": "^6.17.0",
 		"openai": "^5.8.2",
 		"serpapi": "^2.1.0",
+		"swagger-ui-dist": "^5.26.2",
 		"swagger-ui-express": "^5.0.1",
 		"yamljs": "^0.3.0"
 	}
