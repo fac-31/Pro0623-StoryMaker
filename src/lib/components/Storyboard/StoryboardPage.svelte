@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
-	import StoryboardForm from '$lib/components/StoryboardForm.svelte';
-	import SlideThumbnail from '$lib/components/SlideThumbnail.svelte';
-	import MetadataContainer from '$lib/components/MetadataContainer.svelte';
-	import SlideModal from '$lib/components/SlideModal.svelte';
+	import StoryboardForm from '$lib/components/Storyboard/StoryboardForm.svelte';
+	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
+	import MetadataContainer from '$lib/components/Storyboard/MetadataContainer.svelte';
+	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import {
 		Play,
 		Video,
@@ -24,7 +24,7 @@
 		genre: ''
 	};
 
-	let storyboard: Storyboard | null = null;
+	export let storyboard: Storyboard | null = null;
 	let loading = false;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
@@ -58,7 +58,6 @@
 		try {
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(userPrompt)
 			});
 			const data = await res.json();

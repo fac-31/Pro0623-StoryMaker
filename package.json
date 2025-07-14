@@ -14,8 +14,11 @@
 		"lint": "prettier --check . && eslint .",
 		"test:e2e": "playwright test",
 		"test": "npm run test:e2e",
+		"test:dev": "playwright test --ui",
 		"docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
-		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts"
+		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
+		"generate-docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
+		"generate-swagger": "node swagger.js"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -26,19 +29,21 @@
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/forms": "^0.5.9",
 		"@tailwindcss/typography": "^0.5.15",
-		"@tailwindcss/vite": "^4.0.0",
+		"@tailwindcss/vite": "^4.1.11",
 		"@types/node": "^24.0.4",
+		"cross-env": "^7.0.3",
+		"daisyui": "^5.0.43",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-svelte": "^3.0.0",
 		"globals": "^16.0.0",
 		"mdsvex": "^0.12.3",
 		"prettier": "^3.4.2",
-		"prettier-plugin-svelte": "^3.3.3",
+		"prettier-plugin-svelte": "^3.4.0",
 		"prettier-plugin-tailwindcss": "^0.6.11",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
-		"tailwindcss": "^4.0.0",
+		"tailwindcss": "^4.1.11",
 		"ts-to-zod": "^3.15.0",
 		"typedoc": "^0.28.6",
 		"typescript": "^5.0.0",
@@ -58,11 +63,14 @@
 		"dotenv": "^16.5.0",
 		"elevenlabs": "^1.59.0",
 		"histoire": "^1.0.0-alpha.2",
+		"js-yaml": "^4.1.0",
 		"langchain": "^0.3.29",
 		"langsmith": "^0.3.33",
 		"lucide-svelte": "^0.525.0",
 		"mongodb": "^6.17.0",
 		"openai": "^5.8.2",
-		"serpapi": "^2.1.0"
+		"serpapi": "^2.1.0",
+		"swagger-ui-express": "^5.0.1",
+		"yamljs": "^0.3.0"
 	}
 }
