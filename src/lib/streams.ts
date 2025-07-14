@@ -7,7 +7,7 @@ const streams = new Map<string, ReadableStreamDefaultController>();
  * @param {ReadableStreamDefaultController} controller - The controller for the stream.
  */
 export function registerStream(taskId: string, controller: ReadableStreamDefaultController) {
-    streams.set(taskId, controller);
+	streams.set(taskId, controller);
 }
 
 /**
@@ -16,11 +16,11 @@ export function registerStream(taskId: string, controller: ReadableStreamDefault
  * @param {unknown} data - The data to be sent through the stream.
  */
 export function updateStream(taskId: string, data: unknown) {
-    const controller = streams.get(taskId);
-    if (!controller) return;
+	const controller = streams.get(taskId);
+	if (!controller) return;
 
-    const encoder = new TextEncoder();
-    controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+	const encoder = new TextEncoder();
+	controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
 }
 
 /**
@@ -28,9 +28,9 @@ export function updateStream(taskId: string, data: unknown) {
  * @param {string} taskId - The unique identifier for the task.
  */
 export function endStream(taskId: string) {
-    const controller = streams.get(taskId);
-    if (!controller) return;
+	const controller = streams.get(taskId);
+	if (!controller) return;
 
-    controller.close();
-    streams.delete(taskId);
+	controller.close();
+	streams.delete(taskId);
 }

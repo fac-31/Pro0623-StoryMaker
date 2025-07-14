@@ -13,7 +13,9 @@ import type { User, NewUser, SafeUser } from '$lib/models/user.model';
  */
 export async function insertUser(supabase: string, name: string): Promise<InsertOneResult> {
 	const db = getDB();
-	const users = db.collection&lt;NewUser&gt;('users');
+	const users = db.collection & lt;
+	NewUser & gt;
+	('users');
 
 	try {
 		const user: NewUser = {
@@ -37,7 +39,9 @@ export async function insertUser(supabase: string, name: string): Promise<Insert
  */
 export async function getAllUsers(): Promise<User[]> {
 	const db = getDB();
-	const users = db.collection&lt;User&gt;('users');
+	const users = db.collection & lt;
+	User & gt;
+	('users');
 
 	try {
 		return await users.find({}).toArray();
@@ -59,7 +63,9 @@ export async function getUserFromEvent(event: RequestEvent): Promise<User | null
 	if (!supabase) return null;
 
 	const db = getDB();
-	const users = db.collection&lt;User&gt;('users');
+	const users = db.collection & lt;
+	User & gt;
+	('users');
 
 	try {
 		return await users.findOne({ supabase: supabase.id });
