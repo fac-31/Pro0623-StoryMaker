@@ -29,13 +29,9 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-label="Display name"
-					aria-describedby="name-description"
+					aria-describedby="error-message"
 				/>
 			</div>
-			<p id="name-description" class="text-sm text-gray-500 mt-1">
-				This will be your public display name.
-			</p>
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
@@ -49,13 +45,9 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-label="Email address"
-					aria-describedby="email-description"
+					aria-describedby="error-message"
 				/>
 			</div>
-			<p id="email-description" class="text-sm text-gray-500 mt-1">
-				We will never share your email address.
-			</p>
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
@@ -70,17 +62,13 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-label="Password"
-					aria-describedby="password-description"
+					aria-describedby="error-message"
 				/>
 			</div>
-			<p id="password-description" class="text-sm text-gray-500 mt-1">
-				Leave blank if you do not want to change your password.
-			</p>
 		</div>
 		<div>
 			{#if form?.error}
-				<p class="text-red-600" aria-live="polite">{form.error}</p>
+				<p id="error-message" class="text-red-600" aria-live="polite">{form.error}</p>
 			{/if}
 
 			<button

@@ -10,9 +10,11 @@
 </script>
 
 <main class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
-	<NavBar type="home">
-		<MarketingNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} />
-	</NavBar>
+	<header>
+		<NavBar type="home">
+			<MarketingNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} />
+		</NavBar>
+	</header>
 	<section>
 		<HeroSection />
 	</section>
@@ -28,7 +30,7 @@
 	<section>
 		<CtaSection />
 	</section>
-	<section>
+	<footer>
 		<Footer />
-	</section>
+	</footer>
 </main>
