@@ -28,9 +28,8 @@
 					type="text"
 					autocomplete="name"
 					bind:value={name}
-					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-describedby="error-message"
-					aria-invalid={!!form?.error}
+					class="input input-bordered flex-1"
+					aria-describedby="form-error"
 				/>
 			</div>
 		</div>
@@ -45,9 +44,8 @@
 					type="email"
 					autocomplete="email"
 					bind:value={email}
-					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-describedby="error-message"
-					aria-invalid={!!form?.error}
+					class="input input-bordered flex-1"
+					aria-describedby="form-error"
 				/>
 			</div>
 		</div>
@@ -63,15 +61,14 @@
 					autocomplete="new-password"
 					placeholder="Leave blank if no change"
 					bind:value={password}
-					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-describedby="error-message"
-					aria-invalid={!!form?.error}
+					class="input input-bordered flex-1"
+					aria-describedby="form-error"
 				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<p id="error-message" class="text-red-600" aria-live="assertive">{form.error}</p>
+				<p id="form-error" class="text-red-600">{form.error}</p>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
