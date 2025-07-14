@@ -1,0 +1,181 @@
+openapi: 3.0.0
+info:
+  title: Story Maker API
+  version: 1.0.0
+  description: API for the Story Maker application
+paths:
+  /apistoryboard\approve:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apistoryboard\current:
+    get:
+      summary: Get request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apistoryboard\generate-video:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apistoryboard\logs:
+    get:
+      summary: Get request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apistoryboard\progress\{id}:
+    get:
+      summary: Get request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apistoryboard\refine:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apistoryboard\start:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apiteams\create:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apiteams\getall:
+    get:
+      summary: Get request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apiteams\removeuser:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apiteams\updateuser:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apiusers\getall:
+    get:
+      summary: Get request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apiusers\me:
+    get:
+      summary: Get request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /apiusers\signup:
+    post:
+      summary: Post request
+      responses:
+        '200':
+          description: Successful response
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string

@@ -4,7 +4,12 @@ import { env } from '$env/dynamic/private';
 let db: Db;
 let client: MongoClient | null = null;
 
-export async function initDB() {
+/**
+ * Initializes the database connection.
+ * @throws {Error} If DB_CONN_STRING or DB_NAME environment variables are not set.
+ * @returns {Promise<Db>} A promise that resolves to the connected database instance.
+ */
+export async function initDB(): Promise<Db> {
 	if (!db) {
 		if (!env.DB_CONN_STRING) {
 			throw new Error('DB_CONN_STRING environment variable not set.');
@@ -29,11 +34,21 @@ export async function initDB() {
 	return db;
 }
 
-export function getDB() {
+/**
+ * Retrieves the initialized database instance.
+ * @throws {Error} If the database has not been initialized.
+ * @returns {Db} The initialized database instance.
+ */
+export function getDB(): Db {
 	if (!db) throw new Error('❌ DB not initialized');
 	return db;
 }
 
+/**
+ * Retrieves both the initialized database instance and the MongoDB client.
+ * @throws {Error} If the database has not been initialized.
+ * @returns {{ db: Db; client: MongoClient }} An object containing the database instance and MongoDB client.
+ */
 export function getDBAndClient(): { db: Db; client: MongoClient } {
 	if (!db || !client) throw new Error('❌ DB not initialized');
 	return { db, client };
