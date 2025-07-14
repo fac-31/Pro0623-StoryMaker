@@ -39,6 +39,7 @@
 		<button
 			type="submit"
 			aria-label="Sign In"
+			name="sign-in"
 			disabled={navigating.to != null}
 			class="w-full transform rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-3 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
 		>

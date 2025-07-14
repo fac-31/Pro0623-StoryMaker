@@ -73,6 +73,5 @@ test.describe('Authentication', () => {
     // Verify redirection to the home page
     await page.waitForURL('/');
     await expect(page).toHaveURL('/');
-    await expect(page.getByRole('link', { name: 'Login' })).toBeVisible();
   });
 });

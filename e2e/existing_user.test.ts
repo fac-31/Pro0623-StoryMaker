@@ -8,7 +8,7 @@ test('test', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Email Address' }).press('Tab');
   await page.getByRole('textbox', { name: 'Password' }).fill('testing');
   await page.getByRole('textbox', { name: 'Password' }).press('Enter');
-  await page.getByRole('button', { name: 'Sign In' }).click();
   await page.waitForURL('/dashboard');
   await expect(page).toHaveURL('/dashboard');
+  await page.getByRole('button', { name: 'Logout' }).click();
 });
