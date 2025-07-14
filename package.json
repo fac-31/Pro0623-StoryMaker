@@ -14,6 +14,9 @@
 		"lint": "prettier --check . && eslint .",
 		"test:e2e": "playwright test",
 		"test": "npm run test:e2e",
+		"test:dev": "playwright test --ui",
+		"docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
+		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
 		"generate-docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
 		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
 		"generate-swagger": "node swagger.js"
@@ -29,6 +32,7 @@
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.1.11",
 		"@types/node": "^24.0.4",
+		"cross-env": "^7.0.3",
 		"daisyui": "^5.0.43",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",

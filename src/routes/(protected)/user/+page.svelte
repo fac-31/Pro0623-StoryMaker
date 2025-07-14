@@ -12,7 +12,7 @@
 	}
 </script>
 
-<div class="flex flex-col items-center gap-4">
+<section class="flex flex-col items-center gap-4">
 	<h1><strong>Hello: </strong> {data.user?.user_metadata.display_name}</h1>
 	<h2>Check out and edit your account info!</h2>
 
@@ -28,8 +28,8 @@
 					type="text"
 					autocomplete="name"
 					bind:value={name}
-					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-describedby="error-message"
+					class="input input-bordered flex-1"
+					aria-describedby="form-error"
 				/>
 			</div>
 		</div>
@@ -44,8 +44,8 @@
 					type="email"
 					autocomplete="email"
 					bind:value={email}
-					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-describedby="error-message"
+					class="input input-bordered flex-1"
+					aria-describedby="form-error"
 				/>
 			</div>
 		</div>
@@ -61,14 +61,14 @@
 					autocomplete="new-password"
 					placeholder="Leave blank if no change"
 					bind:value={password}
-					class="input input-bordered flex-1 focus-visible:ring-2"
-					aria-describedby="error-message"
+					class="input input-bordered flex-1"
+					aria-describedby="form-error"
 				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<p id="error-message" class="text-red-600" aria-live="polite">{form.error}</p>
+				<p id="form-error" class="text-red-600" aria-live="polite">{form.error}</p>
 			{/if}
 
 			<button
@@ -80,8 +80,8 @@
 			</button>
 
 			{#if form?.success}
-				<p class="text-green-600">Details updated successfully!</p>
+				<p class="text-green-600" aria-live="polite">Details updated successfully!</p>
 			{/if}
 		</div>
 	</form>
-</div>
+</section>
