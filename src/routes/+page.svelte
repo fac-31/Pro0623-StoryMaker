@@ -9,18 +9,14 @@
 	import Footer from '$lib/components/Homepage/Footer.svelte';
 </script>
 
-<header>
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<NavBar type="home">
 		<MarketingNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} />
 	</NavBar>
-</header>
-<main class="bg-gradient-to-br from-purple-50 via-white to-blue-50">
 	<HeroSection />
 	<FeatureSection />
 	<StepSection />
 	<TestimonialSection />
 	<CtaSection />
-</main>
-<footer>
 	<Footer />
-</footer>
+</div>

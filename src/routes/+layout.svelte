@@ -2,8 +2,6 @@
 	import '../app.css';
 </script>
 
-<div class="bg-base-100 min-h-screen">
-	<main class="container mx-auto">
-		<slot />
-	</main>
-</div>
+<main class="bg-base-100 min-h-screen container mx-auto">
+	<slot />
+</main>
