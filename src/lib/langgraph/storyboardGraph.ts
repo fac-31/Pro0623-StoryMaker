@@ -14,14 +14,12 @@ import type { SlideOutline } from '$lib/models/story';
 import { updateStream } from '$lib/streams';
 import { v2 as cloudinary } from 'cloudinary';
 
-
 // Configure Cloudinary (usually done in your app initialization)
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET
 });
-
 
 const llm = new ChatOpenAI({
 	modelName: 'gpt-4',
@@ -113,30 +111,30 @@ const generateImagePrompt = (slide: SlideOutline): string => {
 	return fullPrompt;
 };
 const uploadToCloudinary = async (imageUrl: string, slideNumber: number): Promise<string> => {
-  try {
-    const result = await cloudinary.uploader.upload(imageUrl, {
-      folder: 'storyboard-images',
-      public_id: `slide-${slideNumber}-${Date.now()}`,
-      resource_type: 'image',
-      format: 'webp', // Convert to WebP for better compression
-      quality: 'auto:good', // Automatic quality optimization
-      fetch_format: 'auto', // Automatically choose best format for client
-      transformation: [
-        {
-          width: 1792,
-          height: 1024,
-          crop: 'limit', // Maintain aspect ratio while limiting size
-          quality: 'auto:good'
-        }
-      ],
-      tags: ['storyboard', 'generated', `slide-${slideNumber}`]
-    });
+	try {
+		const result = await cloudinary.uploader.upload(imageUrl, {
+			folder: 'storyboard-images',
+			public_id: `slide-${slideNumber}-${Date.now()}`,
+			resource_type: 'image',
+			format: 'webp', // Convert to WebP for better compression
+			quality: 'auto:good', // Automatic quality optimization
+			fetch_format: 'auto', // Automatically choose best format for client
+			transformation: [
+				{
+					width: 1792,
+					height: 1024,
+					crop: 'limit', // Maintain aspect ratio while limiting size
+					quality: 'auto:good'
+				}
+			],
+			tags: ['storyboard', 'generated', `slide-${slideNumber}`]
+		});
 
-    return result.secure_url;
-  } catch (error) {
-    console.error('Cloudinary upload failed:', error);
-    throw error;
-  }
+		return result.secure_url;
+	} catch (error) {
+		console.error('Cloudinary upload failed:', error);
+		throw error;
+	}
 };
 
 /**
@@ -183,9 +181,9 @@ const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> =>
 		try {
 			console.log('[LangGraph] Uploading to Cloudinary...');
 			addLog('[LangGraph] Uploading to Cloudinary...');
-			
+
 			finalImageUrl = await uploadToCloudinary(dalleImageUrl, state.currentSlide);
-			
+
 			console.log('[LangGraph] Cloudinary upload successful:', finalImageUrl);
 			addLog(`[LangGraph] Cloudinary upload successful: ${finalImageUrl}`);
 		} catch (cloudinaryError) {
@@ -198,7 +196,7 @@ const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> =>
 			slideNumber: state.currentSlide,
 			imageGenerated: true,
 			imagePrompt: imagePrompt,
-			imageUrl: finalImageUrl,
+			imageUrl: finalImageUrl
 		};
 
 		const updatedVisualSlides = [...state.visualSlides];
