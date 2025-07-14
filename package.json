@@ -18,10 +18,10 @@
 		"docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
 		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
 		"generate-docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
-		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
 		"generate-swagger": "node swagger.js"
 	},
 	"devDependencies": {
+		"@axe-core/playwright": "^4.10.2",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@playwright/test": "^1.49.1",
