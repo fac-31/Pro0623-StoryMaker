@@ -17,7 +17,7 @@
 	<h2>Check out and edit your account info!</h2>
 
 	<form method="POST" class="w-full max-w-xl">
-		<div class="form-control mb-4">
+		<div class="form-control mb-4" role="group">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Display name: </span>
@@ -33,7 +33,7 @@
 				/>
 			</div>
 		</div>
-		<div class="form-control mb-4">
+		<div class="form-control mb-4" role="group">
 			<div class="flex items-center gap-4">
 				<label for="email" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Email: </span>
@@ -49,7 +49,7 @@
 				/>
 			</div>
 		</div>
-		<div class="form-control mb-4">
+		<div class="form-control mb-4" role="group">
 			<div class="flex items-center gap-4">
 				<label for="password" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Password: </span>
@@ -68,7 +68,7 @@
 		</div>
 		<div>
 			{#if form?.error}
-				<p id="form-error" class="text-red-600">{form.error}</p>
+				<p id="form-error" class="text-red-600" aria-live="assertive">{form.error}</p>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
