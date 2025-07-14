@@ -4,23 +4,23 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const filteredEnv = Object.fromEntries(
-  Object.entries(process.env).filter((entry): entry is [string, string] => {
-    const value = entry[1];
-    return typeof value === 'string';
-  })
+	Object.entries(process.env).filter((entry): entry is [string, string] => {
+		const value = entry[1];
+		return typeof value === 'string';
+	})
 ) as { [key: string]: string };
 
 export default defineConfig({
-  webServer: {
-    command: 'npm run build && npm run preview',
-    port: 5173,
-    reuseExistingServer: true,
-    env: filteredEnv
-  },
-  testDir: 'e2e',
-  use: {
-    baseURL: 'http://localhost:5173'
-  }
+	webServer: {
+		command: 'npm run build && npm run preview',
+		port: 5173,
+		reuseExistingServer: true,
+		env: filteredEnv
+	},
+	testDir: 'e2e',
+	use: {
+		baseURL: 'http://localhost:5173'
+	}
 });
 // This configuration sets up Playwright to run end-to-end tests for the application.
 // It includes environment variable filtering to ensure only string values are passed to the test environment.
