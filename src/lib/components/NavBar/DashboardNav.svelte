@@ -7,10 +7,10 @@
 
 <div class="px-6 py-4">
 	<div class="flex items-center space-x-4">
-		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+		<button class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none">
 			<Bell class="h-5 w-5" />
 		</button>
-		<a href="/user" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+		<a href="/user" class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none">
 			<Settings class="h-5 w-5" />
 		</a>
 		<div class="flex items-center space-x-2">
@@ -24,7 +24,7 @@
 			>
 		</div>
 		<form action="/logout" method="POST" class="">
-			<button type="submit" class="p-2 text-gray-400 transition-colors hover:text-gray-600">
+			<button type="submit" class="p-2 text-gray-400 transition-colors hover:text-gray-600 motion-reduce:transition-none">
 				<LogOut class="h-5 w-5" />
 			</button>
 		</form>

@@ -42,7 +42,9 @@
 		<div class="grid gap-8 md:grid-cols-3">
 			{#each steps as step, index (step.step)}
 				<div class="relative">
-					<div class="rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl">
+					<div
+						class="rounded-2xl bg-white p-8 shadow-lg transition-shadow hover:shadow-xl motion-reduce:transition-none"
+					>
 						<div class="mb-4 text-4xl font-bold text-purple-600">{step.step}</div>
 						<h3 class="mb-3 text-xl font-semibold text-gray-900">{step.title}</h3>
 						<p class="leading-relaxed text-gray-600">{step.description}</p>

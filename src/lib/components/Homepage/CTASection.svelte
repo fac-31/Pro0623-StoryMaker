@@ -15,14 +15,14 @@
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
 				<a
 					href="/signup"
-					class="flex transform items-center justify-center space-x-2 rounded-lg bg-white px-8 py-4 font-semibold text-purple-600 transition-all hover:scale-105 hover:bg-gray-50"
+					class="flex transform items-center justify-center space-x-2 rounded-lg bg-white px-8 py-4 font-semibold text-purple-600 transition-all hover:scale-105 hover:bg-gray-50 motion-reduce:transform-none motion-reduce:transition-none"
 				>
 					<span>Start Creating Free</span>
 					<ArrowRight class="h-5 w-5" />
 				</a>
 				<a
 					href="/storyboard"
-					class="rounded-lg border-2 border-white px-8 py-4 font-semibold text-white transition-all hover:bg-white hover:text-purple-600"
+					class="rounded-lg border-2 border-white px-8 py-4 font-semibold text-white transition-all hover:bg-white hover:text-purple-600 motion-reduce:transition-none"
 				>
 					Try Demo
 				</a>

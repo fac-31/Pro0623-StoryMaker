@@ -39,7 +39,7 @@
 			</div>
 
 			<button
-				class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+				class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 				onclick={handleNewStoryboard}
 			>
 				<Plus class="h-5 w-5" />
@@ -56,7 +56,7 @@
 		<h3 class="mb-2 text-lg font-medium text-gray-900">No team storyboards yet</h3>
 		<p class="mb-6 text-gray-500">Start creating collaborative storyboards with your team</p>
 		<button
-			class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+			class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700 motion-reduce:transition-none"
 			onclick={handleNewStoryboard}
 		>
 			Create First Storyboard
