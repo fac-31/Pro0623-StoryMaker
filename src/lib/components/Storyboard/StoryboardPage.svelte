@@ -166,7 +166,7 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <main
-	class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 px-4 py-12 sm:px-6 lg:px-8"
+	class="min-h-screen bg-base-200 px-4 py-12 sm:px-6 lg:px-8"
 >
 	<div class="mx-auto max-w-6xl space-y-8">
 		<!-- Header with Back Button and Title -->

@@ -9,7 +9,7 @@
 	import Footer from '$lib/components/Homepage/Footer.svelte';
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+<div class="min-h-screen bg-base-200">
 	<NavBar>
 		<MarketingNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} />
 	</NavBar>
