@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight, Play, Check, BookOpen } from 'lucide-svelte';
+	import { ArrowRight, Play, BookOpen } from 'lucide-svelte';
 </script>
 
 <section class="relative overflow-hidden py-20 lg:py-32">
