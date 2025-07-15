@@ -1,8 +1,5 @@
 <script lang="ts">
 	import { Menu, X, Play } from 'lucide-svelte';
-	type NavType = 'home' | 'auth' | 'dashboard';
-	/** Which variant of the navbar to render */
-	export let type: NavType = 'home';
 	/** Mobile menu open state */
 	let mobileMenuOpen = false;
 </script>
