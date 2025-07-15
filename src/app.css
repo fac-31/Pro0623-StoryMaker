@@ -6,21 +6,20 @@
 	color-scheme: light dark;
 }
 
-
 .slides-container {
 	@apply my-8;
 }
 
 .slides-flex {
-	@apply flex gap-4 overflow-x-auto rounded-lg border border-base-300 py-4;
+	@apply border-base-300 flex gap-4 overflow-x-auto rounded-lg border py-4;
 }
 
 .slide-thumbnail {
-	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-base-300 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
+	@apply border-base-300 relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
 }
 
 .slide-number {
-	@apply rounded-t-md bg-primary px-2 py-1 text-sm font-bold text-primary-content;
+	@apply bg-primary text-primary-content rounded-t-md px-2 py-1 text-sm font-bold;
 }
 
 .slide-thumbnail:hover {
@@ -32,7 +31,7 @@
 }
 
 .placeholder-image {
-	@apply flex h-[calc(100%-2rem)] flex-col items-center justify-center rounded-b-md bg-base-200 p-2 text-center text-base-content/60;
+	@apply bg-base-200 text-base-content/60 flex h-[calc(100%-2rem)] flex-col items-center justify-center rounded-b-md p-2 text-center;
 }
 
 .placeholder-image small {
@@ -40,7 +39,7 @@
 }
 
 .metadata-container {
-	@apply my-8 rounded-lg border border-base-300 bg-base-200 p-6;
+	@apply border-base-300 bg-base-200 my-8 rounded-lg border p-6;
 }
 
 .metadata-grid {
@@ -48,7 +47,7 @@
 }
 
 .metadata-item {
-	@apply rounded border-l-4 border-primary bg-base-100 p-3;
+	@apply border-primary bg-base-100 rounded border-l-4 p-3;
 }
 
 .modal-overlay {
@@ -56,11 +55,11 @@
 }
 
 .modal-content {
-	@apply relative h-[90%] w-[95%] overflow-hidden rounded-lg bg-base-100;
+	@apply bg-base-100 relative h-[90%] w-[95%] overflow-hidden rounded-lg;
 }
 
 .close-button {
-	@apply absolute top-4 right-4 z-[1001] flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 bg-error text-2xl text-error-content hover:bg-error/80;
+	@apply bg-error text-error-content hover:bg-error/80 absolute top-4 right-4 z-[1001] flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 text-2xl;
 }
 
 .modal-body {
@@ -68,11 +67,11 @@
 }
 
 .slide-details {
-	@apply w-1/5 overflow-y-auto border-r border-base-300 bg-base-200 px-4 py-8 pr-8;
+	@apply border-base-300 bg-base-200 w-1/5 overflow-y-auto border-r px-4 py-8 pr-8;
 }
 
 .slide-image {
-	@apply flex w-4/5 items-center justify-center bg-base-100 p-8;
+	@apply bg-base-100 flex w-4/5 items-center justify-center p-8;
 }
 
 .slide-image img {
@@ -80,19 +79,19 @@
 }
 
 .large-placeholder {
-	@apply p-8 text-center text-base-content/60;
+	@apply text-base-content/60 p-8 text-center;
 }
 
 .detail-section {
-	@apply mb-6 border-b border-base-300 pb-4 last:border-b-0;
+	@apply border-base-300 mb-6 border-b pb-4 last:border-b-0;
 }
 
 .detail-section h4 {
-	@apply m-0 mb-2 text-base text-primary;
+	@apply text-primary m-0 mb-2 text-base;
 }
 
 .detail-section p {
-	@apply my-1 text-sm leading-snug text-base-content;
+	@apply text-base-content my-1 text-sm leading-snug;
 }
 
 /* Visually hide an element while keeping it accessible to screen readers */
@@ -109,19 +108,19 @@
 }
 
 .error-message {
-	@apply text-error block min-h-[1em] mt-1;
+	@apply text-error mt-1 block min-h-[1em];
 }
 
 .character-info {
-	@apply mb-4 rounded border-l-4 border-success bg-base-100 p-3;
+	@apply border-success bg-base-100 mb-4 rounded border-l-4 p-3;
 }
 
 .emotions {
-	@apply mt-1 text-xs text-base-content/60 italic;
+	@apply text-base-content/60 mt-1 text-xs italic;
 }
 
 .dialogue-line {
-	@apply mb-2 rounded border-l-4 border-warning bg-base-100 p-2 text-sm;
+	@apply border-warning bg-base-100 mb-2 rounded border-l-4 p-2 text-sm;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -7,9 +7,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<script>
 			// Initialize theme before page loads to prevent flash
-			(function() {
+			(function () {
 				const savedTheme = localStorage.getItem('theme');
-				const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+				const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+					? 'dark'
+					: 'light';
 				const theme = savedTheme || systemTheme;
 				document.documentElement.setAttribute('data-theme', theme);
 			})();

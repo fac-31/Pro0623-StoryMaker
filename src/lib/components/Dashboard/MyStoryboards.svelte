@@ -59,7 +59,7 @@
 
 	<!-- Filters and Search -->
 	<section
-		class="mb-8 rounded-2xl border border-base-300/50 bg-base-100/80 p-6 shadow-xl backdrop-blur-sm"
+		class="border-base-300/50 bg-base-100/80 mb-8 rounded-2xl border p-6 shadow-xl backdrop-blur-sm"
 		aria-label="Search and filter storyboards"
 	>
 		<div class="flex flex-col gap-4 md:flex-row">
@@ -75,7 +75,7 @@
 				/>
 			</div>
 
-			<div class="flex items-center rounded-lg bg-base-200 p-1">
+			<div class="bg-base-200 flex items-center rounded-lg p-1">
 				<button
 					class="rounded-md p-2 transition-colors {viewMode === 'grid'
 						? 'bg-base-100 text-primary shadow-sm'
@@ -137,7 +137,7 @@
 								<span>{storyboard.visualSlides.length} slides</span>
 							</div>
 
-							<div class="mt-4 flex items-center space-x-2 border-t border-base-300 pt-4">
+							<div class="border-base-300 mt-4 flex items-center space-x-2 border-t pt-4">
 								<button
 									class="btn btn-primary btn-sm flex-1"
 									onclick={() => handleEditStoryboard(storyboard)}
@@ -152,13 +152,13 @@
 		{:else}
 			<!-- List view implementation -->
 			<div
-				class="overflow-hidden rounded-2xl border border-base-300/50 bg-base-100/80 shadow-xl backdrop-blur-sm"
+				class="border-base-300/50 bg-base-100/80 overflow-hidden rounded-2xl border shadow-xl backdrop-blur-sm"
 			>
 				{#if filteredProjects().length > 0}
 					<div class="overflow-x-auto">
 						<table class="table w-full">
 							<thead>
-								<tr class="border-b border-base-300">
+								<tr class="border-base-300 border-b">
 									<th class="text-base-content text-left font-semibold">Storyboard</th>
 									<th class="text-base-content text-left font-semibold">Genre</th>
 									<th class="text-base-content text-left font-semibold">Slides</th>
@@ -169,7 +169,7 @@
 							</thead>
 							<tbody>
 								{#each filteredProjects() as storyboard (storyboard._id)}
-									<tr class="group border-b border-base-300 transition-colors hover:bg-base-200">
+									<tr class="group border-base-300 hover:bg-base-200 border-b transition-colors">
 										<td class="py-4">
 											<div class="flex items-center space-x-3">
 												<div
@@ -252,9 +252,9 @@
 				{:else}
 					<div class="p-12 text-center">
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-base-200"
+							class="bg-base-200 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
 						>
-							<Play class="h-8 w-8 text-base-content/40" />
+							<Play class="text-base-content/40 h-8 w-8" />
 						</div>
 						<h3 class="text-base-content mb-2 text-lg font-medium">No storyboards found</h3>
 						<p class="text-base-content/70 mb-6">

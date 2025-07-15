@@ -8,7 +8,7 @@
 			<div class="space-y-8">
 				<div class="space-y-4">
 					<div
-						class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary"
+						class="bg-primary/10 text-primary inline-flex items-center rounded-full px-3 py-1 text-sm font-medium"
 					>
 						✨ AI-Powered Storyboarding
 					</div>
@@ -52,10 +52,10 @@
 
 			<div class="relative">
 				<div
-					class="rotate-3 transform rounded-2xl bg-base-300 p-8 transition-transform duration-300 hover:rotate-0"
+					class="bg-base-300 rotate-3 transform rounded-2xl p-8 transition-transform duration-300 hover:rotate-0"
 				>
 					<div
-						class="flex h-64 w-full items-center justify-center rounded-lg bg-base-200 shadow-2xl"
+						class="bg-base-200 flex h-64 w-full items-center justify-center rounded-lg shadow-2xl"
 					>
 						<div class="text-primary text-center">
 							<BookOpen class="mx-auto mb-4 h-16 w-16" />

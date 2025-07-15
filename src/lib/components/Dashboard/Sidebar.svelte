@@ -33,13 +33,13 @@
 </script>
 
 <aside
-	class="fixed inset-y-0 left-0 z-50 w-64 border-r border-base-300/50 bg-base-100/80 backdrop-blur-sm transition-transform duration-300 {sidebarCollapsed
+	class="border-base-300/50 bg-base-100/80 fixed inset-y-0 left-0 z-50 w-64 border-r backdrop-blur-sm transition-transform duration-300 {sidebarCollapsed
 		? '-translate-x-full'
 		: 'translate-x-0'} lg:translate-x-0"
 >
 	<div class="flex h-full flex-col">
 		<!-- Sidebar Header -->
-		<div class="flex items-center justify-between border-b border-base-300/50 p-6">
+		<div class="border-base-300/50 flex items-center justify-between border-b p-6">
 			<div class="flex items-center space-x-3">
 				<div
 					class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
@@ -70,10 +70,10 @@
 							<span class="font-medium">{item.label}</span>
 						</button>
 					</form>
-					
+
 					<!-- Theme Toggle -->
 					<div class="flex items-center justify-between px-3 py-2">
-						<span class="text-sm font-medium text-base-content">Theme</span>
+						<span class="text-base-content text-sm font-medium">Theme</span>
 						<ThemeToggle />
 					</div>
 				{:else}
@@ -89,7 +89,7 @@
 		</nav>
 
 		<!-- User Section -->
-		<div class="border-t border-base-300/50 p-4">
+		<div class="border-base-300/50 border-t p-4">
 			<div class="flex items-center space-x-3">
 				<div
 					class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
