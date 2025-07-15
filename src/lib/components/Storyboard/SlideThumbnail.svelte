@@ -12,7 +12,7 @@
 		open: number;
 	}>();
 
-	function handleDoubleClick() {
+	function handleClick() {
 		dispatch('open', index);
 	}
 
@@ -30,7 +30,7 @@
 
 <div
 	class="slide-thumbnail focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none"
-	on:dblclick={handleDoubleClick}
+	on:click={handleClick}
 	role="button"
 	tabindex="0"
 	on:keydown={handleKeydown}

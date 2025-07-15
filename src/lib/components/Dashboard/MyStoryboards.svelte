@@ -53,8 +53,10 @@
 	<div class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
-				<h1 class="text-3xl font-bold text-base-content">My Storyboards</h1>
-				<p class="mt-1 text-base-content/70">Create and manage your AI-powered storyboard projects</p>
+				<h1 class="text-base-content text-3xl font-bold">My Storyboards</h1>
+				<p class="text-base-content/70 mt-1">
+					Create and manage your AI-powered storyboard projects
+				</p>
 			</div>
 
 			<button class="btn btn-primary" onclick={handleNewStoryboard}>
@@ -71,7 +73,9 @@
 	>
 		<div class="flex flex-col gap-4 md:flex-row">
 			<div class="relative flex-1">
-				<Search class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-base-content/40" />
+				<Search
+					class="text-base-content/40 absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform"
+				/>
 				<input
 					type="text"
 					placeholder="Search storyboards..."
@@ -110,8 +114,7 @@
 		{#if viewMode === 'grid'}
 			<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{#each filteredProjects() as storyboard (storyboard._id)}
-					<div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow group"
-					>
+					<div class="card bg-base-100 group shadow-xl transition-shadow hover:shadow-2xl">
 						<div class="relative">
 							<div
 								class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600"
@@ -123,18 +126,18 @@
 									class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100"
 									aria-label="More options for {storyboard.storyOutline.storyMetadata.title}"
 								>
-									<MoreHorizontal class="h-4 w-4 text-base-content/60" />
+									<MoreHorizontal class="text-base-content/60 h-4 w-4" />
 								</button>
 							</div>
 						</div>
 
 						<div class="p-6">
 							<div class="mb-3 flex items-start justify-between">
-								<h3 class="truncate font-semibold text-base-content">
+								<h3 class="text-base-content truncate font-semibold">
 									{storyboard.storyOutline.storyMetadata.title}
 								</h3>
 								<button
-									class="p-1 text-base-content/40 transition-colors hover:text-primary"
+									class="text-base-content/40 hover:text-primary p-1 transition-colors"
 									onclick={() => handleEditStoryboard(storyboard)}
 									aria-label="Edit {storyboard.storyOutline.storyMetadata.title}"
 								>
@@ -142,9 +145,11 @@
 								</button>
 							</div>
 
-							<p class="mb-4 line-clamp-2 text-sm text-base-content/70">{storyboard.prompts.concept}</p>
+							<p class="text-base-content/70 mb-4 line-clamp-2 text-sm">
+								{storyboard.prompts.concept}
+							</p>
 
-							<div class="mb-4 flex items-center justify-between text-xs text-base-content/50">
+							<div class="text-base-content/50 mb-4 flex items-center justify-between text-xs">
 								<span>{storyboard.visualSlides.length} slides</span>
 								<span>{storyboard.updatedAt}</span>
 							</div>
@@ -156,8 +161,8 @@
 								>
 									Continue
 								</button>
-								<button 
-									class="p-2 text-base-content/40 transition-colors hover:text-primary"
+								<button
+									class="text-base-content/40 hover:text-primary p-2 transition-colors"
 									aria-label="Export {storyboard.storyOutline.storyMetadata.title} as video"
 								>
 									<Video class="h-4 w-4" />
@@ -172,9 +177,114 @@
 			<div
 				class="overflow-hidden rounded-2xl border border-gray-200/50 bg-white/80 shadow-xl backdrop-blur-sm"
 			>
-				<div class="p-6">
-					<p class="text-base-content/50">List view implementation here</p>
-				</div>
+				{#if filteredProjects().length > 0}
+					<div class="overflow-x-auto">
+						<table class="table w-full">
+							<thead>
+								<tr class="border-b border-gray-200">
+									<th class="text-base-content text-left font-semibold">Storyboard</th>
+									<th class="text-base-content text-left font-semibold">Genre</th>
+									<th class="text-base-content text-left font-semibold">Slides</th>
+									<th class="text-base-content text-left font-semibold">Status</th>
+									<th class="text-base-content text-left font-semibold">Updated</th>
+									<th class="text-base-content text-right font-semibold">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{#each filteredProjects() as storyboard (storyboard._id)}
+									<tr class="group border-b border-gray-100 transition-colors hover:bg-gray-50">
+										<td class="py-4">
+											<div class="flex items-center space-x-3">
+												<div
+													class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
+												>
+													<Play class="h-6 w-6 text-white" />
+												</div>
+												<div class="min-w-0 flex-1">
+													<h3 class="text-base-content truncate font-semibold">
+														{storyboard.storyOutline.storyMetadata.title}
+													</h3>
+													<p class="text-base-content/70 truncate text-sm">
+														{storyboard.prompts.concept}
+													</p>
+												</div>
+											</div>
+										</td>
+										<td class="py-4">
+											<div class="text-sm">
+												<div class="text-base-content font-medium">
+													{storyboard.storyOutline.storyMetadata.genre}
+												</div>
+												<div class="text-base-content/70">
+													{storyboard.storyOutline.storyMetadata.targetAudience}
+												</div>
+											</div>
+										</td>
+										<td class="py-4">
+											<span class="badge badge-primary badge-sm">
+												{storyboard.visualSlides.length}
+											</span>
+										</td>
+										<td class="py-4">
+											<span class="badge badge-outline badge-sm">
+												{storyboard.status}
+											</span>
+										</td>
+										<td class="py-4">
+											<div class="text-base-content/70 text-sm">
+												{new Date(storyboard.updatedAt).toLocaleDateString()}
+											</div>
+										</td>
+										<td class="py-4">
+											<div class="flex items-center justify-end space-x-2">
+												<button
+													class="btn btn-primary btn-sm"
+													onclick={() => handleEditStoryboard(storyboard)}
+													aria-label="Edit {storyboard.storyOutline.storyMetadata.title}"
+												>
+													Continue
+												</button>
+												<button
+													class="btn btn-ghost btn-sm opacity-0 transition-opacity group-hover:opacity-100"
+													aria-label="More options for {storyboard.storyOutline.storyMetadata
+														.title}"
+												>
+													<MoreHorizontal class="h-4 w-4" />
+												</button>
+												<button
+													class="btn btn-ghost btn-sm opacity-0 transition-opacity group-hover:opacity-100"
+													aria-label="Export {storyboard.storyOutline.storyMetadata.title} as video"
+												>
+													<Video class="h-4 w-4" />
+												</button>
+											</div>
+										</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</div>
+				{:else}
+					<div class="p-12 text-center">
+						<div
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100"
+						>
+							<Play class="h-8 w-8 text-gray-400" />
+						</div>
+						<h3 class="text-base-content mb-2 text-lg font-medium">No storyboards found</h3>
+						<p class="text-base-content/70 mb-6">
+							{searchQuery
+								? 'Try adjusting your search terms.'
+								: 'Create your first storyboard to get started.'}
+						</p>
+						{#if !searchQuery}
+							<button class="btn btn-primary" onclick={handleNewStoryboard}>
+								<Plus class="h-5 w-5" />
+								Create Storyboard
+							</button>
+						{/if}
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</section>
