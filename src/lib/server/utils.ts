@@ -23,28 +23,37 @@ export function serializeMongoDocument(doc: unknown): unknown {
 		const serialized: Record<string, unknown> = {};
 
 		for (const [key, value] of Object.entries(doc)) {
-			if (
-				value &&
-				typeof value === 'object' &&
-				value !== null &&
-				'value' in value &&
-				(value as { constructor: { name: string } }).constructor?.name === 'ObjectId'
-			) {
-				// Convert ObjectId to string
-				serialized[key] = value.toString();
-			} else if (value instanceof Date) {
-				// Convert Date to ISO string
-				serialized[key] = value.toISOString();
-			} else if (typeof value === 'object' && value !== null) {
-				// Recursively serialize nested objects
-				serialized[key] = serializeMongoDocument(value);
+			if (value && typeof value === 'object' && value !== null) {
+				// Check for BSON ObjectId (Node.js Mongo driver)
+				if ((value as any)._bsontype === 'ObjectID' && (value as any).id) {
+					serialized[key] = bufferToHex((value as any).id);
+				}
+				// Check if it's an ObjectId-like plain object with buffer property
+				else if ('buffer' in value) {
+					const buffer = (value as any).buffer;
+					if (Array.isArray(buffer) || ArrayBuffer.isView(buffer)) {
+						serialized[key] = bufferToHex(buffer);
+					} else {
+						serialized[key] = '[Invalid ObjectId]';
+					}
+				} else if (value instanceof Date) {
+					serialized[key] = value.toISOString();
+				} else {
+					// recursively process nested objects
+					serialized[key] = serializeMongoDocument(value);
+				}
 			} else {
 				serialized[key] = value;
 			}
 		}
-
 		return serialized;
 	}
 
 	return doc;
+}
+
+function bufferToHex(buffer: Uint8Array | number[]): string {
+	return Array.from(buffer)
+		.map((b) => b.toString(16).padStart(2, '0'))
+		.join('');
 }

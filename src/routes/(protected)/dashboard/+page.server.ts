@@ -8,7 +8,9 @@ import type { Actions } from './$types';
 export const load: PageServerLoad = async ({ parent }) => {
 	const { user } = await parent();
 	const storyboards = await getStoryboardsOfUser(user.id);
+
 	const teams = await getTeamsOfUser(user.id);
+
 	return {
 		user,
 		storyboards,

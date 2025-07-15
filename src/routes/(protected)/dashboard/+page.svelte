@@ -67,7 +67,7 @@
 			{#if currentView === 'my-storyboards'}
 				<Storyboards {storyboards} />
 			{:else if currentView === 'team-storyboards' && selectedTeam}
-				<Storyboards {storyboards} team={selectedTeam}/>
+				<Storyboards {storyboards} team={selectedTeam} />
 			{:else if currentView === 'my-teams'}
 				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} />
 				<!-- assumption: when user presses settings (currentView=="settings") 

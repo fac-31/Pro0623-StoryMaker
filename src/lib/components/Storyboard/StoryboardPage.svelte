@@ -30,7 +30,7 @@
 				method: 'POST',
 				body: JSON.stringify({
 					prompts: userPrompt,
-					team: team,
+					team_id: team?._id
 				})
 			});
 			const data = await res.json();
