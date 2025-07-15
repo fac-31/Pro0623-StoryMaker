@@ -1,6 +1,4 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
 @plugin "daisyui";
 
 /* TODO: we need to set primary, secondary, emphassis colours for the app to be used consistently*/

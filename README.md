@@ -295,7 +295,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Documentation**: Check our [Full Docs](https://fac-31.github.io/Pro0623-StoryMaker) and [accessibility guide](./ACCESSIBILITY.md)
+- **Documentation**: Check our [Typescript Documentation](https://fac-31.github.io/Pro0623-StoryMaker/typedoc/index.html), [Swagger API](https://fac-31.github.io/Pro0623-StoryMaker/api/index.html), and [accessibility guide](./ACCESSIBILITY.md)
 - **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/your-username/story-maker/issues)
 - **Discussions**: Join our [GitHub Discussions](https://github.com/your-username/story-maker/discussions)
 
