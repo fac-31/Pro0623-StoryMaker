@@ -42,7 +42,7 @@
 	{:else}
 		<div class="placeholder-image">
 			{#if storyboard.status == 'generating-image'}
-				<Loader2 class="mx-auto h-8 w-8 animate-spin text-primary motion-reduce:animate-none" />
+				<Loader2 class="text-primary mx-auto h-8 w-8 animate-spin motion-reduce:animate-none" />
 			{:else}
 				<span>No Image</span>
 			{/if}

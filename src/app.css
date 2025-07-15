@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "daisyui";
 
 /* TODO: we need to set primary, secondary, emphassis colours for the app to be used consistently*/

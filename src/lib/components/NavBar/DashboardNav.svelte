@@ -19,7 +19,7 @@
 			>
 				<span class="text-sm font-medium text-white">{user.user_metadata.display_name[0]}</span>
 			</div>
-			<span class="hidden text-sm font-medium text-base-content md:block"
+			<span class="text-base-content hidden text-sm font-medium md:block"
 				>{user.user_metadata.display_name}</span
 			>
 		</div>
@@ -31,19 +31,14 @@
 	</div>
 </div>
 {#if mobileMenuOpen}
-	<div class="border-t border-base-200 bg-base-100 md:hidden">
+	<div class="border-base-200 bg-base-100 border-t md:hidden">
 		<div class="space-y-4 px-4 py-4">
-			<a href="#features" class="block text-base-content/70 hover:text-primary">Features</a>
-			<a href="#how-it-works" class="block text-base-content/70 hover:text-primary">How it Works</a>
-			<a href="#testimonials" class="block text-base-content/70 hover:text-primary">Testimonials</a>
-			<div class="space-y-2 border-t border-base-200 pt-4">
-				<a href="/login" class="block w-full text-left text-base-content/70">Sign In</a>
-				<a
-					href="/signup"
-					class="btn btn-primary w-full"
-				>
-					Start Creating
-				</a>
+			<a href="#features" class="text-base-content/70 hover:text-primary block">Features</a>
+			<a href="#how-it-works" class="text-base-content/70 hover:text-primary block">How it Works</a>
+			<a href="#testimonials" class="text-base-content/70 hover:text-primary block">Testimonials</a>
+			<div class="border-base-200 space-y-2 border-t pt-4">
+				<a href="/login" class="text-base-content/70 block w-full text-left">Sign In</a>
+				<a href="/signup" class="btn btn-primary w-full"> Start Creating </a>
 			</div>
 		</div>
 	</div>

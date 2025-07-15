@@ -105,11 +105,7 @@
 						</div>
 					{/if}
 
-					<button
-						type="submit"
-						disabled={navigating.to != null}
-						class="btn btn-primary w-full"
-					>
+					<button type="submit" disabled={navigating.to != null} class="btn btn-primary w-full">
 						{#if navigating.to}
 							Creating Account...
 						{:else}
@@ -119,19 +115,19 @@
 				</form>
 
 				<!-- Benefits -->
-				<div class="mt-8 border-t border-base-200 pt-6">
+				<div class="border-base-200 mt-8 border-t pt-6">
 					<div class="space-y-3">
 						<div class="flex items-center space-x-3">
-							<Check class="h-5 w-5 text-success" />
-							<span class="text-sm text-base-content/70">Free forever plan available</span>
+							<Check class="text-success h-5 w-5" />
+							<span class="text-base-content/70 text-sm">Free forever plan available</span>
 						</div>
 						<div class="flex items-center space-x-3">
-							<Check class="h-5 w-5 text-success" />
-							<span class="text-sm text-base-content/70">No credit card required</span>
+							<Check class="text-success h-5 w-5" />
+							<span class="text-base-content/70 text-sm">No credit card required</span>
 						</div>
 						<div class="flex items-center space-x-3">
-							<Check class="h-5 w-5 text-success" />
-							<span class="text-sm text-base-content/70">Access to all basic features</span>
+							<Check class="text-success h-5 w-5" />
+							<span class="text-base-content/70 text-sm">Access to all basic features</span>
 						</div>
 					</div>
 				</div>
@@ -142,10 +138,7 @@
 		<div class="text-center">
 			<p class="text-base-content/70">
 				Already have an account?
-				<a
-					href="/login"
-					class="font-semibold text-primary hover:text-primary-focus"
-				>
+				<a href="/login" class="text-primary hover:text-primary-focus font-semibold">
 					Sign in here
 				</a>
 			</p>

@@ -45,9 +45,13 @@
 				>
 					<Play class="h-5 w-5 text-white" />
 				</div>
-				<span class="font-semibold text-base-content">Story Maker</span>
+				<span class="text-base-content font-semibold">Story Maker</span>
 			</div>
-			<button class="btn btn-ghost btn-sm lg:hidden" onclick={onToggleSidebar} aria-label="Close sidebar">
+			<button
+				class="btn btn-ghost btn-sm lg:hidden"
+				onclick={onToggleSidebar}
+				aria-label="Close sidebar"
+			>
 				<X class="h-5 w-5" />
 			</button>
 		</div>
@@ -60,10 +64,7 @@
 				{#if item.id === 'logout'}
 					<!-- Logout form -->
 					<form action="/logout" method="POST">
-						<button
-							type="submit"
-							class="btn btn-ghost w-full justify-start"
-						>
+						<button type="submit" class="btn btn-ghost w-full justify-start">
 							<IconComponent class="h-5 w-5" />
 							<span class="font-medium">{item.label}</span>
 						</button>
@@ -91,10 +92,10 @@
 					>
 				</div>
 				<div class="min-w-0 flex-1">
-					<p class="truncate text-sm font-medium text-base-content">
+					<p class="text-base-content truncate text-sm font-medium">
 						{user.user_metadata.display_name || 'User'}
 					</p>
-					<p class="truncate text-xs text-base-content/50">{user.email || 'user@example.com'}</p>
+					<p class="text-base-content/50 truncate text-xs">{user.email || 'user@example.com'}</p>
 				</div>
 			</div>
 		</div>

@@ -86,22 +86,18 @@
 	<div class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
-				<h1 class="text-3xl font-bold text-base-content">My Teams</h1>
-				<p class="mt-1 text-base-content/70">Collaborate with your team members on storyboard projects</p>
+				<h1 class="text-base-content text-3xl font-bold">My Teams</h1>
+				<p class="text-base-content/70 mt-1">
+					Collaborate with your team members on storyboard projects
+				</p>
 			</div>
 
 			<div class="flex items-center space-x-3">
-				<button
-					class="btn btn-outline"
-					onclick={() => (showJoinTeamModal = true)}
-				>
+				<button class="btn btn-outline" onclick={() => (showJoinTeamModal = true)}>
 					<UserPlus class="h-5 w-5" />
 					<span>Join Team</span>
 				</button>
-				<button
-					class="btn btn-primary"
-					onclick={() => (showCreateTeamModal = true)}
-				>
+				<button class="btn btn-primary" onclick={() => (showCreateTeamModal = true)}>
 					<Plus class="h-5 w-5" />
 					<span>Create Team</span>
 				</button>
@@ -113,8 +109,7 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each teams as team (team._id)}
 			<!-- {@const RoleIcon = getRoleIcon(team.role)} -->
-			<div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow group"
-			>
+			<div class="card bg-base-100 group shadow-xl transition-shadow hover:shadow-2xl">
 				<div class="p-6">
 					<div class="mb-4 flex items-start justify-between">
 						<div class="flex items-center space-x-3">
@@ -124,11 +119,11 @@
 								<Users class="h-6 w-6 text-white" />
 							</div>
 							<div>
-								<h3 class="font-semibold text-base-content">{team.name}</h3>
+								<h3 class="text-base-content font-semibold">{team.name}</h3>
 							</div>
 						</div>
-						<button 
-							class="p-1 text-base-content/40 transition-colors hover:text-base-content/60"
+						<button
+							class="text-base-content/40 hover:text-base-content/60 p-1 transition-colors"
 							aria-label="More options for {team.name}"
 						>
 							<MoreHorizontal class="h-4 w-4" />
@@ -141,17 +136,14 @@
 							{team.role}
 						</span> -->
 
-						<div class="flex items-center space-x-4 text-sm text-base-content/50">
+						<div class="text-base-content/50 flex items-center space-x-4 text-sm">
 							<span>{team.users} members</span>
 							<span>{team.projects} storyboards</span>
 						</div>
 					</div>
 
-					<div class="flex items-center space-x-2 border-t border-base-200 pt-4">
-						<button
-							class="btn btn-primary btn-sm flex-1"
-							onclick={() => viewTeamStoryboards(team)}
-						>
+					<div class="border-base-200 flex items-center space-x-2 border-t pt-4">
+						<button class="btn btn-primary btn-sm flex-1" onclick={() => viewTeamStoryboards(team)}>
 							View Storyboards
 						</button>
 						<!-- <button
@@ -183,8 +175,12 @@
 	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-xl font-semibold text-base-content">Create New Team</h2>
-				<button class="btn btn-ghost btn-sm" onclick={() => (showCreateTeamModal = false)} aria-label="Close create team dialog">
+				<h2 class="text-base-content text-xl font-semibold">Create New Team</h2>
+				<button
+					class="btn btn-ghost btn-sm"
+					onclick={() => (showCreateTeamModal = false)}
+					aria-label="Close create team dialog"
+				>
 					<X class="h-5 w-5" />
 				</button>
 			</div>
@@ -223,12 +219,7 @@
 					>
 						Cancel
 					</button>
-					<button
-						type="submit"
-						class="btn btn-primary flex-1"
-					>
-						Create Team
-					</button>
+					<button type="submit" class="btn btn-primary flex-1"> Create Team </button>
 				</div>
 			</form>
 		</div>
@@ -240,7 +231,7 @@
 	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-xl font-semibold text-base-content">Join Team</h2>
+				<h2 class="text-base-content text-xl font-semibold">Join Team</h2>
 				<button
 					class="btn btn-ghost btn-sm"
 					onclick={() => (showJoinTeamModal = false)}
@@ -269,7 +260,7 @@
 						bind:value={joinTeamCode}
 						required
 					/>
-					<p class="mt-2 text-sm text-base-content/50">Ask your team leader for the invite code</p>
+					<p class="text-base-content/50 mt-2 text-sm">Ask your team leader for the invite code</p>
 				</div>
 
 				<div class="flex space-x-3 pt-4">
@@ -280,12 +271,7 @@
 					>
 						Cancel
 					</button>
-					<button
-						type="submit"
-						class="btn btn-primary flex-1"
-					>
-						Join Team
-					</button>
+					<button type="submit" class="btn btn-primary flex-1"> Join Team </button>
 				</div>
 			</form>
 		</div>

@@ -8,26 +8,25 @@
 			<h2 class="text-3xl font-bold text-white lg:text-5xl">
 				Ready to Bring Your Stories to Life?
 			</h2>
-			<p class="text-xl leading-relaxed text-primary-content/80">
+			<p class="text-primary-content/80 text-xl leading-relaxed">
 				Join thousands of creators who are already using StoryMaker to visualize their ideas and
 				captivate their audiences.
 			</p>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a
-					href="/signup"
-					class="btn btn-secondary btn-lg"
-				>
+				<a href="/signup" class="btn btn-secondary btn-lg">
 					<span>Start Creating Free</span>
 					<ArrowRight class="h-5 w-5" />
 				</a>
 				<a
 					href="/storyboard"
-					class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-primary"
+					class="btn btn-outline btn-lg hover:text-primary border-white text-white hover:bg-white"
 				>
 					Try Demo
 				</a>
 			</div>
-			<p class="text-sm text-primary-content/60">No credit card required • Free forever plan available</p>
+			<p class="text-primary-content/60 text-sm">
+				No credit card required • Free forever plan available
+			</p>
 		</div>
 	</div>
 </section>
