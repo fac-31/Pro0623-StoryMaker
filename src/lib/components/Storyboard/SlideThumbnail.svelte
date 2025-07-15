@@ -12,7 +12,7 @@
 		open: number;
 	}>();
 
-	function handleDoubleClick() {
+	function handleClick() {
 		dispatch('open', index);
 	}
 
@@ -30,7 +30,7 @@
 
 <div
 	class="slide-thumbnail focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none"
-	on:dblclick={handleDoubleClick}
+	on:click={handleClick}
 	role="button"
 	tabindex="0"
 	on:keydown={handleKeydown}
@@ -42,7 +42,7 @@
 	{:else}
 		<div class="placeholder-image">
 			{#if storyboard.status == 'generating-image'}
-				<Loader2 class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none" />
+				<Loader2 class="text-primary mx-auto h-8 w-8 animate-spin motion-reduce:animate-none" />
 			{:else}
 				<span>No Image</span>
 			{/if}

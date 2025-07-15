@@ -47,7 +47,12 @@
 			onclick={handleToggleSidebar}
 			aria-label="Toggle sidebar"
 		>
-			<svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg
+				class="text-base-content/60 h-5 w-5"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+			>
 				<path
 					stroke-linecap="round"
 					stroke-linejoin="round"

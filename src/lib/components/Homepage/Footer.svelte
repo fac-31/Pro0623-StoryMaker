@@ -22,23 +22,10 @@
 			<div>
 				<h3 class="mb-4 font-semibold">Product</h3>
 				<ul class="space-y-2 text-gray-400">
+					<li><a href="#features" class="transition-colors hover:text-white">Features</a></li>
+					<li><a href="/storyboard" class="transition-colors hover:text-white">Storyboard</a></li>
 					<li>
-						<a
-							href="#features"
-							class="transition-colors hover:text-white motion-reduce:transition-none">Features</a
-						>
-					</li>
-					<li>
-						<a
-							href="/storyboard"
-							class="transition-colors hover:text-white motion-reduce:transition-none">Storyboard</a
-						>
-					</li>
-					<li>
-						<a
-							href="/langchain-agent"
-							class="transition-colors hover:text-white motion-reduce:transition-none">AI Agent</a
-						>
+						<a href="/langchain-agent" class="transition-colors hover:text-white">AI Agent</a>
 					</li>
 				</ul>
 			</div>
@@ -46,42 +33,18 @@
 			<div>
 				<h3 class="mb-4 font-semibold">Account</h3>
 				<ul class="space-y-2 text-gray-400">
-					<li>
-						<a href="/signup" class="transition-colors hover:text-white motion-reduce:transition-none"
-							>Sign Up</a
-						>
-					</li>
-					<li>
-						<a href="/login" class="transition-colors hover:text-white motion-reduce:transition-none"
-							>Sign In</a
-						>
-					</li>
-					<li>
-						<a href="/logout" class="transition-colors hover:text-white motion-reduce:transition-none"
-							>Sign Out</a
-						>
-					</li>
+					<li><a href="/signup" class="transition-colors hover:text-white">Sign Up</a></li>
+					<li><a href="/login" class="transition-colors hover:text-white">Sign In</a></li>
+					<li><a href="/logout" class="transition-colors hover:text-white">Sign Out</a></li>
 				</ul>
 			</div>
 
 			<div>
 				<h3 class="mb-4 font-semibold">Support</h3>
 				<ul class="space-y-2 text-gray-400">
-					<li>
-						<a href="/help" class="transition-colors hover:text-white motion-reduce:transition-none"
-							>Help Center</a
-						>
-					</li>
-					<li>
-						<a href="/privacy" class="transition-colors hover:text-white motion-reduce:transition-none"
-							>Privacy</a
-						>
-					</li>
-					<li>
-						<a href="/terms" class="transition-colors hover:text-white motion-reduce:transition-none"
-							>Terms</a
-						>
-					</li>
+					<li><a href="/help" class="transition-colors hover:text-white">Help Center</a></li>
+					<li><a href="/privacy" class="transition-colors hover:text-white">Privacy</a></li>
+					<li><a href="/terms" class="transition-colors hover:text-white">Terms</a></li>
 				</ul>
 			</div>
 		</div>
@@ -91,19 +54,13 @@
 		>
 			<p class="text-gray-400">© 2024 StoryMaker. All rights reserved.</p>
 			<div class="mt-4 flex space-x-6 md:mt-0">
-				<a
-					href="https://twitter.com"
-					class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
+				<a href="https://twitter.com" class="text-gray-400 transition-colors hover:text-white"
 					>Twitter</a
 				>
-				<a
-					href="https://linkedin.com"
-					class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
+				<a href="https://linkedin.com" class="text-gray-400 transition-colors hover:text-white"
 					>LinkedIn</a
 				>
-				<a
-					href="https://instagram.com"
-					class="text-gray-400 transition-colors hover:text-white motion-reduce:transition-none"
+				<a href="https://instagram.com" class="text-gray-400 transition-colors hover:text-white"
 					>Instagram</a
 				>
 			</div>
