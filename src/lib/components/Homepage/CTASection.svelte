@@ -24,9 +24,6 @@
 					Try Demo
 				</a>
 			</div>
-			<p class="text-primary-content/60 text-sm">
-				No credit card required • Free forever plan available
-			</p>
 		</div>
 	</div>
 </section>

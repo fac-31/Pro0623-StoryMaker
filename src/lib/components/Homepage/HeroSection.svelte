@@ -37,17 +37,6 @@
 						<span>Try Demo</span>
 					</a>
 				</div>
-
-				<div class="text-base-content/50 flex items-center space-x-6 text-sm">
-					<div class="flex items-center space-x-1">
-						<Check class="text-success h-4 w-4" />
-						<span>No credit card required</span>
-					</div>
-					<div class="flex items-center space-x-1">
-						<Check class="text-success h-4 w-4" />
-						<span>Free templates</span>
-					</div>
-				</div>
 			</div>
 
 			<div class="relative">
