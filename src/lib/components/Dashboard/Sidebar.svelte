@@ -47,7 +47,7 @@
 				</div>
 				<span class="font-semibold text-base-content">Story Maker</span>
 			</div>
-			<button class="btn btn-ghost btn-sm lg:hidden" onclick={onToggleSidebar}>
+			<button class="btn btn-ghost btn-sm lg:hidden" onclick={onToggleSidebar} aria-label="Close sidebar">
 				<X class="h-5 w-5" />
 			</button>
 		</div>

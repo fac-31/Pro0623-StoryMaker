@@ -7,7 +7,7 @@
 
 <div class="px-6 py-4">
 	<div class="flex items-center space-x-4">
-		<button class="btn btn-ghost btn-sm">
+		<button class="btn btn-ghost btn-sm" aria-label="View notifications">
 			<Bell class="h-5 w-5" />
 		</button>
 		<a href="/user" class="btn btn-ghost btn-sm">
@@ -24,7 +24,7 @@
 			>
 		</div>
 		<form action="/logout" method="POST" class="">
-			<button type="submit" class="btn btn-ghost btn-sm">
+			<button type="submit" class="btn btn-ghost btn-sm" aria-label="Sign out">
 				<LogOut class="h-5 w-5" />
 			</button>
 		</form>

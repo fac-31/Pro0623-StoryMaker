@@ -13,8 +13,9 @@
 </script>
 
 <div class="flex flex-col items-center gap-4">
-	<h1><strong>Hello: </strong> {data.user?.user_metadata.display_name}</h1>
-	<h2>Check out and edit your account info!</h2>
+	<h1>Account Settings</h1>
+	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
+	<p class="text-base-content/70">Check out and edit your account info</p>
 
 	<form method="POST" class="w-full max-w-xl">
 		<div class="form-control mb-4">
@@ -68,7 +69,7 @@
 		</div>
 		<div>
 			{#if form?.error}
-				<div class="alert alert-error">
+				<div id="form-error" class="alert alert-error" role="alert">
 					<span>{form.error}</span>
 				</div>
 			{/if}
@@ -78,7 +79,7 @@
 			</button>
 
 			{#if form?.success}
-				<div class="alert alert-success">
+				<div class="alert alert-success" role="alert">
 					<span>Details updated successfully!</span>
 				</div>
 			{/if}

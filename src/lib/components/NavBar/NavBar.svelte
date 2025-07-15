@@ -4,7 +4,7 @@
 	let mobileMenuOpen = false;
 </script>
 
-<header class="navbar bg-base-100/80 backdrop-blur-md sticky top-0 z-50 border-b border-base-200">
+<header class="navbar bg-base-100/80 border-base-200 sticky top-0 z-50 border-b backdrop-blur-md">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between py-4">
 			<div class="flex items-center space-x-2">
@@ -22,6 +22,8 @@
 			<button
 				class="btn btn-ghost btn-square md:hidden"
 				on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
+				aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+				aria-expanded={mobileMenuOpen}
 			>
 				{#if mobileMenuOpen}
 					<X class="h-6 w-6" />

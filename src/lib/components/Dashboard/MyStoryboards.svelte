@@ -67,6 +67,7 @@
 	<!-- Filters and Search -->
 	<section
 		class="mb-8 rounded-2xl border border-gray-200/50 bg-white/80 p-6 shadow-xl backdrop-blur-sm"
+		aria-label="Search and filter storyboards"
 	>
 		<div class="flex flex-col gap-4 md:flex-row">
 			<div class="relative flex-1">
@@ -85,6 +86,8 @@
 						? 'bg-base-100 text-primary shadow-sm'
 						: 'text-base-content/70 hover:text-base-content'}"
 					onclick={() => (viewMode = 'grid')}
+					aria-label="Grid view"
+					aria-pressed={viewMode === 'grid'}
 				>
 					<Grid3X3 class="h-4 w-4" />
 				</button>
@@ -93,6 +96,8 @@
 						? 'bg-base-100 text-primary shadow-sm'
 						: 'text-base-content/70 hover:text-base-content'}"
 					onclick={() => (viewMode = 'list')}
+					aria-label="List view"
+					aria-pressed={viewMode === 'list'}
 				>
 					<List class="h-4 w-4" />
 				</button>
@@ -116,6 +121,7 @@
 							<div class="absolute top-3 right-3">
 								<button
 									class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100"
+									aria-label="More options for {storyboard.storyOutline.storyMetadata.title}"
 								>
 									<MoreHorizontal class="h-4 w-4 text-base-content/60" />
 								</button>
@@ -130,6 +136,7 @@
 								<button
 									class="p-1 text-base-content/40 transition-colors hover:text-primary"
 									onclick={() => handleEditStoryboard(storyboard)}
+									aria-label="Edit {storyboard.storyOutline.storyMetadata.title}"
 								>
 									<UserPlus class="h-4 w-4" />
 								</button>
@@ -149,7 +156,10 @@
 								>
 									Continue
 								</button>
-								<button class="p-2 text-base-content/40 transition-colors hover:text-primary">
+								<button 
+									class="p-2 text-base-content/40 transition-colors hover:text-primary"
+									aria-label="Export {storyboard.storyOutline.storyMetadata.title} as video"
+								>
 									<Video class="h-4 w-4" />
 								</button>
 							</div>

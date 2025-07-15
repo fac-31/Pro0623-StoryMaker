@@ -127,7 +127,10 @@
 								<h3 class="font-semibold text-base-content">{team.name}</h3>
 							</div>
 						</div>
-						<button class="p-1 text-base-content/40 transition-colors hover:text-base-content/60">
+						<button 
+							class="p-1 text-base-content/40 transition-colors hover:text-base-content/60"
+							aria-label="More options for {team.name}"
+						>
 							<MoreHorizontal class="h-4 w-4" />
 						</button>
 					</div>
@@ -181,7 +184,7 @@
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-xl font-semibold text-base-content">Create New Team</h2>
-				<button class="btn btn-ghost btn-sm" onclick={() => (showCreateTeamModal = false)}>
+				<button class="btn btn-ghost btn-sm" onclick={() => (showCreateTeamModal = false)} aria-label="Close create team dialog">
 					<X class="h-5 w-5" />
 				</button>
 			</div>
@@ -241,6 +244,7 @@
 				<button
 					class="btn btn-ghost btn-sm"
 					onclick={() => (showJoinTeamModal = false)}
+					aria-label="Close join team dialog"
 				>
 					<X class="h-5 w-5" />
 				</button>
