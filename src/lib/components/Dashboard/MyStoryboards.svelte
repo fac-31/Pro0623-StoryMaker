@@ -1,14 +1,5 @@
 <script lang="ts">
-	import {
-		Plus,
-		Search,
-		Grid3X3,
-		List,
-		Play,
-		MoreHorizontal,
-		UserPlus,
-		Video
-	} from 'lucide-svelte';
+	import { Plus, Search, Grid3X3, List, Play, MoreHorizontal, Video } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import { storyboardStore } from '$lib/stores/storyboard';
 	import type { Storyboard } from '$lib/models/storyboard.model';
