@@ -254,7 +254,7 @@
 							class="text-base-content mb-6 flex items-center gap-2 text-2xl font-bold"
 						>
 							<Sparkles class="text-primary h-6 w-6" />
-							Visual Slides
+							Slides
 						</h2>
 						<div class="slides-flex">
 							{#each storyboard.visualSlides as slide, index (slide.slideNumber)}

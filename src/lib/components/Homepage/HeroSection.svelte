@@ -7,7 +7,9 @@
 		<div class="grid items-center gap-12 lg:grid-cols-2">
 			<div class="space-y-8">
 				<div class="space-y-4">
-					<div class="badge badge-primary badge-lg">
+					<div
+						class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700"
+					>
 						✨ AI-Powered Storyboarding
 					</div>
 					<h1 class="text-4xl leading-tight font-bold text-base-content lg:text-6xl">

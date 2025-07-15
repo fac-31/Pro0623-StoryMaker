@@ -117,17 +117,17 @@
 					<div class="card bg-base-100 group shadow-xl transition-shadow hover:shadow-2xl">
 						<div class="relative">
 							<div
-								class="flex h-48 w-full items-center justify-center rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600"
+								class="flex h-48 w-full items-center justify-center overflow-hidden rounded-t-2xl bg-gradient-to-br from-purple-600 to-blue-600"
 							>
-								<Play class="h-12 w-12 text-white" />
-							</div>
-							<div class="absolute top-3 right-3">
-								<button
-									class="rounded-lg bg-white/90 p-2 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100"
-									aria-label="More options for {storyboard.storyOutline.storyMetadata.title}"
-								>
-									<MoreHorizontal class="text-base-content/60 h-4 w-4" />
-								</button>
+								{#if storyboard.visualSlides.length > 0 && storyboard.visualSlides[0].imageUrl}
+									<img
+										src={storyboard.visualSlides[0].imageUrl}
+										alt="First slide of {storyboard.storyOutline.storyMetadata.title}"
+										class="h-full w-full object-cover"
+									/>
+								{:else}
+									<Play class="h-12 w-12 text-white" />
+								{/if}
 							</div>
 						</div>
 
@@ -136,13 +136,6 @@
 								<h3 class="text-base-content truncate font-semibold">
 									{storyboard.storyOutline.storyMetadata.title}
 								</h3>
-								<button
-									class="text-base-content/40 hover:text-primary p-1 transition-colors"
-									onclick={() => handleEditStoryboard(storyboard)}
-									aria-label="Edit {storyboard.storyOutline.storyMetadata.title}"
-								>
-									<UserPlus class="h-4 w-4" />
-								</button>
 							</div>
 
 							<p class="text-base-content/70 mb-4 line-clamp-2 text-sm">
@@ -151,7 +144,6 @@
 
 							<div class="text-base-content/50 mb-4 flex items-center justify-between text-xs">
 								<span>{storyboard.visualSlides.length} slides</span>
-								<span>{storyboard.updatedAt}</span>
 							</div>
 
 							<div class="mt-4 flex items-center space-x-2 border-t border-gray-100 pt-4">
@@ -159,13 +151,7 @@
 									class="btn btn-primary btn-sm flex-1"
 									onclick={() => handleEditStoryboard(storyboard)}
 								>
-									Continue
-								</button>
-								<button
-									class="text-base-content/40 hover:text-primary p-2 transition-colors"
-									aria-label="Export {storyboard.storyOutline.storyMetadata.title} as video"
-								>
-									<Video class="h-4 w-4" />
+									View/Edit
 								</button>
 							</div>
 						</div>
@@ -196,9 +182,17 @@
 										<td class="py-4">
 											<div class="flex items-center space-x-3">
 												<div
-													class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
+													class="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
 												>
-													<Play class="h-6 w-6 text-white" />
+													{#if storyboard.visualSlides.length > 0 && storyboard.visualSlides[0].imageUrl}
+														<img
+															src={storyboard.visualSlides[0].imageUrl}
+															alt="First slide of {storyboard.storyOutline.storyMetadata.title}"
+															class="h-full w-full object-cover"
+														/>
+													{:else}
+														<Play class="h-6 w-6 text-white" />
+													{/if}
 												</div>
 												<div class="min-w-0 flex-1">
 													<h3 class="text-base-content truncate font-semibold">
