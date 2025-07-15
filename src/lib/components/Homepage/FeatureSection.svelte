@@ -54,10 +54,10 @@
 			{#each features as feature (feature.title)}
 				{@const Icon = feature.icon}
 				<div
-					class="group rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-8 transition-all duration-300 hover:border-purple-200 hover:shadow-xl"
+					class="group rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-8 transition-all duration-300 hover:border-purple-200 hover:shadow-xl motion-reduce:transition-none"
 				>
 					<div
-						class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110"
+						class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110 motion-reduce:transform-none"
 					>
 						<Icon class="h-6 w-6 text-white" />
 					</div>

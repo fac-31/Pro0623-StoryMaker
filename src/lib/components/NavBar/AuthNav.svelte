@@ -7,7 +7,7 @@
 	<div class="text-center">
 		<a
 			href="/"
-			class="mb-8 inline-flex items-center space-x-2 text-purple-600 transition-colors hover:text-purple-700"
+			class="mb-8 inline-flex items-center space-x-2 text-purple-600 transition-colors hover:text-purple-700 motion-reduce:transition-none"
 		>
 			<ArrowLeft class="h-5 w-5" />
 			<span class:hidden={mobileMenuOpen} class="md:inline">Back to Home</span>

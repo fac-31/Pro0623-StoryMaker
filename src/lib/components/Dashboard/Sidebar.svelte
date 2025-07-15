@@ -32,7 +32,7 @@
 </script>
 
 <aside
-	class="fixed inset-y-0 left-0 z-50 w-64 border-r border-gray-200/50 bg-white/80 backdrop-blur-sm transition-transform duration-300 {sidebarCollapsed
+	class="fixed inset-y-0 left-0 z-50 w-64 border-r border-gray-200/50 bg-white/80 backdrop-blur-sm transition-transform duration-300 motion-reduce:transition-none {sidebarCollapsed
 		? '-translate-x-full'
 		: 'translate-x-0'} lg:translate-x-0"
 >
@@ -70,7 +70,7 @@
 					</form>
 				{:else}
 					<button
-						class="flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left transition-colors {currentView ===
+						class="flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left transition-colors motion-reduce:transition-none {currentView ===
 						item.id
 							? 'bg-purple-100 text-purple-700'
 							: 'text-gray-700 hover:bg-gray-100'}"

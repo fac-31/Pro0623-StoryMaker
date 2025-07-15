@@ -30,14 +30,14 @@
 				<div class="flex flex-col gap-4 sm:flex-row">
 					<a
 						href="/signup"
-						class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700"
+						class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 motion-reduce:transform-none motion-reduce:transition-none"
 					>
 						<span>Start Creating Free</span>
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
 						href="/storyboard"
-						class="flex items-center justify-center space-x-2 rounded-lg border-2 border-gray-300 px-8 py-4 font-semibold text-gray-700 transition-all hover:border-purple-300 hover:text-purple-600"
+						class="flex items-center justify-center space-x-2 rounded-lg border-2 border-gray-300 px-8 py-4 font-semibold text-gray-700 transition-all hover:border-purple-300 hover:text-purple-600 motion-reduce:transition-none"
 					>
 						<Play class="h-5 w-5" />
 						<span>Try Demo</span>
@@ -58,7 +58,7 @@
 
 			<div class="relative">
 				<div
-					class="rotate-3 transform rounded-2xl bg-gradient-to-br from-purple-100 to-blue-100 p-8 transition-transform duration-300 hover:rotate-0"
+					class="rotate-3 transform rounded-2xl bg-gradient-to-br from-purple-100 to-blue-100 p-8 transition-transform duration-300 hover:rotate-0 motion-reduce:transform-none"
 				>
 					<div
 						class="flex h-64 w-full items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-blue-200 shadow-2xl"

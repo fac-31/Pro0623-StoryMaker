@@ -15,7 +15,7 @@
 				name="email"
 				type="email"
 				required
-				class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500"
+				class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 			/>
 		</div>
 
@@ -26,7 +26,7 @@
 				name="password"
 				type="password"
 				required
-				class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500"
+				class="w-full rounded-lg border border-gray-300 px-4 py-3 transition-colors focus:border-purple-500 focus:ring-2 focus:ring-purple-500 motion-reduce:transition-none"
 			/>
 		</div>
 
@@ -41,7 +41,7 @@
 			aria-label="Sign In"
 			name="sign-in"
 			disabled={navigating.to != null}
-			class="w-full transform rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-3 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+			class="w-full transform rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-3 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
 		>
 			{#if navigating.to}
 				Signing In...
@@ -74,7 +74,10 @@
 <div class="text-center">
 	<p class="text-gray-600">
 		Don't have an account?
-		<a href="/signup" class="font-semibold text-purple-600 transition-colors hover:text-purple-700">
+		<a
+			href="/signup"
+			class="font-semibold text-purple-600 transition-colors hover:text-purple-700 motion-reduce:transition-none"
+		>
 			Sign up here
 		</a>
 	</p>
