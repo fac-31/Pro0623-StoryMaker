@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Menu, X, Play } from 'lucide-svelte';
+	import ThemeToggle from '../ThemeToggle.svelte';
 	/** Mobile menu open state */
 	let mobileMenuOpen = false;
 </script>
@@ -21,6 +22,7 @@
 			</div>
 			<div class="flex items-center space-x-8">
 				<slot name="nav" {mobileMenuOpen}></slot>
+				<ThemeToggle />
 				<button
 					class="btn btn-ghost btn-square md:hidden"
 					on:click={() => (mobileMenuOpen = !mobileMenuOpen)}

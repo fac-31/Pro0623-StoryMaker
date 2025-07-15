@@ -23,7 +23,7 @@
 	];
 </script>
 
-<section id="how-it-works" class="bg-gradient-to-br from-purple-50 to-blue-50 py-20">
+<section id="how-it-works" class="bg-base-200 py-20">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="mb-16 space-y-4 text-center">
 			<div class="badge badge-primary badge-lg">How It Works</div>

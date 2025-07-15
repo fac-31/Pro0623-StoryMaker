@@ -20,7 +20,7 @@
 
 <!-- Mobile Navigation -->
 {#if mobileMenuOpen}
-	<div class="border-t border-gray-200 bg-white md:hidden">
+	<div class="border-base-300 bg-base-100 border-t md:hidden">
 		<div class="space-y-4 px-4 py-4">
 			<a href="#features" class="text-base-content/70 hover:text-primary block">Features</a>
 			<a href="#how-it-works" class="text-base-content/70 hover:text-primary block">How it Works</a>
