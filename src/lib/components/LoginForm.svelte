@@ -28,7 +28,7 @@
 			</div>
 
 			{#if error}
-				<div class="alert alert-error">
+				<div class="alert alert-error" aria-live="polite">
 					<span>{error}</span>
 				</div>
 			{/if}
@@ -38,7 +38,7 @@
 				aria-label="Sign In"
 				name="sign-in"
 				disabled={navigating.to != null}
-				class="btn btn-primary w-full"
+				class="btn btn-primary w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
 			>
 				{#if navigating.to}
 					Signing In...

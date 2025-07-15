@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { Menu, X, Play } from 'lucide-svelte';
+	import ThemeToggle from '../ThemeToggle.svelte';
 	/** Mobile menu open state */
 	let mobileMenuOpen = false;
 </script>
 
-<header class="navbar bg-base-100/80 border-base-200 sticky top-0 z-50 border-b backdrop-blur-md">
+<header
+	class="navbar bg-base-100/80 border-base-200 sticky top-0 z-50 border-b backdrop-blur-md"
+	role="navigation"
+>
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between py-4">
 			<div class="flex items-center space-x-2">
@@ -20,12 +24,14 @@
 				</span>
 			</div>
 			<div class="flex items-center space-x-8">
-				<slot name="nav" {mobileMenuOpen}></slot>
+				<slot name="nav" {mobileMenuOpen} id="mobile-menu"></slot>
+				<ThemeToggle />
 				<button
-					class="btn btn-ghost btn-square md:hidden"
+					class="btn btn-ghost btn-square md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
 					on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
 					aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
 					aria-expanded={mobileMenuOpen}
+					aria-controls="mobile-menu"
 				>
 					{#if mobileMenuOpen}
 						<X class="h-6 w-6" />

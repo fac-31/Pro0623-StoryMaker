@@ -17,8 +17,9 @@
 	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form method="POST" class="w-full max-w-xl" aria-describedby="form-error">
-		<div role="group">
+	<form method="POST" class="w-full max-w-xl">
+		<fieldset>
+			<legend class="sr-only">User Information</legend>
 			<div class="form-control mb-4">
 				<div class="flex items-center gap-4">
 					<label for="name" class="label max-w-[60px] flex-auto">
@@ -31,6 +32,8 @@
 						autocomplete="name"
 						bind:value={name}
 						class="input input-bordered flex-1"
+						aria-describedby="form-error"
+						required
 					/>
 				</div>
 			</div>
@@ -46,6 +49,8 @@
 						autocomplete="email"
 						bind:value={email}
 						class="input input-bordered flex-1"
+						aria-describedby="form-error"
+						required
 					/>
 				</div>
 			</div>
@@ -62,26 +67,27 @@
 						placeholder="Leave blank if no change"
 						bind:value={password}
 						class="input input-bordered flex-1"
+						aria-describedby="form-error"
 					/>
 				</div>
 			</div>
-		</div>
-		<div>
-			{#if form?.error}
-				<div id="form-error" class="alert alert-error" role="alert">
-					<span>{form.error}</span>
-				</div>
-			{/if}
+			<div>
+				{#if form?.error}
+					<div id="form-error" class="alert alert-error" role="alert" aria-live="assertive">
+						<span>{form.error}</span>
+					</div>
+				{/if}
 
-			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
-				{#if navigating.to}Updating…{:else}Update Details{/if}
-			</button>
+				<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
+					{#if navigating.to}Updating…{:else}Update Details{/if}
+				</button>
 
-			{#if form?.success}
-				<div class="alert alert-success" role="alert">
-					<span>Details updated successfully!</span>
-				</div>
-			{/if}
-		</div>
+				{#if form?.success}
+					<div class="alert alert-success" role="alert">
+						<span>Details updated successfully!</span>
+					</div>
+				{/if}
+			</div>
+		</fieldset>
 	</form>
 </div>

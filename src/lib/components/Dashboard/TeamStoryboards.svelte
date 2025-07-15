@@ -38,10 +38,7 @@
 				<p class="text-base-content/70 mt-1">Collaborative storyboard projects for your team</p>
 			</div>
 
-			<button
-				class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
-				onclick={handleNewStoryboard}
-			>
+			<button class="btn btn-primary btn-lg" onclick={handleNewStoryboard}>
 				<Plus class="h-5 w-5" />
 				<span>New Team Storyboard</span>
 			</button>
