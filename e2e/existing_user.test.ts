@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('Login with existing user', async ({ page }) => {
 	await page.goto('http://localhost:5173/');
 	await page.locator('header').getByRole('link', { name: 'Sign In' }).click();
 	await page.getByRole('textbox', { name: 'Email Address' }).click();

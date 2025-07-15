@@ -9,27 +9,45 @@ let client: MongoClient | null = null;
  * @throws {Error} If DB_CONN_STRING or DB_NAME environment variables are not set.
  * @returns {Promise<Db>} A promise that resolves to the connected database instance.
  */
-export async function initDB(): Promise<Db> {
+export async function initDB() {
 	if (!db) {
+		console.log(
+			`[${new Date().toISOString()}] [db.ts] initDB: Starting database initialization...`
+		);
+
 		if (!env.DB_CONN_STRING) {
+			console.error(
+				`[${new Date().toISOString()}] [db.ts] initDB: DB_CONN_STRING environment variable not set.`
+			);
 			throw new Error('DB_CONN_STRING environment variable not set.');
 		}
 		if (!env.DB_NAME) {
+			console.error(
+				`[${new Date().toISOString()}] [db.ts] initDB: DB_NAME environment variable not set.`
+			);
 			throw new Error('DB_NAME environment variable not set.');
 		}
 
+		console.log(`[${new Date().toISOString()}] [db.ts] initDB: Creating MongoClient...`);
 		client = new MongoClient(env.DB_CONN_STRING, {
 			tls: true,
 			tlsAllowInvalidCertificates: true, // Only for development
 			serverSelectionTimeoutMS: 5000,
 			connectTimeoutMS: 10000
 		});
-		//const client = new MongoClient(env.DB_CONN_STRING);
 
-		console.log('Connecting to MongoDB...');
+		console.log(`[${new Date().toISOString()}] [db.ts] initDB: Connecting to MongoDB...`);
+		const connectStart = Date.now();
 		await client.connect();
+		const connectEnd = Date.now();
+		console.log(
+			`[${new Date().toISOString()}] [db.ts] initDB: MongoDB connected in ${connectEnd - connectStart}ms`
+		);
+
 		db = client.db(env.DB_NAME);
-		console.log('✅ MongoDB connected');
+		console.log(`[${new Date().toISOString()}] [db.ts] initDB: Database selected: ${env.DB_NAME}`);
+	} else {
+		console.log(`[${new Date().toISOString()}] [db.ts] initDB: Database already initialized.`);
 	}
 	return db;
 }
