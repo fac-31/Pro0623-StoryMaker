@@ -38,10 +38,7 @@
 				<p class="text-base-content/70 mt-1">Collaborative storyboard projects for your team</p>
 			</div>
 
-			<button
-				class="btn btn-primary btn-lg"
-				onclick={handleNewStoryboard}
-			>
+			<button class="btn btn-primary btn-lg" onclick={handleNewStoryboard}>
 				<Plus class="h-5 w-5" />
 				<span>New Team Storyboard</span>
 			</button>
