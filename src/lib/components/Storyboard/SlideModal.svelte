@@ -25,12 +25,8 @@
 		dispatch('close');
 	}
 
-	function handleOverlayClick() {
-		closeModal();
-	}
-
-	function handleOverlayKeydown(event: KeyboardEvent) {
-		if (event.key === 'Enter' || event.key === ' ') {
+	function handleOverlayClick(event: MouseEvent | KeyboardEvent) {
+		if (event.type === 'click' || (event instanceof KeyboardEvent && ['Enter', ' '].includes(event.key))) {
 			closeModal();
 		}
 	}
@@ -78,10 +74,11 @@
 	}
 
 	$: if (show) {
-		liveRegionMessage = 'Slide modal has been opened.';
+		liveRegionMessage = `Slide ${slideOutline.slideId}: ${slideOutline.sceneTitle} modal has been opened.`;
 		if (typeof document !== 'undefined') {
 			triggerElement = document.activeElement as HTMLElement;
-			tick().then(() => {
+			(async () => {
+				await tick();
 				if (modalContentElement) {
 					const firstInteractiveFocusable = Array.from(
 						modalContentElement.querySelectorAll(
@@ -95,7 +92,7 @@
 						modalContentElement.focus(); // Fallback to modal content itself
 					}
 				}
-			});
+			})();
 		}
 	} else {
 		liveRegionMessage = ''; // Clear message when modal is not shown
@@ -112,7 +109,7 @@
 		tabindex="0"
 		aria-label="Close modal"
 		on:click={handleOverlayClick}
-		on:keydown={handleOverlayKeydown}
+		on:keydown={handleOverlayClick}
 	>
 		<div
 			bind:this={modalContentElement}

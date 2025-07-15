@@ -11,7 +11,15 @@
 		Skip to main content
 	</a>
 
+	<header>
+		<!-- Add header content here -->
+	</header>
+
 	<main id="main-content" class="container mx-auto">
 		<slot />
 	</main>
+
+	<footer>
+		<!-- Add footer content here -->
+	</footer>
 </div>
