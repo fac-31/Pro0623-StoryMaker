@@ -4,7 +4,7 @@
 	let mobileMenuOpen = false;
 </script>
 
-<header class="sticky top-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-md">
+<header class="navbar bg-base-100/80 backdrop-blur-md sticky top-0 z-50 border-b border-base-200">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between py-4">
 			<div class="flex items-center space-x-2">
@@ -20,7 +20,7 @@
 				</span>
 			</div>
 			<button
-				class="p-2 text-gray-500 hover:text-gray-800 md:hidden"
+				class="btn btn-ghost btn-square md:hidden"
 				on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
 			>
 				{#if mobileMenuOpen}

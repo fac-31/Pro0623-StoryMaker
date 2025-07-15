@@ -86,20 +86,20 @@
 	<div class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
-				<h1 class="text-3xl font-bold text-gray-900">My Teams</h1>
-				<p class="mt-1 text-gray-600">Collaborate with your team members on storyboard projects</p>
+				<h1 class="text-3xl font-bold text-base-content">My Teams</h1>
+				<p class="mt-1 text-base-content/70">Collaborate with your team members on storyboard projects</p>
 			</div>
 
 			<div class="flex items-center space-x-3">
 				<button
-					class="flex items-center space-x-2 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
+					class="btn btn-outline"
 					onclick={() => (showJoinTeamModal = true)}
 				>
 					<UserPlus class="h-5 w-5" />
 					<span>Join Team</span>
 				</button>
 				<button
-					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+					class="btn btn-primary"
 					onclick={() => (showCreateTeamModal = true)}
 				>
 					<Plus class="h-5 w-5" />
@@ -113,8 +113,7 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each teams as team (team._id)}
 			<!-- {@const RoleIcon = getRoleIcon(team.role)} -->
-			<div
-				class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl"
+			<div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow group"
 			>
 				<div class="p-6">
 					<div class="mb-4 flex items-start justify-between">
@@ -125,10 +124,10 @@
 								<Users class="h-6 w-6 text-white" />
 							</div>
 							<div>
-								<h3 class="font-semibold text-gray-900">{team.name}</h3>
+								<h3 class="font-semibold text-base-content">{team.name}</h3>
 							</div>
 						</div>
-						<button class="p-1 text-gray-400 transition-colors hover:text-gray-600">
+						<button class="p-1 text-base-content/40 transition-colors hover:text-base-content/60">
 							<MoreHorizontal class="h-4 w-4" />
 						</button>
 					</div>
@@ -139,15 +138,15 @@
 							{team.role}
 						</span> -->
 
-						<div class="flex items-center space-x-4 text-sm text-gray-500">
+						<div class="flex items-center space-x-4 text-sm text-base-content/50">
 							<span>{team.users} members</span>
 							<span>{team.projects} storyboards</span>
 						</div>
 					</div>
 
-					<div class="flex items-center space-x-2 border-t border-gray-100 pt-4">
+					<div class="flex items-center space-x-2 border-t border-base-200 pt-4">
 						<button
-							class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700"
+							class="btn btn-primary btn-sm flex-1"
 							onclick={() => viewTeamStoryboards(team)}
 						>
 							View Storyboards
@@ -181,8 +180,8 @@
 	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-xl font-semibold text-gray-900">Create New Team</h2>
-				<button class="p-2 text-gray-400" onclick={() => (showCreateTeamModal = false)}>
+				<h2 class="text-xl font-semibold text-base-content">Create New Team</h2>
+				<button class="btn btn-ghost btn-sm" onclick={() => (showCreateTeamModal = false)}>
 					<X class="h-5 w-5" />
 				</button>
 			</div>
@@ -200,14 +199,14 @@
 				class="space-y-4"
 			>
 				<div>
-					<label for="team-name" class="mb-2 block text-sm font-medium text-gray-700"
-						>Team Name</label
-					>
+					<label for="team-name" class="label">
+						<span class="label-text">Team Name</span>
+					</label>
 					<input
 						id="team-name"
 						type="text"
 						name="name"
-						class="w-full rounded-lg border px-3 py-2"
+						class="input input-bordered w-full"
 						placeholder="Enter team name..."
 						required
 					/>
@@ -216,14 +215,14 @@
 				<div class="flex space-x-3 pt-4">
 					<button
 						type="button"
-						class="flex-1 rounded-lg border px-4 py-2"
+						class="btn btn-outline flex-1"
 						onclick={() => (showCreateTeamModal = false)}
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white"
+						class="btn btn-primary flex-1"
 					>
 						Create Team
 					</button>
@@ -238,9 +237,9 @@
 	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-xl font-semibold text-gray-900">Join Team</h2>
+				<h2 class="text-xl font-semibold text-base-content">Join Team</h2>
 				<button
-					class="p-2 text-gray-400 transition-colors hover:text-gray-600"
+					class="btn btn-ghost btn-sm"
 					onclick={() => (showJoinTeamModal = false)}
 				>
 					<X class="h-5 w-5" />
@@ -255,31 +254,31 @@
 				class="space-y-4"
 			>
 				<div>
-					<label for="team-invite-code" class="mb-2 block text-sm font-medium text-gray-700"
-						>Team Invite Code</label
-					>
+					<label for="team-invite-code" class="label">
+						<span class="label-text">Team Invite Code</span>
+					</label>
 					<input
 						id="team-invite-code"
 						type="text"
-						class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
+						class="input input-bordered w-full"
 						placeholder="Enter invite code..."
 						bind:value={joinTeamCode}
 						required
 					/>
-					<p class="mt-2 text-sm text-gray-500">Ask your team leader for the invite code</p>
+					<p class="mt-2 text-sm text-base-content/50">Ask your team leader for the invite code</p>
 				</div>
 
 				<div class="flex space-x-3 pt-4">
 					<button
 						type="button"
-						class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+						class="btn btn-outline flex-1"
 						onclick={() => (showJoinTeamModal = false)}
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+						class="btn btn-primary flex-1"
 					>
 						Join Team
 					</button>

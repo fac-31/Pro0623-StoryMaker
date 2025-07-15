@@ -290,7 +290,7 @@
 		<div class="text-center">
 			<a
 				href="/"
-				class="mb-8 inline-flex items-center space-x-2 text-purple-600 transition-colors hover:text-purple-700 motion-reduce:transition-none"
+				class="mb-8 inline-flex items-center space-x-2 text-primary transition-colors hover:text-primary-focus motion-reduce:transition-none"
 			>
 				<ArrowLeft class="h-5 w-5" />
 				<span>Back to Home</span>
@@ -304,8 +304,8 @@
 				</div>
 			</div>
 
-			<h1 class="mb-2 text-3xl font-bold text-gray-900">Storyboard Creator</h1>
-			<p class="text-gray-600">
+			<h1 class="mb-2 text-3xl font-bold text-base-content">Storyboard Creator</h1>
+			<p class="text-base-content/70">
 				Transform your story ideas into visual magic with AI-powered generation
 			</p>
 		</div>
@@ -313,15 +313,16 @@
 		<!-- Main Content -->
 		<section
 			aria-label="Storyboard creation and display"
-			class="rounded-2xl border border-gray-200/50 bg-white/80 p-8 shadow-xl backdrop-blur-sm"
+			class="card bg-base-100 shadow-xl"
 		>
+			<div class="card-body">
 			{#if !storyboard && !loading}
 				<StoryboardForm bind:userPrompt {loading} on:submit={handleFormSubmit} />
 			{/if}
 
 			{#if error}
-				<div class="rounded-lg border border-red-200 bg-red-50 p-4">
-					<p class="text-sm text-red-600">{error}</p>
+				<div class="alert alert-error">
+					<span>{error}</span>
 				</div>
 			{/if}
 
@@ -329,12 +330,12 @@
 				<div class="flex items-center justify-center py-12">
 					<div class="text-center">
 						<Loader2
-							class="mx-auto h-8 w-8 animate-spin text-purple-600 motion-reduce:animate-none"
+							class="mx-auto h-8 w-8 animate-spin text-primary motion-reduce:animate-none"
 						/>
 						{#if storyboard && storyboard.status == 'generating-outline'}
-							<p class="mt-4 text-gray-600">Creating outlines...</p>
+							<p class="mt-4 text-base-content/70">Creating outlines...</p>
 						{:else}
-							<p class="mt-4 text-gray-600">Creating your storyboard...</p>
+							<p class="mt-4 text-base-content/70">Creating your storyboard...</p>
 						{/if}
 					</div>
 				</div>
@@ -344,7 +345,7 @@
 					<button
 						onclick={generateVideo}
 						disabled={generatingVideo}
-						class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transform-none motion-reduce:transition-none"
+						class="btn btn-primary btn-lg"
 					>
 						{#if generatingVideo}
 							<Loader2 class="h-5 w-5 animate-spin motion-reduce:animate-none" />
@@ -360,13 +361,14 @@
 				{#if showPlayer && slides.length > 0}
 					<section
 						aria-labelledby="player-heading"
-						class="mb-8 rounded-xl border border-gray-200/50 bg-white/50 p-6 shadow-lg backdrop-blur-sm"
+						class="card bg-base-200 shadow-lg mb-8"
 					>
+						<div class="card-body">
 						<h3
 							id="player-heading"
-							class="mb-4 flex items-center gap-2 text-xl font-semibold text-gray-900"
+							class="mb-4 flex items-center gap-2 text-xl font-semibold text-base-content"
 						>
-							<Play class="h-5 w-5 text-purple-600" />
+							<Play class="h-5 w-5 text-primary" />
 							Storyboard Player
 						</h3>
 
@@ -385,8 +387,8 @@
 
 							{#if audioSegments[currentSlideIndex]?.dialogue}
 								<div class="mt-4 rounded-lg bg-gray-50 p-4">
-									<h4 class="mb-2 font-semibold text-gray-800">Dialogue:</h4>
-									<p class="text-gray-600">{audioSegments[currentSlideIndex].dialogue}</p>
+									<h4 class="mb-2 font-semibold text-base-content">Dialogue:</h4>
+									<p class="text-base-content/70">{audioSegments[currentSlideIndex].dialogue}</p>
 								</div>
 							{/if}
 						</div>
@@ -428,8 +430,8 @@
 									onclick={() => goToSlide(index)}
 									class="flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors {currentSlideIndex ===
 									index
-										? 'bg-purple-600 text-white'
-										: 'bg-gray-200 text-gray-700 hover:bg-gray-300'} motion-reduce:transition-none"
+										? 'bg-primary text-primary-content'
+										: 'bg-base-200 text-base-content hover:bg-base-300'} motion-reduce:transition-none"
 								>
 									{index + 1}
 								</button>
@@ -439,8 +441,8 @@
 				{/if}
 
 				{#if videoError}
-					<div class="mb-8 rounded-lg border border-red-200 bg-red-50 p-4">
-						<p class="text-red-600">Audio generation failed: {videoError}</p>
+					<div class="alert alert-error mb-8">
+						<span>Audio generation failed: {videoError}</span>
 					</div>
 				{/if}
 
@@ -448,9 +450,9 @@
 				<section aria-labelledby="visual-slides-heading" class="mb-8">
 					<h2
 						id="visual-slides-heading"
-						class="mb-6 flex items-center gap-2 text-2xl font-bold text-gray-900"
+						class="mb-6 flex items-center gap-2 text-2xl font-bold text-base-content"
 					>
-						<Sparkles class="h-6 w-6 text-purple-600" />
+						<Sparkles class="h-6 w-6 text-primary" />
 						Visual Slides
 					</h2>
 					<div class="slides-flex">

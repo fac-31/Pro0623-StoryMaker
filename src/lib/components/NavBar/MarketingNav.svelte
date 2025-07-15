@@ -4,20 +4,20 @@
 </script>
 
 <nav class="hidden items-center space-x-8 md:flex">
-	<a href="#features" class="text-gray-600 transition-colors hover:text-purple-600">Features</a>
-	<a href="#how-it-works" class="text-gray-600 transition-colors hover:text-purple-600"
+	<a href="#features" class="text-base-content/70 transition-colors hover:text-primary">Features</a>
+	<a href="#how-it-works" class="text-base-content/70 transition-colors hover:text-primary"
 		>How it Works</a
 	>
-	<a href="#testimonials" class="text-gray-600 transition-colors hover:text-purple-600"
+	<a href="#testimonials" class="text-base-content/70 transition-colors hover:text-primary"
 		>Testimonials</a
 	>
 </nav>
 
 <div class="hidden items-center space-x-4 md:flex">
-	<a href="/login" class="text-gray-600 transition-colors hover:text-purple-600">Sign In</a>
+	<a href="/login" class="btn btn-ghost">Sign In</a>
 	<a
 		href="/signup"
-		class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
+		class="btn btn-primary"
 	>
 		Start Creating
 	</a>
@@ -27,14 +27,14 @@
 {#if mobileMenuOpen}
 	<div class="border-t border-gray-200 bg-white md:hidden">
 		<div class="space-y-4 px-4 py-4">
-			<a href="#features" class="block text-gray-600 hover:text-purple-600">Features</a>
-			<a href="#how-it-works" class="block text-gray-600 hover:text-purple-600">How it Works</a>
-			<a href="#testimonials" class="block text-gray-600 hover:text-purple-600">Testimonials</a>
-			<div class="space-y-2 border-t border-gray-200 pt-4">
-				<a href="/login" class="block w-full text-left text-gray-600">Sign In</a>
+			<a href="#features" class="block text-base-content/70 hover:text-primary">Features</a>
+			<a href="#how-it-works" class="block text-base-content/70 hover:text-primary">How it Works</a>
+			<a href="#testimonials" class="block text-base-content/70 hover:text-primary">Testimonials</a>
+			<div class="space-y-2 border-t border-base-200 pt-4">
+				<a href="/login" class="block w-full text-left text-base-content/70">Sign In</a>
 				<a
 					href="/signup"
-					class="block w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-center text-white"
+					class="btn btn-primary w-full"
 				>
 					Start Creating
 				</a>

@@ -68,7 +68,9 @@
 		</div>
 		<div>
 			{#if form?.error}
-				<p id="form-error" class="text-red-600">{form.error}</p>
+				<div class="alert alert-error">
+					<span>{form.error}</span>
+				</div>
 			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
@@ -76,7 +78,9 @@
 			</button>
 
 			{#if form?.success}
-				<p class="text-green-600">Details updated successfully!</p>
+				<div class="alert alert-success">
+					<span>Details updated successfully!</span>
+				</div>
 			{/if}
 		</div>
 	</form>

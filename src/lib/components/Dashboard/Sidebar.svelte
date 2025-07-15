@@ -45,10 +45,10 @@
 				>
 					<Play class="h-5 w-5 text-white" />
 				</div>
-				<span class="font-semibold text-gray-900">Story Maker</span>
+				<span class="font-semibold text-base-content">Story Maker</span>
 			</div>
-			<button class="rounded-lg p-1 hover:bg-gray-100 lg:hidden" onclick={onToggleSidebar}>
-				<X class="h-5 w-5 text-gray-500" />
+			<button class="btn btn-ghost btn-sm lg:hidden" onclick={onToggleSidebar}>
+				<X class="h-5 w-5" />
 			</button>
 		</div>
 
@@ -62,7 +62,7 @@
 					<form action="/logout" method="POST">
 						<button
 							type="submit"
-							class="flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left text-gray-700 hover:bg-gray-100"
+							class="btn btn-ghost w-full justify-start"
 						>
 							<IconComponent class="h-5 w-5" />
 							<span class="font-medium">{item.label}</span>
@@ -70,10 +70,7 @@
 					</form>
 				{:else}
 					<button
-						class="flex w-full items-center space-x-3 rounded-lg px-3 py-2 text-left transition-colors {currentView ===
-						item.id
-							? 'bg-purple-100 text-purple-700'
-							: 'text-gray-700 hover:bg-gray-100'}"
+						class="btn btn-ghost w-full justify-start {currentView === item.id ? 'btn-active' : ''}"
 						onclick={() => handleNavClick(item.id)}
 					>
 						<IconComponent class="h-5 w-5" />
@@ -94,10 +91,10 @@
 					>
 				</div>
 				<div class="min-w-0 flex-1">
-					<p class="truncate text-sm font-medium text-gray-900">
+					<p class="truncate text-sm font-medium text-base-content">
 						{user.user_metadata.display_name || 'User'}
 					</p>
-					<p class="truncate text-xs text-gray-500">{user.email || 'user@example.com'}</p>
+					<p class="truncate text-xs text-base-content/50">{user.email || 'user@example.com'}</p>
 				</div>
 			</div>
 		</div>

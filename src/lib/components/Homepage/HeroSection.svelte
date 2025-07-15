@@ -7,12 +7,10 @@
 		<div class="grid items-center gap-12 lg:grid-cols-2">
 			<div class="space-y-8">
 				<div class="space-y-4">
-					<div
-						class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700"
-					>
+					<div class="badge badge-primary badge-lg">
 						✨ AI-Powered Storyboarding
 					</div>
-					<h1 class="text-4xl leading-tight font-bold text-gray-900 lg:text-6xl">
+					<h1 class="text-4xl leading-tight font-bold text-base-content lg:text-6xl">
 						Turn Your
 						<span
 							class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
@@ -21,7 +19,7 @@
 						</span>
 						Into Visual Magic
 					</h1>
-					<p class="text-xl leading-relaxed text-gray-600">
+					<p class="text-xl leading-relaxed text-base-content/70">
 						Create professional storyboards from your story ideas in minutes. Customize by style,
 						target audience, and genre to bring your vision to life.
 					</p>
@@ -30,27 +28,27 @@
 				<div class="flex flex-col gap-4 sm:flex-row">
 					<a
 						href="/signup"
-						class="flex transform items-center justify-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white transition-all hover:scale-105 hover:from-purple-700 hover:to-blue-700"
+						class="btn btn-primary btn-lg"
 					>
 						<span>Start Creating Free</span>
 						<ArrowRight class="h-5 w-5" />
 					</a>
 					<a
 						href="/storyboard"
-						class="flex items-center justify-center space-x-2 rounded-lg border-2 border-gray-300 px-8 py-4 font-semibold text-gray-700 transition-all hover:border-purple-300 hover:text-purple-600"
+						class="btn btn-outline btn-lg"
 					>
 						<Play class="h-5 w-5" />
 						<span>Try Demo</span>
 					</a>
 				</div>
 
-				<div class="flex items-center space-x-6 text-sm text-gray-500">
+				<div class="flex items-center space-x-6 text-sm text-base-content/50">
 					<div class="flex items-center space-x-1">
-						<Check class="h-4 w-4 text-green-500" />
+						<Check class="h-4 w-4 text-success" />
 						<span>No credit card required</span>
 					</div>
 					<div class="flex items-center space-x-1">
-						<Check class="h-4 w-4 text-green-500" />
+						<Check class="h-4 w-4 text-success" />
 						<span>Free templates</span>
 					</div>
 				</div>
@@ -63,7 +61,7 @@
 					<div
 						class="flex h-64 w-full items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-blue-200 shadow-2xl"
 					>
-						<div class="text-center text-purple-600">
+						<div class="text-center text-primary">
 							<BookOpen class="mx-auto mb-4 h-16 w-16" />
 							<p class="text-lg font-semibold">StoryMaker Interface</p>
 							<p class="text-sm">AI-Powered Storyboarding</p>
@@ -71,7 +69,7 @@
 					</div>
 				</div>
 				<div
-					class="absolute -top-4 -right-4 rotate-12 transform rounded-full bg-yellow-400 px-3 py-1 text-sm font-semibold text-yellow-900"
+					class="badge badge-warning absolute -top-4 -right-4 rotate-12 transform"
 				>
 					New!
 				</div>

@@ -23,19 +23,19 @@
 	<div class="mb-8">
 		<div class="mb-4 flex items-center space-x-2">
 			<button
-				class="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+				class="flex items-center space-x-2 text-base-content/70 hover:text-base-content"
 				onclick={handleBackToTeams}
 			>
 				<span>Teams</span>
 				<ChevronRight class="h-4 w-4" />
 			</button>
-			<span class="font-medium text-gray-900">{selectedTeam.name}</span>
+			<span class="font-medium text-base-content">{selectedTeam.name}</span>
 		</div>
 
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
-				<h1 class="text-3xl font-bold text-gray-900">{selectedTeam.name} Storyboards</h1>
-				<p class="mt-1 text-gray-600">Collaborative storyboard projects for your team</p>
+				<h1 class="text-3xl font-bold text-base-content">{selectedTeam.name} Storyboards</h1>
+				<p class="mt-1 text-base-content/70">Collaborative storyboard projects for your team</p>
 			</div>
 
 			<button
@@ -50,13 +50,13 @@
 
 	<!-- Empty State -->
 	<div class="py-12 text-center">
-		<div class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-100">
-			<Users class="h-8 w-8 text-gray-400" />
+		<div class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-base-200">
+			<Users class="h-8 w-8 text-base-content/40" />
 		</div>
-		<h3 class="mb-2 text-lg font-medium text-gray-900">No team storyboards yet</h3>
-		<p class="mb-6 text-gray-500">Start creating collaborative storyboards with your team</p>
+		<h3 class="mb-2 text-lg font-medium text-base-content">No team storyboards yet</h3>
+		<p class="mb-6 text-base-content/50">Start creating collaborative storyboards with your team</p>
 		<button
-			class="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
+			class="btn btn-primary"
 			onclick={handleNewStoryboard}
 		>
 			Create First Storyboard

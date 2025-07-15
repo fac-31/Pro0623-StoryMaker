@@ -7,7 +7,7 @@
 	<div class="text-center">
 		<a
 			href="/"
-			class="mb-8 inline-flex items-center space-x-2 text-purple-600 transition-colors hover:text-purple-700"
+			class="btn btn-ghost btn-sm mb-8"
 		>
 			<ArrowLeft class="h-5 w-5" />
 			<span class:hidden={mobileMenuOpen} class="md:inline">Back to Home</span>
@@ -22,13 +22,13 @@
 		</div>
 
 		<h2
-			class="mb-2 text-3xl font-bold text-gray-900"
+			class="mb-2 text-3xl font-bold text-base-content"
 			class:text-xl={mobileMenuOpen}
 			class:text-3xl={!mobileMenuOpen}
 		>
 			Create Your Account
 		</h2>
-		<p class="text-gray-600" class:text-sm={mobileMenuOpen}>
+		<p class="text-base-content/70" class:text-sm={mobileMenuOpen}>
 			Join thousands of creators using StoryMaker
 		</p>
 	</div>
