@@ -14,16 +14,19 @@ Transform your creative ideas into compelling visual stories with the power of a
 ## ✨ Features
 
 ### 🤖 **AI-Powered Story Generation**
+
 - **GPT-4 Integration**: Intelligent story outline and scene generation
 - **DALL-E 3 Visuals**: Stunning AI-generated images for each scene
 - **LangGraph Workflows**: Advanced AI agent orchestration for complex storytelling
 
 ### 👥 **Collaboration & Management**
+
 - **Team Management**: Create and manage collaborative teams
 - **User Authentication**: Secure login with Supabase
 - **Project Organization**: Track and organize multiple storyboard projects
 
 ### 🎨 **Modern User Experience**
+
 - **Responsive Design**: Beautiful interface that works on all devices
 - **Accessibility First**: WCAG compliant with comprehensive accessibility features
 - **Real-time Updates**: Server-sent events for live progress tracking
@@ -87,27 +90,30 @@ CLOUDINARY_API_SECRET=your_cloudinary_secret
 
 ### 🔑 Getting API Keys
 
-| Service | Purpose | Get Your Key |
-|---------|---------|--------------|
-| **OpenAI** | Story generation & DALL-E images | [OpenAI Platform](https://platform.openai.com/api-keys) |
-| **Supabase** | Authentication & database | [Supabase Dashboard](https://supabase.com/dashboard) |
-| **Cloudinary** | Image hosting (optional) | [Cloudinary](https://cloudinary.com/) |
+| Service        | Purpose                          | Get Your Key                                            |
+| -------------- | -------------------------------- | ------------------------------------------------------- |
+| **OpenAI**     | Story generation & DALL-E images | [OpenAI Platform](https://platform.openai.com/api-keys) |
+| **Supabase**   | Authentication & database        | [Supabase Dashboard](https://supabase.com/dashboard)    |
+| **Cloudinary** | Image hosting (optional)         | [Cloudinary](https://cloudinary.com/)                   |
 
 ---
 
 ## 📖 How to Use
 
 ### 1. **Create Your Story**
+
 - Fill out the story creation form with your concept
 - Choose your preferred style, genre, and target audience
 - Specify the number of slides for your storyboard
 
 ### 2. **AI Generation Process**
+
 - Watch real-time progress as AI generates your story outline
 - DALL-E creates unique visuals for each scene
 - Review and refine the generated content
 
 ### 3. **Collaborate**
+
 - Create teams and invite collaborators
 - Manage user roles and permissions
 - Share projects across your organization
@@ -197,19 +203,20 @@ npm run generate-swagger
 
 ### Key API Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/storyboard/start` | POST | Create new storyboard |
-| `/api/storyboard/progress/{id}` | GET | Real-time progress stream |
-from storyboard |
-| `/api/users/signup` | POST | User registration |
-| `/api/teams/create` | POST | Create new team |
+| Endpoint                        | Method | Description               |
+| ------------------------------- | ------ | ------------------------- |
+| `/api/storyboard/start`         | POST   | Create new storyboard     |
+| `/api/storyboard/progress/{id}` | GET    | Real-time progress stream |
+| from storyboard                 |
+| `/api/users/signup`             | POST   | User registration         |
+| `/api/teams/create`             | POST   | Create new team           |
 
 ---
 
 ## 🎯 Tech Stack
 
 ### **Frontend**
+
 - **SvelteKit** - Full-stack web framework
 - **TypeScript** - Type-safe JavaScript
 - **Tailwind CSS** - Utility-first CSS framework
@@ -217,16 +224,19 @@ from storyboard |
 - **Lucide Icons** - Consistent icon system
 
 ### **Backend**
+
 - **SvelteKit API Routes** - Server-side API
 - **MongoDB** - Document database
 - **Supabase** - Authentication & real-time features
 
 ### **AI & Media**
+
 - **OpenAI GPT-4** - Story generation
 - **DALL-E 3** - Image generation
 - **LangGraph** - AI workflow orchestration
 
 ### **Development Tools**
+
 - **Vite** - Fast build tool
 - **Playwright** - End-to-end testing
 - **ESLint & Prettier** - Code quality
