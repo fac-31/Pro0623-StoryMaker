@@ -173,3 +173,12 @@ button {
 		scroll-behavior: auto !important;
 	}
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.motion-safe\:transition-all {
+		transition: none;
+	}
+	.motion-safe\:transform {
+		transform: none;
+	}
+}

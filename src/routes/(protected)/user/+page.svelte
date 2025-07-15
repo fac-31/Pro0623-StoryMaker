@@ -18,53 +18,55 @@
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
 	<form method="POST" class="w-full max-w-xl">
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="name" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Display name: </span>
-				</label>
-				<input
-					id="name"
-					name="name"
-					type="text"
-					autocomplete="name"
-					bind:value={name}
-					class="input input-bordered flex-1"
-					aria-describedby="form-error"
-				/>
+		<div role="group">
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="name" class="label max-w-[60px] flex-auto">
+						<span class="label-text"> Display name: </span>
+					</label>
+					<input
+						id="name"
+						name="name"
+						type="text"
+						autocomplete="name"
+						bind:value={name}
+						class="input input-bordered flex-1"
+						aria-describedby="name-error"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="email" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Email: </span>
-				</label>
-				<input
-					id="email"
-					name="email"
-					type="email"
-					autocomplete="email"
-					bind:value={email}
-					class="input input-bordered flex-1"
-					aria-describedby="form-error"
-				/>
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="email" class="label max-w-[60px] flex-auto">
+						<span class="label-text"> Email: </span>
+					</label>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						autocomplete="email"
+						bind:value={email}
+						class="input input-bordered flex-1"
+						aria-describedby="email-error"
+					/>
+				</div>
 			</div>
-		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="password" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Password: </span>
-				</label>
-				<input
-					id="password"
-					name="password"
-					type="password"
-					autocomplete="new-password"
-					placeholder="Leave blank if no change"
-					bind:value={password}
-					class="input input-bordered flex-1"
-					aria-describedby="form-error"
-				/>
+			<div class="form-control mb-4">
+				<div class="flex items-center gap-4">
+					<label for="password" class="label max-w-[60px] flex-auto">
+						<span class="label-text"> Password: </span>
+					</label>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						autocomplete="new-password"
+						placeholder="Leave blank if no change"
+						bind:value={password}
+						class="input input-bordered flex-1"
+						aria-describedby="password-error"
+					/>
+				</div>
 			</div>
 		</div>
 		<div>
