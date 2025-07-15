@@ -19,19 +19,21 @@
 					StoryMaker
 				</span>
 			</div>
-			<button
-				class="btn btn-ghost btn-square md:hidden"
-				on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
-				aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-				aria-expanded={mobileMenuOpen}
-			>
-				{#if mobileMenuOpen}
-					<X class="h-6 w-6" />
-				{:else}
-					<Menu class="h-6 w-6" />
-				{/if}
-			</button>
-			<slot name="nav" {mobileMenuOpen}></slot>
+			<div class="flex items-center space-x-8">
+				<slot name="nav" {mobileMenuOpen}></slot>
+				<button
+					class="btn btn-ghost btn-square md:hidden"
+					on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
+					aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+					aria-expanded={mobileMenuOpen}
+				>
+					{#if mobileMenuOpen}
+						<X class="h-6 w-6" />
+					{:else}
+						<Menu class="h-6 w-6" />
+					{/if}
+				</button>
+			</div>
 		</div>
 	</div>
 </header>

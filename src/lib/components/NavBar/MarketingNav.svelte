@@ -3,7 +3,7 @@
 	export let mobileMenuOpen: boolean = false;
 </script>
 
-<nav class="hidden items-center space-x-8 md:flex">
+<nav class="hidden items-center space-x-8 md:flex md:ml-8">
 	<a href="#features" class="text-base-content/70 transition-colors hover:text-primary">Features</a>
 	<a href="#how-it-works" class="text-base-content/70 transition-colors hover:text-primary"
 		>How it Works</a
