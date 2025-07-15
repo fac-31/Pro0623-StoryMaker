@@ -1,15 +1,22 @@
 // +page.server.ts - Only load storyboard-specific data
 import { getStoryboardsOfUser } from '$lib/server/storyboardService.js';
 import { getTeamsOfUser } from '$lib/server/teamService.js';
+import { getUserFromSupabaseId } from '$lib/server/userService.js';
 import type { PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { user } = await parent();
-	const storyboards = await getStoryboardsOfUser(user.id);
+	const mongoUser = await getUserFromSupabaseId(user.id);
+	if (!mongoUser) {
+		console.log('User not found:', user.id);
+		return {};
+	}
 
-	const teams = await getTeamsOfUser(user.id);
+	const storyboards = await getStoryboardsOfUser(mongoUser);
+
+	const teams = await getTeamsOfUser(mongoUser);
 
 	return {
 		user,

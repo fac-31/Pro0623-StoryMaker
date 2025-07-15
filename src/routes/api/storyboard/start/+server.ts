@@ -39,8 +39,6 @@ export const POST: RequestHandler = async (event) => {
 		return json({ error: 'User not found' }, { status: 404 });
 	}
 
-	console.log('team_id', team_id);
-
 	let team: Team | null = null;
 	if (team_id) {
 		team = await getTeamById(team_id);

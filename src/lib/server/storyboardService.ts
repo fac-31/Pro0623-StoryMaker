@@ -24,23 +24,14 @@ export async function getAllStoryboardsIds(): Promise<string[]> {
 
 /**
  * Retrieves all storyboards associated with a specific user.
- * @param {string} supabaseUserId - The Supabase ID of the user.
+ * @param {User} user - The user object.
  * @returns {Promise<Storyboard[]>} A promise that resolves to an array of Storyboard objects.
  * @throws {Error} If the database find operation fails.
  */
-export async function getStoryboardsOfUser(supabaseUserId: string): Promise<Storyboard[]> {
+export async function getStoryboardsOfUser(user: User): Promise<Storyboard[]> {
 	const db = getDB();
 
 	try {
-		const userDoc = await db.collection('users').findOne({
-			supabase: supabaseUserId // Use supabase field
-		});
-		const user = userDoc as User;
-		if (!user) {
-			console.log('User not found:', supabaseUserId);
-			return [];
-		}
-
 		const storyboardsCollection = db.collection('storyboards');
 
 		const storyboards = await storyboardsCollection

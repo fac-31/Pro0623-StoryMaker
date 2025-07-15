@@ -82,23 +82,14 @@ export async function getAllTeams(): Promise<Team[]> {
 
 /**
  * Retrieves all teams associated with a specific user.
- * @param {string} supabaseUserId - The Supabase ID of the user.
+ * @param {User} user - The user object.
  * @returns {Promise<Team[]>} A promise that resolves to an array of teams the user belongs to.
  * @throws {Error} If the database find operation fails.
  */
-export async function getTeamsOfUser(supabaseUserId: string): Promise<Team[]> {
+export async function getTeamsOfUser(user: User): Promise<Team[]> {
 	const db = getDB();
 
 	try {
-		const userDoc = await await db.collection('users').findOne({
-			supabase: supabaseUserId // Use supabase field
-		});
-		const user = userDoc as User;
-		if (!user) {
-			console.log('User not found:', supabaseUserId);
-			return [];
-		}
-
 		const teamsCollection = db.collection('teams');
 
 		const teams = await teamsCollection
