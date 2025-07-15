@@ -2,13 +2,18 @@
 	import { Plus, Search, Grid3X3, List, Play, MoreHorizontal, Video } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import { storyboardStore } from '$lib/stores/storyboard';
+	import { teamStore } from '$lib/stores/team';
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import type { Team } from '$lib/models/team.model';
 
 	interface Props {
 		storyboards: Storyboard[];
+		team?: Team;
 	}
 
-	let { storyboards }: Props = $props();
+	let { storyboards, team }: Props = $props();
+
+	teamStore.set(team ? team : null);
 
 	// State management
 	let selectedStoryboard = $state<Storyboard | null>(null);
@@ -44,7 +49,13 @@
 	<div class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
-				<h1 class="text-base-content text-3xl font-bold">My Storyboards</h1>
+				<h1 class="text-base-content text-3xl font-bold">
+					{#if team}
+						{team.name}'s Storyboards
+					{:else}
+						My Storyboards
+					{/if}
+				</h1>
 				<p class="text-base-content/70 mt-1">
 					Create and manage your AI-powered storyboard projects
 				</p>
@@ -55,6 +66,11 @@
 				<span>New Storyboard</span>
 			</button>
 		</div>
+		{#if team}
+			{#each team.users as teamuser}
+				{teamuser.user}, {teamuser.role}
+			{/each}
+		{/if}
 	</div>
 
 	<!-- Filters and Search -->

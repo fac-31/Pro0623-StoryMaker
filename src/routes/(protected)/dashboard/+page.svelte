@@ -6,7 +6,7 @@
 	const teams = $derived(data.teams);
 
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
-	import MyStoryboards from '$lib/components/Dashboard/MyStoryboards.svelte';
+	import Storyboards from '$lib/components/Dashboard/Storyboards.svelte';
 	import MyTeams from '$lib/components/Dashboard/MyTeams.svelte';
 	import type { Team } from '$lib/models/team.model.js';
 
@@ -65,8 +65,10 @@
 		<main class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
-				<MyStoryboards {storyboards} />
-			{:else if currentView === 'my-teams' || currentView === 'team-storyboards'}
+				<Storyboards {storyboards} />
+			{:else if currentView === 'team-storyboards' && selectedTeam}
+				<Storyboards {storyboards} team={selectedTeam}/>
+			{:else if currentView === 'my-teams'}
 				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} />
 				<!-- assumption: when user presses settings (currentView=="settings") 
 			 we goto "\user" route from the navbar itself.

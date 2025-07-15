@@ -229,8 +229,6 @@ const saveSlideAndAdvance = async (state: Storyboard): Promise<Partial<Storyboar
 	// Advance to next slide. mark complete is in the logic of shouldContinue()
 	const nextSlide = currentSlideNum + 1;
 
-	updateStream(state._id.toString(), state);
-
 	console.log('[LangGraph] saveSlideAndAdvance nextSlide:', nextSlide);
 	addLog(`[LangGraph] saveSlideAndAdvance nextSlide: ${nextSlide}`);
 	return {
@@ -262,6 +260,8 @@ export const createStoryboardGraph = () => {
 			_id: null,
 			status: null,
 			prompts: null,
+			createdAt: null,
+			updatedAt: null,
 			storyOutline: null,
 			currentSlide: null,
 			visualSlides: null

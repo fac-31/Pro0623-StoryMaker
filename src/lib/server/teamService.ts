@@ -200,6 +200,27 @@ export async function removeTeamUser(team_id: string, user_id: string): Promise<
 }
 
 /**
+ * Checks if a user is in a team.
+ * @param {string} team_id - The ID of the team.
+ * @param {string} user_id - The ID of the user.
+ * @returns {Promise<boolean>} Returns true if the user is in a team, false otherwise.
+ */
+export async function isUserInTeam(team_id: string, user_id: string) {
+	const team = await getTeamById(team_id);
+	if (!team) return 'Could not find team by id ' + team_id;
+
+	const teamUser: TeamUser | undefined = team.users.find((teamUser) =>
+		teamUser.user.equals(user_id)
+	);
+
+	if (!teamUser) return 'You are not in this team to edit';
+
+	if (teamUser.role !== 'admin') return 'You are not an admin to edit this team';
+
+	return true;
+}
+
+/**
  * Checks if a user has permission to edit a team.
  * @param {string} team_id - The ID of the team.
  * @param {string} user_id - The ID of the user.

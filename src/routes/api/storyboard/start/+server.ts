@@ -3,6 +3,7 @@ import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { UserPrompt } from '$lib/models/UserPrompt';
 import type { NewStoryboard } from '$lib/models/storyboard.model';
+import type { Team } from '$lib/models/team.model';
 import { getUserFromEvent } from '$lib/server/userService';
 
 /**
@@ -26,7 +27,10 @@ import { getUserFromEvent } from '$lib/server/userService';
  * - Returns a 404 status if the user is not found.
  */
 export const POST: RequestHandler = async (event) => {
-	const prompts: UserPrompt = await event.request.json();
+	const { prompts, team } = await event.request.json() as {
+		prompts: UserPrompt,
+		team: Team | null,
+	};
 
 	const storyboard: NewStoryboard = {
 		status: 'none',
