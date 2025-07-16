@@ -8,10 +8,11 @@
 
 	interface Props {
 		storyboards: Storyboard[];
+		list: string[];
 		team?: Team;
 	}
 
-	let { storyboards, team }: Props = $props();
+	let { storyboards, list, team }: Props = $props();
 
 	teamStore.set(team ? team : null);
 
@@ -23,6 +24,9 @@
 	// Computed values
 	const filteredProjects = () => {
 		return storyboards.filter((storyboard) => {
+			if (!list.includes(storyboard._id as string))
+				return false;
+
 			const matchesSearch =
 				storyboard.prompts.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				storyboard.storyOutline.storyMetadata.title

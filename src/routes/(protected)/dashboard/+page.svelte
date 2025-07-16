@@ -2,8 +2,9 @@
 	const { data } = $props();
 
 	const user = $derived(data.user);
-	const storyboards = $derived(data.storyboards);
+	const mongoUser = $derived(data.mongoUser);
 	const teams = $derived(data.teams);
+	const storyboards = $derived(data.storyboards);
 
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
 	import Storyboards from '$lib/components/Dashboard/Storyboards.svelte';
@@ -65,9 +66,9 @@
 		<main class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
-				<Storyboards {storyboards} />
+				<Storyboards {storyboards} list={mongoUser.projects} />
 			{:else if currentView === 'team-storyboards' && selectedTeam}
-				<Storyboards {storyboards} team={selectedTeam} />
+				<Storyboards {storyboards} list={selectedTeam.projects} team={selectedTeam} />
 			{:else if currentView === 'my-teams'}
 				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} />
 				<!-- assumption: when user presses settings (currentView=="settings") 

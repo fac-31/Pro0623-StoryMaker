@@ -25,8 +25,9 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 	return {
 		user,
+		mongoUser,
+		teams,
 		storyboards,
-		teams
 	};
 };
 
