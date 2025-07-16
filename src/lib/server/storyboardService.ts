@@ -23,19 +23,19 @@ export async function getAllStoryboardsIds(): Promise<string[]> {
 }
 
 /**
- * Retrieves all storyboards associated with a specific user.
- * @param {User} user - The user object.
+ * Retrieves all storyboards from given list of ids
+ * @param {stirng[]} ids - List of ids to collect.
  * @returns {Promise<Storyboard[]>} A promise that resolves to an array of Storyboard objects.
  * @throws {Error} If the database find operation fails.
  */
-export async function getStoryboardsOfUser(user: User): Promise<Storyboard[]> {
+export async function getStoryboardsFromIds(ids: string[]): Promise<Storyboard[]> {
 	const db = getDB();
 
 	try {
 		const storyboardsCollection = db.collection('storyboards');
 
 		const storyboards = await storyboardsCollection
-			.find({ _id: { $in: user.projects.map((id) => new ObjectId(id)) } })
+			.find({ _id: { $in: ids.map((id) => new ObjectId(id)) } })
 			.toArray();
 
 		const serialized = serializeMongoDocument(storyboards);

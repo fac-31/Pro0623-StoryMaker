@@ -13,7 +13,7 @@ export interface Team {
 	_id: ObjectId;
 	name: string;
 	users: TeamUser[];
-	projects: ObjectId[];
+	projects: ObjectId[] | string[];
 }
 
 export type NewTeam = Omit<Team, '_id'>;

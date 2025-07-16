@@ -3,6 +3,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { getDB } from './db';
 
 import type { User, NewUser, SafeUser } from '$lib/models/user.model';
+import { serializeMongoDocument } from '$lib/server/utils.js';
 
 /**
  * Inserts a new user into the database.
@@ -72,7 +73,8 @@ export async function getUserFromSupabaseId(supabaseId: string): Promise<User | 
 	const users = db.collection<User>('users');
 
 	try {
-		return await users.findOne({ supabase: supabaseId });
+		const user = await users.findOne({ supabase: supabaseId });
+		return serializeMongoDocument(user) as User;
 	} catch (err) {
 		// Should be expecting every supabase users have mongodb user?
 		console.error('Failed to find user:', err);

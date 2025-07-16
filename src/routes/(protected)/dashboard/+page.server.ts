@@ -1,5 +1,5 @@
 // +page.server.ts - Only load storyboard-specific data
-import { getStoryboardsOfUser } from '$lib/server/storyboardService.js';
+import { getStoryboardsFromIds } from '$lib/server/storyboardService.js';
 import { getTeamsOfUser } from '$lib/server/teamService.js';
 import { getUserFromSupabaseId } from '$lib/server/userService.js';
 import type { PageServerLoad } from './$types';
@@ -14,9 +14,14 @@ export const load: PageServerLoad = async ({ parent }) => {
 		return {};
 	}
 
-	const storyboards = await getStoryboardsOfUser(mongoUser);
-
 	const teams = await getTeamsOfUser(mongoUser);
+
+	const storyboardIds: string[] = [
+		...mongoUser.projects as string[],
+		...teams.flatMap(team => team.projects as string[]),
+	]
+
+	const storyboards = await getStoryboardsFromIds(storyboardIds);
 
 	return {
 		user,
