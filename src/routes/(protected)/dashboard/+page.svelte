@@ -67,9 +67,9 @@
 		<main class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
-				<Storyboards {storyboards} list={user.projects} />
+				<Storyboards {storyboards} list={user.projects} {user} />
 			{:else if currentView === 'team-storyboards' && selectedTeam}
-				<Storyboards {storyboards} list={selectedTeam.projects} team={selectedTeam} {users} />
+				<Storyboards {storyboards} list={selectedTeam.projects} {user} team={selectedTeam} {users} />
 			{:else if currentView === 'my-teams'}
 				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} />
 				<!-- assumption: when user presses settings (currentView=="settings") 

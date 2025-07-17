@@ -54,5 +54,24 @@ export const actions: Actions = {
 		}
 
 		return { success: true };
-	}
+	},
+
+	addUser: async ({ request, fetch }) => {
+		const formData = await request.formData();
+		const team_id = formData.get('team_id') as string;
+		const user_id = formData.get('user_id') as string;
+		
+		const response = await fetch('/api/teams/updateuser', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({team_id, user_id, role: 'user'})
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			return fail(response.status, { error: errorData.error });
+		}
+
+		return { success: true };
+	},
 };

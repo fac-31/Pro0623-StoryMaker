@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Plus, Search, Grid3X3, List, Play, MoreHorizontal, Video } from 'lucide-svelte';
+	import { Plus, Search, Grid3X3, List, Play, MoreHorizontal, X, Video } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import { storyboardStore } from '$lib/stores/storyboard';
 	import { teamStore } from '$lib/stores/team';
@@ -10,11 +10,12 @@
 	interface Props {
 		storyboards: Storyboard[];
 		list: string[];
+		user: User;
 		team?: Team;
 		users?: User[];
 	}
 
-	let { storyboards, list, team, users }: Props = $props();
+	let { storyboards, list, user, team, users }: Props = $props();
 
 	teamStore.set(team ? team : null);
 
@@ -22,6 +23,8 @@
 	let selectedStoryboard = $state<Storyboard | null>(null);
 	let viewMode = $state('grid');
 	let searchQuery = $state('');
+	let showAddUserModal = $state(false);
+	let admin = team?.users.find((teamuser) => teamuser.user = user._id).role == 'admin';
 
 	// Computed values
 	const filteredProjects = () => {
@@ -48,6 +51,10 @@
 		selectedStoryboard = null;
 		goto('/storyboard');
 	}
+
+	function handleAddUser(user: User) {
+		showAddUserModal = false;
+	}
 </script>
 
 <div>
@@ -72,12 +79,38 @@
 				<span>New Storyboard</span>
 			</button>
 		</div>
-		{#if team && users}
-			{#each team.users as teamuser}
-				{users.find((user) => user._id == teamuser.user).name}, {teamuser.role}
-			{/each}
-		{/if}
 	</div>
+
+	<!-- Team members list -->
+	{#if team && users}
+		<section
+			class="border-base-300/50 bg-base-100/80 mb-8 rounded-2xl border p-6 shadow-xl backdrop-blur-sm"
+			aria-label="Members list"
+		>
+		
+			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+				<div>
+					<h2 class="text-base-content text-2xl font-bold">
+						Members list
+					</h2>
+				</div>
+
+				{#if admin}
+					<div>
+						<button class="btn btn-primary"  onclick={() => (showAddUserModal = true)}>
+							<Plus class="h-5 w-5" />
+							<span>Add User</span>
+						</button>
+					</div>
+				{/if}
+			</div>
+			<p>
+				{#each team.users as teamuser}
+					<p>{users.find((user) => user._id == teamuser.user).name}, {teamuser.role}</p>
+				{/each}
+			</p>
+		</section>
+	{/if}
 
 	<!-- Filters and Search -->
 	<section
@@ -296,3 +329,59 @@
 		{/if}
 	</section>
 </div>
+
+<!-- Create Team Modal -->
+{#if showAddUserModal}
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+		<div class="w-full max-w-md rounded-2xl bg-white p-6">
+			<div class="mb-6 flex items-center justify-between">
+				<h2 class="text-base-content text-xl font-semibold">Add User to team</h2>
+				<button
+					class="btn btn-ghost btn-sm"
+					onclick={() => (showAddUserModal = false)}
+					aria-label="Close create team dialog"
+				>
+					<X class="h-5 w-5" />
+				</button>
+			</div>
+
+
+			<div class="max-h-60 overflow-y-auto space-y-2">
+				{#each users as user}
+					{#if !team?.users.find((teamuser) => teamuser.user == user._id)}
+
+						<form
+							method="POST"
+							action="?/addUser"
+							use:enhance={() => {
+								// This callback runs after the action completes
+								return async ({ update }) => {
+									await update();
+									showAddUserModal = false;
+								};
+							}}
+							class="space-y-4"
+						>
+							<input type="hidden" name="team_id" value={team._id} />
+							<input type="hidden" name="user_id" value={user._id} />
+							<button type="submit" class="btn btn-primary flex-1">
+								<Plus class="h-5 w-5" />
+								{user.name}
+							</button>
+						</form>
+					{/if}
+				{/each}
+			</div>
+			
+			<div class="flex space-x-3 pt-4">
+				<button
+					type="button"
+					class="btn btn-outline flex-1"
+					onclick={() => (showAddUserModal = false)}
+				>
+					Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
