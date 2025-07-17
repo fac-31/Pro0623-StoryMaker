@@ -30,7 +30,7 @@
 	];
 </script>
 
-<section id="features" class="bg-white py-20">
+<section id="features" class="bg-base-100 py-20">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="mb-16 space-y-4 text-center">
 			<div class="badge badge-primary badge-lg">Features</div>

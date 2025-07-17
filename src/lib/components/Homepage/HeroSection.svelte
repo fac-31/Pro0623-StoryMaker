@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight, Play, Check, BookOpen } from 'lucide-svelte';
+	import { ArrowRight, Play, BookOpen } from 'lucide-svelte';
 </script>
 
 <section class="relative overflow-hidden py-20 lg:py-32">
@@ -8,7 +8,7 @@
 			<div class="space-y-8">
 				<div class="space-y-4">
 					<div
-						class="inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700"
+						class="bg-primary/10 text-primary inline-flex items-center rounded-full px-3 py-1 text-sm font-medium"
 					>
 						✨ AI-Powered Storyboarding
 					</div>
@@ -37,25 +37,14 @@
 						<span>Try Demo</span>
 					</a>
 				</div>
-
-				<div class="text-base-content/50 flex items-center space-x-6 text-sm">
-					<div class="flex items-center space-x-1">
-						<Check class="text-success h-4 w-4" />
-						<span>No credit card required</span>
-					</div>
-					<div class="flex items-center space-x-1">
-						<Check class="text-success h-4 w-4" />
-						<span>Free templates</span>
-					</div>
-				</div>
 			</div>
 
 			<div class="relative">
 				<div
-					class="rotate-3 transform rounded-2xl bg-gradient-to-br from-purple-100 to-blue-100 p-8 transition-transform duration-300 hover:rotate-0"
+					class="bg-base-300 rotate-3 transform rounded-2xl p-8 transition-transform duration-300 hover:rotate-0"
 				>
 					<div
-						class="flex h-64 w-full items-center justify-center rounded-lg bg-gradient-to-br from-purple-200 to-blue-200 shadow-2xl"
+						class="bg-base-200 flex h-64 w-full items-center justify-center rounded-lg shadow-2xl"
 					>
 						<div class="text-primary text-center">
 							<BookOpen class="mx-auto mb-4 h-16 w-16" />

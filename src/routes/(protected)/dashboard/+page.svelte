@@ -30,7 +30,7 @@
 	}
 </script>
 
-<div class="flex min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+<div class="bg-base-200 flex min-h-screen">
 	<!-- Sidebar Component -->
 	<Sidebar
 		{user}
@@ -44,7 +44,7 @@
 	<div class="flex-1 lg:ml-64">
 		<!-- Mobile sidebar toggle -->
 		<button
-			class="fixed top-4 left-4 z-40 rounded-lg border border-gray-200/50 bg-white/80 p-2 backdrop-blur-sm lg:hidden"
+			class="border-base-300/50 bg-base-100/80 fixed top-4 left-4 z-40 rounded-lg border p-2 backdrop-blur-sm lg:hidden"
 			onclick={handleToggleSidebar}
 			aria-label="Toggle sidebar"
 		>
