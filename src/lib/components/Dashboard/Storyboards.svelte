@@ -104,11 +104,35 @@
 					</div>
 				{/if}
 			</div>
-			<p>
-				{#each team.users as teamuser}
-					<p>{users.find((user) => user._id == teamuser.user).name}, {teamuser.role}</p>
-				{/each}
-			</p>
+			
+			<table class="table w-auto">
+				<tbody>
+					{#each team.users as teamuser}
+					<tr class="group border-base-300 hover:bg-base-200 border-b transition-colors">
+						<td class="py-4">
+							{users.find((user) => user._id == teamuser.user).name}
+						</td>
+						<td class="py-4">
+							<form method="POST" action="?/updateUser" class="inline">
+								<!-- Hidden inputs for identifying which user to update -->
+								<input type="hidden" name="team_id" value={team._id} />
+								<input type="hidden" name="user_id" value={teamuser.user} />
+		
+								<select
+									name="role"
+									class="select select-bordered select-sm"
+									onchange={(e) => e.currentTarget.form.requestSubmit()}
+									disabled={!admin || user._id === teamuser.user}
+								>
+									<option value="user" selected={teamuser.role === 'user'}>Member</option>
+									<option value="admin" selected={teamuser.role === 'admin'}>Admin</option>
+								</select>
+							</form>
+						</td>		
+					</tr>
+					{/each}
+				</tbody>
+			</table>
 		</section>
 	{/if}
 
