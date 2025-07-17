@@ -41,7 +41,9 @@ export async function getAllUsers(): Promise<User[]> {
 	const users = db.collection<User>('users');
 
 	try {
-		return await users.find({}).toArray();
+		const result = await users.find({}).toArray();
+		const serialized = serializeMongoDocument(result);
+		return serialized as User[];
 	} catch (err) {
 		// Should be expecting every supabase users have mongodb user?
 		console.error('Failed to get all users:', err);

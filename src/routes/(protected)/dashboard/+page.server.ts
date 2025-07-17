@@ -1,31 +1,35 @@
 // +page.server.ts - Only load storyboard-specific data
 import { getStoryboardsFromIds } from '$lib/server/storyboardService.js';
 import { getTeamsOfUser } from '$lib/server/teamService.js';
-import { getUserFromSupabaseId } from '$lib/server/userService.js';
+import { getUserFromSupabaseId, getAllUsers, toSafeUsers } from '$lib/server/userService.js';
 import type { PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const load: PageServerLoad = async ({ parent }) => {
-	const { user } = await parent();
-	const mongoUser = await getUserFromSupabaseId(user.id);
-	if (!mongoUser) {
-		console.log('User not found:', user.id);
+	const data = await parent();
+	const supabase = data.user;
+
+	const user = await getUserFromSupabaseId(supabase.id);
+	if (!user) {
+		console.log('User not found:', supabase.id);
 		return {};
 	}
 
-	const teams = await getTeamsOfUser(mongoUser);
+	const users = toSafeUsers(await getAllUsers());
+	const teams = await getTeamsOfUser(user);
 
 	const storyboardIds: string[] = [
-		...mongoUser.projects as string[],
+		...user.projects as string[],
 		...teams.flatMap(team => team.projects as string[]),
 	]
 
 	const storyboards = await getStoryboardsFromIds(storyboardIds);
 
 	return {
+		supabase,
 		user,
-		mongoUser,
+		users,
 		teams,
 		storyboards,
 	};

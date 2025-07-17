@@ -5,14 +5,16 @@
 	import { teamStore } from '$lib/stores/team';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { Team } from '$lib/models/team.model';
+	import type { User } from '$lib/models/user.model';
 
 	interface Props {
 		storyboards: Storyboard[];
 		list: string[];
 		team?: Team;
+		users?: User[];
 	}
 
-	let { storyboards, list, team }: Props = $props();
+	let { storyboards, list, team, users }: Props = $props();
 
 	teamStore.set(team ? team : null);
 
@@ -70,9 +72,9 @@
 				<span>New Storyboard</span>
 			</button>
 		</div>
-		{#if team}
+		{#if team && users}
 			{#each team.users as teamuser}
-				{teamuser.user}, {teamuser.role}
+				{users.find((user) => user._id == teamuser.user).name}, {teamuser.role}
 			{/each}
 		{/if}
 	</div>

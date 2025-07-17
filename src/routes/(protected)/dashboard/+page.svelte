@@ -1,8 +1,9 @@
 <script lang="ts">
 	const { data } = $props();
 
+	const supabase = $derived(data.supabase);
 	const user = $derived(data.user);
-	const mongoUser = $derived(data.mongoUser);
+	const users = $derived(data.users);
 	const teams = $derived(data.teams);
 	const storyboards = $derived(data.storyboards);
 
@@ -33,7 +34,7 @@
 <div class="bg-base-200 flex min-h-screen">
 	<!-- Sidebar Component -->
 	<Sidebar
-		{user}
+		{supabase}
 		{currentView}
 		{sidebarCollapsed}
 		onViewChange={handleViewChange}
@@ -66,9 +67,9 @@
 		<main class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
-				<Storyboards {storyboards} list={mongoUser.projects} />
+				<Storyboards {storyboards} list={user.projects} />
 			{:else if currentView === 'team-storyboards' && selectedTeam}
-				<Storyboards {storyboards} list={selectedTeam.projects} team={selectedTeam} />
+				<Storyboards {storyboards} list={selectedTeam.projects} team={selectedTeam} {users} />
 			{:else if currentView === 'my-teams'}
 				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} />
 				<!-- assumption: when user presses settings (currentView=="settings") 
