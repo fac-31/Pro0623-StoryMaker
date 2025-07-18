@@ -20,11 +20,14 @@ export async function insertTeam(name: string, owner: User): Promise<InsertOneRe
 	const session = client.startSession();
 	let insertResult: InsertOneResult | null = null;
 
+	const user_id =
+		owner._id instanceof ObjectId ? owner._id : new ObjectId((owner._id as string).toString());
+
 	//session is used to ensure atomicity. when we create a team, we also add the team to the user's teams array
 	try {
 		await session.withTransaction(async () => {
 			const teamuser: TeamUser = {
-				user: owner._id,
+				user: user_id,
 				role: 'admin'
 			};
 
@@ -39,7 +42,7 @@ export async function insertTeam(name: string, owner: User): Promise<InsertOneRe
 
 			// Update user
 			const updateResult = await usersCollection.updateOne(
-				{ _id: owner._id },
+				{ _id: user_id },
 				{ $addToSet: { teams: insertResult.insertedId } },
 				{ session }
 			);
