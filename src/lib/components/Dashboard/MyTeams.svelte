@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Plus, UserPlus, Users, MoreHorizontal, X } from 'lucide-svelte';
+	import { Plus, Users, MoreHorizontal, X } from 'lucide-svelte';
 	import type { Team } from '$lib/models/team.model';
 	import { enhance } from '$app/forms';
 

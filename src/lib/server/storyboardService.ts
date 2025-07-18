@@ -1,6 +1,5 @@
 import { ObjectId } from 'mongodb';
 import { getDB } from './db';
-import type { User } from '$lib/models/user.model';
 import type { Storyboard } from '$lib/models/storyboard.model';
 import { serializeMongoDocument } from '$lib/server/utils.js';
 

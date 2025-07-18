@@ -45,6 +45,7 @@ export function serializeMongoDocument(doc: unknown): unknown {
 }
 
 function isObjectIdLike(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	value: any
 ): value is { buffer: number[] | Uint8Array | Record<string, number> } {
 	if (!value || typeof value !== 'object') return false;

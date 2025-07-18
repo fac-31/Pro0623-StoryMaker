@@ -65,10 +65,6 @@
 		selectedStoryboard = null;
 		goto('/storyboard');
 	}
-
-	function handleAddUser(user: User) {
-		showAddUserModal = false;
-	}
 </script>
 
 <div>
@@ -118,7 +114,7 @@
 
 			<table class="table w-auto">
 				<tbody>
-					{#each team.users as teamuser}
+					{#each team.users as teamuser (teamuser.user)}
 						<tr class="group border-base-300 hover:bg-base-200 border-b transition-colors">
 							<td class="py-4">
 								{users.find((user) => user._id == teamuser.user)?.name}
@@ -395,7 +391,7 @@
 			</div>
 
 			<div class="max-h-60 space-y-2 overflow-y-auto">
-				{#each users as user}
+				{#each users as user (user._id)}
 					{#if !team?.users.find((teamuser) => teamuser.user == user._id)}
 						<form
 							method="POST"
