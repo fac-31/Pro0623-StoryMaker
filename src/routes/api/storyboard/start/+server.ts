@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { json } from '@sveltejs/kit';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
@@ -80,8 +81,9 @@ export const POST: RequestHandler = async (event) => {
 
 	if (!obj.projects) obj.projects = [];
 
-	obj.projects.push(result.insertedId);
-	await db.collection(table).updateOne({ _id: obj._id }, { $set: { projects: obj.projects } });
+	const projects: ObjectId[] = obj.projects as ObjectId[];
+	projects.push(result.insertedId);
+	await db.collection(table).updateOne({ _id: obj._id }, { $set: { projects: projects } });
 
 	return json(result);
 };

@@ -60,8 +60,16 @@ function isObjectIdLike(
 }
 
 function bufferToHex(buffer: Uint8Array | number[] | Record<string, number>): string {
-	const byteArray = Array.isArray(buffer)
-		? buffer
-		: Array.from({ length: 12 }, (_, i) => buffer[i.toString()]);
+	let byteArray: number[];
+
+	if (Array.isArray(buffer)) {
+		byteArray = buffer;
+	} else if (buffer instanceof Uint8Array) {
+		byteArray = Array.from(buffer);
+	} else {
+		// Assume it's a Record<string, number>
+		byteArray = Array.from({ length: 12 }, (_, i) => buffer[i]);
+	}
+
 	return byteArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }

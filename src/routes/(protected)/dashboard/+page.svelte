@@ -1,16 +1,20 @@
 <script lang="ts">
 	const { data } = $props();
 
-	const supabase = $derived(data.supabase);
-	const user = $derived(data.user);
-	const users = $derived(data.users);
-	const teams = $derived(data.teams);
-	const storyboards = $derived(data.storyboards);
+	import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
 	import Storyboards from '$lib/components/Dashboard/Storyboards.svelte';
 	import MyTeams from '$lib/components/Dashboard/MyTeams.svelte';
+	import type { Storyboard } from '$lib/models/storyboard.model.js';
 	import type { Team } from '$lib/models/team.model.js';
+	import type { User } from '$lib/models/user.model.js';
+
+	const supabase = $derived(data.supabase) as SupabaseUser;
+	const user = $derived(data.user) as User;
+	const users = $derived(data.users) as User[];
+	const teams = $derived(data.teams) as Team[];
+	const storyboards = $derived(data.storyboards) as Storyboard[];
 
 	// State management
 	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
@@ -67,11 +71,11 @@
 		<main class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
-				<Storyboards {storyboards} list={user.projects} {user} />
+				<Storyboards {storyboards} list={user.projects as string[]} {user} />
 			{:else if currentView === 'team-storyboards' && selectedTeam}
 				<Storyboards
 					{storyboards}
-					list={selectedTeam.projects}
+					list={selectedTeam.projects as string[]}
 					{user}
 					team={selectedTeam}
 					{users}
