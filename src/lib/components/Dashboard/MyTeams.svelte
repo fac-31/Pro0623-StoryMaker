@@ -13,40 +13,6 @@
 
 	// Team management modals
 	let showCreateTeamModal = $state(false);
-	let showJoinTeamModal = $state(false);
-
-	// Form states
-	// let newTeam = $state({ name: '' });
-	let joinTeamCode = $state('');
-	// let copiedInviteCode = $state(false);
-
-	function joinTeam() {
-		if (joinTeamCode.trim()) {
-			// const team = {
-			// 	id: Date.now(),
-			// 	name: 'Joined Team',
-			// 	description: 'Team joined via invite code',
-			// 	role: 'viewer',
-			// 	members: 12,
-			// 	inviteCode: joinTeamCode,
-			// 	storyboards: 5
-			// };
-
-			//userTeams.push(team);
-			joinTeamCode = '';
-			showJoinTeamModal = false;
-		}
-	}
-
-	// function leaveTeam(teamId: number) {
-	// 	//userTeams = userTeams.filter(team => team.id !== teamId);
-	// }
-
-	// function copyInviteCode(code: string) {
-	// 	navigator.clipboard.writeText(code);
-	// 	copiedInviteCode = true;
-	// 	setTimeout(() => (copiedInviteCode = false), 2000);
-	// }
 
 	// function getRoleIcon(role: string) {
 	// 	switch (role) {
@@ -93,10 +59,6 @@
 			</div>
 
 			<div class="flex items-center space-x-3">
-				<button class="btn btn-outline" onclick={() => (showJoinTeamModal = true)}>
-					<UserPlus class="h-5 w-5" />
-					<span>Join Team</span>
-				</button>
 				<button class="btn btn-primary" onclick={() => (showCreateTeamModal = true)}>
 					<Plus class="h-5 w-5" />
 					<span>Create Team</span>
@@ -221,58 +183,6 @@
 						Cancel
 					</button>
 					<button type="submit" class="btn btn-primary flex-1"> Create Team </button>
-				</div>
-			</form>
-		</div>
-	</div>
-{/if}
-
-<!-- Join Team Modal -->
-{#if showJoinTeamModal}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-		<div class="w-full max-w-md rounded-2xl bg-white p-6">
-			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-base-content text-xl font-semibold">Join Team</h2>
-				<button
-					class="btn btn-ghost btn-sm"
-					onclick={() => (showJoinTeamModal = false)}
-					aria-label="Close join team dialog"
-				>
-					<X class="h-5 w-5" />
-				</button>
-			</div>
-
-			<form
-				onsubmit={(e) => {
-					e.preventDefault();
-					joinTeam();
-				}}
-				class="space-y-4"
-			>
-				<div>
-					<label for="team-invite-code" class="label">
-						<span class="label-text">Team Invite Code</span>
-					</label>
-					<input
-						id="team-invite-code"
-						type="text"
-						class="input input-bordered w-full"
-						placeholder="Enter invite code..."
-						bind:value={joinTeamCode}
-						required
-					/>
-					<p class="text-base-content/50 mt-2 text-sm">Ask your team leader for the invite code</p>
-				</div>
-
-				<div class="flex space-x-3 pt-4">
-					<button
-						type="button"
-						class="btn btn-outline flex-1"
-						onclick={() => (showJoinTeamModal = false)}
-					>
-						Cancel
-					</button>
-					<button type="submit" class="btn btn-primary flex-1"> Join Team </button>
 				</div>
 			</form>
 		</div>
