@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Plus, Search, Grid3X3, List, Play, MoreHorizontal, X, Video } from 'lucide-svelte';
+	import { Plus, Trash, Search, Grid3X3, List, Play, MoreHorizontal, X, Video } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import { storyboardStore } from '$lib/stores/storyboard';
 	import { teamStore } from '$lib/stores/team';
@@ -24,6 +24,7 @@
 	let viewMode = $state('grid');
 	let searchQuery = $state('');
 	let showAddUserModal = $state(false);
+	let showRemoveUserModal = $state(null);
 	let admin = team?.users.find((teamuser) => teamuser.user = user._id).role == 'admin';
 
 	// Computed values
@@ -128,7 +129,18 @@
 									<option value="admin" selected={teamuser.role === 'admin'}>Admin</option>
 								</select>
 							</form>
-						</td>		
+						</td>
+						{#if admin}
+							<td>
+								{#if user._id !== teamuser.user}
+								<div>
+									<button class="btn btn-square"  onclick={() => (showRemoveUserModal = teamuser.user)}>
+										<Trash class="h-5 w-5" />
+									</button>
+								</div>
+								{/if}
+							</td>
+						{/if}
 					</tr>
 					{/each}
 				</tbody>
@@ -354,7 +366,7 @@
 	</section>
 </div>
 
-<!-- Create Team Modal -->
+<!-- Create Add User Modal -->
 {#if showAddUserModal}
 	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
@@ -368,7 +380,6 @@
 					<X class="h-5 w-5" />
 				</button>
 			</div>
-
 
 			<div class="max-h-60 overflow-y-auto space-y-2">
 				{#each users as user}
@@ -406,6 +417,51 @@
 					Cancel
 				</button>
 			</div>
+		</div>
+	</div>
+{/if}
+
+<!-- Create Remove User Modal -->
+{#if showRemoveUserModal}
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+		<div class="w-full max-w-md rounded-2xl bg-white p-6">
+			<div class="mb-6 flex items-center justify-between">
+				<h2 class="text-base-content text-xl font-semibold">Are you sure you want to remove {users.find((user) => user._id == showRemoveUserModal).name}?</h2>
+				<button
+					class="btn btn-ghost btn-sm"
+					onclick={() => (showRemoveUserModal = null)}
+					aria-label="Close create team dialog"
+				>
+					<X class="h-5 w-5" />
+				</button>
+			</div>
+
+			<form
+				method="POST"
+				action="?/removeUser"
+				use:enhance={() => {
+					// This callback runs after the action completes
+					return async ({ update }) => {
+						await update();
+						showRemoveUserModal = null;
+					};
+				}}
+				class="space-y-4"
+			>
+				<input type="hidden" name="team_id" value={team._id} />
+				<input type="hidden" name="user_id" value={showRemoveUserModal} />
+				
+				<div class="flex space-x-3 pt-4">
+					<button
+						type="button"
+						class="btn btn-outline flex-1"
+						onclick={() => (showRemoveUserModal = null)}
+					>
+						Cancel
+					</button>
+					<button type="submit" class="btn btn-primary flex-1">Remove User</button>
+				</div>
+			</form>
 		</div>
 	</div>
 {/if}

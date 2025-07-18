@@ -23,7 +23,7 @@ export async function POST(event: RequestEvent) {
 	if (!user) return json({ error: 'User not logged in' }, { status: 401 });
 
 	try {
-		const result = await canUserEditTeam(info.team_id, info.user_id);
+		const result = await canUserEditTeam(info.team_id, user._id.toString());
 		if (result !== true) return json({ error: result }, { status: 401 });
 
 		if (user._id.toString() == info.user_id)

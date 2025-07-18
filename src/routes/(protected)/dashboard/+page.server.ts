@@ -94,4 +94,26 @@ export const actions: Actions = {
 
 		return { success: true };
 	},
+
+	removeUser: async ({ request, fetch }) => {
+		const formData = await request.formData();
+		const team_id = formData.get('team_id') as string;
+		const user_id = formData.get('user_id') as string;
+		
+		console.log(formData);
+
+		const response = await fetch('/api/teams/removeuser', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({team_id, user_id})
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			console.log(errorData);
+			return fail(response.status, { error: errorData.error });
+		}
+
+		return { success: true };
+	},
 };
