@@ -1,5 +1,15 @@
 <script lang="ts">
-	import { Plus, Trash, Search, Grid3X3, List, Play, MoreHorizontal, X, Video } from 'lucide-svelte';
+	import {
+		Plus,
+		Trash,
+		Search,
+		Grid3X3,
+		List,
+		Play,
+		MoreHorizontal,
+		X,
+		Video
+	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import { storyboardStore } from '$lib/stores/storyboard';
 	import { teamStore } from '$lib/stores/team';
@@ -25,13 +35,12 @@
 	let searchQuery = $state('');
 	let showAddUserModal = $state(false);
 	let showRemoveUserModal = $state(null);
-	let admin = team?.users.find((teamuser) => teamuser.user = user._id).role == 'admin';
+	let admin = team?.users.find((teamuser) => (teamuser.user = user._id)).role == 'admin';
 
 	// Computed values
 	const filteredProjects = () => {
 		return storyboards.filter((storyboard) => {
-			if (!list.includes(storyboard._id as string))
-				return false;
+			if (!list.includes(storyboard._id as string)) return false;
 
 			const matchesSearch =
 				storyboard.prompts.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -88,60 +97,60 @@
 			class="border-base-300/50 bg-base-100/80 mb-8 rounded-2xl border p-6 shadow-xl backdrop-blur-sm"
 			aria-label="Members list"
 		>
-		
 			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div>
-					<h2 class="text-base-content text-2xl font-bold">
-						Members list
-					</h2>
+					<h2 class="text-base-content text-2xl font-bold">Members list</h2>
 				</div>
 
 				{#if admin}
 					<div>
-						<button class="btn btn-primary"  onclick={() => (showAddUserModal = true)}>
+						<button class="btn btn-primary" onclick={() => (showAddUserModal = true)}>
 							<Plus class="h-5 w-5" />
 							<span>Add User</span>
 						</button>
 					</div>
 				{/if}
 			</div>
-			
+
 			<table class="table w-auto">
 				<tbody>
 					{#each team.users as teamuser}
-					<tr class="group border-base-300 hover:bg-base-200 border-b transition-colors">
-						<td class="py-4">
-							{users.find((user) => user._id == teamuser.user).name}
-						</td>
-						<td class="py-4">
-							<form method="POST" action="?/updateUser" class="inline">
-								<!-- Hidden inputs for identifying which user to update -->
-								<input type="hidden" name="team_id" value={team._id} />
-								<input type="hidden" name="user_id" value={teamuser.user} />
-		
-								<select
-									name="role"
-									class="select select-bordered select-sm"
-									onchange={(e) => e.currentTarget.form.requestSubmit()}
-									disabled={!admin || user._id === teamuser.user}
-								>
-									<option value="user" selected={teamuser.role === 'user'}>Member</option>
-									<option value="admin" selected={teamuser.role === 'admin'}>Admin</option>
-								</select>
-							</form>
-						</td>
-						{#if admin}
-							<td>
-								{#if user._id !== teamuser.user}
-								<div>
-									<button class="btn btn-square"  onclick={() => (showRemoveUserModal = teamuser.user)}>
-										<Trash class="h-5 w-5" />
-									</button>
-								</div>
-								{/if}
+						<tr class="group border-base-300 hover:bg-base-200 border-b transition-colors">
+							<td class="py-4">
+								{users.find((user) => user._id == teamuser.user).name}
 							</td>
-						{/if}
-					</tr>
+							<td class="py-4">
+								<form method="POST" action="?/updateUser" class="inline">
+									<!-- Hidden inputs for identifying which user to update -->
+									<input type="hidden" name="team_id" value={team._id} />
+									<input type="hidden" name="user_id" value={teamuser.user} />
+
+									<select
+										name="role"
+										class="select select-bordered select-sm"
+										onchange={(e) => e.currentTarget.form.requestSubmit()}
+										disabled={!admin || user._id === teamuser.user}
+									>
+										<option value="user" selected={teamuser.role === 'user'}>Member</option>
+										<option value="admin" selected={teamuser.role === 'admin'}>Admin</option>
+									</select>
+								</form>
+							</td>
+							{#if admin}
+								<td>
+									{#if user._id !== teamuser.user}
+										<div>
+											<button
+												class="btn btn-square"
+												onclick={() => (showRemoveUserModal = teamuser.user)}
+											>
+												<Trash class="h-5 w-5" />
+											</button>
+										</div>
+									{/if}
+								</td>
+							{/if}
+						</tr>
 					{/each}
 				</tbody>
 			</table>
@@ -381,10 +390,9 @@
 				</button>
 			</div>
 
-			<div class="max-h-60 overflow-y-auto space-y-2">
+			<div class="max-h-60 space-y-2 overflow-y-auto">
 				{#each users as user}
 					{#if !team?.users.find((teamuser) => teamuser.user == user._id)}
-
 						<form
 							method="POST"
 							action="?/addUser"
@@ -407,7 +415,7 @@
 					{/if}
 				{/each}
 			</div>
-			
+
 			<div class="flex space-x-3 pt-4">
 				<button
 					type="button"
@@ -426,7 +434,10 @@
 	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-base-content text-xl font-semibold">Are you sure you want to remove {users.find((user) => user._id == showRemoveUserModal).name}?</h2>
+				<h2 class="text-base-content text-xl font-semibold">
+					Are you sure you want to remove {users.find((user) => user._id == showRemoveUserModal)
+						.name}?
+				</h2>
 				<button
 					class="btn btn-ghost btn-sm"
 					onclick={() => (showRemoveUserModal = null)}
@@ -450,7 +461,7 @@
 			>
 				<input type="hidden" name="team_id" value={team._id} />
 				<input type="hidden" name="user_id" value={showRemoveUserModal} />
-				
+
 				<div class="flex space-x-3 pt-4">
 					<button
 						type="button"

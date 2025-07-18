@@ -137,8 +137,8 @@
 						</span> -->
 
 						<div class="text-base-content/50 flex items-center space-x-4 text-sm">
-							<span>{team.users.length} member{team.users.length == 1 ? "" : "s"}</span>
-							<span>{team.projects.length} storyboard{team.projects.length == 1 ? "" : "s"}</span>
+							<span>{team.users.length} member{team.users.length == 1 ? '' : 's'}</span>
+							<span>{team.projects.length} storyboard{team.projects.length == 1 ? '' : 's'}</span>
 						</div>
 					</div>
 

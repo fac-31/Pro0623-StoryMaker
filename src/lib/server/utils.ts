@@ -44,7 +44,9 @@ export function serializeMongoDocument(doc: unknown): unknown {
 	return doc;
 }
 
-function isObjectIdLike(value: any): value is { buffer: number[] | Uint8Array | Record<string, number> } {
+function isObjectIdLike(
+	value: any
+): value is { buffer: number[] | Uint8Array | Record<string, number> } {
 	if (!value || typeof value !== 'object') return false;
 
 	// Check for `{ buffer: { '0': number, '1': number, ... } }`
@@ -52,14 +54,14 @@ function isObjectIdLike(value: any): value is { buffer: number[] | Uint8Array | 
 	if (!buffer || typeof buffer !== 'object') return false;
 
 	const keys = Object.keys(buffer);
-	return keys.length === 12 && keys.every((k) => !isNaN(Number(k)) && typeof buffer[k] === 'number');
+	return (
+		keys.length === 12 && keys.every((k) => !isNaN(Number(k)) && typeof buffer[k] === 'number')
+	);
 }
 
 function bufferToHex(buffer: Uint8Array | number[] | Record<string, number>): string {
 	const byteArray = Array.isArray(buffer)
 		? buffer
 		: Array.from({ length: 12 }, (_, i) => buffer[i.toString()]);
-	return byteArray
-		.map((b) => b.toString(16).padStart(2, '0'))
-		.join('');
+	return byteArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }

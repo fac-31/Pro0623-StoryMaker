@@ -20,9 +20,9 @@ export const load: PageServerLoad = async ({ parent }) => {
 	const teams = await getTeamsOfUser(user);
 
 	const storyboardIds: string[] = [
-		...user.projects as string[],
-		...teams.flatMap(team => team.projects as string[]),
-	]
+		...(user.projects as string[]),
+		...teams.flatMap((team) => team.projects as string[])
+	];
 
 	const storyboards = await getStoryboardsFromIds(storyboardIds);
 
@@ -31,7 +31,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 		user,
 		users,
 		teams,
-		storyboards,
+		storyboards
 	};
 };
 
@@ -60,11 +60,11 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const team_id = formData.get('team_id') as string;
 		const user_id = formData.get('user_id') as string;
-		
+
 		const response = await fetch('/api/teams/updateuser', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({team_id, user_id, role: 'user'})
+			body: JSON.stringify({ team_id, user_id, role: 'user' })
 		});
 
 		if (!response.ok) {
@@ -80,11 +80,11 @@ export const actions: Actions = {
 		const team_id = formData.get('team_id') as string;
 		const user_id = formData.get('user_id') as string;
 		const role = formData.get('role') as string;
-		
+
 		const response = await fetch('/api/teams/updateuser', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({team_id, user_id, role})
+			body: JSON.stringify({ team_id, user_id, role })
 		});
 
 		if (!response.ok) {
@@ -99,13 +99,13 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const team_id = formData.get('team_id') as string;
 		const user_id = formData.get('user_id') as string;
-		
+
 		console.log(formData);
 
 		const response = await fetch('/api/teams/removeuser', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({team_id, user_id})
+			body: JSON.stringify({ team_id, user_id })
 		});
 
 		if (!response.ok) {
@@ -115,5 +115,5 @@ export const actions: Actions = {
 		}
 
 		return { success: true };
-	},
+	}
 };
