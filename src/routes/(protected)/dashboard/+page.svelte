@@ -1,14 +1,20 @@
 <script lang="ts">
 	const { data } = $props();
 
-	const user = $derived(data.user);
-	const storyboards = $derived(data.storyboards);
-	const teams = $derived(data.teams);
+	import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
-	import MyStoryboards from '$lib/components/Dashboard/MyStoryboards.svelte';
+	import Storyboards from '$lib/components/Dashboard/Storyboards.svelte';
 	import MyTeams from '$lib/components/Dashboard/MyTeams.svelte';
+	import type { Storyboard } from '$lib/models/storyboard.model.js';
 	import type { Team } from '$lib/models/team.model.js';
+	import type { User } from '$lib/models/user.model.js';
+
+	const supabase = $derived(data.supabase) as SupabaseUser;
+	const user = $derived(data.user) as User;
+	const users = $derived(data.users) as User[];
+	const teams = $derived(data.teams) as Team[];
+	const storyboards = $derived(data.storyboards) as Storyboard[];
 
 	// State management
 	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
@@ -32,7 +38,7 @@
 <div class="bg-base-200 flex min-h-screen">
 	<!-- Sidebar Component -->
 	<Sidebar
-		{user}
+		{supabase}
 		{currentView}
 		{sidebarCollapsed}
 		onViewChange={handleViewChange}
@@ -65,8 +71,16 @@
 		<main class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
-				<MyStoryboards {storyboards} />
-			{:else if currentView === 'my-teams' || currentView === 'team-storyboards'}
+				<Storyboards {storyboards} list={user.projects as string[]} {user} />
+			{:else if currentView === 'team-storyboards' && selectedTeam}
+				<Storyboards
+					{storyboards}
+					list={selectedTeam.projects as string[]}
+					{user}
+					team={selectedTeam}
+					{users}
+				/>
+			{:else if currentView === 'my-teams'}
 				<MyTeams {teams} onViewChange={handleViewChange} {selectedTeam} />
 				<!-- assumption: when user presses settings (currentView=="settings") 
 			 we goto "\user" route from the navbar itself.

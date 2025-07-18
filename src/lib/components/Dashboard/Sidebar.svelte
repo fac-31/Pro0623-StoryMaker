@@ -5,14 +5,14 @@
 	import ThemeToggle from '../ThemeToggle.svelte';
 
 	interface Props {
-		user: User;
+		supabase: User;
 		currentView: string;
 		sidebarCollapsed: boolean;
 		onViewChange: (view: string) => void;
 		onToggleSidebar: () => void;
 	}
 
-	let { user, currentView, sidebarCollapsed, onViewChange, onToggleSidebar }: Props = $props();
+	let { supabase, currentView, sidebarCollapsed, onViewChange, onToggleSidebar }: Props = $props();
 
 	// Navigation items
 	const navItems = [
@@ -95,14 +95,16 @@
 					class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
 				>
 					<span class="text-sm font-medium text-white"
-						>{user.user_metadata.display_name?.charAt(0) || 'U'}</span
+						>{supabase.user_metadata.display_name?.charAt(0) || 'U'}</span
 					>
 				</div>
 				<div class="min-w-0 flex-1">
 					<p class="text-base-content truncate text-sm font-medium">
-						{user.user_metadata.display_name || 'User'}
+						{supabase.user_metadata.display_name || 'User'}
 					</p>
-					<p class="text-base-content/50 truncate text-xs">{user.email || 'user@example.com'}</p>
+					<p class="text-base-content/50 truncate text-xs">
+						{supabase.email || 'user@example.com'}
+					</p>
 				</div>
 			</div>
 		</div>

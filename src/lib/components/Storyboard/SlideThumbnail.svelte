@@ -41,7 +41,7 @@
 		<img src={slide.imageUrl} alt={computedAltText} />
 	{:else}
 		<div class="placeholder-image">
-			{#if storyboard.status == 'generating-image'}
+			{#if storyboard.status == 'generating-image' || storyboard.status == 'uploading-image'}
 				<Loader2 class="text-primary mx-auto h-8 w-8 animate-spin motion-reduce:animate-none" />
 			{:else}
 				<span>No Image</span>
