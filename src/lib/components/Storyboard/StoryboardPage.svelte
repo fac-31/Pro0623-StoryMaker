@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import type { Team } from '$lib/models/team.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 	import StoryboardForm from '$lib/components/Storyboard/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
@@ -15,6 +16,7 @@
 	};
 
 	export let storyboard: Storyboard | null = null;
+	export let team: Team | null = null;
 	let loading = false;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
@@ -26,12 +28,14 @@
 		try {
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
-				body: JSON.stringify(userPrompt)
+				body: JSON.stringify({
+					prompts: userPrompt,
+					team_id: team?._id
+				})
 			});
 			const data = await res.json();
 			if (res.ok) {
 				const id = data.insertedId;
-				console.log(id);
 
 				await progressStoryboard(id);
 
@@ -194,6 +198,11 @@
 					<div>
 						<h1 class="text-base-content text-3xl font-bold">Create New Storyboard</h1>
 						<p class="text-base-content/70 mt-1">Transform your story ideas into visual magic</p>
+						{#if team}
+							<p class="text-yellow-600">
+								You are creating a storyboard for {team.name}
+							</p>
+						{/if}
 					</div>
 				{/if}
 			</div>
