@@ -4,7 +4,6 @@ import { ObjectId } from 'mongodb';
 import OpenAI from 'openai';
 import { env } from '$env/dynamic/private';
 import path from 'path';
-import { buildGame } from '../../../../../scripts/build-game.js';
 import type { RequestHandler } from '@sveltejs/kit';
 import fs from 'fs';
 
@@ -13,8 +12,11 @@ interface GenerateGameRequest {
 }
 
 // Helper function to get bounding boxes using OpenAI GPT-4o vision
-async function getBoundingBoxes(openai, imageUrl) {
-	const prompt = `You are an object detection assistant. For the image provided, list all distinct objects (e.g., characters, items, animals) and for each, return:\n- a label (e.g., \"Dino\", \"desk\", \"bird\")\n- a bounding box in the format {x, y, width, height} (pixel coordinates, origin top-left)\nReturn a JSON array, no explanations.`;
+async function getBoundingBoxes(openai: OpenAI, imageUrl: string) {
+	const prompt = `You are an object detection assistant. For the image provided, list all distinct objects (e.g., characters, items, animals) and for each, return:
+- a label (e.g., "Dino", "desk", "bird")
+- a bounding box in the format {x, y, width, height} (pixel coordinates, origin top-left)
+Return a JSON array, no explanations.`;
 
 	const response = await openai.chat.completions.create({
 		model: 'gpt-4o',
@@ -35,7 +37,7 @@ async function getBoundingBoxes(openai, imageUrl) {
 	let objects = [];
 	try {
 		objects = JSON.parse(content.replace(/```json|```/g, '').trim());
-	} catch (e) {
+	} catch {
 		console.error('Failed to parse bounding box JSON:', content);
 	}
 	return objects;
