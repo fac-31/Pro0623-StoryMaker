@@ -12,7 +12,7 @@ export type StoryboardStatus =
 	| 'done';
 
 export interface Storyboard {
-	_id: ObjectId;
+	_id: ObjectId | string;
 	status: StoryboardStatus;
 	prompts: UserPrompt;
 	currentSlide: number;

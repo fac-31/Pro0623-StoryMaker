@@ -13,7 +13,13 @@
  * // Result: { _id: "507f1f77bcf86cd799439011", date: "2023-04-01T12:00:00.000Z" }
  */
 export function serializeMongoDocument(doc: unknown): unknown {
+	// I had to ask ChatGPT like 10 times to fix it's own function they keep screwing up
+
 	if (!doc) return doc;
+
+	if (isObjectIdLike(doc)) {
+		return bufferToHex(doc.buffer);
+	}
 
 	if (Array.isArray(doc)) {
 		return doc.map(serializeMongoDocument);
@@ -23,23 +29,12 @@ export function serializeMongoDocument(doc: unknown): unknown {
 		const serialized: Record<string, unknown> = {};
 
 		for (const [key, value] of Object.entries(doc)) {
-			if (
-				value &&
-				typeof value === 'object' &&
-				value !== null &&
-				'value' in value &&
-				(value as { constructor: { name: string } }).constructor?.name === 'ObjectId'
-			) {
-				// Convert ObjectId to string
-				serialized[key] = value.toString();
+			if (isObjectIdLike(value)) {
+				serialized[key] = bufferToHex(value.buffer);
 			} else if (value instanceof Date) {
-				// Convert Date to ISO string
 				serialized[key] = value.toISOString();
-			} else if (typeof value === 'object' && value !== null) {
-				// Recursively serialize nested objects
-				serialized[key] = serializeMongoDocument(value);
 			} else {
-				serialized[key] = value;
+				serialized[key] = serializeMongoDocument(value);
 			}
 		}
 
@@ -47,4 +42,35 @@ export function serializeMongoDocument(doc: unknown): unknown {
 	}
 
 	return doc;
+}
+
+function isObjectIdLike(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	value: any
+): value is { buffer: number[] | Uint8Array | Record<string, number> } {
+	if (!value || typeof value !== 'object') return false;
+
+	// Check for `{ buffer: { '0': number, '1': number, ... } }`
+	const buffer = value.buffer;
+	if (!buffer || typeof buffer !== 'object') return false;
+
+	const keys = Object.keys(buffer);
+	return (
+		keys.length === 12 && keys.every((k) => !isNaN(Number(k)) && typeof buffer[k] === 'number')
+	);
+}
+
+function bufferToHex(buffer: Uint8Array | number[] | Record<string, number>): string {
+	let byteArray: number[];
+
+	if (Array.isArray(buffer)) {
+		byteArray = buffer;
+	} else if (buffer instanceof Uint8Array) {
+		byteArray = Array.from(buffer);
+	} else {
+		// Assume it's a Record<string, number>
+		byteArray = Array.from({ length: 12 }, (_, i) => buffer[i]);
+	}
+
+	return byteArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }

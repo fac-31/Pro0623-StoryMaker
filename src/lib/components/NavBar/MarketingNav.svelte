@@ -3,7 +3,7 @@
 	export let mobileMenuOpen: boolean = false;
 </script>
 
-<nav class="hidden items-center space-x-8 md:ml-8 md:flex">
+<nav class="hidden items-center space-x-8 md:ml-8 md:flex" aria-label="Main navigation">
 	<a href="#features" class="text-base-content/70 hover:text-primary transition-colors">Features</a>
 	<a href="#how-it-works" class="text-base-content/70 hover:text-primary transition-colors"
 		>How it Works</a
@@ -20,7 +20,11 @@
 
 <!-- Mobile Navigation -->
 {#if mobileMenuOpen}
-	<div class="border-base-300 bg-base-100 border-t md:hidden">
+	<div
+		class="border-base-300 bg-base-100 border-t md:hidden"
+		aria-labelledby="mobile-navigation-title"
+	>
+		<h2 id="mobile-navigation-title" class="sr-only">Mobile navigation</h2>
 		<div class="space-y-4 px-4 py-4">
 			<a href="#features" class="text-base-content/70 hover:text-primary block">Features</a>
 			<a href="#how-it-works" class="text-base-content/70 hover:text-primary block">How it Works</a>

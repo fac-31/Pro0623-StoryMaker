@@ -25,10 +25,14 @@ test('Creating a team', async ({ page }) => {
 		}
 	});
 
+	let response;
+
 	// Create a team
-	const resultTeam = await (
-		await apiContext.post('/api/teams/create', { data: { name: 'Team Potato' } })
-	).json();
+	response = await apiContext.post('/api/teams/create', { data: { name: 'Team Potato' } });
+
+	expect(response.ok(), await response.text()).toBeTruthy();
+
+	const resultTeam = await response.json();
 
 	// Get yourself and all other users
 	const resultMe = await (await apiContext.get('/api/users/me')).json();
@@ -36,8 +40,6 @@ test('Creating a team', async ({ page }) => {
 
 	// Find any user thats not us to add to team
 	const user = resultAll.find((user) => user._id !== resultMe._id);
-
-	let response;
 
 	// Add user to the team
 	response = await apiContext.post('/api/teams/updateuser', {

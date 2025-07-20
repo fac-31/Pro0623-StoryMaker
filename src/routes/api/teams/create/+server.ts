@@ -29,6 +29,6 @@ export async function POST(event: RequestEvent) {
 		});
 	} catch (e) {
 		console.error('Insert team failed:', e);
-		return json({ error: 'Failed to insert team' }, { status: 500 });
+		return json({ error: e instanceof Error ? e.message : String(e) }, { status: 500 });
 	}
 }

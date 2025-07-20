@@ -34,6 +34,9 @@ export async function POST(event: RequestEvent) {
 		if (!teamRoles.includes(info.role))
 			return json({ error: 'Invalid role ' + info.role }, { status: 401 });
 
+		if (user._id.toString() == info.user_id)
+			return json({ error: 'You cannot update your own role' }, { status: 401 });
+
 		await updateTeamUser(info.team_id, info.user_id, info.role);
 		return json({ success: true });
 	} catch (e) {
