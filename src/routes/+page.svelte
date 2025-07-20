@@ -13,10 +13,10 @@
 	<NavBar>
 		<MarketingNav slot="nav" let:mobileMenuOpen {mobileMenuOpen} />
 	</NavBar>
-	<HeroSection />
-	<FeatureSection />
-	<StepSection />
-	<TestimonialSection />
-	<CtaSection />
+	<HeroSection aria-label="Hero" />
+	<FeatureSection aria-label="Features" />
+	<StepSection aria-label="How it works" />
+	<TestimonialSection aria-label="Testimonials" />
+	<CtaSection aria-label="Call to action" />
 	<Footer />
 </div>

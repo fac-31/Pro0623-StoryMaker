@@ -58,3 +58,10 @@
 		</div>
 	</div>
 </section>
+<style>
+	@media (prefers-reduced-motion: reduce) {
+		.transition-transform {
+			transition: none;
+		}
+	}
+</style>

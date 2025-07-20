@@ -27,7 +27,7 @@
 </script>
 
 <button
-	class="btn btn-ghost btn-circle"
+	class="btn btn-ghost btn-circle focus-visible:ring"
 	onclick={toggleTheme}
 	aria-label="Toggle theme"
 	title="Toggle between light and dark theme"
