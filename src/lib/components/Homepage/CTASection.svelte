@@ -9,6 +9,7 @@
 				Ready to Bring Your Stories to Life?
 			</h2>
 			<p class="text-primary-content/80 text-xl leading-relaxed">
+			<p class="text-primary-content/80 text-xl leading-relaxed">
 				Join thousands of creators who are already using StoryMaker to visualize their ideas and
 				captivate their audiences.
 			</p>
