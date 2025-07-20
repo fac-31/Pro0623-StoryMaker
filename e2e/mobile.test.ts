@@ -33,6 +33,7 @@ test.describe('Mobile Navigation - Marketing', () => {
 		await expect(page.evaluate(() => window.location.hash)).resolves.toBe('#features');
 		// Open menu again and click How it Works
 		await hamburger.click();
+		await expect(mobileMenu).toBeVisible(); // Wait for menu to open
 		await mobileMenu.getByRole('link', { name: 'How it Works' }).click();
 		await expect(page).toHaveURL(/#how-it-works/);
 	});
