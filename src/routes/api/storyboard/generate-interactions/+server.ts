@@ -44,7 +44,7 @@ ${JSON.stringify(storyboard, null, 2)}
 		let interactions;
 		try {
 			interactions = JSON.parse(responseText!);
-		} catch (e) {
+		} catch {
 			// If the model returns markdown or text, extract JSON
 			const match = responseText!.match(/```json([\s\S]*?)```/);
 			if (match) {
