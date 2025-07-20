@@ -14,7 +14,9 @@ test.describe('Mobile Navigation - Marketing', () => {
 
 		// Open mobile menu
 		await hamburger.click();
-		await expect(page.locator('div.border-base-300.bg-base-100.border-t.md\\:hidden')).toBeVisible();
+		await expect(
+			page.locator('div.border-base-300.bg-base-100.border-t.md\\:hidden')
+		).toBeVisible();
 
 		// Close mobile menu
 		await hamburger.click();

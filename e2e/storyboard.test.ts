@@ -38,7 +38,9 @@ test('Create a storyboard', async ({ page }) => {
 	await page.getByRole('spinbutton', { name: 'Number of Slides:' }).click();
 	await page.getByRole('spinbutton', { name: 'Number of Slides:' }).fill('2');
 	await page.getByRole('textbox', { name: 'Target Audience:' }).click();
-	await page.getByRole('textbox', { name: 'Target Audience:' }).fill('professionals living in london');
+	await page
+		.getByRole('textbox', { name: 'Target Audience:' })
+		.fill('professionals living in london');
 	await page.getByRole('textbox', { name: 'Target Audience:' }).press('Tab');
 	await page.getByRole('textbox', { name: 'Genre:' }).fill('drama');
 	await page.getByRole('button', { name: 'Start Storyboard' }).click();
