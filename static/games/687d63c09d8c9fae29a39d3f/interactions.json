@@ -1,0 +1,68 @@
+{
+	"slideInteractions": [
+		{
+			"slideId": 1,
+			"interactions": [
+				{
+					"type": "drag",
+					"description": "Help Dino explore the jungle by dragging him around the scene.",
+					"elements": [
+						{
+							"elementId": "Dino",
+							"draggable": true,
+							"constraints": "withinScene"
+						}
+					]
+				},
+				{
+					"type": "click",
+					"description": "Click on the different plants to learn their names.",
+					"elements": [
+						{
+							"elementId": "plant1",
+							"clickable": true,
+							"action": "showName",
+							"name": "Fern"
+						},
+						{
+							"elementId": "plant2",
+							"clickable": true,
+							"action": "showName",
+							"name": "Moss"
+						}
+					]
+				}
+			]
+		},
+		{
+			"slideId": 2,
+			"interactions": [
+				{
+					"type": "choose",
+					"description": "Choose how Dino and the Bird will play together.",
+					"options": [
+						{
+							"optionId": "playChase",
+							"description": "Play a game of chase",
+							"result": "Dino and the Bird run around the jungle, laughing."
+						},
+						{
+							"optionId": "playHideSeek",
+							"description": "Play hide and seek",
+							"result": "Dino hides behind a tree and the Bird finds him quickly."
+						}
+					]
+				},
+				{
+					"type": "solve",
+					"description": "Solve the puzzle to help Dino and the Bird find a hidden treasure.",
+					"puzzle": {
+						"type": "jigsaw",
+						"pieces": 4,
+						"solution": "Complete the image of a treasure map."
+					}
+				}
+			]
+		}
+	]
+}

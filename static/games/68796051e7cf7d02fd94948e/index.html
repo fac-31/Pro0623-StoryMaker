@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Jono's Inevitable Aging: A Tale of Long Nights at KKR</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				background-color: #f0f0f0;
+			}
+			#game-container {
+				width: 80%;
+				max-width: 800px;
+				background-color: #fff;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+				overflow: hidden;
+				border-radius: 8px;
+			}
+			.slide {
+				display: none;
+				padding: 20px;
+				text-align: center;
+			}
+			.slide.active {
+				display: block;
+			}
+			.slide img {
+				width: 100%;
+				height: auto;
+				border-radius: 8px;
+			}
+			.interaction-description {
+				margin: 20px 0;
+				font-size: 18px;
+				color: #333;
+			}
+			.hint {
+				margin: 10px 0;
+				color: #888;
+				font-size: 16px;
+			}
+			.hint-button {
+				margin: 10px 0;
+				padding: 10px 20px;
+				background-color: #007bff;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+			.hint-button:disabled {
+				background-color: #ccc;
+			}
+			.next-button {
+				margin: 20px 0;
+				padding: 10px 20px;
+				background-color: #28a745;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+			.next-button:disabled {
+				background-color: #ccc;
+			}
+			.interactive-area {
+				position: absolute;
+				border: 2px dashed #ff0000;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="game-container">
+			<div class="slide active" id="slide-1">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785056/storyboard-images/slide-1-1752785055682.webp"
+					alt="The Office"
+				/>
+				<div class="interaction-description">
+					Drag the stacks of paperwork to organize Jono's desk.
+				</div>
+				<button class="hint-button" onclick="showHint(1)">Hint</button>
+				<div class="hint" id="hint-1"></div>
+				<div
+					class="interactive-area"
+					id="paperwork"
+					style="width: 100px; height: 100px; top: 50%; left: 50%"
+				></div>
+				<button class="next-button" id="next-1" disabled>Next</button>
+			</div>
+			<div class="slide" id="slide-2">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785081/storyboard-images/slide-2-1752785081181.webp"
+					alt="The Negotiation"
+				/>
+				<div class="interaction-description">
+					Click on the negotiation options to choose Jono's strategy.
+				</div>
+				<button class="hint-button" onclick="showHint(2)">Hint</button>
+				<div class="hint" id="hint-2"></div>
+				<div
+					class="interactive-area"
+					id="negotiationOptions"
+					style="width: 100px; height: 100px; top: 50%; left: 50%"
+				></div>
+				<button class="next-button" id="next-2" disabled>Next</button>
+			</div>
+			<div class="slide" id="slide-3">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785109/storyboard-images/slide-3-1752785109017.jpg"
+					alt="The Struggle"
+				/>
+				<div class="interaction-description">
+					Solve the time management puzzle to help Jono balance work and rest.
+				</div>
+				<button class="hint-button" onclick="showHint(3)">Hint</button>
+				<div class="hint" id="hint-3"></div>
+				<div
+					class="interactive-area"
+					id="puzzle"
+					style="width: 100px; height: 100px; top: 50%; left: 50%"
+				></div>
+				<button class="next-button" id="next-3" disabled>Next</button>
+			</div>
+			<div class="slide" id="slide-4">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785137/storyboard-images/slide-4-1752785136438.webp"
+					alt="The Sacrifice"
+				/>
+				<div class="interaction-description">
+					Choose the aspects of life Jono sacrifices for his career.
+				</div>
+				<button class="hint-button" onclick="showHint(4)">Hint</button>
+				<div class="hint" id="hint-4"></div>
+				<div
+					class="interactive-area"
+					id="sacrificeChoices"
+					style="width: 100px; height: 100px; top: 50%; left: 50%"
+				></div>
+				<button class="next-button" id="next-4" disabled>Next</button>
+			</div>
+			<div class="slide" id="slide-5">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785162/storyboard-images/slide-5-1752785161307.webp"
+					alt="The Realization"
+				/>
+				<div class="interaction-description">
+					Click on different parts of the mirror to reveal Jono's thoughts.
+				</div>
+				<button class="hint-button" onclick="showHint(5)">Hint</button>
+				<div class="hint" id="hint-5"></div>
+				<div
+					class="interactive-area"
+					id="reflection"
+					style="width: 100px; height: 100px; top: 50%; left: 50%"
+				></div>
+				<button class="next-button" id="next-5" disabled>Next</button>
+			</div>
+			<div class="slide" id="slide-6">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785189/storyboard-images/slide-6-1752785188988.webp"
+					alt="The Acceptance"
+				/>
+				<div class="interaction-description">
+					Drag the cityscape to adjust Jono's perspective on his journey.
+				</div>
+				<button class="hint-button" onclick="showHint(6)">Hint</button>
+				<div class="hint" id="hint-6"></div>
+				<div
+					class="interactive-area"
+					id="cityscape"
+					style="width: 100px; height: 100px; top: 50%; left: 50%"
+				></div>
+				<button class="next-button" id="next-6" disabled>Next</button>
+			</div>
+		</div>
+
+		<script>
+			let currentSlide = 1;
+
+			function showHint(slideNumber) {
+				const hints = {
+					1: 'Try dragging the paperwork to the empty space on the desk.',
+					2: "Consider Jono's current stress level when choosing a strategy.",
+					3: 'Balance work and rest by solving the puzzle efficiently.',
+					4: 'Think about what Jono values most and what he might sacrifice.',
+					5: "Click on the mirror to explore Jono's inner thoughts.",
+					6: 'Drag the cityscape to find a balanced view.'
+				};
+				document.getElementById(`hint-${slideNumber}`).innerText = hints[slideNumber];
+			}
+
+			function enableNextButton(slideNumber) {
+				document.getElementById(`next-${slideNumber}`).disabled = false;
+			}
+
+			function goToNextSlide() {
+				document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+				currentSlide++;
+				document.getElementById(`slide-${currentSlide}`).classList.add('active');
+			}
+
+			document.querySelectorAll('.next-button').forEach((button) => {
+				button.addEventListener('click', goToNextSlide);
+			});
+
+			// Example interaction logic for slide 1
+			document.getElementById('paperwork').addEventListener('dragend', function () {
+				// Assume the paperwork is organized correctly
+				enableNextButton(1);
+			});
+
+			// Example interaction logic for slide 2
+			document.getElementById('negotiationOptions').addEventListener('click', function () {
+				// Assume a strategy is chosen
+				enableNextButton(2);
+			});
+
+			// Example interaction logic for slide 3
+			document.getElementById('puzzle').addEventListener('click', function () {
+				// Assume the puzzle is solved
+				enableNextButton(3);
+			});
+
+			// Example interaction logic for slide 4
+			document.getElementById('sacrificeChoices').addEventListener('click', function () {
+				// Assume a choice is made
+				enableNextButton(4);
+			});
+
+			// Example interaction logic for slide 5
+			document.getElementById('reflection').addEventListener('click', function () {
+				// Assume thoughts are revealed
+				enableNextButton(5);
+			});
+
+			// Example interaction logic for slide 6
+			document.getElementById('cityscape').addEventListener('dragend', function () {
+				// Assume perspective is adjusted
+				enableNextButton(6);
+			});
+		</script>
+	</body>
+</html>

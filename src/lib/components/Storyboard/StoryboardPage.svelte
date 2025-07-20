@@ -34,7 +34,7 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
-				gameUrl = data.gamePath;
+				window.location.href = data.gamePath;
 			} else {
 				error = data.error || 'Failed to generate game';
 			}
