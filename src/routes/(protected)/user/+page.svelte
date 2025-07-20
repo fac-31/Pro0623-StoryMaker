@@ -30,7 +30,7 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					{...form?.error ? { 'aria-describedby': 'form-error' } : {}}
 				/>
 			</div>
 		</div>
@@ -46,7 +46,7 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					{...form?.error ? { 'aria-describedby': 'form-error' } : {}}
 				/>
 			</div>
 		</div>
@@ -63,13 +63,14 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					{...form?.error ? { 'aria-describedby': 'form-error' } : {}}
 				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<div id="form-error" class="alert alert-error" role="alert">
+				<div id="form-error" class="alert alert-error" role="alert" aria-live="assertive">
+					<span class="sr-only">Error:</span>
 					<span>{form.error}</span>
 				</div>
 			{/if}

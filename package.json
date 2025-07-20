@@ -13,7 +13,8 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"test:e2e": "playwright test",
-		"test": "npm run test:e2e",
+		"test:e2e:accessibility": "playwright test e2e/accessibility.test.ts",
+		"test": "npm run test:e2e && npm run test:e2e:accessibility",
 		"test:dev": "playwright test --ui",
 		"docs": "typedoc \"src/**/*.ts\" --name \"Story Maker\" --out docs",
 		"generate-schema": "npx ts-to-zod src/lib/models/Story.ts src/lib/schemas/story.schema.ts",
@@ -22,6 +23,7 @@
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "^4.10.2",
+		"axe-core": "^4.10.0",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@playwright/test": "^1.49.1",
