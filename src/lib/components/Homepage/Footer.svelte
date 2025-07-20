@@ -23,15 +23,24 @@
 				<h3 class="mb-4 font-semibold">Product</h3>
 				<ul class="text-neutral-content/70 space-y-2">
 					<li>
-						<a href="#features" class="hover:text-neutral-content transition-colors">Features</a>
-					</li>
-					<li>
-						<a href="/storyboard" class="hover:text-neutral-content transition-colors">Storyboard</a
+						<a
+							href="#features"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Features">Features</a
 						>
 					</li>
 					<li>
-						<a href="/langchain-agent" class="hover:text-neutral-content transition-colors"
-							>AI Agent</a
+						<a
+							href="/storyboard"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Storyboard">Storyboard</a
+						>
+					</li>
+					<li>
+						<a
+							href="/langchain-agent"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="AI Agent">AI Agent</a
 						>
 					</li>
 				</ul>
@@ -41,11 +50,25 @@
 				<h3 class="mb-4 font-semibold">Account</h3>
 				<ul class="text-neutral-content/70 space-y-2">
 					<li>
-						<a href="/signup" class="hover:text-neutral-content transition-colors">Sign Up</a>
+						<a
+							href="/signup"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Sign Up">Sign Up</a
+						>
 					</li>
-					<li><a href="/login" class="hover:text-neutral-content transition-colors">Sign In</a></li>
 					<li>
-						<a href="/logout" class="hover:text-neutral-content transition-colors">Sign Out</a>
+						<a
+							href="/login"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Sign In">Sign In</a
+						>
+					</li>
+					<li>
+						<a
+							href="/logout"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Sign Out">Sign Out</a
+						>
 					</li>
 				</ul>
 			</div>
@@ -54,12 +77,26 @@
 				<h3 class="mb-4 font-semibold">Support</h3>
 				<ul class="text-neutral-content/70 space-y-2">
 					<li>
-						<a href="/help" class="hover:text-neutral-content transition-colors">Help Center</a>
+						<a
+							href="/help"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Help Center">Help Center</a
+						>
 					</li>
 					<li>
-						<a href="/privacy" class="hover:text-neutral-content transition-colors">Privacy</a>
+						<a
+							href="/privacy"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Privacy">Privacy</a
+						>
 					</li>
-					<li><a href="/terms" class="hover:text-neutral-content transition-colors">Terms</a></li>
+					<li>
+						<a
+							href="/terms"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Terms">Terms</a
+						>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -71,15 +108,18 @@
 			<div class="mt-4 flex space-x-6 md:mt-0">
 				<a
 					href="https://twitter.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Twitter</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Twitter">Twitter</a
 				>
 				<a
 					href="https://linkedin.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">LinkedIn</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="LinkedIn">LinkedIn</a
 				>
 				<a
 					href="https://instagram.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Instagram</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Instagram">Instagram</a
 				>
 			</div>
 		</div>

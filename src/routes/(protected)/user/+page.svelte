@@ -30,7 +30,8 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby="name-error"
+					required
 				/>
 			</div>
 		</div>
@@ -46,7 +47,8 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby="email-error"
+					required
 				/>
 			</div>
 		</div>
@@ -63,16 +65,19 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby="password-error"
 				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<div id="form-error" class="alert alert-error" role="alert">
+				<div id="form-error" class="alert alert-error" role="alert" aria-live="polite">
 					<span>{form.error}</span>
 				</div>
 			{/if}
+			<div id="name-error" class="error-message" aria-live="polite"></div>
+			<div id="email-error" class="error-message" aria-live="polite"></div>
+			<div id="password-error" class="error-message" aria-live="polite"></div>
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
 				{#if navigating.to}Updating…{:else}Update Details{/if}

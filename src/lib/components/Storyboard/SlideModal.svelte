@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, tick } from 'svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import { createFocusTrap } from 'focus-trap';
 
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
@@ -17,6 +18,7 @@
 
 	let triggerElement: HTMLElement | null = null;
 	let modalContentElement: HTMLElement;
+	let focusTrap: ReturnType<typeof createFocusTrap> | null = null;
 
 	function closeModal() {
 		if (triggerElement && typeof triggerElement.focus === 'function') {
@@ -35,47 +37,12 @@
 		}
 	}
 
-	function handleFocusTrap(event: KeyboardEvent) {
-		if (event.key !== 'Tab' || !modalContentElement) return;
-
-		const focusableElements = Array.from(
-			modalContentElement.querySelectorAll(
-				'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
-			)
-		).filter(
-			(el) => (el as HTMLElement).offsetParent !== null // Check for visibility
-		) as HTMLElement[];
-
-		if (focusableElements.length === 0) {
-			if (document.activeElement !== modalContentElement) {
-				modalContentElement.focus();
-			}
-			event.preventDefault();
-			return;
-		}
-
-		const firstElement = focusableElements[0];
-		const lastElement = focusableElements[focusableElements.length - 1];
-		const currentActiveElement = document.activeElement;
-
-		if (event.shiftKey) {
-			// Shift + Tab
-			if (currentActiveElement === firstElement || currentActiveElement === modalContentElement) {
-				lastElement.focus();
-				event.preventDefault();
-			}
-		} else {
-			// Tab
-			if (currentActiveElement === lastElement) {
-				firstElement.focus();
-				event.preventDefault();
-			} else if (currentActiveElement === modalContentElement && focusableElements.length > 0) {
-				// If focus is on the modal container, move to the first actual interactive element
-				firstElement.focus();
-				event.preventDefault();
-			}
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			closeModal();
 		}
 	}
+
 
 	$: if (show) {
 		liveRegionMessage = 'Slide modal has been opened.';
@@ -83,22 +50,19 @@
 			triggerElement = document.activeElement as HTMLElement;
 			tick().then(() => {
 				if (modalContentElement) {
-					const firstInteractiveFocusable = Array.from(
-						modalContentElement.querySelectorAll(
-							'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
-						)
-					).filter((el) => (el as HTMLElement).offsetParent !== null)[0] as HTMLElement | null;
-
-					if (firstInteractiveFocusable) {
-						firstInteractiveFocusable.focus();
-					} else {
-						modalContentElement.focus(); // Fallback to modal content itself
+					if (!focusTrap) {
+						focusTrap = createFocusTrap(modalContentElement, {
+							onDeactivate: closeModal,
+							clickOutsideDeactivates: true
+						});
 					}
+					focusTrap.activate();
 				}
 			});
 		}
 	} else {
 		liveRegionMessage = ''; // Clear message when modal is not shown
+		focusTrap?.deactivate();
 	}
 </script>
 
@@ -114,6 +78,7 @@
 		on:click={handleOverlayClick}
 		on:keydown={handleOverlayKeydown}
 	>
+		<svelte:window on:keydown={handleKeydown} />
 		<div
 			bind:this={modalContentElement}
 			class="modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -122,7 +87,6 @@
 			tabindex="0"
 			aria-labelledby="modal-title"
 			on:click|stopPropagation
-			on:keydown={handleFocusTrap}
 		>
 			<button
 				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"
