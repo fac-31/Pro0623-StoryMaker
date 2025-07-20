@@ -1,42 +1,9 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+@plugin "daisyui";
 
-/* TODO: we need to set primary, secondary, emphassis colours for the app to be used consistently*/
-
-form {
-	@apply mx-auto max-w-2xl rounded-lg border border-gray-300 bg-gray-50 p-6;
-}
-
-.form-group {
-	@apply mb-6;
-}
-
-.form-group label {
-	@apply mb-2 block text-base font-medium text-gray-700;
-}
-
-.form-group input,
-.form-group textarea {
-	@apply w-full rounded border border-gray-300 bg-white px-3 py-2 text-base focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none;
-}
-
-.form-group input[type='number'] {
-	@apply max-w-xs;
-}
-
-.form-group textarea {
-	@apply min-h-[80px];
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-	@apply text-gray-500;
-}
-
-/* Form Submit Button */
-form button[type='submit'] {
-	@apply mt-4 w-full bg-blue-500 py-3 text-lg font-medium text-white hover:bg-blue-700 disabled:bg-gray-500;
+/* Ensure proper theme switching */
+:root {
+	color-scheme: light dark;
 }
 
 .slides-container {
@@ -44,19 +11,19 @@ form button[type='submit'] {
 }
 
 .slides-flex {
-	@apply flex gap-4 overflow-x-auto rounded-lg border border-gray-300 py-4;
+	@apply border-base-300 flex gap-4 overflow-x-auto rounded-lg border py-4;
 }
 
 .slide-thumbnail {
-	@apply relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 border-gray-300 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
+	@apply border-base-300 relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
 }
 
 .slide-number {
-	@apply rounded-t-md bg-blue-600 px-2 py-1 text-sm font-bold text-white;
+	@apply bg-primary text-primary-content rounded-t-md px-2 py-1 text-sm font-bold;
 }
 
 .slide-thumbnail:hover {
-	@apply border-blue-600 shadow-md motion-safe:scale-105;
+	@apply border-primary shadow-md motion-safe:scale-105;
 }
 
 .slide-thumbnail img {
@@ -64,7 +31,7 @@ form button[type='submit'] {
 }
 
 .placeholder-image {
-	@apply flex h-[calc(100%-2rem)] flex-col items-center justify-center rounded-b-md bg-gray-100 p-2 text-center text-gray-600;
+	@apply bg-base-200 text-base-content/60 flex h-[calc(100%-2rem)] flex-col items-center justify-center rounded-b-md p-2 text-center;
 }
 
 .placeholder-image small {
@@ -72,7 +39,7 @@ form button[type='submit'] {
 }
 
 .metadata-container {
-	@apply my-8 rounded-lg border border-gray-300 bg-gray-50 p-6;
+	@apply border-base-300 bg-base-200 my-8 rounded-lg border p-6;
 }
 
 .metadata-grid {
@@ -80,7 +47,7 @@ form button[type='submit'] {
 }
 
 .metadata-item {
-	@apply rounded border-l-4 border-blue-500 bg-white p-3;
+	@apply border-primary bg-base-100 rounded border-l-4 p-3;
 }
 
 .modal-overlay {
@@ -88,11 +55,11 @@ form button[type='submit'] {
 }
 
 .modal-content {
-	@apply relative h-[90%] w-[95%] overflow-hidden rounded-lg bg-white;
+	@apply bg-base-100 relative h-[90%] w-[95%] overflow-hidden rounded-lg;
 }
 
 .close-button {
-	@apply absolute top-4 right-4 z-[1001] flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 bg-red-600 text-2xl text-white hover:bg-red-700;
+	@apply bg-error text-error-content hover:bg-error/80 absolute top-4 right-4 z-[1001] flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 text-2xl;
 }
 
 .modal-body {
@@ -100,11 +67,11 @@ form button[type='submit'] {
 }
 
 .slide-details {
-	@apply w-1/5 overflow-y-auto border-r border-gray-300 bg-gray-50 px-4 py-8 pr-8;
+	@apply border-base-300 bg-base-200 w-1/5 overflow-y-auto border-r px-4 py-8 pr-8;
 }
 
 .slide-image {
-	@apply flex w-4/5 items-center justify-center bg-white p-8;
+	@apply bg-base-100 flex w-4/5 items-center justify-center p-8;
 }
 
 .slide-image img {
@@ -112,19 +79,19 @@ form button[type='submit'] {
 }
 
 .large-placeholder {
-	@apply p-8 text-center text-gray-600;
+	@apply text-base-content/60 p-8 text-center;
 }
 
 .detail-section {
-	@apply mb-6 border-b border-gray-200 pb-4 last:border-b-0;
+	@apply border-base-300 mb-6 border-b pb-4 last:border-b-0;
 }
 
 .detail-section h4 {
-	@apply m-0 mb-2 text-base text-blue-500;
+	@apply text-primary m-0 mb-2 text-base;
 }
 
 .detail-section p {
-	@apply my-1 text-sm leading-snug;
+	@apply text-base-content my-1 text-sm leading-snug;
 }
 
 /* Visually hide an element while keeping it accessible to screen readers */
@@ -141,24 +108,28 @@ form button[type='submit'] {
 }
 
 .error-message {
-	color: red;
-	display: block; /* Ensures it takes up its own line if needed */
-	min-height: 1em; /* Ensures space is reserved even if empty, preventing layout shifts */
-	margin-top: 0.25rem; /* Adds a little space above the error message */
+	@apply text-error mt-1 block min-h-[1em];
 }
 
 .character-info {
-	@apply mb-4 rounded border-l-4 border-green-500 bg-white p-3;
+	@apply border-success bg-base-100 mb-4 rounded border-l-4 p-3;
 }
 
 .emotions {
-	@apply mt-1 text-xs text-gray-600 italic;
+	@apply text-base-content/60 mt-1 text-xs italic;
 }
 
 .dialogue-line {
-	@apply mb-2 rounded border-l-4 border-yellow-400 bg-white p-2 text-sm;
+	@apply border-warning bg-base-100 mb-2 rounded border-l-4 p-2 text-sm;
 }
 
-button {
-	@apply cursor-pointer rounded border-0 bg-blue-500 px-4 py-2 text-base text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-500 motion-reduce:transition-none;
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }

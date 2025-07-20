@@ -1,40 +1,58 @@
-# StoryMaker
+# 🎬 Story Maker
 
-A SvelteKit application for creating AI-powered storyboards with video generation capabilities.
+> **AI-Powered Storyboard Creation & Video Generation Platform**
 
-## Features
+Transform your creative ideas into compelling visual stories with the power of artificial intelligence. Story Maker combines cutting-edge AI technologies to generate storyboards, create stunning visuals, and produce engaging video content.
 
-- **AI Storyboard Generation**: Create storyboards using OpenAI's GPT-4 and DALL-E 3
-- **Interactive Slideshow Player**: Play your storyboard with synchronized audio
-- **ElevenLabs Integration**: Generate realistic voice audio for dialogue
-- **Modern UI**: Beautiful, responsive interface built with Tailwind CSS
+[![Built with SvelteKit](https://img.shields.io/badge/Built%20with-SvelteKit-FF3E00?style=flat-square&logo=svelte)](https://kit.svelte.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
-## Environment Variables
+---
 
-Create a `.env` file in the root directory with the following variables:
+## ✨ Features
 
-```env
-# OpenAI API Key (required for storyboard generation)
-OPENAI_API_KEY=your_openai_api_key_here
+### 🤖 **AI-Powered Story Generation**
 
-# ElevenLabs API Key (required for audio generation)
-ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+- **GPT-4 Integration**: Intelligent story outline and scene generation
+- **DALL-E 3 Visuals**: Stunning AI-generated images for each scene
+- **LangGraph Workflows**: Advanced AI agent orchestration for complex storytelling
 
-# Optional: Tavily API Key (for search functionality)
-TAVILY_API_KEY=your_tavily_api_key_here
-```
+### 👥 **Collaboration & Management**
 
-### Getting API Keys
+- **Team Management**: Create and manage collaborative teams
+- **User Authentication**: Secure login with Supabase
+- **Project Organization**: Track and organize multiple storyboard projects
 
-1. **OpenAI API Key**: Get your key from [OpenAI Platform](https://platform.openai.com/api-keys)
-2. **ElevenLabs API Key**: Get your key from [ElevenLabs](https://elevenlabs.io/) (free tier available)
-3. **Tavily API Key**: Get your key from [Tavily](https://tavily.com/) (optional)
+### 🎨 **Modern User Experience**
 
-## Installation
+- **Responsive Design**: Beautiful interface that works on all devices
+- **Accessibility First**: WCAG compliant with comprehensive accessibility features
+- **Real-time Updates**: Server-sent events for live progress tracking
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js** (v18 or higher)
+- **MongoDB** database
+- **API Keys** for AI services (see [Environment Setup](#-environment-setup))
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/your-username/story-maker.git
+cd story-maker
+
 # Install dependencies
 npm install
+
+# Set up environment variables (see below)
+cp .env.example .env
 
 # Start development server
 npm run dev
@@ -46,53 +64,250 @@ npm run dev:https
 npm run dev -- --open
 ```
 
-## Usage
+---
 
-1. **Create a Storyboard**: Fill out the form with your story concept, style, and preferences
-2. **Generate Images**: The AI will create visual slides based on your story
-3. **Play Storyboard**: Click "Play Storyboard" to generate audio and create an interactive slideshow
-4. **Customize**: Navigate through slides, play/pause, and adjust timing
+## 🔧 Environment Setup
 
-## Building for Production
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# 🤖 AI Services (Required)
+OPENAI_API_KEY=your_openai_api_key_here
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+
+# 🔍 Search (Optional)
+TAVILY_API_KEY=your_tavily_api_key_here
+
+# 🗄️ Database
+MONGODB_URI=mongodb://localhost:27017/storymaker
+
+# 🔐 Authentication
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# ☁️ File Storage (Optional)
+CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_key
+CLOUDINARY_API_SECRET=your_cloudinary_secret
+```
+
+### 🔑 Getting API Keys
+
+| Service        | Purpose                          | Get Your Key                                            |
+| -------------- | -------------------------------- | ------------------------------------------------------- |
+| **OpenAI**     | Story generation & DALL-E images | [OpenAI Platform](https://platform.openai.com/api-keys) |
+| **Supabase**   | Authentication & database        | [Supabase Dashboard](https://supabase.com/dashboard)    |
+| **Cloudinary** | Image hosting (optional)         | [Cloudinary](https://cloudinary.com/)                   |
+
+---
+
+## 📖 How to Use
+
+### 1. **Create Your Story**
+
+- Fill out the story creation form with your concept
+- Choose your preferred style, genre, and target audience
+- Specify the number of slides for your storyboard
+
+### 2. **AI Generation Process**
+
+- Watch real-time progress as AI generates your story outline
+- DALL-E creates unique visuals for each scene
+- Review and refine the generated content
+
+### 3. **Collaborate**
+
+- Create teams and invite collaborators
+- Manage user roles and permissions
+- Share projects across your organization
+
+---
+
+## 🏗️ Project Structure
+
+```
+story-maker/
+├── 📁 src/
+│   ├── 📁 lib/
+│   │   ├── 📁 components/     # Reusable UI components
+│   │   ├── 📁 langgraph/      # AI workflow orchestration
+│   │   ├── 📁 models/         # TypeScript interfaces
+│   │   ├── 📁 server/         # Server-side utilities
+│   │   └── 📁 schemas/        # Data validation schemas
+│   ├── 📁 routes/
+│   │   ├── 📁 api/            # REST API endpoints
+│   │   ├── 📁 (auth)/         # Authentication pages
+│   │   ├── 📁 (protected)/    # Protected user pages
+│   │   └── 📁 storyboard/     # Main storyboard interface
+│   └── 📄 app.html            # HTML template
+├── 📁 static/                 # Static assets
+├── 📁 e2e/                    # End-to-end tests
+├── 📄 swagger.yaml            # API documentation
+└── 📄 ACCESSIBILITY.md        # Accessibility guidelines
+```
+
+---
+
+## 🛠️ Development
+
+### Available Scripts
 
 ```bash
-npm run build
-npm run preview
+# Development
+npm run dev              # Start development server
+npm run dev -- --open   # Start dev server and open browser
+
+# Building
+npm run build           # Build for production
+npm run preview         # Preview production build
+
+# Quality Assurance
+npm run lint            # Run ESLint
+npm run format          # Format code with Prettier
+npm run check           # Type checking
+npm run test            # Run all tests
+npm run test:e2e        # Run end-to-end tests
+npm run test:dev        # Run tests in UI mode
+
+# Documentation
+npm run docs            # Generate TypeDoc documentation
+npm run generate-swagger # Update API documentation
 ```
 
-## Technologies Used
+### 🧪 Testing
 
-- **SvelteKit**: Full-stack web framework
-- **Tailwind CSS**: Utility-first CSS framework
-- **OpenAI**: GPT-4 for story generation, DALL-E 3 for images
-- **ElevenLabs**: AI voice generation
-- **Lucide Icons**: Beautiful icon library
+The project includes comprehensive testing:
 
-## Project Structure
+- **End-to-End Tests**: Playwright tests for user workflows
+- **Accessibility Tests**: Automated accessibility compliance checks
+- **Type Safety**: Full TypeScript coverage with strict mode
 
-```
-src/
-├── lib/
-│   ├── components/          # Reusable UI components
-│   ├── langgraph/          # Storyboard generation logic
-│   ├── models/             # TypeScript interfaces
-│   └── schemas/            # Data validation schemas
-├── routes/
-│   ├── api/                # Server API endpoints
-│   ├── (public)/           # Public pages (login, signup)
-│   └── storyboard/         # Main storyboard interface
-└── static/                 # Static assets
+```bash
+# Run all tests
+npm test
+
+# Run tests with UI
+npm run test:dev
+
+# Run accessibility tests
+npm run test:e2e -- --grep "accessibility"
 ```
 
-## Progressive Web App
+---
 
-StoryMaker is a PWA. The service worker caches build assets and an offline fallback page so the app works without a network connection. A web manifest enables installability on desktop and mobile. Service workers run on `http://localhost`, but you can use HTTPS locally for a production-like install experience. The manifest reuses `static/favicon.png` for all icon sizes to avoid bundling extra binary assets.
+## 📚 API Documentation
 
-### Testing
+The project includes a comprehensive OpenAPI specification. View the interactive API documentation:
 
-1. Run `npm run build` then `npm run preview` to serve the production build.
-   For a secure connection, use `npm run preview:https`.
-2. Visit the site in Chrome and open DevTools > Application > Service Workers to ensure it is registered.
-3. Use Lighthouse to verify the PWA audit passes.
-4. Disable your connection and reload the page to confirm the offline fallback displays.
-5. Click the install button in the address bar or "Add to Home Screen" on mobile.
+```bash
+# Generate and serve API docs
+npm run generate-swagger
+```
+
+### Key API Endpoints
+
+| Endpoint                        | Method | Description               |
+| ------------------------------- | ------ | ------------------------- |
+| `/api/storyboard/start`         | POST   | Create new storyboard     |
+| `/api/storyboard/progress/{id}` | GET    | Real-time progress stream |
+| from storyboard                 |
+| `/api/users/signup`             | POST   | User registration         |
+| `/api/teams/create`             | POST   | Create new team           |
+
+---
+
+## 🎯 Tech Stack
+
+### **Frontend**
+
+- **SvelteKit** - Full-stack web framework
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **DaisyUI** - Beautiful component library
+- **Lucide Icons** - Consistent icon system
+
+### **Backend**
+
+- **SvelteKit API Routes** - Server-side API
+- **MongoDB** - Document database
+- **Supabase** - Authentication & real-time features
+
+### **AI & Media**
+
+- **OpenAI GPT-4** - Story generation
+- **DALL-E 3** - Image generation
+- **LangGraph** - AI workflow orchestration
+
+### **Development Tools**
+
+- **Vite** - Fast build tool
+- **Playwright** - End-to-end testing
+- **ESLint & Prettier** - Code quality
+- **TypeDoc** - Documentation generation
+
+---
+
+## ♿ Accessibility
+
+Story Maker is built with accessibility as a core principle:
+
+- **WCAG 2.1 AA Compliance** - Meets international accessibility standards
+- **Keyboard Navigation** - Full keyboard support for all features
+- **Screen Reader Support** - Comprehensive ARIA labels and semantic HTML
+- **Focus Management** - Proper focus handling in modals and dynamic content
+- **Reduced Motion** - Respects user motion preferences
+
+See [ACCESSIBILITY.md](./ACCESSIBILITY.md) for detailed guidelines.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our contributing guidelines:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Development Guidelines
+
+- Follow the existing code style (ESLint + Prettier)
+- Write tests for new features
+- Update documentation as needed
+- Ensure accessibility compliance
+- Test across different browsers and devices
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- **OpenAI** for GPT-4 and DALL-E 3 APIs
+- **Svelte Team** for the amazing framework
+- **Tailwind CSS** for the utility-first approach
+- **MongoDB** for flexible data storage
+
+---
+
+## 📞 Support
+
+- **Documentation**: Check our [Typescript Documentation](https://fac-31.github.io/Pro0623-StoryMaker/typedoc/index.html), [Swagger API](https://fac-31.github.io/Pro0623-StoryMaker/api/index.html), and [accessibility guide](./ACCESSIBILITY.md)
+- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/your-username/story-maker/issues)
+- **Discussions**: Join our [GitHub Discussions](https://github.com/your-username/story-maker/discussions)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by the Story Maker Team**
+
+[⭐ Star this repo](https://github.com/your-username/story-maker) • [🐛 Report Bug](https://github.com/your-username/story-maker/issues) • [💡 Request Feature](https://github.com/your-username/story-maker/issues)
+
+</div>

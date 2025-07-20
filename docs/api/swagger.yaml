@@ -1,0 +1,783 @@
+openapi: 3.0.0
+info:
+  title: Story Maker API
+  version: 1.0.0
+  description: API for the Story Maker application - A comprehensive storyboard creation and management system
+  contact:
+    name: Story Maker Team
+  license:
+    name: MIT
+
+servers:
+  - url: /api
+    description: API base path
+
+paths:
+  # Storyboard Endpoints
+  /storyboard/start:
+    post:
+      tags:
+        - Storyboard
+      summary: Start a new storyboard creation
+      description: Creates a new storyboard with initial user prompts and saves it to the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPrompt'
+      responses:
+        '200':
+          description: Storyboard created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  acknowledged:
+                    type: boolean
+                  insertedId:
+                    type: string
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Failed to save storyboard
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /storyboard/progress/{id}:
+    get:
+      tags:
+        - Storyboard
+      summary: Get storyboard progress with real-time updates
+      description: Returns a server-sent events stream for real-time storyboard creation progress
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Storyboard ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Server-sent events stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '500':
+          description: ID not provided or invalid ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /storyboard/current:
+    get:
+      tags:
+        - Storyboard
+      summary: Get current storyboard by ID
+      description: Retrieves a specific storyboard by its ID
+      parameters:
+        - name: _id
+          in: query
+          required: true
+          description: Storyboard ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Storyboard retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storyboard'
+        '400':
+          description: Missing _id parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Storyboard not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /storyboard/generate-video:
+    post:
+      tags:
+        - Storyboard
+      summary: Generate video from storyboard
+      description: Processes storyboard slides to generate audio segments and prepare for video creation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                storyboard:
+                  $ref: '#/components/schemas/Storyboard'
+                storyboardId:
+                  type: string
+              required:
+                - storyboard
+      responses:
+        '200':
+          description: Video generation data prepared successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  audioSegments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        slideNumber:
+                          type: integer
+                        audioUrl:
+                          type: string
+                        duration:
+                          type: number
+                        dialogue:
+                          type: string
+                  slides:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        slideNumber:
+                          type: integer
+                        imageUrl:
+                          type: string
+                        sceneTitle:
+                          type: string
+                  storyMetadata:
+                    $ref: '#/components/schemas/StoryMetadata'
+                  message:
+                    type: string
+        '400':
+          description: No storyboard data provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: ElevenLabs API key not configured or generation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /storyboard/logs:
+    get:
+      tags:
+        - Storyboard
+      summary: Get storyboard processing logs
+      description: Retrieves logs from storyboard processing operations
+      responses:
+        '200':
+          description: Logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  # Teams Endpoints
+  /teams/create:
+    post:
+      tags:
+        - Teams
+      summary: Create a new team
+      description: Creates a new team with the authenticated user as admin
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Team name
+              required:
+                - name
+      responses:
+        '200':
+          description: Team created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  insertedId:
+                    type: string
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Failed to insert team
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /teams/getall:
+    get:
+      tags:
+        - Teams
+      summary: Get all teams
+      description: Retrieves all teams from the database
+      responses:
+        '200':
+          description: Teams retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+        '500':
+          description: Failed to get teams
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /teams/removeuser:
+    post:
+      tags:
+        - Teams
+      summary: Remove user from team
+      description: Removes a specified user from a team (requires team edit permissions)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                team_id:
+                  type: string
+                  description: Team ID
+                user_id:
+                  type: string
+                  description: User ID to remove
+              required:
+                - team_id
+                - user_id
+      responses:
+        '200':
+          description: User removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '401':
+          description: User not logged in, insufficient permissions, or trying to remove self
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Failed to remove user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /teams/updateuser:
+    post:
+      tags:
+        - Teams
+      summary: Update user role in team
+      description: Updates a user's role within a team (requires team edit permissions)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                team_id:
+                  type: string
+                  description: Team ID
+                user_id:
+                  type: string
+                  description: User ID to update
+                role:
+                  type: string
+                  enum: [user, admin]
+                  description: New role for the user
+              required:
+                - team_id
+                - user_id
+                - role
+      responses:
+        '200':
+          description: User role updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+        '401':
+          description: User not logged in, insufficient permissions, or invalid role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Failed to update user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # Users Endpoints
+  /users/signup:
+    post:
+      tags:
+        - Users
+      summary: Register a new user
+      description: Creates a new user account in both Supabase and MongoDB
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignup'
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  supabase:
+                    type: string
+                    description: Supabase user ID
+                  mongodb:
+                    type: string
+                    description: MongoDB document ID
+        '500':
+          description: Signup failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/me:
+    get:
+      tags:
+        - Users
+      summary: Get current user information
+      description: Retrieves the authenticated user's profile information
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SafeUser'
+        '401':
+          description: User not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Failed to get user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/getall:
+    get:
+      tags:
+        - Users
+      summary: Get all users
+      description: Retrieves all users from the database (safe format without sensitive data)
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SafeUser'
+        '500':
+          description: Failed to get users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # LangChain Agent Endpoint
+  /langchain-agent:
+    post:
+      tags:
+        - AI Agent
+      summary: Run LangChain AI agent
+      description: Executes the LangChain storyboard creation agent with a concept
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                concept:
+                  type: string
+                  description: The concept or idea for storyboard creation
+              required:
+                - concept
+      responses:
+        '200':
+          description: Agent execution completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Result from the LangChain agent execution
+        '500':
+          description: Agent execution failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: JWT token from Supabase authentication
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+      required:
+        - error
+
+    UserPrompt:
+      type: object
+      properties:
+        numSlides:
+          type: integer
+          description: Number of slides for the storyboard
+          minimum: 1
+        concept:
+          type: string
+          description: The main concept or idea for the story
+        storyStyle:
+          type: string
+          description: Visual and narrative style of the story
+        targetAudience:
+          type: string
+          description: Intended audience for the story
+        genre:
+          type: string
+          description: Genre of the story
+      required:
+        - numSlides
+        - concept
+        - storyStyle
+        - targetAudience
+        - genre
+
+    UserSignup:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address
+        password:
+          type: string
+          description: User's password
+          minLength: 6
+        full_name:
+          type: string
+          description: User's full name
+        display_name:
+          type: string
+          description: User's display name
+      required:
+        - email
+        - password
+        - full_name
+        - display_name
+
+    Character:
+      type: object
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+          enum: [protagonist, antagonist, mentor, supporting, narrator]
+        description:
+          type: string
+        emotions:
+          type: array
+          items:
+            type: string
+        position:
+          type: string
+          enum: [left, center, right, background, foreground]
+      required:
+        - name
+        - role
+        - description
+        - emotions
+        - position
+
+    SlideDialogue:
+      type: object
+      properties:
+        character:
+          type: string
+        line:
+          type: string
+      required:
+        - character
+        - line
+
+    SlideText:
+      type: object
+      properties:
+        dialogue:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlideDialogue'
+      required:
+        - dialogue
+
+    SlideOutline:
+      type: object
+      properties:
+        slideId:
+          type: integer
+        timestamp:
+          type: string
+        durationSeconds:
+          type: number
+        sceneTitle:
+          type: string
+        text:
+          $ref: '#/components/schemas/SlideText'
+        characters:
+          type: array
+          items:
+            $ref: '#/components/schemas/Character'
+        sceneDescription:
+          type: string
+        visualStyle:
+          type: string
+        cameraAngle:
+          type: string
+      required:
+        - slideId
+        - timestamp
+        - durationSeconds
+        - sceneTitle
+        - text
+        - characters
+        - sceneDescription
+        - visualStyle
+        - cameraAngle
+
+    StoryMetadata:
+      type: object
+      properties:
+        title:
+          type: string
+        totalDuration:
+          type: string
+        genre:
+          type: string
+        style:
+          type: string
+        targetAudience:
+          type: string
+      required:
+        - title
+        - totalDuration
+        - genre
+        - style
+        - targetAudience
+
+    StoryOutline:
+      type: object
+      properties:
+        storyMetadata:
+          $ref: '#/components/schemas/StoryMetadata'
+        slideOutlines:
+          type: array
+          items:
+            $ref: '#/components/schemas/SlideOutline'
+      required:
+        - storyMetadata
+        - slideOutlines
+
+    VisualSlide:
+      type: object
+      properties:
+        slideNumber:
+          type: integer
+        imageGenerated:
+          type: boolean
+        imagePrompt:
+          type: string
+        imageUrl:
+          type: string
+      required:
+        - slideNumber
+        - imageGenerated
+
+    Storyboard:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: MongoDB ObjectId
+        status:
+          type: string
+          enum: [none, generating-outline, generating-image, uploading-image, done]
+        prompts:
+          $ref: '#/components/schemas/UserPrompt'
+        currentSlide:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        storyOutline:
+          $ref: '#/components/schemas/StoryOutline'
+        visualSlides:
+          type: array
+          items:
+            $ref: '#/components/schemas/VisualSlide'
+      required:
+        - _id
+        - status
+        - prompts
+        - currentSlide
+        - createdAt
+        - updatedAt
+        - storyOutline
+        - visualSlides
+
+    TeamUser:
+      type: object
+      properties:
+        user:
+          type: string
+          description: MongoDB ObjectId of the user
+        role:
+          type: string
+          enum: [user, admin]
+      required:
+        - user
+        - role
+
+    Team:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: MongoDB ObjectId
+        name:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamUser'
+        projects:
+          type: array
+          items:
+            type: string
+            description: MongoDB ObjectId of projects
+      required:
+        - _id
+        - name
+        - users
+        - projects
+
+    SafeUser:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: MongoDB ObjectId
+        name:
+          type: string
+        projects:
+          type: array
+          items:
+            type: string
+            description: MongoDB ObjectId of projects
+        teams:
+          type: array
+          items:
+            type: string
+            description: MongoDB ObjectId of teams
+      required:
+        - _id
+        - name
+        - projects
+        - teams
+
+tags:
+  - name: Storyboard
+    description: Storyboard creation and management operations
+  - name: Teams
+    description: Team management operations
+  - name: Users
+    description: User management and authentication operations
+  - name: AI Agent
+    description: AI-powered storyboard generation operations

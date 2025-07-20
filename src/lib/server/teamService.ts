@@ -1,34 +1,76 @@
 import { ObjectId } from 'mongodb';
 import type { InsertOneResult } from 'mongodb';
-
-import { getDB } from './db';
-
+import { serializeMongoDocument } from '$lib/server/utils.js';
+import { getDB, getDBAndClient } from './db';
 import type { Team, NewTeam, TeamUser, TeamRole } from '$lib/models/team.model';
 import type { User } from '$lib/models/user.model';
 
+/**
+ * Inserts a new team into the database and adds it to the owner's teams.
+ * @param {string} name - The name of the team.
+ * @param {User} owner - The user who is creating the team.
+ * @returns {Promise<InsertOneResult>} A promise that resolves to the result of the insert operation.
+ * @throws {Error} If the transaction fails.
+ */
 export async function insertTeam(name: string, owner: User): Promise<InsertOneResult> {
-	const db = getDB();
-	const teams = db.collection<NewTeam>('teams');
+	const { db, client } = getDBAndClient();
+	const teamsCollection = db.collection<NewTeam>('teams');
+	const usersCollection = db.collection<User>('users');
 
-	const teamuser: TeamUser = {
-		user: owner._id,
-		role: 'admin'
-	};
+	const session = client.startSession();
+	let insertResult: InsertOneResult | null = null;
 
-	const team: NewTeam = {
-		name: name,
-		users: [teamuser],
-		projects: []
-	};
+	const user_id =
+		owner._id instanceof ObjectId ? owner._id : new ObjectId((owner._id as string).toString());
 
+	//session is used to ensure atomicity. when we create a team, we also add the team to the user's teams array
 	try {
-		return await teams.insertOne(team);
+		await session.withTransaction(async () => {
+			const teamuser: TeamUser = {
+				user: user_id,
+				role: 'admin'
+			};
+
+			const team: NewTeam = {
+				name,
+				users: [teamuser],
+				projects: []
+			};
+
+			// Insert team
+			insertResult = await teamsCollection.insertOne(team, { session });
+
+			// Update user
+			const updateResult = await usersCollection.updateOne(
+				{ _id: user_id },
+				{ $addToSet: { teams: insertResult.insertedId } },
+				{ session }
+			);
+
+			// Ensure update was successful, else abort
+			if (updateResult.modifiedCount === 0 && updateResult.matchedCount === 0) {
+				throw new Error('Failed to update user with team ID');
+			}
+		});
+
+		if (!insertResult) {
+			throw new Error('Transaction failed, insertResult missing');
+		}
+
+		return insertResult;
 	} catch (err) {
-		console.error('Failed to insert user:', err);
-		throw new Error('Database insert failed');
+		console.error('Transaction failed:', err);
+		throw new Error('Transaction failed');
+	} finally {
+		await session.endSession();
 	}
 }
 
+/**
+ * Retrieves all teams from the database.
+ * @returns {Promise<Team[]>} A promise that resolves to an array of all teams.
+ * @throws {Error} If the database find operation fails.
+ */
 export async function getAllTeams(): Promise<Team[]> {
 	const db = getDB();
 	const teams = db.collection<Team>('teams');
@@ -41,6 +83,36 @@ export async function getAllTeams(): Promise<Team[]> {
 	}
 }
 
+/**
+ * Retrieves all teams associated with a specific user.
+ * @param {User} user - The user object.
+ * @returns {Promise<Team[]>} A promise that resolves to an array of teams the user belongs to.
+ * @throws {Error} If the database find operation fails.
+ */
+export async function getTeamsOfUser(user: User): Promise<Team[]> {
+	const db = getDB();
+
+	try {
+		const teamsCollection = db.collection('teams');
+
+		const teams = await teamsCollection
+			.find({ _id: { $in: user.teams.map((id) => new ObjectId(id)) } })
+			.toArray();
+
+		const serialized = serializeMongoDocument(teams);
+		return serialized as Team[];
+	} catch (err) {
+		console.error('Failed to get all teams:', err);
+		throw new Error('Database find failed');
+	}
+}
+
+/**
+ * Retrieves a team by its ID.
+ * @param {string} id - The ID of the team to retrieve.
+ * @returns {Promise<Team | null>} A promise that resolves to the team object or null if not found.
+ * @throws {Error} If the database get operation fails.
+ */
 export async function getTeamById(id: string): Promise<Team | null> {
 	const db = getDB();
 	const teams = db.collection<NewTeam>('teams');
@@ -53,6 +125,14 @@ export async function getTeamById(id: string): Promise<Team | null> {
 	}
 }
 
+/**
+ * Updates a user's role within a team or adds the user to the team if not already a member.
+ * @param {string} team_id - The ID of the team.
+ * @param {string} user_id - The ID of the user.
+ * @param {TeamRole} role - The new role for the user.
+ * @returns {Promise<void>}
+ * @throws {Error} If the database update operation fails.
+ */
 export async function updateTeamUser(
 	team_id: string,
 	user_id: string,
@@ -87,6 +167,13 @@ export async function updateTeamUser(
 	}
 }
 
+/**
+ * Removes a user from a team.
+ * @param {string} team_id - The ID of the team.
+ * @param {string} user_id - The ID of the user to remove.
+ * @returns {Promise<void>}
+ * @throws {Error} If the database update operation fails.
+ */
 export async function removeTeamUser(team_id: string, user_id: string): Promise<void> {
 	const db = getDB();
 	const teams = db.collection<Team>('teams');
@@ -106,6 +193,28 @@ export async function removeTeamUser(team_id: string, user_id: string): Promise<
 	}
 }
 
+/**
+ * Checks if a user is in a team.
+ * @param {Team} team - Team object.
+ * @param {string} user_id - The ID of the user.
+ * @returns {Promise<boolean>} Returns true if the user is in a team, false otherwise.
+ */
+export async function isUserInTeam(team: Team, user_id: string) {
+	const teamUser: TeamUser | undefined = team.users.find((teamUser) =>
+		teamUser.user.equals(user_id)
+	);
+
+	if (!teamUser) return false;
+
+	return true;
+}
+
+/**
+ * Checks if a user has permission to edit a team.
+ * @param {string} team_id - The ID of the team.
+ * @param {string} user_id - The ID of the user.
+ * @returns {Promise<true | string>} Returns true if the user can edit, or an error message if not.
+ */
 export async function canUserEditTeam(team_id: string, user_id: string) {
 	const team = await getTeamById(team_id);
 	if (!team) return 'Could not find team by id ' + team_id;

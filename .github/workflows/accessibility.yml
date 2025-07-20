@@ -42,5 +42,4 @@ jobs:
           title: 'Accessibility Audit Report for ${{ github.sha }}'
           content-filepath: ai_accessibility_report.md
           labels: accessibility, audit, jules
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}

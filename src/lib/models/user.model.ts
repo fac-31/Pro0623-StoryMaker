@@ -4,7 +4,8 @@ export interface User {
 	_id: ObjectId;
 	supabase: string;
 	name: string;
-	projects: ObjectId[];
+	projects: ObjectId[] | string[];
+	teams: ObjectId[] | string[];
 }
 
 export type NewUser = Omit<User, '_id'>;
