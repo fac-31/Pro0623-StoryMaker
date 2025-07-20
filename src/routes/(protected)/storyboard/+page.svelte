@@ -20,4 +20,5 @@
 	// });
 </script>
 
+<h1>Create Storyboard</h1>
 <StoryboardPage {storyboard} {team} />

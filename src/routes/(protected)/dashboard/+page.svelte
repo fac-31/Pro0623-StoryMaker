@@ -35,6 +35,7 @@
 	}
 </script>
 
+<h1>Dashboard</h1>
 <div class="bg-base-200 flex min-h-screen">
 	<!-- Sidebar Component -->
 	<Sidebar
