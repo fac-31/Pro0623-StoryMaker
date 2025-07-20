@@ -27,12 +27,13 @@ test.describe('Mobile Navigation - Marketing', () => {
 		await page.goto('/');
 		const hamburger = page.locator('button.btn-ghost.btn-square.md\\:hidden');
 		await hamburger.click();
-		// Click Features link
-		await page.getByRole('link', { name: 'Features' }).click();
+		// Click Features link in the open mobile menu only
+		const mobileMenu = page.locator('div.border-base-300.bg-base-100.border-t.md\\:hidden');
+		await mobileMenu.getByRole('link', { name: 'Features' }).click();
 		await expect(page.evaluate(() => window.location.hash)).resolves.toBe('#features');
 		// Open menu again and click How it Works
 		await hamburger.click();
-		await page.getByRole('link', { name: 'How it Works' }).click();
+		await mobileMenu.getByRole('link', { name: 'How it Works' }).click();
 		await expect(page).toHaveURL(/#how-it-works/);
 	});
 });
