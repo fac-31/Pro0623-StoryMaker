@@ -54,7 +54,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (!env.OPENAI_API_KEY) return json({ error: 'OpenAI API key not configured' }, { status: 500 });
 
 	const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
-	const prompt = `Generate rich game interactions for each slide in this story. Use drag, click, choose, or solve mechanics. Return ONLY valid JSON, with no explanations, markdown, or code fences. Story JSON:\n${JSON.stringify(storyboard.storyOutline)}`;
+	const prompt = `Generate rich game interactions for each slide in this story. Use click, or choose mechanics. Return ONLY valid JSON, with no explanations, markdown, or code fences. Story JSON:\n${JSON.stringify(storyboard.storyOutline)}`;
 
 	const completion = await openai.chat.completions.create({
 		model: 'gpt-4o',
@@ -87,7 +87,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	const htmlPrompt = `
 You are a web game developer. Given the following story, game interactions, and detected object bounding boxes, generate a complete HTML file (with embedded CSS and JavaScript) that implements the game. For each slide:
 - Display the corresponding image (from the "imageUrl" field in the storyboard's "visualSlides").
-- For each interaction, use the provided bounding box coordinates (in slide.detectedObjects) to position interactive elements (e.g., draggable, clickable, selectable, or puzzle) precisely over the image.
+- For each interaction, use the provided bounding box coordinates (in slide.detectedObjects) to position interactive elements (e.g. clickable, selectable) precisely over the image.
 - Visually highlight all interactive areas on the image (e.g., with colored boxes, outlines, or hotspots) so the user knows where to interact.
 - The user should only be able to proceed to the next slide after successfully completing all required interactions for the current slide.
 - Add a "Hint" button for each interaction. If a hint is not provided in the data, generate a helpful hint based on the interaction description.
