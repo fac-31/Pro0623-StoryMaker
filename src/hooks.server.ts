@@ -31,11 +31,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	event.locals.user = user ?? null;
 
-	console.log(`[${new Date().toISOString()}] [hooks.server.ts] Resolving request`);
+	console.log('[hooks.server.ts] Resolving request for:', event.url.pathname);
 	const response = await resolve(event);
 
 	// Optionally, log the response status for debugging
-	console.log(`[${new Date().toISOString()}] [hooks.server.ts] Response status:`, response.status);
+	console.log(
+		`[${new Date().toISOString()}] [hooks.server.ts] Response status:`,
+		response.status,
+		event.url.pathname
+	);
 
 	return response;
 };

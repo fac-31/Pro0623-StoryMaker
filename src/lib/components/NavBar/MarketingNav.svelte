@@ -22,9 +22,21 @@
 {#if mobileMenuOpen}
 	<div class="border-base-300 bg-base-100 border-t md:hidden">
 		<div class="space-y-4 px-4 py-4">
-			<a href="#features" class="text-base-content/70 hover:text-primary block">Features</a>
-			<a href="#how-it-works" class="text-base-content/70 hover:text-primary block">How it Works</a>
-			<a href="#testimonials" class="text-base-content/70 hover:text-primary block">Testimonials</a>
+			<a
+				href="#features"
+				class="text-base-content/70 hover:text-primary block"
+				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}>Features</a
+			>
+			<a
+				href="#how-it-works"
+				class="text-base-content/70 hover:text-primary block"
+				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}>How it Works</a
+			>
+			<a
+				href="#testimonials"
+				class="text-base-content/70 hover:text-primary block"
+				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}>Testimonials</a
+			>
 			<div class="border-base-200 space-y-2 border-t pt-4">
 				<a href="/login" class="text-base-content/70 block w-full text-left">Sign In</a>
 				<a href="/signup" class="btn btn-primary w-full"> Start Creating </a>
