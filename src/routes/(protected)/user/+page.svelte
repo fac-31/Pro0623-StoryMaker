@@ -20,7 +20,7 @@
 	<form method="POST" class="w-full max-w-xl">
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
-				<label for="name" class="label max-w-[60px] flex-auto">
+				<label for="name" class="label max-w-[60px] flex-auto sr-only">
 					<span class="label-text"> Display name: </span>
 				</label>
 				<input
@@ -36,7 +36,7 @@
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
-				<label for="email" class="label max-w-[60px] flex-auto">
+				<label for="email" class="label max-w-[60px] flex-auto sr-only">
 					<span class="label-text"> Email: </span>
 				</label>
 				<input
@@ -52,7 +52,7 @@
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
-				<label for="password" class="label max-w-[60px] flex-auto">
+				<label for="password" class="label max-w-[60px] flex-auto sr-only">
 					<span class="label-text"> Password: </span>
 				</label>
 				<input
@@ -67,7 +67,7 @@
 				/>
 			</div>
 		</div>
-		<div>
+		<div role="status" aria-live="polite">
 			{#if form?.error}
 				<div id="form-error" class="alert alert-error" role="alert">
 					<span>{form.error}</span>

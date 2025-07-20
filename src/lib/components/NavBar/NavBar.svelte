@@ -24,7 +24,7 @@
 				<slot name="nav" {mobileMenuOpen}></slot>
 				<ThemeToggle />
 				<button
-					class="btn btn-ghost btn-square md:hidden"
+					class="btn btn-ghost btn-square focus-visible:ring md:hidden"
 					on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
 					aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
 					aria-expanded={mobileMenuOpen}
