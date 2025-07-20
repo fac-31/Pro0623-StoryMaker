@@ -19,7 +19,7 @@
 	// State management
 	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
 	let selectedTeam = $state<Team | null>(null);
-	let sidebarCollapsed = $state(false);
+	let sidebarCollapsed = $state(true);
 
 	function handleViewChange(view: string, team?: Team | null) {
 		currentView = view;
