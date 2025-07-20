@@ -8,7 +8,7 @@
 			<h2 id="cta-title" class="text-3xl font-bold text-white lg:text-5xl">
 				Ready to Bring Your Stories to Life?
 			</h2>
-			<p class="text-primary-content/80 text-xl leading-relaxed">
+			<p class="text-primary-content/80 text-xl leading-relaxed"></p>
 			<p class="text-primary-content/80 text-xl leading-relaxed">
 				Join thousands of creators who are already using StoryMaker to visualize their ideas and
 				captivate their audiences.
