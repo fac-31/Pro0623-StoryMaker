@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount, onDestroy, tick } from 'svelte';
+	import { createEventDispatcher, tick } from 'svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 
 	export let storyboard: Storyboard;
@@ -80,7 +80,6 @@
 	$: if (show) {
 		liveRegionMessage = 'Slide modal has been opened.';
 		if (typeof document !== 'undefined') {
-			document.body.classList.add('modal-open');
 			triggerElement = document.activeElement as HTMLElement;
 			tick().then(() => {
 				if (modalContentElement) {
@@ -99,32 +98,22 @@
 			});
 		}
 	} else {
-		if (typeof document !== 'undefined') {
-			document.body.classList.remove('modal-open');
-		}
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
-
-	onDestroy(() => {
-		if (typeof document !== 'undefined') {
-			document.body.classList.remove('modal-open');
-		}
-	});
 </script>
 
 {#if show}
 	<div role="status" aria-live="assertive" class="sr-only">
 		{liveRegionMessage}
 	</div>
-	<div class="modal-container" on:keydown={handleFocusTrap}>
-		<div
-			class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
-			role="button"
-			tabindex="0"
-			aria-label="Close modal"
-			on:click={handleOverlayClick}
-			on:keydown={handleOverlayKeydown}
-		></div>
+	<div
+		class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
+		role="button"
+		tabindex="0"
+		aria-label="Close modal"
+		on:click={handleOverlayClick}
+		on:keydown={handleOverlayKeydown}
+	>
 		<div
 			bind:this={modalContentElement}
 			class="modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -133,6 +122,7 @@
 			tabindex="0"
 			aria-labelledby="modal-title"
 			on:click|stopPropagation
+			on:keydown={handleFocusTrap}
 		>
 			<button
 				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"

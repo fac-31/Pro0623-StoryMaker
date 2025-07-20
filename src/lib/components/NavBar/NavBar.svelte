@@ -31,8 +31,10 @@
 				>
 					{#if mobileMenuOpen}
 						<X class="h-6 w-6" />
+						<span class="sr-only">Close menu</span>
 					{:else}
 						<Menu class="h-6 w-6" />
+						<span class="sr-only">Open menu</span>
 					{/if}
 				</button>
 			</div>

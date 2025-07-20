@@ -1,7 +1,16 @@
 <script lang="ts">
 	import { navigating } from '$app/state';
+	import { onMount } from 'svelte';
 	export let data;
-	export let form: { success: boolean; error?: string };
+	export let form: {
+		success: boolean;
+		errors?: {
+			name?: string[];
+			email?: string[];
+			password?: string[];
+			_errors?: string[];
+		};
+	};
 	let name = data.user?.user_metadata.display_name;
 	let email = data.user?.email;
 	let password = '';
@@ -9,6 +18,15 @@
 		name = data.user?.user_metadata.display_name;
 		email = data.user?.email;
 		password = '';
+	}
+
+	$: if (form?.errors) {
+		onMount(() => {
+			const errorSummary = document.getElementById('form-error-summary');
+			if (errorSummary) {
+				errorSummary.focus();
+			}
+		});
 	}
 </script>
 
@@ -30,9 +48,14 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby="name-error"
 				/>
 			</div>
+			{#if form?.errors?.name}
+			<div id="name-error" class="alert alert-error mt-2" role="alert" aria-live="polite">
+				<span>{form.errors.name}</span>
+			</div>
+			{/if}
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
@@ -46,9 +69,14 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby="email-error"
 				/>
 			</div>
+			{#if form?.errors?.email}
+			<div id="email-error" class="alert alert-error mt-2" role="alert" aria-live="polite">
+				<span>{form.errors.email}</span>
+			</div>
+			{/if}
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
@@ -63,14 +91,19 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby="password-error"
 				/>
 			</div>
+			{#if form?.errors?.password}
+			<div id="password-error" class="alert alert-error mt-2" role="alert" aria-live="polite">
+				<span>{form.errors.password}</span>
+			</div>
+			{/if}
 		</div>
 		<div>
-			{#if form?.error}
-				<div id="form-error" class="alert alert-error" role="alert" aria-live="polite">
-					<span>{form.error}</span>
+			{#if form?.errors?._errors}
+				<div id="form-error-summary" class="alert alert-error mt-2" role="alert" aria-live="polite" tabindex="-1">
+					<span>{form.errors._errors[0]}</span>
 				</div>
 			{/if}
 
@@ -79,7 +112,7 @@
 			</button>
 
 			{#if form?.success}
-				<div class="alert alert-success" role="alert">
+				<div class="alert alert-success mt-2" role="status" aria-live="polite">
 					<span>Details updated successfully!</span>
 				</div>
 			{/if}

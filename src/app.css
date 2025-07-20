@@ -50,20 +50,12 @@
 	@apply border-primary bg-base-100 rounded border-l-4 p-3;
 }
 
-.modal-open {
-	@apply overflow-hidden;
-}
-
-.modal-container {
-	@apply fixed inset-0 z-[1000] flex items-center justify-center;
-}
-
 .modal-overlay {
-	@apply absolute inset-0 bg-black/80;
+	@apply fixed inset-0 z-[1000] flex items-center justify-center bg-black/80;
 }
 
 .modal-content {
-	@apply bg-base-100 relative z-[1001] h-[90%] w-[95%] overflow-y-auto rounded-lg;
+	@apply bg-base-100 relative h-[90%] w-[95%] overflow-hidden rounded-lg;
 }
 
 .close-button {
