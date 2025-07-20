@@ -9,7 +9,6 @@
 	<div class="flex items-center space-x-4">
 		<button class="btn btn-ghost btn-sm" aria-label="View notifications">
 			<Bell class="h-5 w-5" />
-			<span class="sr-only">View notifications</span>
 		</button>
 		<a href="/user" class="btn btn-ghost btn-sm">
 			<Settings class="h-5 w-5" />
@@ -27,7 +26,6 @@
 		<form action="/logout" method="POST" class="">
 			<button type="submit" class="btn btn-ghost btn-sm" aria-label="Sign out">
 				<LogOut class="h-5 w-5" />
-				<span class="sr-only">Sign out</span>
 			</button>
 		</form>
 	</div>

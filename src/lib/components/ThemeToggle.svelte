@@ -34,9 +34,7 @@
 >
 	{#if theme === 'light'}
 		<Moon class="h-5 w-5" />
-		<span class="sr-only">Switch to dark theme</span>
 	{:else}
 		<Sun class="h-5 w-5" />
-		<span class="sr-only">Switch to light theme</span>
 	{/if}
 </button>

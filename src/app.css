@@ -133,3 +133,8 @@
 		scroll-behavior: auto !important;
 	}
 }
+
+/* Add a visible focus ring to interactive elements */
+:is(a, button, input, textarea, select):focus-visible {
+	@apply outline-primary outline-offset-2 outline-2;
+}

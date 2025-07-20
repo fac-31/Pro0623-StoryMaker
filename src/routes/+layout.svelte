@@ -1,5 +1,13 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		if ('serviceWorker' in navigator) {
+			const base = import.meta.env.BASE_URL;
+			navigator.serviceWorker.register(`${base}service-worker.js`);
+		}
+	});
 </script>
 
 <div class="bg-base-100 min-h-screen">

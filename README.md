@@ -57,6 +57,9 @@ cp .env.example .env
 # Start development server
 npm run dev
 
+# Serve over HTTPS for PWA testing
+npm run dev:https
+
 # Open in browser
 npm run dev -- --open
 ```
