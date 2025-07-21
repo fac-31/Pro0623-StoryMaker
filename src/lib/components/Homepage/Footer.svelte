@@ -55,15 +55,18 @@
 			<div class="mt-4 flex space-x-6 md:mt-0">
 				<a
 					href="https://twitter.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Twitter</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Follow us on Twitter">Twitter</a
 				>
 				<a
 					href="https://linkedin.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">LinkedIn</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Connect with us on LinkedIn">LinkedIn</a
 				>
 				<a
 					href="https://instagram.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Instagram</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Follow us on Instagram">Instagram</a
 				>
 			</div>
 		</div>
