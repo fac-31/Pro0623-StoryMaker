@@ -2,7 +2,7 @@
 	import { Play } from 'lucide-svelte';
 </script>
 
-<footer class="bg-neutral text-neutral-content py-16">
+<footer class="bg-neutral text-neutral-content py-16" aria-label="Footer">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="grid gap-8 md:grid-cols-4">
 			<div class="space-y-4">
@@ -55,15 +55,18 @@
 			<div class="mt-4 flex space-x-6 md:mt-0">
 				<a
 					href="https://twitter.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Twitter</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="StoryMaker on Twitter">Twitter</a
 				>
 				<a
 					href="https://linkedin.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">LinkedIn</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="StoryMaker on LinkedIn">LinkedIn</a
 				>
 				<a
 					href="https://instagram.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Instagram</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="StoryMaker on Instagram">Instagram</a
 				>
 			</div>
 		</div>
