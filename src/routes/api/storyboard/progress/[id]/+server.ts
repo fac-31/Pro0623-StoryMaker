@@ -35,16 +35,15 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	const stream = new ReadableStream({
 		start(controller) {
-			registerStream(id, controller);
+			const abortController = new AbortController();
+			registerStream(id, controller, abortController);
 
-			runAsyncStoryboard(storyboard).catch((err) => {
+			runAsyncStoryboard(storyboard, abortController.signal).catch((err) => {
 				console.error('Storyboard error:', err);
 				endStream(id);
 			});
 		},
-
 		cancel() {
-			// Cleanup if the client disconnects
 			endStream(id);
 		}
 	});
