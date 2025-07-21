@@ -9,3 +9,6 @@ docs/
 # Ignore generated game files
 static/games/
 /static/games/
+
+# Ignore linting config
+eslint.config.js
