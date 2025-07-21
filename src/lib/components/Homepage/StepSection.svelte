@@ -23,11 +23,11 @@
 	];
 </script>
 
-<section id="how-it-works" class="bg-base-200 py-20" aria-labelledby="how-it-works-title">
+<section id="how-it-works" class="bg-base-200 py-20">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="mb-16 space-y-4 text-center">
 			<div class="badge badge-primary badge-lg">How It Works</div>
-			<h2 id="how-it-works-title" class="text-base-content text-3xl font-bold lg:text-5xl">
+			<h2 class="text-base-content text-3xl font-bold lg:text-5xl">
 				From Idea to Storyboard in
 				<span class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
 					3 Simple Steps
