@@ -53,6 +53,18 @@ export const POST: RequestHandler = async ({ request }) => {
 		.findOne({ _id: new ObjectId(storyboardId) });
 	if (!storyboard) return json({ error: 'Storyboard not found' }, { status: 404 });
 
+	const outputDir = path.join('static', 'games', storyboardId);
+
+	// --- Check if game is already generated ---
+	if (storyboard.gameHtml) {
+		console.log('Serving previously generated game from DB.');
+		await fs.promises.mkdir(outputDir, { recursive: true });
+		await fs.promises.writeFile(path.join(outputDir, 'index.html'), storyboard.gameHtml);
+		return json({ success: true, gamePath: `/games/${storyboardId}/index.html` });
+	}
+	
+	// --- Continue with generation if not found ---
+
 	if (!env.OPENAI_API_KEY) return json({ error: 'OpenAI API key not configured' }, { status: 500 });
 
 	const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
@@ -83,15 +95,13 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 	}
 
-	const outputDir = path.join('static', 'games', storyboardId);
-
-	// New: Ask OpenAI to generate the full HTML, CSS, and JS for the game
 	const htmlPrompt = `
 You are a web game developer. Given the following story, game interactions, and detected object bounding boxes, generate a complete HTML file (with embedded CSS and JavaScript) that implements the game. For each slide:
 - Display the corresponding image (from the "imageUrl" field in the storyboard's "visualSlides").
 - For each interaction, use the provided bounding box coordinates (in slide.detectedObjects) to position interactive elements (e.g. clickable, selectable) precisely over the image.
 - Visually highlight all interactive areas on the image (e.g., with colored boxes, outlines, or hotspots) so the user knows where to interact.
 - The user should only be able to proceed to the next slide after successfully completing all required interactions for the current slide.
+- When rendering interactive boxes (hotspots) over the image, sort them by area (width × height) from smallest to largest. Assign a higher z-index to smaller boxes so that if boxes overlap, the smaller ones are always on top and remain clickable.
 - Add a "Hint" button for each interaction. If a hint is not provided in the data, generate a helpful hint based on the interaction description.
 - Use only vanilla JS, HTML, and CSS (no external dependencies).
 - The game should be playable in an iframe.
@@ -116,6 +126,20 @@ ${JSON.stringify(interactions, null, 2)}
 
 	await fs.promises.mkdir(outputDir, { recursive: true });
 	await fs.promises.writeFile(path.join(outputDir, 'index.html'), generatedHtml);
+	
+	// --- Save the generated game back to the database ---
+	await db.collection('storyboards').updateOne(
+		{ _id: new ObjectId(storyboardId) },
+		{ 
+			$set: {
+				interactions: interactions,
+				gameHtml: generatedHtml,
+				updatedAt: new Date()
+			}
+		}
+	);
+
+	console.log('Saved generated game to the database.');
 
 	return json({ success: true, gamePath: `/games/${storyboardId}/index.html` });
 };

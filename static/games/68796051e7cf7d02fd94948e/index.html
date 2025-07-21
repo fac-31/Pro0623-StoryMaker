@@ -1,309 +1,165 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Jono's Inevitable Aging: A Tale of Long Nights at KKR</title>
-		<style>
-			body {
-				margin: 0;
-				overflow: hidden;
-			}
-			#game-container {
-				position: relative;
-				width: 100vw;
-				height: 100vh;
-				background-color: black;
-			}
-			.slide {
-				display: none;
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-			}
-			.slide img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-			.interactive-area {
-				position: absolute;
-				border: 2px solid rgba(255, 0, 0, 0.5);
-				cursor: pointer;
-			}
-			.hint-button {
-				position: absolute;
-				background-color: rgba(0, 0, 0, 0.5);
-				color: white;
-				border: none;
-				padding: 5px;
-				cursor: pointer;
-			}
-			.hint-button:hover {
-				background-color: rgba(0, 0, 0, 0.7);
-			}
-			#next-button {
-				position: absolute;
-				bottom: 20px;
-				right: 20px;
-				padding: 10px 20px;
-				background-color: rgba(0, 0, 0, 0.5);
-				color: white;
-				border: none;
-				cursor: pointer;
-				display: none;
-			}
-			#next-button:hover {
-				background-color: rgba(0, 0, 0, 0.7);
-			}
-		</style>
-	</head>
-	<body>
-		<div id="game-container">
-			<!-- Slide 1 -->
-			<div class="slide" id="slide-1">
-				<img
-					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785056/storyboard-images/slide-1-1752785055682.webp"
-					alt="Slide 1"
-				/>
-				<div
-					class="interactive-area"
-					style="left: 950px; top: 250px; width: 100px; height: 200px"
-					data-action="toggle"
-					data-result="The room dims as the lamp is turned off, highlighting the cityscape outside."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 950px; top: 460px"
-					onclick="showHint('Try clicking on the lamp to see what happens.')"
-				>
-					Hint
-				</button>
-				<div
-					class="interactive-area"
-					style="left: 0px; top: 400px; width: 200px; height: 100px"
-					data-action="click"
-					data-result="A document detailing a critical deal is revealed, hinting at Jono's workload."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 0px; top: 510px"
-					onclick="showHint('Check the paperwork stack for more details.')"
-				>
-					Hint
-				</button>
-			</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jono's Inevitable Aging: A Tale of Long Nights at KKR</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+        #game-container {
+            position: relative;
+            width: 1344px;
+            height: 768px;
+        }
+        .slide {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .active {
+            display: block;
+        }
+        .interactive-area {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 0, 0.5);
+            cursor: pointer;
+        }
+        .hint-button {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Slide 1 -->
+        <div class="slide active" id="slide-1">
+            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785056/storyboard-images/slide-1-1752785055682.webp" alt="Slide 1" style="width:100%; height:100%;">
+            <div class="interactive-area" style="left: 540px; top: 180px; width: 240px; height: 480px;" data-interaction="click" data-description="Jono glances at the paperwork, revealing a list of urgent tasks." data-result="A close-up of the paperwork shows a list with deadlines."></div>
+            <button class="hint-button" style="left: 540px; top: 660px;" onclick="showHint('Jono glances at the paperwork to reveal urgent tasks.')">Hint</button>
+            <div class="interactive-area" style="left: 0px; top: 480px; width: 1344px; height: 288px;" data-interaction="choose" data-options='[
+                {"description": "Jono takes a deep breath and focuses on the task at hand.", "result": "His determination is renewed, and he starts typing furiously."},
+                {"description": "Jono leans back and closes his eyes for a moment's rest.", "result": "The camera zooms in on his tired eyes as he takes a brief respite."}
+            ]'></div>
+            <button class="hint-button" style="left: 0px; top: 760px;" onclick="showHint('Choose how Jono reacts to the paperwork.')">Hint</button>
+        </div>
+        <!-- Slide 2 -->
+        <div class="slide" id="slide-2">
+            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785081/storyboard-images/slide-2-1752785081181.webp" alt="Slide 2" style="width:100%; height:100%;">
+            <div class="interactive-area" style="left: 530px; top: 250px; width: 300px; height: 500px;" data-interaction="click" data-description="Jono adjusts his tie and leans forward." data-result="The tension in the room increases as Jono becomes more assertive."></div>
+            <button class="hint-button" style="left: 530px; top: 750px;" onclick="showHint('Jono adjusts his tie to become more assertive.')">Hint</button>
+            <div class="interactive-area" style="left: 200px; top: 400px; width: 900px; height: 200px;" data-interaction="choose" data-options='[
+                {"description": "Jono pushes for a higher offer.", "result": "The unseen characters murmur in consideration."},
+                {"description": "Jono suggests a compromise.", "result": "The atmosphere lightens slightly as the negotiation progresses."}
+            ]'></div>
+            <button class="hint-button" style="left: 200px; top: 600px;" onclick="showHint('Choose Jono\'s negotiation strategy.')">Hint</button>
+        </div>
+        <!-- Slide 3 -->
+        <div class="slide" id="slide-3">
+            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785109/storyboard-images/slide-3-1752785109017.jpg" alt="Slide 3" style="width:100%; height:100%;">
+            <div class="interactive-area" style="left: 0px; top: 0px; width: 1344px; height: 768px;" data-interaction="click" data-description="The city lights flicker, reflecting Jono's wavering resolve." data-result="A brief montage of Jono's late-night work sessions."></div>
+            <button class="hint-button" style="left: 0px; top: 740px;" onclick="showHint('Click on the city lights to see Jono\'s resolve.')">Hint</button>
+            <div class="interactive-area" style="left: 0px; top: 700px; width: 1344px; height: 68px;" data-interaction="choose" data-options='[
+                {"description": "Jono takes a sip of cold coffee.", "result": "The bitterness of the coffee mirrors his exhaustion."},
+                {"description": "Jono rubs his eyes and continues working.", "result": "The camera focuses on the dark circles under his eyes."}
+            ]'></div>
+            <button class="hint-button" style="left: 0px; top: 740px;" onclick="showHint('Choose Jono\'s late-night action.')">Hint</button>
+        </div>
+        <!-- Slide 4 -->
+        <div class="slide" id="slide-4">
+            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785137/storyboard-images/slide-4-1752785136438.webp" alt="Slide 4" style="width:100%; height:100%;">
+            <div class="interactive-area" style="left: 400px; top: 100px; width: 500px; height: 600px;" data-interaction="click" data-description="Jono touches the mirror, tracing the lines on his face." data-result="A flashback of his younger self appears briefly."></div>
+            <button class="hint-button" style="left: 400px; top: 700px;" onclick="showHint('Click on the mirror to see Jono\'s reflection.')">Hint</button>
+            <div class="interactive-area" style="left: 100px; top: 200px; width: 200px; height: 400px;" data-interaction="choose" data-options='[
+                {"description": "Jono sighs deeply, accepting his reflection.", "result": "The reflection seems to nod in understanding."},
+                {"description": "Jono turns away from the mirror.", "result": "The camera lingers on the mirror, capturing his retreating figure."}
+            ]'></div>
+            <button class="hint-button" style="left: 100px; top: 600px;" onclick="showHint('Choose Jono\'s reaction to his reflection.')">Hint</button>
+        </div>
+        <!-- Slide 5 -->
+        <div class="slide" id="slide-5">
+            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785162/storyboard-images/slide-5-1752785161307.webp" alt="Slide 5" style="width:100%; height:100%;">
+            <div class="interactive-area" style="left: 300px; top: 100px; width: 400px; height: 600px;" data-interaction="click" data-description="Jono examines his reflection closely." data-result="A montage of past achievements and sacrifices plays in his mind."></div>
+            <button class="hint-button" style="left: 300px; top: 700px;" onclick="showHint('Click on Jono\'s reflection to see his thoughts.')">Hint</button>
+            <div class="interactive-area" style="left: 700px; top: 200px; width: 300px; height: 500px;" data-interaction="choose" data-options='[
+                {"description": "Jono whispers to himself, questioning his choices.", "result": "The room echoes with his whispered doubts."},
+                {"description": "Jono straightens his posture, ready to face reality.", "result": "His reflection mirrors his newfound resolve."}
+            ]'></div>
+            <button class="hint-button" style="left: 700px; top: 700px;" onclick="showHint('Choose Jono\'s reaction to his past.')">Hint</button>
+        </div>
+        <!-- Slide 6 -->
+        <div class="slide" id="slide-6">
+            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785189/storyboard-images/slide-6-1752785188988.webp" alt="Slide 6" style="width:100%; height:100%;">
+            <div class="interactive-area" style="left: 300px; top: 100px; width: 700px; height: 500px;" data-interaction="click" data-description="Jono gazes at the cityscape, contemplating his journey." data-result="The camera pans out, showing the vast city as a symbol of his ambition."></div>
+            <button class="hint-button" style="left: 300px; top: 600px;" onclick="showHint('Click on the cityscape to see Jono\'s contemplation.')">Hint</button>
+            <div class="interactive-area" style="left: 350px; top: 150px; width: 600px; height: 400px;" data-interaction="choose" data-options='[
+                {"description": "Jono smiles faintly, accepting his life choices.", "result": "The scene fades to black, symbolizing closure."},
+                {"description": "Jono closes his eyes, reflecting on his journey.", "result": "The screen fades to black, leaving a sense of peace."}
+            ]'></div>
+            <button class="hint-button" style="left: 350px; top: 550px;" onclick="showHint('Choose Jono\'s final reaction.')">Hint</button>
+        </div>
+    </div>
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
 
-			<!-- Slide 2 -->
-			<div class="slide" id="slide-2">
-				<img
-					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785081/storyboard-images/slide-2-1752785081181.webp"
-					alt="Slide 2"
-				/>
-				<button
-					class="hint-button"
-					style="left: 500px; top: 200px"
-					onclick="showHint('Choose an option to guide Jono through the negotiation.')"
-				>
-					Hint
-				</button>
-				<div
-					class="interactive-area"
-					style="left: 500px; top: 200px; width: 400px; height: 600px"
-					onclick="chooseOption('Encourage Jono to push for a better deal', 'Jono\'s determination increases, but so does the stress on his face.')"
-				></div>
-				<div
-					class="interactive-area"
-					style="left: 800px; top: 100px; width: 100px; height: 300px"
-					onclick="chooseOption('Advise Jono to settle quickly', 'Jono\'s stress decreases slightly, but a hint of doubt crosses his face.')"
-				></div>
-			</div>
+        document.querySelectorAll('.interactive-area').forEach(area => {
+            area.addEventListener('click', () => {
+                const interactionType = area.dataset.interaction;
+                if (interactionType === 'click') {
+                    alert(area.dataset.result);
+                    checkCompletion();
+                } else if (interactionType === 'choose') {
+                    const options = JSON.parse(area.dataset.options);
+                    const choice = prompt('Choose an option:\n1. ' + options[0].description + '\n2. ' + options[1].description);
+                    if (choice === '1' || choice === '2') {
+                        alert(options[choice - 1].result);
+                        checkCompletion();
+                    }
+                }
+            });
+        });
 
-			<!-- Slide 3 -->
-			<div class="slide" id="slide-3">
-				<img
-					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785109/storyboard-images/slide-3-1752785109017.jpg"
-					alt="Slide 3"
-				/>
-				<div
-					class="interactive-area"
-					style="left: 400px; top: 100px; width: 500px; height: 600px"
-					data-action="click"
-					data-result="The screen displays a late-night email from a client demanding immediate attention."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 400px; top: 710px"
-					onclick="showHint('Check the computer screen for any updates.')"
-				>
-					Hint
-				</button>
-				<div
-					class="interactive-area"
-					style="left: 0px; top: 700px; width: 1344px; height: 68px"
-					data-action="click"
-					data-result="Jono takes a sip, the caffeine barely masking his exhaustion."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 0px; top: 770px"
-					onclick="showHint('A sip of coffee might help Jono stay awake.')"
-				>
-					Hint
-				</button>
-			</div>
+        function showHint(hint) {
+            alert(hint);
+        }
 
-			<!-- Slide 4 -->
-			<div class="slide" id="slide-4">
-				<img
-					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785137/storyboard-images/slide-4-1752785136438.webp"
-					alt="Slide 4"
-				/>
-				<div
-					class="interactive-area"
-					style="left: 450px; top: 100px; width: 450px; height: 600px"
-					data-action="click"
-					data-result="Jono's reflection shifts, showing a younger version of himself, a stark contrast to his current state."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 450px; top: 710px"
-					onclick="showHint('Look into the mirror to see a reflection of the past.')"
-				>
-					Hint
-				</button>
-				<div
-					class="interactive-area"
-					style="left: 100px; top: 150px; width: 150px; height: 400px"
-					data-action="click"
-					data-result="The clock ticks loudly, emphasizing the relentless passage of time."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 100px; top: 560px"
-					onclick="showHint('The clock might reveal something about time.')"
-				>
-					Hint
-				</button>
-			</div>
+        function checkCompletion() {
+            const slide = document.getElementById('slide-' + currentSlide);
+            const areas = slide.querySelectorAll('.interactive-area');
+            let completed = true;
+            areas.forEach(area => {
+                if (!area.dataset.completed) {
+                    completed = false;
+                }
+            });
+            if (completed) {
+                goToNextSlide();
+            }
+        }
 
-			<!-- Slide 5 -->
-			<div class="slide" id="slide-5">
-				<img
-					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785162/storyboard-images/slide-5-1752785161307.webp"
-					alt="Slide 5"
-				/>
-				<button
-					class="hint-button"
-					style="left: 200px; top: 50px"
-					onclick="showHint('Choose a path for Jono to reflect on his journey.')"
-				>
-					Hint
-				</button>
-				<div
-					class="interactive-area"
-					style="left: 200px; top: 50px; width: 400px; height: 600px"
-					onclick="chooseOption('Reflect on the past sacrifices', 'Jono\'s eyes show a deep sense of regret, as memories of missed opportunities flash by.')"
-				></div>
-				<div
-					class="interactive-area"
-					style="left: 600px; top: 200px; width: 200px; height: 400px"
-					onclick="chooseOption('Focus on future possibilities', 'A glimmer of hope appears in Jono\'s eyes, considering new paths ahead.')"
-				></div>
-			</div>
-
-			<!-- Slide 6 -->
-			<div class="slide" id="slide-6">
-				<img
-					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785189/storyboard-images/slide-6-1752785188988.webp"
-					alt="Slide 6"
-				/>
-				<div
-					class="interactive-area"
-					style="left: 300px; top: 100px; width: 700px; height: 300px"
-					data-action="click"
-					data-result="The city lights twinkle, symbolizing the endless possibilities and challenges that lie ahead."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 300px; top: 410px"
-					onclick="showHint('The cityscape holds many stories.')"
-				>
-					Hint
-				</button>
-				<div
-					class="interactive-area"
-					style="left: 400px; top: 500px; width: 400px; height: 200px"
-					data-action="click"
-					data-result="A photo of Jono with friends and family is revealed, reminding him of the personal sacrifices made."
-				></div>
-				<button
-					class="hint-button"
-					style="left: 400px; top: 710px"
-					onclick="showHint('Check the desk for personal memories.')"
-				>
-					Hint
-				</button>
-			</div>
-
-			<button id="next-button" onclick="nextSlide()">Next</button>
-		</div>
-
-		<script>
-			let currentSlide = 1;
-			const totalSlides = 6;
-			const interactionsCompleted = new Set();
-
-			function showHint(hint) {
-				alert(hint);
-			}
-
-			function chooseOption(optionText, result) {
-				alert(result);
-				interactionsCompleted.add(`${currentSlide}-${optionText}`);
-				checkInteractions();
-			}
-
-			function checkInteractions() {
-				const slideInteractions = {
-					1: 2,
-					2: 2,
-					3: 2,
-					4: 2,
-					5: 2,
-					6: 2
-				};
-
-				if (interactionsCompleted.size >= slideInteractions[currentSlide]) {
-					document.getElementById('next-button').style.display = 'block';
-				}
-			}
-
-			function nextSlide() {
-				if (currentSlide < totalSlides) {
-					document.getElementById(`slide-${currentSlide}`).style.display = 'none';
-					currentSlide++;
-					document.getElementById(`slide-${currentSlide}`).style.display = 'block';
-					document.getElementById('next-button').style.display = 'none';
-					interactionsCompleted.clear();
-				}
-			}
-
-			document.querySelectorAll('.interactive-area').forEach((area) => {
-				area.addEventListener('click', function () {
-					const action = this.getAttribute('data-action');
-					const result = this.getAttribute('data-result');
-					if (action && result) {
-						alert(result);
-						interactionsCompleted.add(`${currentSlide}-${action}`);
-						checkInteractions();
-					}
-				});
-			});
-
-			document.getElementById('slide-1').style.display = 'block';
-		</script>
-	</body>
+        function goToNextSlide() {
+            if (currentSlide < totalSlides) {
+                document.getElementById('slide-' + currentSlide).classList.remove('active');
+                currentSlide++;
+                document.getElementById('slide-' + currentSlide).classList.add('active');
+            } else {
+                alert('You have completed the story!');
+            }
+        }
+    </script>
+</body>
 </html>

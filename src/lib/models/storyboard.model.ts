@@ -1,8 +1,7 @@
 import type { ObjectId } from 'mongodb';
 
 import type { UserPrompt } from '$lib/models/UserPrompt';
-import type { StoryOutline } from '$lib/models/story';
-import type { VisualSlide } from '$lib/models/story';
+import type { StoryOutline, VisualSlide } from '$lib/models/story';
 
 export type StoryboardStatus =
 	| 'none'
@@ -22,4 +21,14 @@ export interface Storyboard {
 	visualSlides: VisualSlide[];
 }
 
-export type NewStoryboard = Omit<Storyboard, '_id'>;
+export interface NewStoryboard {
+	status: StoryboardStatus;
+	prompts: UserPrompt;
+	currentSlide: number;
+	createdAt: Date;
+	updatedAt: Date;
+	storyOutline: StoryOutline;
+	visualSlides: VisualSlide[];
+	interactions?: any; // To store game interactions
+	gameHtml?: string; // To store the generated game HTML
+}
