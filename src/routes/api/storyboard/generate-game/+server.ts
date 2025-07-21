@@ -62,7 +62,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		await fs.promises.writeFile(path.join(outputDir, 'index.html'), storyboard.gameHtml);
 		return json({ success: true, gamePath: `/games/${storyboardId}/index.html` });
 	}
-	
+
 	// --- Continue with generation if not found ---
 
 	if (!env.OPENAI_API_KEY) return json({ error: 'OpenAI API key not configured' }, { status: 500 });
@@ -126,11 +126,11 @@ ${JSON.stringify(interactions, null, 2)}
 
 	await fs.promises.mkdir(outputDir, { recursive: true });
 	await fs.promises.writeFile(path.join(outputDir, 'index.html'), generatedHtml);
-	
+
 	// --- Save the generated game back to the database ---
 	await db.collection('storyboards').updateOne(
 		{ _id: new ObjectId(storyboardId) },
-		{ 
+		{
 			$set: {
 				interactions: interactions,
 				gameHtml: generatedHtml,

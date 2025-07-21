@@ -1,144 +1,182 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fairy Makes a Friend</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f8ff;
-        }
-        #game-container {
-            position: relative;
-            width: 800px;
-            height: 600px;
-            background-color: #fff;
-            border: 2px solid #ccc;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .slide {
-            display: none;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-        .active {
-            display: block;
-        }
-        .interactive-area {
-            position: absolute;
-            border: 2px dashed #ff69b4;
-            cursor: pointer;
-        }
-        .hint-button {
-            position: absolute;
-            background-color: #ff69b4;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .choice-container {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-        }
-        .choice-button {
-            background-color: #ff69b4;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        #next-slide {
-            display: none;
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background-color: #32cd32;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div id="game-container">
-        <!-- Slide 1 -->
-        <div class="slide active" id="slide-1">
-            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753096738/storyboard-images/slide-1-1753096736808.webp" alt="Fairy in the Forest" style="width: 100%; height: 100%;">
-            <div class="interactive-area" style="left: 100px; top: 150px; width: 300px; height: 400px;" data-action="sparkle" data-target="Faye"></div>
-            <button class="hint-button" style="left: 100px; top: 560px;" onclick="showHint('Click on Faye to see her spread magic dust with a sparkle effect.')">Hint</button>
-            <div class="choice-container">
-                <button class="choice-button" onclick="makeChoice('Explore the forest', 1)">Explore the forest</button>
-                <button class="choice-button" onclick="makeChoice('Follow the stream', 1)">Follow the stream</button>
-            </div>
-        </div>
-        <!-- Slide 2 -->
-        <div class="slide" id="slide-2">
-            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753096768/storyboard-images/slide-2-1753096766696.webp" alt="Faye Meets a Friend" style="width: 100%; height: 100%;">
-            <div class="interactive-area" style="left: 600px; top: 200px; width: 200px; height: 300px;" data-action="peek" data-target="Squirrel"></div>
-            <button class="hint-button" style="left: 600px; top: 510px;" onclick="showHint('Click on the squirrel to make it peek out from behind the mushroom.')">Hint</button>
-            <div class="choice-container">
-                <button class="choice-button" onclick="makeChoice('Comfort the squirrel', 2)">Comfort the squirrel</button>
-                <button class="choice-button" onclick="makeChoice('Ask the squirrel a question', 2)">Ask the squirrel a question</button>
-            </div>
-        </div>
-        <button id="next-slide" onclick="nextSlide()">Next</button>
-    </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Fairy Makes a Friend</title>
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				background-color: #f0f8ff;
+			}
+			#game-container {
+				position: relative;
+				width: 800px;
+				height: 600px;
+				background-color: #fff;
+				border: 2px solid #ccc;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+			.slide {
+				display: none;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+			}
+			.active {
+				display: block;
+			}
+			.interactive-area {
+				position: absolute;
+				border: 2px dashed #ff69b4;
+				cursor: pointer;
+			}
+			.hint-button {
+				position: absolute;
+				background-color: #ff69b4;
+				color: #fff;
+				border: none;
+				padding: 5px 10px;
+				cursor: pointer;
+				border-radius: 5px;
+			}
+			.choice-container {
+				position: absolute;
+				bottom: 20px;
+				left: 50%;
+				transform: translateX(-50%);
+				display: flex;
+				gap: 10px;
+			}
+			.choice-button {
+				background-color: #ff69b4;
+				color: #fff;
+				border: none;
+				padding: 10px 15px;
+				cursor: pointer;
+				border-radius: 5px;
+			}
+			#next-slide {
+				display: none;
+				position: absolute;
+				bottom: 20px;
+				right: 20px;
+				background-color: #32cd32;
+				color: #fff;
+				border: none;
+				padding: 10px 15px;
+				cursor: pointer;
+				border-radius: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="game-container">
+			<!-- Slide 1 -->
+			<div class="slide active" id="slide-1">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753096738/storyboard-images/slide-1-1753096736808.webp"
+					alt="Fairy in the Forest"
+					style="width: 100%; height: 100%"
+				/>
+				<div
+					class="interactive-area"
+					style="left: 100px; top: 150px; width: 300px; height: 400px"
+					data-action="sparkle"
+					data-target="Faye"
+				></div>
+				<button
+					class="hint-button"
+					style="left: 100px; top: 560px"
+					onclick="showHint('Click on Faye to see her spread magic dust with a sparkle effect.')"
+				>
+					Hint
+				</button>
+				<div class="choice-container">
+					<button class="choice-button" onclick="makeChoice('Explore the forest', 1)">
+						Explore the forest
+					</button>
+					<button class="choice-button" onclick="makeChoice('Follow the stream', 1)">
+						Follow the stream
+					</button>
+				</div>
+			</div>
+			<!-- Slide 2 -->
+			<div class="slide" id="slide-2">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753096768/storyboard-images/slide-2-1753096766696.webp"
+					alt="Faye Meets a Friend"
+					style="width: 100%; height: 100%"
+				/>
+				<div
+					class="interactive-area"
+					style="left: 600px; top: 200px; width: 200px; height: 300px"
+					data-action="peek"
+					data-target="Squirrel"
+				></div>
+				<button
+					class="hint-button"
+					style="left: 600px; top: 510px"
+					onclick="showHint('Click on the squirrel to make it peek out from behind the mushroom.')"
+				>
+					Hint
+				</button>
+				<div class="choice-container">
+					<button class="choice-button" onclick="makeChoice('Comfort the squirrel', 2)">
+						Comfort the squirrel
+					</button>
+					<button class="choice-button" onclick="makeChoice('Ask the squirrel a question', 2)">
+						Ask the squirrel a question
+					</button>
+				</div>
+			</div>
+			<button id="next-slide" onclick="nextSlide()">Next</button>
+		</div>
 
-    <script>
-        let currentSlide = 1;
-        const totalSlides = 2;
-        const interactionsCompleted = {};
+		<script>
+			let currentSlide = 1;
+			const totalSlides = 2;
+			const interactionsCompleted = {};
 
-        function showHint(hint) {
-            alert(hint);
-        }
+			function showHint(hint) {
+				alert(hint);
+			}
 
-        function makeChoice(choice, slideId) {
-            alert(choice);
-            interactionsCompleted[`slide-${slideId}`] = true;
-            checkInteractions(slideId);
-        }
+			function makeChoice(choice, slideId) {
+				alert(choice);
+				interactionsCompleted[`slide-${slideId}`] = true;
+				checkInteractions(slideId);
+			}
 
-        function checkInteractions(slideId) {
-            if (interactionsCompleted[`slide-${slideId}`]) {
-                document.getElementById('next-slide').style.display = 'block';
-            }
-        }
+			function checkInteractions(slideId) {
+				if (interactionsCompleted[`slide-${slideId}`]) {
+					document.getElementById('next-slide').style.display = 'block';
+				}
+			}
 
-        function nextSlide() {
-            if (currentSlide < totalSlides) {
-                document.getElementById(`slide-${currentSlide}`).classList.remove('active');
-                currentSlide++;
-                document.getElementById(`slide-${currentSlide}`).classList.add('active');
-                document.getElementById('next-slide').style.display = 'none';
-            }
-        }
+			function nextSlide() {
+				if (currentSlide < totalSlides) {
+					document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+					currentSlide++;
+					document.getElementById(`slide-${currentSlide}`).classList.add('active');
+					document.getElementById('next-slide').style.display = 'none';
+				}
+			}
 
-        document.querySelectorAll('.interactive-area').forEach(area => {
-            area.addEventListener('click', function() {
-                const action = this.dataset.action;
-                const target = this.dataset.target;
-                alert(`Action: ${action} on ${target}`);
-                interactionsCompleted[`slide-${currentSlide}`] = true;
-                checkInteractions(currentSlide);
-            });
-        });
-    </script>
-</body>
+			document.querySelectorAll('.interactive-area').forEach((area) => {
+				area.addEventListener('click', function () {
+					const action = this.dataset.action;
+					const target = this.dataset.target;
+					alert(`Action: ${action} on ${target}`);
+					interactionsCompleted[`slide-${currentSlide}`] = true;
+					checkInteractions(currentSlide);
+				});
+			});
+		</script>
+	</body>
 </html>

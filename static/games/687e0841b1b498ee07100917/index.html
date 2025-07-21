@@ -1,150 +1,192 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mouse Makes a Friend</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-        }
-        #game-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        .slide {
-            display: none;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-        .slide.active {
-            display: block;
-        }
-        .interactive-area {
-            position: absolute;
-            border: 2px solid rgba(255, 0, 0, 0.5);
-            cursor: pointer;
-        }
-        .hint-button {
-            position: absolute;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .dialogue-box {
-            position: absolute;
-            bottom: 10%;
-            left: 10%;
-            right: 10%;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-        .dialogue-box.active {
-            display: block;
-        }
-    </style>
-</head>
-<body>
-    <div id="game-container">
-        <!-- Slide 1 -->
-        <div class="slide" id="slide-1">
-            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753090169/storyboard-images/slide-1-1753090167280.webp" alt="Slide 1" style="width:100%; height:100%;">
-            <div class="interactive-area" style="left: 150px; top: 200px; width: 200px; height: 200px;" onclick="handleClick(1, 'Max')"></div>
-            <button class="hint-button" style="left: 150px; top: 410px;" onclick="showHint(1, 'Max')">Hint</button>
-            <div class="interactive-area" style="left: 500px; top: 300px; width: 150px; height: 100px;" onclick="handleChoice(1, 'Cheese')"></div>
-            <button class="hint-button" style="left: 500px; top: 410px;" onclick="showHint(1, 'Cheese')">Hint</button>
-            <div class="dialogue-box" id="dialogue-1"></div>
-        </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Mouse Makes a Friend</title>
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+				font-family: Arial, sans-serif;
+			}
+			#game-container {
+				position: relative;
+				width: 100vw;
+				height: 100vh;
+				background-color: #f0f0f0;
+			}
+			.slide {
+				display: none;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+			}
+			.slide.active {
+				display: block;
+			}
+			.interactive-area {
+				position: absolute;
+				border: 2px solid rgba(255, 0, 0, 0.5);
+				cursor: pointer;
+			}
+			.hint-button {
+				position: absolute;
+				background-color: #007bff;
+				color: white;
+				border: none;
+				padding: 5px 10px;
+				cursor: pointer;
+				border-radius: 5px;
+			}
+			.dialogue-box {
+				position: absolute;
+				bottom: 10%;
+				left: 10%;
+				right: 10%;
+				background-color: rgba(255, 255, 255, 0.8);
+				padding: 10px;
+				border-radius: 5px;
+				display: none;
+			}
+			.dialogue-box.active {
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="game-container">
+			<!-- Slide 1 -->
+			<div class="slide" id="slide-1">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753090169/storyboard-images/slide-1-1753090167280.webp"
+					alt="Slide 1"
+					style="width: 100%; height: 100%"
+				/>
+				<div
+					class="interactive-area"
+					style="left: 150px; top: 200px; width: 200px; height: 200px"
+					onclick="handleClick(1, 'Max')"
+				></div>
+				<button class="hint-button" style="left: 150px; top: 410px" onclick="showHint(1, 'Max')">
+					Hint
+				</button>
+				<div
+					class="interactive-area"
+					style="left: 500px; top: 300px; width: 150px; height: 100px"
+					onclick="handleChoice(1, 'Cheese')"
+				></div>
+				<button class="hint-button" style="left: 500px; top: 410px" onclick="showHint(1, 'Cheese')">
+					Hint
+				</button>
+				<div class="dialogue-box" id="dialogue-1"></div>
+			</div>
 
-        <!-- Slide 2 -->
-        <div class="slide" id="slide-2">
-            <img src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753090192/storyboard-images/slide-2-1753090190406.webp" alt="Slide 2" style="width:100%; height:100%;">
-            <div class="interactive-area" style="left: 450px; top: 300px; width: 200px; height: 150px;" onclick="handleClick(2, 'Charlie')"></div>
-            <button class="hint-button" style="left: 450px; top: 460px;" onclick="showHint(2, 'Charlie')">Hint</button>
-            <div class="interactive-area" style="left: 400px; top: 50px; width: 200px; height: 150px;" onclick="handleChoice(2, 'Garden')"></div>
-            <button class="hint-button" style="left: 400px; top: 210px;" onclick="showHint(2, 'Garden')">Hint</button>
-            <div class="dialogue-box" id="dialogue-2"></div>
-        </div>
-    </div>
+			<!-- Slide 2 -->
+			<div class="slide" id="slide-2">
+				<img
+					src="https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753090192/storyboard-images/slide-2-1753090190406.webp"
+					alt="Slide 2"
+					style="width: 100%; height: 100%"
+				/>
+				<div
+					class="interactive-area"
+					style="left: 450px; top: 300px; width: 200px; height: 150px"
+					onclick="handleClick(2, 'Charlie')"
+				></div>
+				<button
+					class="hint-button"
+					style="left: 450px; top: 460px"
+					onclick="showHint(2, 'Charlie')"
+				>
+					Hint
+				</button>
+				<div
+					class="interactive-area"
+					style="left: 400px; top: 50px; width: 200px; height: 150px"
+					onclick="handleChoice(2, 'Garden')"
+				></div>
+				<button class="hint-button" style="left: 400px; top: 210px" onclick="showHint(2, 'Garden')">
+					Hint
+				</button>
+				<div class="dialogue-box" id="dialogue-2"></div>
+			</div>
+		</div>
 
-    <script>
-        let currentSlide = 1;
-        const totalSlides = 2;
+		<script>
+			let currentSlide = 1;
+			const totalSlides = 2;
 
-        function showSlide(slideNumber) {
-            document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
-            document.getElementById(`slide-${slideNumber}`).classList.add('active');
-        }
+			function showSlide(slideNumber) {
+				document.querySelectorAll('.slide').forEach((slide) => slide.classList.remove('active'));
+				document.getElementById(`slide-${slideNumber}`).classList.add('active');
+			}
 
-        function handleClick(slideId, target) {
-            const dialogueBox = document.getElementById(`dialogue-${slideId}`);
-            if (slideId === 1 && target === 'Max') {
-                dialogueBox.innerText = "Max looks around his cozy home, pondering what adventure awaits outside.";
-                dialogueBox.classList.add('active');
-            } else if (slideId === 2 && target === 'Charlie') {
-                dialogueBox.innerText = "Charlie wiggles happily, his eyes shining with friendliness.";
-                dialogueBox.classList.add('active');
-            }
-            checkCompletion(slideId);
-        }
+			function handleClick(slideId, target) {
+				const dialogueBox = document.getElementById(`dialogue-${slideId}`);
+				if (slideId === 1 && target === 'Max') {
+					dialogueBox.innerText =
+						'Max looks around his cozy home, pondering what adventure awaits outside.';
+					dialogueBox.classList.add('active');
+				} else if (slideId === 2 && target === 'Charlie') {
+					dialogueBox.innerText = 'Charlie wiggles happily, his eyes shining with friendliness.';
+					dialogueBox.classList.add('active');
+				}
+				checkCompletion(slideId);
+			}
 
-        function handleChoice(slideId, target) {
-            const dialogueBox = document.getElementById(`dialogue-${slideId}`);
-            if (slideId === 1 && target === 'Cheese') {
-                const choice = prompt("Choose an action:\n1. Look out the hole\n2. Check the cheese crumbs");
-                if (choice === '1') {
-                    dialogueBox.innerText = "Max peers out, seeing the vibrant garden and feeling the warm sun.";
-                } else if (choice === '2') {
-                    dialogueBox.innerText = "Max nibbles on a crumb, savoring the familiar taste.";
-                }
-                dialogueBox.classList.add('active');
-            } else if (slideId === 2 && target === 'Garden') {
-                const choice = prompt("Choose an action:\n1. Ask about the garden\n2. Invite Charlie inside");
-                if (choice === '1') {
-                    dialogueBox.innerText = "Charlie describes the garden's flowers and the buzzing bees.";
-                } else if (choice === '2') {
-                    dialogueBox.innerText = "Max invites Charlie into his cozy home for a cup of tea.";
-                }
-                dialogueBox.classList.add('active');
-            }
-            checkCompletion(slideId);
-        }
+			function handleChoice(slideId, target) {
+				const dialogueBox = document.getElementById(`dialogue-${slideId}`);
+				if (slideId === 1 && target === 'Cheese') {
+					const choice = prompt(
+						'Choose an action:\n1. Look out the hole\n2. Check the cheese crumbs'
+					);
+					if (choice === '1') {
+						dialogueBox.innerText =
+							'Max peers out, seeing the vibrant garden and feeling the warm sun.';
+					} else if (choice === '2') {
+						dialogueBox.innerText = 'Max nibbles on a crumb, savoring the familiar taste.';
+					}
+					dialogueBox.classList.add('active');
+				} else if (slideId === 2 && target === 'Garden') {
+					const choice = prompt(
+						'Choose an action:\n1. Ask about the garden\n2. Invite Charlie inside'
+					);
+					if (choice === '1') {
+						dialogueBox.innerText = "Charlie describes the garden's flowers and the buzzing bees.";
+					} else if (choice === '2') {
+						dialogueBox.innerText = 'Max invites Charlie into his cozy home for a cup of tea.';
+					}
+					dialogueBox.classList.add('active');
+				}
+				checkCompletion(slideId);
+			}
 
-        function showHint(slideId, target) {
-            if (slideId === 1 && target === 'Max') {
-                alert("Hint: Click on Max to see what he's thinking.");
-            } else if (slideId === 1 && target === 'Cheese') {
-                alert("Hint: Choose an action related to the cheese.");
-            } else if (slideId === 2 && target === 'Charlie') {
-                alert("Hint: Click on Charlie to interact with him.");
-            } else if (slideId === 2 && target === 'Garden') {
-                alert("Hint: Choose an action related to the garden.");
-            }
-        }
+			function showHint(slideId, target) {
+				if (slideId === 1 && target === 'Max') {
+					alert("Hint: Click on Max to see what he's thinking.");
+				} else if (slideId === 1 && target === 'Cheese') {
+					alert('Hint: Choose an action related to the cheese.');
+				} else if (slideId === 2 && target === 'Charlie') {
+					alert('Hint: Click on Charlie to interact with him.');
+				} else if (slideId === 2 && target === 'Garden') {
+					alert('Hint: Choose an action related to the garden.');
+				}
+			}
 
-        function checkCompletion(slideId) {
-            const dialogueBox = document.getElementById(`dialogue-${slideId}`);
-            if (dialogueBox.classList.contains('active')) {
-                if (slideId < totalSlides) {
-                    setTimeout(() => {
-                        currentSlide++;
-                        showSlide(currentSlide);
-                    }, 2000);
-                }
-            }
-        }
+			function checkCompletion(slideId) {
+				const dialogueBox = document.getElementById(`dialogue-${slideId}`);
+				if (dialogueBox.classList.contains('active')) {
+					if (slideId < totalSlides) {
+						setTimeout(() => {
+							currentSlide++;
+							showSlide(currentSlide);
+						}, 2000);
+					}
+				}
+			}
 
-        showSlide(currentSlide);
-    </script>
-</body>
+			showSlide(currentSlide);
+		</script>
+	</body>
 </html>
