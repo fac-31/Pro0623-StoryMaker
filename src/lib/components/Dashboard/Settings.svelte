@@ -2,21 +2,30 @@
 	import { navigating } from '$app/state';
 
 	import type { User as SupabaseUser } from '@supabase/supabase-js';
-    import type { ActionData } from './$types';
+	import type { ActionData } from './$types';
+	import { invalidateAll } from '$app/navigation';
+	import { enhance } from '$app/forms';
+
 	interface Props {
 		supabase: SupabaseUser;
-		form?: ActionData; // Add 'form' here. It's optional as it only exists after a submission.
+		form?: ActionData;
 	}
-    let { supabase, form}: Props = $props();
+	let { supabase, form }: Props = $props();
 
-	let name = supabase?.user_metadata.display_name;
-	let email = supabase?.email;
-	let password = '';
+	let name = $state(supabase?.user_metadata.display_name);
+	let email = $state(supabase?.email);
+	let password = $state('');
+
+	// Use $effect.pre to react to prop changes before rendering
+	$effect.pre(() => {
+		// This ensures the component state updates if the supabase prop changes
+		name = supabase?.user_metadata.display_name;
+		email = supabase?.email;
+	});
+
 	$effect(() => {
 		if (form?.success) {
-			// Reset the state variables after a successful form submission
-			name = supabase?.user_metadata.display_name;
-			email = supabase?.email;
+			// Clear the password field on success
 			password = '';
 		}
 	});
@@ -27,7 +36,20 @@
 	<p class="text-lg"><strong>Hello, </strong> {supabase?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form method="POST" action="?/changeSettings" class="w-full max-w-xl">   
+    <form
+		method="POST"
+		action="?/changeSettings"
+		class="w-full max-w-xl"
+		use:enhance={() => {
+			return async ({ result }) => {
+				// If the form submission was successful, invalidate all data
+				// causing load functions to re-run.
+				if (result.type === 'success') {
+					await invalidateAll();
+				}
+			};
+		}}
+	>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
@@ -86,7 +108,7 @@
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
 				{#if navigating.to}Updating…{:else}Update Details{/if}
-			</button>
+</button>
 
 			{#if form?.success}
 				<div class="alert alert-success" role="alert">
