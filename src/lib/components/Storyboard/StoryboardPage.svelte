@@ -175,7 +175,10 @@
 		<header class="flex items-center justify-between">
 			<div class="flex items-center space-x-4">
 				<button
-					onclick={() => window.history.back()}
+					onclick={() => {
+						sessionStorage.setItem('team', JSON.stringify(team));
+						window.history.back();
+					}}
 					class="btn btn-ghost btn-sm"
 					aria-label="Go back to previous page"
 				>
