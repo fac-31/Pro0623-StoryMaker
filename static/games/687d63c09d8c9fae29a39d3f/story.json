@@ -1,0 +1,98 @@
+{
+	"_id": "687d63c09d8c9fae29a39d3f",
+	"status": "done",
+	"prompts": {
+		"numSlides": 2,
+		"concept": "dino meets friend",
+		"storyStyle": "minimalist",
+		"targetAudience": "children",
+		"genre": "advenutre"
+	},
+	"currentSlide": 3,
+	"createdAt": "2025-07-20T21:46:40.260Z",
+	"updatedAt": "2025-07-20T21:47:54.289Z",
+	"storyOutline": {
+		"storyMetadata": {
+			"title": "Dino Meets Friend",
+			"totalDuration": "00:02:00",
+			"genre": "adventure",
+			"style": "minimalist",
+			"targetAudience": "children"
+		},
+		"slideOutlines": [
+			{
+				"slideId": 1,
+				"timestamp": "00:00:00",
+				"durationSeconds": 60,
+				"sceneTitle": "Dino in the Jungle",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Narrator",
+							"line": "In the lush, green jungle, Dino, a small, friendly dinosaur, is exploring his surroundings."
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Dino",
+						"role": "protagonist",
+						"description": "Dino is a small, friendly dinosaur with bright green scales and big, curious eyes.",
+						"emotions": ["happy", "curious"],
+						"position": "center"
+					}
+				],
+				"sceneDescription": "The scene is set in a lush, green jungle with towering trees and vibrant plants. Dino, a small, friendly dinosaur, is in the center of the scene, looking around curiously.",
+				"visualStyle": "minimalist",
+				"cameraAngle": "wide"
+			},
+			{
+				"slideId": 2,
+				"timestamp": "00:01:00",
+				"durationSeconds": 60,
+				"sceneTitle": "Dino Meets Friend",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Narrator",
+							"line": "Suddenly, Dino spots a little bird with colorful feathers. They quickly become friends, playing and laughing together."
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Dino",
+						"role": "protagonist",
+						"description": "Dino is a small, friendly dinosaur with bright green scales and big, curious eyes.",
+						"emotions": ["happy", "excited"],
+						"position": "left"
+					},
+					{
+						"name": "Bird",
+						"role": "supporting",
+						"description": "The bird is small with colorful feathers and a cheerful demeanor.",
+						"emotions": ["happy", "excited"],
+						"position": "right"
+					}
+				],
+				"sceneDescription": "In the same lush, green jungle, Dino is now on the left side of the scene, playing with a small, colorful bird on the right. They are both laughing and having a great time.",
+				"visualStyle": "minimalist",
+				"cameraAngle": "medium"
+			}
+		]
+	},
+	"visualSlides": [
+		{
+			"slideNumber": 1,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: The scene is set in a lush, green jungle with towering trees and vibrant plants. Dino, a small, friendly dinosaur, is in the center of the scene, looking around curiously.. Dino: Dino is a small, friendly dinosaur with bright green scales and big, curious eyes., positioned center, expressing happy, curious. Visual style: minimalist. Camera angle: wide. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753048052/storyboard-images/slide-1-1753048050806.webp"
+		},
+		{
+			"slideNumber": 2,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: In the same lush, green jungle, Dino is now on the left side of the scene, playing with a small, colorful bird on the right. They are both laughing and having a great time.. Dino: Dino is a small, friendly dinosaur with bright green scales and big, curious eyes., positioned left, expressing happy, excited. Bird: The bird is small with colorful feathers and a cheerful demeanor., positioned right, expressing happy, excited. Visual style: minimalist. Camera angle: medium. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753048073/storyboard-images/slide-2-1753048071959.webp"
+		}
+	]
+}

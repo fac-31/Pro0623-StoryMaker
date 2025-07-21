@@ -1,15 +1,18 @@
+/// <reference types="@sveltejs/kit" />
 /// <reference lib="webworker" />
 import { build, files, version } from '$service-worker';
+
+declare const self: ServiceWorkerGlobalScope;
 
 const CACHE = `cache-${version}`;
 const ASSETS = [...build, ...files, '/offline.html'];
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', (event: ExtendableEvent) => {
 	self.skipWaiting();
 	event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', (event: ExtendableEvent) => {
 	event.waitUntil(
 		caches
 			.keys()
@@ -19,11 +22,16 @@ self.addEventListener('activate', (event) => {
 	);
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event: FetchEvent) => {
 	if (event.request.method !== 'GET') return;
 
 	if (event.request.mode === 'navigate') {
-		event.respondWith(fetch(event.request).catch(() => caches.match('/offline.html')));
+		event.respondWith(
+			fetch(event.request).catch(async () => {
+				const cached = await caches.match('/offline.html');
+				return cached ?? new Response('Offline', { status: 503, statusText: 'Offline' });
+			})
+		);
 		return;
 	}
 

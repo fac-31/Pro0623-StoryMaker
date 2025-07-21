@@ -1,3 +1,4 @@
+/// <reference types="@sveltejs/kit" />
 import { Db, MongoClient } from 'mongodb';
 import { env } from '$env/dynamic/private';
 
