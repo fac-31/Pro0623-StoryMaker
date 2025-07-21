@@ -1,0 +1,219 @@
+{
+	"_id": "68796051e7cf7d02fd94948e",
+	"status": "done",
+	"prompts": {
+		"numSlides": 6,
+		"concept": "jono's inevitable aging as he slaves away long nights at KKR's offices in stressful deal negotiations",
+		"storyStyle": "hollywood movie, hyper realistic",
+		"targetAudience": "adults",
+		"genre": "drama"
+	},
+	"currentSlide": 7,
+	"createdAt": "2025-07-17T20:42:57.914Z",
+	"updatedAt": "2025-07-17T20:46:31.036Z",
+	"storyOutline": {
+		"storyMetadata": {
+			"title": "Jono's Inevitable Aging: A Tale of Long Nights at KKR",
+			"totalDuration": "6 minutes",
+			"genre": "Drama",
+			"style": "Hollywood Movie, Hyper Realistic",
+			"targetAudience": "Adults"
+		},
+		"slideOutlines": [
+			{
+				"slideId": 1,
+				"timestamp": "00:00",
+				"durationSeconds": 60,
+				"sceneTitle": "The Office",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Narrator",
+							"line": "In the heart of the city, a man named Jono sits in his office at KKR, surrounded by stacks of paperwork."
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Jono",
+						"role": "protagonist",
+						"description": "A young, ambitious man in his late 20s. He's dressed in a crisp suit, his hair neatly combed. His eyes, however, reveal a hint of fatigue.",
+						"emotions": ["determined", "tired"],
+						"position": "center"
+					}
+				],
+				"sceneDescription": "A large office with floor-to-ceiling windows revealing a cityscape. The room is filled with stacks of paperwork, a computer, and a desk lamp casting a warm glow.",
+				"visualStyle": "Hyper Realistic",
+				"cameraAngle": "Wide shot"
+			},
+			{
+				"slideId": 2,
+				"timestamp": "01:00",
+				"durationSeconds": 60,
+				"sceneTitle": "The Negotiation",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Jono",
+							"line": "We need to close this deal. It's crucial for our growth."
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Jono",
+						"role": "protagonist",
+						"description": "Jono, now looking more stressed, his tie slightly loosened, his hair a bit disheveled.",
+						"emotions": ["stressed", "determined"],
+						"position": "center"
+					}
+				],
+				"sceneDescription": "Jono is in a conference room, negotiating with unseen characters. The room is dimly lit, the tension palpable.",
+				"visualStyle": "Hyper Realistic",
+				"cameraAngle": "Medium shot"
+			},
+			{
+				"slideId": 3,
+				"timestamp": "02:00",
+				"durationSeconds": 60,
+				"sceneTitle": "The Struggle",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Narrator",
+							"line": "As the nights grow longer, Jono's struggle becomes more evident."
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Jono",
+						"role": "protagonist",
+						"description": "Jono, now visibly aged, with dark circles under his eyes and a few strands of grey hair.",
+						"emotions": ["exhausted", "resolute"],
+						"position": "center"
+					}
+				],
+				"sceneDescription": "Jono is back in his office, working late into the night. The city lights outside twinkle, reflecting off his tired eyes.",
+				"visualStyle": "Hyper Realistic",
+				"cameraAngle": "Close-up shot"
+			},
+			{
+				"slideId": 4,
+				"timestamp": "03:00",
+				"durationSeconds": 60,
+				"sceneTitle": "The Sacrifice",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Narrator",
+							"line": "Jono's dedication comes at a cost. His youth, sacrificed at the altar of ambition."
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Jono",
+						"role": "protagonist",
+						"description": "Jono, significantly aged, his face lined with wrinkles, his hair more grey than black.",
+						"emotions": ["worn-out", "resigned"],
+						"position": "center"
+					}
+				],
+				"sceneDescription": "Jono is seen in front of a mirror, looking at his reflection. The harsh reality of his sacrifice is evident in his aged appearance.",
+				"visualStyle": "Hyper Realistic",
+				"cameraAngle": "Medium shot"
+			},
+			{
+				"slideId": 5,
+				"timestamp": "04:00",
+				"durationSeconds": 60,
+				"sceneTitle": "The Realization",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Jono",
+							"line": "Is this what I've become? Is this the price of success?"
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Jono",
+						"role": "protagonist",
+						"description": "Jono, looking at his reflection, a mix of regret and acceptance in his eyes.",
+						"emotions": ["regretful", "accepting"],
+						"position": "center"
+					}
+				],
+				"sceneDescription": "Jono is still in front of the mirror, his reflection staring back at him. The room is silent, the weight of his realization heavy in the air.",
+				"visualStyle": "Hyper Realistic",
+				"cameraAngle": "Close-up shot"
+			},
+			{
+				"slideId": 6,
+				"timestamp": "05:00",
+				"durationSeconds": 60,
+				"sceneTitle": "The Acceptance",
+				"text": {
+					"dialogue": [
+						{
+							"character": "Narrator",
+							"line": "In the end, Jono accepts his fate. His journey, a testament to the relentless pursuit of ambition."
+						}
+					]
+				},
+				"characters": [
+					{
+						"name": "Jono",
+						"role": "protagonist",
+						"description": "Jono, now calm and accepting, his face a map of his journey.",
+						"emotions": ["calm", "accepting"],
+						"position": "center"
+					}
+				],
+				"sceneDescription": "Jono is seen sitting at his desk, looking out at the cityscape. The office is quiet, the city lights twinkling in the distance.",
+				"visualStyle": "Hyper Realistic",
+				"cameraAngle": "Wide shot"
+			}
+		]
+	},
+	"visualSlides": [
+		{
+			"slideNumber": 1,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: A large office with floor-to-ceiling windows revealing a cityscape. The room is filled with stacks of paperwork, a computer, and a desk lamp casting a warm glow.. Jono: A young, ambitious man in his late 20s. He's dressed in a crisp suit, his hair neatly combed. His eyes, however, reveal a hint of fatigue., positioned center, expressing determined, tired. Visual style: Hyper Realistic. Camera angle: Wide shot. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785056/storyboard-images/slide-1-1752785055682.webp"
+		},
+		{
+			"slideNumber": 2,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: Jono is in a conference room, negotiating with unseen characters. The room is dimly lit, the tension palpable.. Jono: Jono, now looking more stressed, his tie slightly loosened, his hair a bit disheveled., positioned center, expressing stressed, determined. Visual style: Hyper Realistic. Camera angle: Medium shot. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785081/storyboard-images/slide-2-1752785081181.webp"
+		},
+		{
+			"slideNumber": 3,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: Jono is back in his office, working late into the night. The city lights outside twinkle, reflecting off his tired eyes.. Jono: Jono, now visibly aged, with dark circles under his eyes and a few strands of grey hair., positioned center, expressing exhausted, resolute. Visual style: Hyper Realistic. Camera angle: Close-up shot. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785109/storyboard-images/slide-3-1752785109017.jpg"
+		},
+		{
+			"slideNumber": 4,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: Jono is seen in front of a mirror, looking at his reflection. The harsh reality of his sacrifice is evident in his aged appearance.. Jono: Jono, significantly aged, his face lined with wrinkles, his hair more grey than black., positioned center, expressing worn-out, resigned. Visual style: Hyper Realistic. Camera angle: Medium shot. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785137/storyboard-images/slide-4-1752785136438.webp"
+		},
+		{
+			"slideNumber": 5,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: Jono is still in front of the mirror, his reflection staring back at him. The room is silent, the weight of his realization heavy in the air.. Jono: Jono, looking at his reflection, a mix of regret and acceptance in his eyes., positioned center, expressing regretful, accepting. Visual style: Hyper Realistic. Camera angle: Close-up shot. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785162/storyboard-images/slide-5-1752785161307.webp"
+		},
+		{
+			"slideNumber": 6,
+			"imageGenerated": true,
+			"imagePrompt": "Storyboard panel: Scene: Jono is seen sitting at his desk, looking out at the cityscape. The office is quiet, the city lights twinkling in the distance.. Jono: Jono, now calm and accepting, his face a map of his journey., positioned center, expressing calm, accepting. Visual style: Hyper Realistic. Camera angle: Wide shot. Professional illustration style, clean lines, suitable for storyboard presentation.",
+			"imageUrl": "https://res.cloudinary.com/dn4cxpz0x/image/upload/v1752785189/storyboard-images/slide-6-1752785188988.webp"
+		}
+	]
+}

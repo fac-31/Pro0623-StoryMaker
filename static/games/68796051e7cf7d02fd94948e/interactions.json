@@ -1,0 +1,105 @@
+{
+	"interactions": [
+		{
+			"slideId": 1,
+			"interactionType": "drag",
+			"description": "Drag and organize the stacks of paperwork on Jono's desk.",
+			"elements": [
+				{
+					"elementId": "paperwork1",
+					"position": "left"
+				},
+				{
+					"elementId": "paperwork2",
+					"position": "center"
+				},
+				{
+					"elementId": "paperwork3",
+					"position": "right"
+				}
+			]
+		},
+		{
+			"slideId": 2,
+			"interactionType": "choose",
+			"description": "Choose Jono's negotiation strategy.",
+			"options": [
+				{
+					"optionId": "aggressive",
+					"text": "Be aggressive"
+				},
+				{
+					"optionId": "calm",
+					"text": "Stay calm"
+				},
+				{
+					"optionId": "compromise",
+					"text": "Seek compromise"
+				}
+			]
+		},
+		{
+			"slideId": 3,
+			"interactionType": "solve",
+			"description": "Solve Jono's time management puzzle.",
+			"puzzle": {
+				"type": "scheduling",
+				"tasks": [
+					{
+						"taskId": "work",
+						"duration": "4 hours"
+					},
+					{
+						"taskId": "rest",
+						"duration": "2 hours"
+					},
+					{
+						"taskId": "personal",
+						"duration": "1 hour"
+					}
+				]
+			}
+		},
+		{
+			"slideId": 4,
+			"interactionType": "click",
+			"description": "Click to reveal Jono's thoughts as he looks in the mirror.",
+			"elements": [
+				{
+					"elementId": "mirror",
+					"revealedText": "I've given everything for this."
+				}
+			]
+		},
+		{
+			"slideId": 5,
+			"interactionType": "drag",
+			"description": "Drag to adjust the lighting in the room, reflecting Jono's realization.",
+			"elements": [
+				{
+					"elementId": "lightSlider",
+					"positions": ["dim", "normal", "bright"]
+				}
+			]
+		},
+		{
+			"slideId": 6,
+			"interactionType": "choose",
+			"description": "Choose Jono's final words of acceptance.",
+			"options": [
+				{
+					"optionId": "acceptance",
+					"text": "I've done my best."
+				},
+				{
+					"optionId": "reflection",
+					"text": "It's been a long journey."
+				},
+				{
+					"optionId": "gratitude",
+					"text": "Thankful for the lessons."
+				}
+			]
+		}
+	]
+}
