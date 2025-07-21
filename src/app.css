@@ -11,11 +11,11 @@
 }
 
 .slides-flex {
-	@apply border-base-300 flex gap-4 overflow-x-auto rounded-lg border py-4;
+	@apply carousel carousel-center w-full space-x-4 rounded-box bg-base-100 p-4;
 }
 
 .slide-thumbnail {
-	@apply border-base-300 relative flex h-36 w-48 min-w-48 cursor-pointer flex-col rounded-lg border-2 motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
+	@apply carousel-item card h-36 w-48 cursor-pointer motion-safe:transition-all motion-safe:duration-200 motion-safe:ease-in-out;
 }
 
 .slide-number {
@@ -39,7 +39,7 @@
 }
 
 .metadata-container {
-	@apply border-base-300 bg-base-200 my-8 rounded-lg border p-6;
+	@apply card bg-base-200 my-8 border p-6;
 }
 
 .metadata-grid {
@@ -47,19 +47,19 @@
 }
 
 .metadata-item {
-	@apply border-primary bg-base-100 rounded border-l-4 p-3;
+	@apply bg-base-100 rounded-box border-primary border-l-4 p-3;
 }
 
 .modal-overlay {
-	@apply fixed inset-0 z-[1000] flex items-center justify-center bg-black/80;
+	@apply modal;
 }
 
 .modal-content {
-	@apply bg-base-100 relative h-[90%] w-[95%] overflow-hidden rounded-lg;
+	@apply modal-box h-[90%] w-11/12 max-w-5xl;
 }
 
 .close-button {
-	@apply bg-error text-error-content hover:bg-error/80 absolute top-4 right-4 z-[1001] flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border-0 text-2xl;
+	@apply btn btn-circle btn-error absolute top-4 right-4 z-[1001];
 }
 
 .modal-body {
@@ -67,11 +67,11 @@
 }
 
 .slide-details {
-	@apply border-base-300 bg-base-200 w-1/5 overflow-y-auto border-r px-4 py-8 pr-8;
+	@apply bg-base-200 w-1/5 overflow-y-auto border-r border-base-300 px-4 py-8 pr-8;
 }
 
 .slide-image {
-	@apply bg-base-100 flex w-4/5 items-center justify-center p-8;
+	@apply flex w-4/5 items-center justify-center bg-base-100 p-8;
 }
 
 .slide-image img {
@@ -83,7 +83,8 @@
 }
 
 .detail-section {
-	@apply border-base-300 mb-6 border-b pb-4 last:border-b-0;
+	@apply border-b border-base-300 pb-4 last:border-b-0;
+	margin-bottom: 1.5rem;
 }
 
 .detail-section h4 {
@@ -91,7 +92,7 @@
 }
 
 .detail-section p {
-	@apply text-base-content my-1 text-sm leading-snug;
+	@apply my-1 text-sm leading-snug text-base-content;
 }
 
 /* Visually hide an element while keeping it accessible to screen readers */
@@ -112,7 +113,7 @@
 }
 
 .character-info {
-	@apply border-success bg-base-100 mb-4 rounded border-l-4 p-3;
+	@apply alert alert-success;
 }
 
 .emotions {
@@ -120,7 +121,7 @@
 }
 
 .dialogue-line {
-	@apply border-warning bg-base-100 mb-2 rounded border-l-4 p-2 text-sm;
+	@apply alert alert-warning p-2 text-sm;
 }
 
 @media (prefers-reduced-motion: reduce) {

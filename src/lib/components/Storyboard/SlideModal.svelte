@@ -107,7 +107,7 @@
 		{liveRegionMessage}
 	</div>
 	<div
-		class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
+		class="modal-overlay modal-open focus:ring-2 focus:ring-gray-300 focus:outline-none"
 		role="button"
 		tabindex="0"
 		aria-label="Close modal"
