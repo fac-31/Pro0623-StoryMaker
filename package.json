@@ -9,7 +9,7 @@
 		"build": "vite build",
 		"preview": "vite preview --port 5173",
 		"preview:https": "vite preview --https --port 5173",
-		"prepare": "svelte-kit sync || echo ''",
+		"prepare": "svelte-kit sync",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
