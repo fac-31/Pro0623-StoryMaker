@@ -127,16 +127,12 @@
 	*,
 	*::before,
 	*::after {
-		animation-duration: 0.01ms !important;
+		animation-delay: -1ms !important;
+		animation-duration: 1ms !important;
 		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
+		background-attachment: initial !important;
 		scroll-behavior: auto !important;
+		transition-delay: 0s !important;
+		transition-duration: 0s !important;
 	}
-}
-
-/* Add a global focus style */
-:focus-visible {
-	outline: 3px solid hsl(var(--p));
-	outline-offset: 2px;
-	border-radius: 2px;
 }

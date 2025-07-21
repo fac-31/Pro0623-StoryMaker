@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { navigating } from '$app/state';
 	export let data;
-	export let form: { success: boolean; error?: string };
+	export let form: {
+		success: boolean;
+		error?: string;
+		errors?: { name?: string; email?: string; password?: string };
+	};
 	let name = data.user?.user_metadata.display_name;
 	let email = data.user?.email;
 	let password = '';
@@ -17,7 +21,14 @@
 	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form method="POST" class="w-full max-w-xl" role="group">
+	<form
+		method="POST"
+		class="w-full max-w-xl"
+		novalidate
+		role="group"
+		aria-labelledby="form-title"
+	>
+		<h2 id="form-title" class="sr-only">Account Information</h2>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
@@ -30,10 +41,13 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
-					aria-invalid={form?.error ? 'true' : 'false'}
+					aria-errormessage="name-error"
+					aria-invalid={!!form?.errors?.name}
 				/>
 			</div>
+			{#if form?.errors?.name}
+				<p id="name-error" class="text-error text-sm mt-1" role="alert">{form.errors.name}</p>
+			{/if}
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
@@ -47,10 +61,13 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
-					aria-invalid={form?.error ? 'true' : 'false'}
+					aria-errormessage="email-error"
+					aria-invalid={!!form?.errors?.email}
 				/>
 			</div>
+			{#if form?.errors?.email}
+				<p id="email-error" class="text-error text-sm mt-1" role="alert">{form.errors.email}</p>
+			{/if}
 		</div>
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
@@ -65,15 +82,22 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
-					aria-invalid={form?.error ? 'true' : 'false'}
+					aria-errormessage="password-error"
+					aria-invalid={!!form?.errors?.password}
 				/>
 			</div>
+			{#if form?.errors?.password}
+				<p id="password-error" class="text-error text-sm mt-1" role="alert">
+					{form.errors.password}
+				</p>
+			{/if}
 		</div>
 		<div>
-			<div id="form-error" class="alert alert-error" role="alert" class:invisible={!form?.error}>
-				<span>{form?.error || ''}</span>
-			</div>
+			{#if form?.error && !form.errors}
+				<div id="form-error" class="alert alert-error" role="alert">
+					<span>{form.error}</span>
+				</div>
+			{/if}
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
 				{#if navigating.to}Updating…{:else}Update Details{/if}

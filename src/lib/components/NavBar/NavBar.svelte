@@ -7,7 +7,7 @@
 
 <header class="navbar bg-base-100/80 border-base-200 sticky top-0 z-50 border-b backdrop-blur-md">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<nav class="flex items-center justify-between py-4" aria-label="Main navigation">
+		<div class="flex items-center justify-between py-4">
 			<div class="flex items-center space-x-2">
 				<div
 					class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"

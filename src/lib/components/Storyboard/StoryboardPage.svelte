@@ -21,6 +21,29 @@
 	let error = '';
 	let selectedSlideIndex: number | null = null;
 	let showModal = false;
+	let gameUrl: string | null = null;
+
+	async function generateGame() {
+		if (!storyboard?._id) return;
+		loading = true;
+		error = '';
+		try {
+			const res = await fetch('/api/storyboard/generate-game', {
+				method: 'POST',
+				body: JSON.stringify({ storyboardId: storyboard._id })
+			});
+			const data = await res.json();
+			if (res.ok) {
+				window.location.href = data.gamePath;
+			} else {
+				error = data.error || 'Failed to generate game';
+			}
+		} catch (e) {
+			error = e instanceof Error ? e.message : String(e);
+		} finally {
+			loading = false;
+		}
+	}
 
 	async function startStoryboard() {
 		loading = true;
@@ -269,6 +292,14 @@
 							{/each}
 						</div>
 					</section>
+					{#if storyboard.status === 'done'}
+						<button class="btn btn-primary" onclick={generateGame}>Generate Game</button>
+					{/if}
+					{#if gameUrl}
+						<div class="mt-4">
+							<iframe src={gameUrl} title="Game preview" class="h-[600px] w-full border"></iframe>
+						</div>
+					{/if}
 				{/if}
 			</div>
 		</section>

@@ -7,11 +7,7 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	darkMode: 'media', // Automatically switches based on system preference
 	theme: {
-		extend: {
-			transitionProperty: {
-				'motion-reduce': 'transform, opacity'
-			}
-		}
+		extend: {}
 	},
 	plugins: [forms, typography, daisyui],
 	daisyui: {
