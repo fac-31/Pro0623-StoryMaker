@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { createEventDispatcher, tick } from 'svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 
@@ -103,66 +103,66 @@
 </script>
 
 {#if show}
-	<div role="status" aria-live="assertive" class="sr-only">
+	<div role='status' aria-live='assertive' class='sr-only'>
 		{liveRegionMessage}
 	</div>
 	<div
-		class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
-		role="button"
-		tabindex="0"
-		aria-label="Close modal"
+		class='modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none'
+		role='button'
+		tabindex='0'
+		aria-label='Close modal'
 		on:click={handleOverlayClick}
 		on:keydown={handleOverlayKeydown}
 	>
 		<div
 			bind:this={modalContentElement}
-			class="modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none"
-			role="dialog"
-			aria-modal="true"
-			tabindex="0"
-			aria-labelledby="modal-title"
+			class='modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none'
+			role='dialog'
+			aria-modal='true'
+			tabindex='0'
+			aria-labelledby='modal-title'
 			on:click|stopPropagation
 			on:keydown={handleFocusTrap}
 		>
 			<button
-				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"
+				class='close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none'
 				on:click={closeModal}
-				aria-label="Close slide details">&times;</button
+				aria-label='Close slide details modal'>&times;</button
 			>
 
-			<div class="modal-body">
+			<div class='modal-body'>
 				<!-- Left side - Slide details (20%) -->
-				<div class="slide-details">
-					<h3 id="modal-title">Slide {slideOutline.slideId}</h3>
+				<div class='slide-details'>
+					<h3 id='modal-title'>Slide {slideOutline.slideId}</h3>
 
-					<div class="detail-section">
+					<div class='detail-section'>
 						<h4>Scene</h4>
 						<p><strong>Title:</strong> {slideOutline.sceneTitle}</p>
 						<p><strong>Duration:</strong> {slideOutline.durationSeconds}s</p>
 						<p><strong>Timestamp:</strong> {slideOutline.timestamp}</p>
 					</div>
 
-					<div class="detail-section">
+					<div class='detail-section'>
 						<h4>Description</h4>
 						<p>{slideOutline.sceneDescription}</p>
 					</div>
 
-					<div class="detail-section">
+					<div class='detail-section'>
 						<h4>Visual Style</h4>
 						<p>{slideOutline.visualStyle}</p>
 						<p><strong>Camera:</strong> {slideOutline.cameraAngle}</p>
 					</div>
 
 					{#if slideOutline.characters.length > 0}
-						<div class="detail-section">
+						<div class='detail-section'>
 							<h4>Characters</h4>
 							{#each slideOutline.characters as character (slideOutline.slideId + character.name)}
-								<div class="character-info">
+								<div class='character-info'>
 									<strong>{character.name}</strong> ({character.role})
 									<p>{character.description}</p>
 									<small>Position: {character.position}</small>
 									{#if character.emotions.length > 0}
-										<div class="emotions">Emotions: {character.emotions.join(', ')}</div>
+										<div class='emotions'>Emotions: {character.emotions.join(', ')}</div>
 									{/if}
 								</div>
 							{/each}
@@ -170,11 +170,12 @@
 					{/if}
 
 					{#if slideOutline.text.dialogue.length > 0}
-						<div class="detail-section">
+						<div class='detail-section'>
 							<h4>Dialogue</h4>
 							{#each slideOutline.text.dialogue as dialogue (slideOutline.slideId + dialogue.line)}
-								<div class="dialogue-line">
-									<strong>{dialogue.character}:</strong> "{dialogue.line}"
+								<div class='dialogue-line'>
+									<strong>{dialogue.character}:</strong>
+									'{dialogue.line}'
 								</div>
 							{/each}
 						</div>
@@ -182,11 +183,11 @@
 				</div>
 
 				<!-- Right side - Image (80%) -->
-				<div class="slide-image">
+				<div class='slide-image'>
 					{#if visualSlide.imageGenerated && visualSlide.imageUrl}
-						<img src={visualSlide.imageUrl} alt="Slide {visualSlide.slideNumber}" />
+						<img src={visualSlide.imageUrl} alt='Slide {visualSlide.slideNumber}' />
 					{:else}
-						<div class="large-placeholder">
+						<div class='large-placeholder'>
 							<h3>No Image Generated</h3>
 							{#if visualSlide.imagePrompt}
 								<p><strong>Image Prompt:</strong></p>

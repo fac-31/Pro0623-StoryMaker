@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { Team } from '$lib/models/team.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
@@ -192,40 +192,41 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<main class="bg-base-200 min-h-screen px-4 py-12 sm:px-6 lg:px-8">
-	<div class="mx-auto max-w-6xl space-y-8">
+<main class='bg-base-200 min-h-screen px-4 py-12 sm:px-6 lg:px-8'>
+	<div class='mx-auto max-w-6xl space-y-8'>
 		<!-- Header with Back Button and Title -->
-		<header class="flex items-center justify-between">
-			<div class="flex items-center space-x-4">
+		<header class='flex items-center justify-between'>
+			<div class='flex items-center space-x-4'>
 				<button
 					onclick={() => {
 						sessionStorage.setItem('team', JSON.stringify(team));
 						window.history.back();
 					}}
-					class="btn btn-ghost btn-sm"
-					aria-label="Go back to previous page"
+					class='btn btn-ghost btn-sm'
+					aria-label='Go back to previous page'
 				>
-					<ArrowLeft class="h-5 w-5" />
-					<span class="hidden sm:inline">Back</span>
+					<ArrowLeft class='h-5 w-5' />
+					<span class='hidden sm:inline'>Back</span>
 				</button>
 
 				{#if storyboard}
 					<div>
-						<h1 class="text-base-content text-3xl font-bold">
+						<h1 class='text-base-content text-3xl font-bold'>
 							{storyboard.storyOutline.storyMetadata.title}
 						</h1>
-						<p class="text-base-content/70 mt-1">
-							{storyboard.storyOutline.storyMetadata.genre} • {storyboard.storyOutline.storyMetadata
-								.targetAudience} • {storyboard.storyOutline.storyMetadata.style} • {storyboard
-								.storyOutline.storyMetadata.totalDuration}
+						<p class='text-base-content/70 mt-1'>
+							{storyboard.storyOutline.storyMetadata.genre} •
+							{storyboard.storyOutline.storyMetadata.targetAudience} •
+							{storyboard.storyOutline.storyMetadata.style} •
+							{storyboard.storyOutline.storyMetadata.totalDuration}
 						</p>
 					</div>
 				{:else}
 					<div>
-						<h1 class="text-base-content text-3xl font-bold">Create New Storyboard</h1>
-						<p class="text-base-content/70 mt-1">Transform your story ideas into visual magic</p>
+						<h1 class='text-base-content text-3xl font-bold'>Create New Storyboard</h1>
+						<p class='text-base-content/70 mt-1'>Transform your story ideas into visual magic</p>
 						{#if team}
-							<p class="text-yellow-600">
+							<p class='text-yellow-600'>
 								You are creating a storyboard for {team.name}
 							</p>
 						{/if}
@@ -234,11 +235,9 @@
 			</div>
 
 			{#if storyboard}
-				<div class="flex items-center space-x-2">
-					<div class="badge badge-primary">
-						{storyboard.visualSlides.length} slides
-					</div>
-					<div class="badge badge-outline">
+				<div class='flex items-center space-x-2'>
+					<div class='badge badge-primary'>{storyboard.visualSlides.length} slides</div>
+					<div class='badge badge-outline'>
 						{storyboard.status}
 					</div>
 				</div>
@@ -246,34 +245,34 @@
 		</header>
 
 		<!-- Main Content -->
-		<section aria-label="Storyboard creation and display" class="card bg-base-100 shadow-xl">
-			<div class="card-body">
+		<section aria-label='Storyboard creation and display' class='card bg-base-100 shadow-xl'>
+			<div class='card-body'>
 				{#if !storyboard && !loading}
 					<StoryboardForm bind:userPrompt {loading} on:submit={handleFormSubmit} />
 				{/if}
 
 				{#if error}
-					<div class="alert alert-error">
+					<div class='alert alert-error'>
 						<span>{error}</span>
 					</div>
 				{/if}
 
 				{#if loading && (!storyboard || storyboard.status == 'none' || storyboard.status == 'generating-outline')}
-					<div class="flex items-center justify-center py-12">
-						<div class="text-center">
+					<div class='flex items-center justify-center py-12'>
+						<div class='text-center'>
 							<Loader2
-								class="text-primary mx-auto h-8 w-8 animate-spin motion-reduce:animate-none"
+								class='text-primary mx-auto h-8 w-8 animate-spin motion-reduce:animate-none'
 							/>
 							{#if storyboard && storyboard.status == 'generating-outline'}
-								<p class="text-base-content/70 mt-4">Creating outlines...</p>
+								<p class='text-base-content/70 mt-4'>Creating outlines...</p>
 							{:else}
-								<p class="text-base-content/70 mt-4">Creating your storyboard...</p>
+								<p class='text-base-content/70 mt-4'>Creating your storyboard...</p>
 							{/if}
 						</div>
 					</div>
 				{:else if storyboard}
 					<!-- Storyboard Info -->
-					<div class="text-base-content/70 mb-6 flex items-center space-x-4 text-sm">
+					<div class='text-base-content/70 mb-6 flex items-center space-x-4 text-sm'>
 						<div>Created: {new Date(storyboard.createdAt).toLocaleDateString()}</div>
 						{#if storyboard.updatedAt !== storyboard.createdAt}
 							<div>• Updated: {new Date(storyboard.updatedAt).toLocaleDateString()}</div>
@@ -281,26 +280,30 @@
 					</div>
 
 					<!-- Visual Slides Horizontal Container -->
-					<section aria-labelledby="visual-slides-heading" class="mb-8">
+					<section aria-labelledby='visual-slides-heading' class='mb-8'>
 						<h2
-							id="visual-slides-heading"
-							class="text-base-content mb-6 flex items-center gap-2 text-2xl font-bold"
+							id='visual-slides-heading'
+							class='text-base-content mb-6 flex items-center gap-2 text-2xl font-bold'
 						>
-							<Sparkles class="text-primary h-6 w-6" />
+							<Sparkles class='text-primary h-6 w-6' />
 							Slides
 						</h2>
-						<div class="slides-flex">
+						<div class='slides-flex'>
 							{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
 								<SlideThumbnail {storyboard} {slide} {index} on:open={openSlideModal} />
 							{/each}
 						</div>
 					</section>
 					{#if storyboard.status === 'done'}
-						<button class="btn btn-primary" onclick={generateGame}>Generate Game</button>
+						<button
+							class='btn btn-primary'
+							onclick={generateGame}
+							aria-label='Generate a game from this storyboard'>Generate Game</button
+						>
 					{/if}
 					{#if gameUrl}
-						<div class="mt-4">
-							<iframe src={gameUrl} title="Game preview" class="h-[600px] w-full border"></iframe>
+						<div class='mt-4'>
+							<iframe src={gameUrl} title='Game preview' class='h-[600px] w-full border'></iframe>
 						</div>
 					{/if}
 				{/if}
