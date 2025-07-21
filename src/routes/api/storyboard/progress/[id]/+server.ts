@@ -63,8 +63,8 @@ export const GET: RequestHandler = async ({ params }) => {
 	 * 3. Sends the final update to the stream.
 	 * 4. Ends the stream.
 	 */
-	async function runAsyncStoryboard(storyboard: Storyboard) {
-		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard);
+	async function runAsyncStoryboard(storyboard: Storyboard, signal: AbortSignal) {
+		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
 

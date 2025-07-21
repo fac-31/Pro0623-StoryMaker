@@ -358,14 +358,14 @@ export const createStoryboardGraph = () => {
  * @param {Storyboard} storyboard - The initial storyboard state.
  * @returns {Promise<Storyboard>} A promise that resolves to the completed storyboard.
  */
-export const runStoryboardCreation = async (storyboard: Storyboard): Promise<Storyboard> => {
+export const runStoryboardCreation = async (storyboard: Storyboard, signal: AbortSignal): Promise<Storyboard> => {
 	console.log('[LangGraph] runStoryboardCreation called with:', storyboard.prompts);
 	addLog(`[LangGraph] runStoryboardCreation called with: ${storyboard.prompts}`);
 	const app = createStoryboardGraph();
 
 	storyboard.currentSlide = 1;
 
-	const result = await app.invoke(storyboard);
+	const result = await app.invoke(storyboard, { signal });
 	console.log('[LangGraph] runStoryboardCreation result:', result);
 	addLog(`[LangGraph] runStoryboardCreation result: ${JSON.stringify(result)}`);
 

@@ -28,9 +28,12 @@ export function updateStream(taskId: string, data: unknown) {
  * @param {string} taskId - The unique identifier for the task.
  */
 export function endStream(taskId: string) {
-	const controller = streams.get(taskId);
-	if (!controller) return;
+	const streamData = streams.get(taskId);
+	if (!streamData) return;
 
-	controller.close();
+	const { controller, abortController } = streamData;
+	if (!abortController.signal.aborted) {
+		controller.close();
+	}
 	streams.delete(taskId);
 }
