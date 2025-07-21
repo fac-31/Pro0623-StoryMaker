@@ -3,9 +3,9 @@
 	export let mobileMenuOpen: boolean = false;
 </script>
 
-<nav class="relative">
+<nav class="relative" role="navigation" aria-label="Authentication">
 	<div class="text-center">
-		<a href="/" class="btn btn-ghost btn-sm mb-8">
+		<a href="/" class="btn btn-ghost btn-sm mb-8" aria-label="Back to Home">
 			<ArrowLeft class="h-5 w-5" />
 			<span class:hidden={mobileMenuOpen} class="md:inline">Back to Home</span>
 		</a>
@@ -22,6 +22,7 @@
 			class="text-base-content mb-2 text-3xl font-bold"
 			class:text-xl={mobileMenuOpen}
 			class:text-3xl={!mobileMenuOpen}
+			aria-level="1"
 		>
 			Create Your Account
 		</h2>

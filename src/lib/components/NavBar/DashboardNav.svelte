@@ -5,17 +5,18 @@
 	export let user;
 </script>
 
-<nav class="px-6 py-4">
+<nav class="px-6 py-4" role="navigation" aria-label="Dashboard">
 	<div class="flex items-center space-x-4">
 		<button class="btn btn-ghost btn-sm" aria-label="View notifications">
 			<Bell class="h-5 w-5" />
 		</button>
-		<a href="/user" class="btn btn-ghost btn-sm">
+		<a href="/user" class="btn btn-ghost btn-sm" aria-label="Settings">
 			<Settings class="h-5 w-5" />
 		</a>
 		<div class="flex items-center space-x-2">
 			<div
 				class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
+				aria-label="User's profile picture"
 			>
 				<span class="text-sm font-medium text-white">{user.user_metadata.display_name[0]}</span>
 			</div>
