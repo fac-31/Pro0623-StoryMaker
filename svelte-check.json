@@ -1,0 +1,7 @@
+{
+	"ignore": [
+		"src/lib/server/db.ts",
+		"src/lib/supabaseServerClient.ts",
+		"src/routes/api/storyboard/generate-game/+server.ts"
+	]
+}
