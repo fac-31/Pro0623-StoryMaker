@@ -103,24 +103,29 @@
 </script>
 
 {#if show}
+	<div role="status" aria-live="assertive" class="sr-only">
+		{liveRegionMessage}
+	</div>
 	<div
-		class="modal-overlay"
-		role="dialog"
-		aria-modal="true"
-		aria-labelledby="modal-title"
+		class="modal-overlay focus:ring-2 focus:ring-gray-300 focus:outline-none"
+		role="button"
+		tabindex="0"
+		aria-label="Close modal"
 		on:click={handleOverlayClick}
 		on:keydown={handleOverlayKeydown}
 	>
 		<div
 			bind:this={modalContentElement}
-			class="modal-content"
-			role="document"
-			tabindex="-1"
+			class="modal-content focus:ring-2 focus:ring-blue-500 focus:outline-none"
+			role="dialog"
+			aria-modal="true"
+			tabindex="0"
+			aria-labelledby="modal-title"
 			on:click|stopPropagation
 			on:keydown={handleFocusTrap}
 		>
 			<button
-				class="close-button"
+				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"
 				on:click={closeModal}
 				aria-label="Close slide details">&times;</button
 			>
@@ -192,8 +197,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div role="status" aria-live="assertive" class="sr-only">
-		{liveRegionMessage}
 	</div>
 {/if}

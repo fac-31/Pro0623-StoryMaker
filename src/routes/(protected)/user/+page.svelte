@@ -17,7 +17,7 @@
 	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form method="POST" class="w-full max-w-xl">
+	<form method="POST" class="w-full max-w-xl" role="group">
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
@@ -31,6 +31,7 @@
 					bind:value={name}
 					class="input input-bordered flex-1"
 					aria-describedby="form-error"
+					aria-invalid={form?.error ? 'true' : 'false'}
 				/>
 			</div>
 		</div>
@@ -47,6 +48,7 @@
 					bind:value={email}
 					class="input input-bordered flex-1"
 					aria-describedby="form-error"
+					aria-invalid={form?.error ? 'true' : 'false'}
 				/>
 			</div>
 		</div>
@@ -64,15 +66,14 @@
 					bind:value={password}
 					class="input input-bordered flex-1"
 					aria-describedby="form-error"
+					aria-invalid={form?.error ? 'true' : 'false'}
 				/>
 			</div>
 		</div>
 		<div>
-			{#if form?.error}
-				<div id="form-error" class="alert alert-error" role="alert">
-					<span>{form.error}</span>
-				</div>
-			{/if}
+			<div id="form-error" class="alert alert-error" role="alert" class:invisible={!form?.error}>
+				<span>{form?.error || ''}</span>
+			</div>
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
 				{#if navigating.to}Updating…{:else}Update Details{/if}

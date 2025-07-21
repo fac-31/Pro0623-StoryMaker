@@ -1,33 +1,34 @@
 <script lang="ts">
-	import { navigating } from '$app/stores';
+	import { navigating } from '$app/state';
 	import { Check } from 'lucide-svelte';
-	import FormField from '$lib/components/common/Form/FormField.svelte';
 	export let error: string;
 </script>
 
 <div class="card bg-base-100 shadow-xl">
 	<div class="card-body">
 		<form method="POST" class="space-y-6">
-			<FormField
-				label="Email Address"
-				id="email"
-				name="email"
-				type="email"
-				required
-				aria-describedby="form-error"
-			/>
+			<div class="form-control">
+				<label class="label" for="email">
+					<span class="label-text">Email Address</span>
+				</label>
+				<input id="email" name="email" type="email" required class="input input-bordered w-full" />
+			</div>
 
-			<FormField
-				label="Password"
-				id="password"
-				name="password"
-				type="password"
-				required
-				aria-describedby="form-error"
-			/>
+			<div class="form-control">
+				<label class="label" for="password">
+					<span class="label-text">Password</span>
+				</label>
+				<input
+					id="password"
+					name="password"
+					type="password"
+					required
+					class="input input-bordered w-full"
+				/>
+			</div>
 
 			{#if error}
-				<div id="form-error" class="alert alert-error" role="alert" aria-live="assertive">
+				<div class="alert alert-error">
 					<span>{error}</span>
 				</div>
 			{/if}
@@ -36,10 +37,10 @@
 				type="submit"
 				aria-label="Sign In"
 				name="sign-in"
-				disabled={$navigating.to != null}
+				disabled={navigating.to != null}
 				class="btn btn-primary w-full"
 			>
-				{#if $navigating.to}
+				{#if navigating.to}
 					Signing In...
 				{:else}
 					Sign In
