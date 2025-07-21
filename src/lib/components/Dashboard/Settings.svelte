@@ -1,23 +1,33 @@
-<!-- <script lang="ts">
+<script lang="ts">
 	import { navigating } from '$app/state';
-	export let data;
-	export let form: { success: boolean; error?: string };
-	let name = data.user?.user_metadata.display_name;
-	let email = data.user?.email;
-	let password = '';
-	$: if (form?.success) {
-		name = data.user?.user_metadata.display_name;
-		email = data.user?.email;
-		password = '';
+
+	import type { User as SupabaseUser } from '@supabase/supabase-js';
+    import type { ActionData } from './$types';
+	interface Props {
+		supabase: SupabaseUser;
+		form?: ActionData; // Add 'form' here. It's optional as it only exists after a submission.
 	}
+    let { supabase, form}: Props = $props();
+
+	let name = supabase?.user_metadata.display_name;
+	let email = supabase?.email;
+	let password = '';
+	$effect(() => {
+		if (form?.success) {
+			// Reset the state variables after a successful form submission
+			name = supabase?.user_metadata.display_name;
+			email = supabase?.email;
+			password = '';
+		}
+	});
 </script>
 
 <div class="flex flex-col items-center gap-4">
 	<h1>Account Settings</h1>
-	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
+	<p class="text-lg"><strong>Hello, </strong> {supabase?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form method="POST" class="w-full max-w-xl">
+	<form method="POST" action="?/changeSettings" class="w-full max-w-xl">   
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
@@ -85,4 +95,4 @@
 			{/if}
 		</div>
 	</form>
-</div> -->
+</div>
