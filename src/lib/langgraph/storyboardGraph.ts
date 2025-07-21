@@ -72,9 +72,9 @@ const generateImagePrompt = (slide: SlideOutline, characterSheet: string): strin
 
 	// Add scene description & Charactersheet
 	promptParts.push(`Character Profiles:\n${characterSheet}`);
-    promptParts.push(
-        'Please follow the character profiles above exactly—do not alter appearance between panels.'
-      );
+	promptParts.push(
+		'Please follow the character profiles above exactly—do not alter appearance between panels.'
+	);
 	promptParts.push(`Scene: ${slide.sceneDescription}`);
 
 	// Add character descriptions
@@ -163,7 +163,10 @@ const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> =>
 	updateStream(state._id.toString(), state);
 
 	//create prompt for image generation
-	const imagePrompt = generateImagePrompt(state.storyOutline.slideOutlines[state.currentSlide - 1], state.characterSheet);
+	const imagePrompt = generateImagePrompt(
+		state.storyOutline.slideOutlines[state.currentSlide - 1],
+		state.characterSheet
+	);
 
 	try {
 		const response = await openai.images.generate({
