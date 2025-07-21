@@ -20,7 +20,7 @@
 
 <!-- Mobile Navigation -->
 {#if mobileMenuOpen}
-	<div class="border-base-300 bg-base-100 border-t md:hidden">
+	<nav class="border-base-300 bg-base-100 border-t md:hidden">
 		<div class="space-y-4 px-4 py-4">
 			<a
 				href="#features"
@@ -42,5 +42,5 @@
 				<a href="/signup" class="btn btn-primary w-full"> Start Creating </a>
 			</div>
 		</div>
-	</div>
+	</nav>
 {/if}
