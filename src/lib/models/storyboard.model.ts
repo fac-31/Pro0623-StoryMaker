@@ -29,6 +29,6 @@ export interface NewStoryboard {
 	updatedAt: Date;
 	storyOutline: StoryOutline;
 	visualSlides: VisualSlide[];
-	interactions?: any; // To store game interactions
-	gameHtml?: string; // To store the generated game HTML
+	interactions?: unknown; // Use unknown instead of any
+	gameHtml?: string; // Use string for HTML
 }

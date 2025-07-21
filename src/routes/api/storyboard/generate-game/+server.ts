@@ -1,4 +1,3 @@
-/// <reference types="@sveltejs/kit" />
 import { json } from '@sveltejs/kit';
 import { initDB } from '$lib/server/db';
 import { ObjectId } from 'mongodb';
