@@ -1,14 +1,32 @@
 import { test, expect, request } from '@playwright/test';
 
 test('Creating a team', async ({ page }) => {
-	await page.goto('login');
-	await page.getByRole('textbox', { name: 'Email Address' }).click();
-	await page.getByRole('textbox', { name: 'Email Address' }).fill('annavanwingerden@outlook.com');
-	await page.getByRole('textbox', { name: 'Password' }).click();
-	await page.getByRole('textbox', { name: 'Password' }).fill('testing');
+	// Generate a unique user
+	const uniqueId = Date.now();
+	const email = `testuser-${uniqueId}@example.com`;
+	const password = 'password123';
+	const fullName = 'Test User';
+	const displayName = `TestDisplay${uniqueId}`;
+
+	// Sign up the user
+	await page.goto('/signup');
+	await page.getByRole('textbox', { name: 'Email Address' }).fill(email);
+	await page.getByRole('textbox', { name: 'Password' }).fill(password);
+	await page.getByRole('textbox', { name: 'Full Name' }).fill(fullName);
+	await page.getByRole('textbox', { name: 'Display Name' }).fill(displayName);
+	await page.getByRole('button', { name: 'Create Account' }).click();
+
+	// Wait for redirect to login
+	await page.waitForURL('/login');
+	await expect(page).toHaveURL('/login');
+
+	// Log in with the new user
+	await page.getByRole('textbox', { name: 'Email Address' }).fill(email);
+	await page.getByRole('textbox', { name: 'Password' }).fill(password);
 	await page.getByRole('button', { name: 'Sign in' }).click();
 
-	// Wait for redirect or token to be set
+	// Wait for redirect to dashboard
+	await page.waitForURL('/dashboard');
 	await expect(page).toHaveURL('/dashboard');
 
 	// Get all of the needed cookie headers for auth
@@ -25,19 +43,19 @@ test('Creating a team', async ({ page }) => {
 		}
 	});
 
+	let response;
+
 	// Create a team
-	const resultTeam = await (
-		await apiContext.post('/api/teams/create', { data: { name: 'Team Potato' } })
-	).json();
+	response = await apiContext.post('/api/teams/create', { data: { name: 'Team Potato' } });
+	expect(response.ok(), await response.text()).toBeTruthy();
+	const resultTeam = await response.json();
 
 	// Get yourself and all other users
 	const resultMe = await (await apiContext.get('/api/users/me')).json();
 	const resultAll = await (await apiContext.get('/api/users/getall')).json();
 
-	// Find any user thats not us to add to team
+	// Find any user that's not us to add to team
 	const user = resultAll.find((user) => user._id !== resultMe._id);
-
-	let response;
 
 	// Add user to the team
 	response = await apiContext.post('/api/teams/updateuser', {
@@ -47,7 +65,6 @@ test('Creating a team', async ({ page }) => {
 			role: 'user'
 		}
 	});
-
 	expect(response.ok(), await response.text()).toBeTruthy();
 
 	// Update same user to be an admin
@@ -58,7 +75,6 @@ test('Creating a team', async ({ page }) => {
 			role: 'admin'
 		}
 	});
-
 	expect(response.ok(), await response.text()).toBeTruthy();
 
 	// Remove user from team
@@ -68,6 +84,5 @@ test('Creating a team', async ({ page }) => {
 			user_id: user._id
 		}
 	});
-
 	expect(response.ok(), await response.text()).toBeTruthy();
 });

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Plus, UserPlus, Users, MoreHorizontal, X } from 'lucide-svelte';
+	import { Plus, Users, MoreHorizontal, X } from 'lucide-svelte';
 	import type { Team } from '$lib/models/team.model';
 	import { enhance } from '$app/forms';
 
@@ -13,40 +13,6 @@
 
 	// Team management modals
 	let showCreateTeamModal = $state(false);
-	let showJoinTeamModal = $state(false);
-
-	// Form states
-	// let newTeam = $state({ name: '' });
-	let joinTeamCode = $state('');
-	// let copiedInviteCode = $state(false);
-
-	function joinTeam() {
-		if (joinTeamCode.trim()) {
-			// const team = {
-			// 	id: Date.now(),
-			// 	name: 'Joined Team',
-			// 	description: 'Team joined via invite code',
-			// 	role: 'viewer',
-			// 	members: 12,
-			// 	inviteCode: joinTeamCode,
-			// 	storyboards: 5
-			// };
-
-			//userTeams.push(team);
-			joinTeamCode = '';
-			showJoinTeamModal = false;
-		}
-	}
-
-	// function leaveTeam(teamId: number) {
-	// 	//userTeams = userTeams.filter(team => team.id !== teamId);
-	// }
-
-	// function copyInviteCode(code: string) {
-	// 	navigator.clipboard.writeText(code);
-	// 	copiedInviteCode = true;
-	// 	setTimeout(() => (copiedInviteCode = false), 2000);
-	// }
 
 	// function getRoleIcon(role: string) {
 	// 	switch (role) {
@@ -81,41 +47,31 @@
 	}
 </script>
 
-<div>
+<section>
 	<!-- Page Header -->
-	<div class="mb-8">
+	<header class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
-				<h1 class="text-3xl font-bold text-gray-900">My Teams</h1>
-				<p class="mt-1 text-gray-600">Collaborate with your team members on storyboard projects</p>
+				<h1 class="text-base-content text-3xl font-bold">My Teams</h1>
+				<p class="text-base-content/70 mt-1">
+					Collaborate with your team members on storyboard projects
+				</p>
 			</div>
 
 			<div class="flex items-center space-x-3">
-				<button
-					class="flex items-center space-x-2 rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
-					onclick={() => (showJoinTeamModal = true)}
-				>
-					<UserPlus class="h-5 w-5" />
-					<span>Join Team</span>
-				</button>
-				<button
-					class="flex items-center space-x-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-3 font-semibold text-white transition-all hover:from-purple-700 hover:to-blue-700"
-					onclick={() => (showCreateTeamModal = true)}
-				>
+				<button class="btn btn-primary" onclick={() => (showCreateTeamModal = true)}>
 					<Plus class="h-5 w-5" />
 					<span>Create Team</span>
 				</button>
 			</div>
 		</div>
-	</div>
+	</header>
 
 	<!-- Teams Grid -->
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each teams as team (team._id)}
 			<!-- {@const RoleIcon = getRoleIcon(team.role)} -->
-			<div
-				class="group rounded-2xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all hover:border-purple-200 hover:shadow-xl"
-			>
+			<div class="card bg-base-100 group shadow-xl transition-shadow hover:shadow-2xl">
 				<div class="p-6">
 					<div class="mb-4 flex items-start justify-between">
 						<div class="flex items-center space-x-3">
@@ -125,10 +81,13 @@
 								<Users class="h-6 w-6 text-white" />
 							</div>
 							<div>
-								<h3 class="font-semibold text-gray-900">{team.name}</h3>
+								<h3 class="text-base-content font-semibold">{team.name}</h3>
 							</div>
 						</div>
-						<button class="p-1 text-gray-400 transition-colors hover:text-gray-600">
+						<button
+							class="text-base-content/40 hover:text-base-content/60 p-1 transition-colors"
+							aria-label="More options for {team.name}"
+						>
 							<MoreHorizontal class="h-4 w-4" />
 						</button>
 					</div>
@@ -139,17 +98,14 @@
 							{team.role}
 						</span> -->
 
-						<div class="flex items-center space-x-4 text-sm text-gray-500">
-							<span>{team.users} members</span>
-							<span>{team.projects} storyboards</span>
+						<div class="text-base-content/50 flex items-center space-x-4 text-sm">
+							<span>{team.users.length} member{team.users.length == 1 ? '' : 's'}</span>
+							<span>{team.projects.length} storyboard{team.projects.length == 1 ? '' : 's'}</span>
 						</div>
 					</div>
 
-					<div class="flex items-center space-x-2 border-t border-gray-100 pt-4">
-						<button
-							class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-center text-sm font-medium text-white transition-all hover:from-purple-700 hover:to-blue-700"
-							onclick={() => viewTeamStoryboards(team)}
-						>
+					<div class="border-base-200 flex items-center space-x-2 border-t pt-4">
+						<button class="btn btn-primary btn-sm flex-1" onclick={() => viewTeamStoryboards(team)}>
 							View Storyboards
 						</button>
 						<!-- <button
@@ -175,14 +131,21 @@
 			</div>
 		{/each}
 	</div>
-</div>
+</section>
 
-<!-- Create Team Modal -->{#if showCreateTeamModal}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+<!-- Create Team Modal -->
+{#if showCreateTeamModal}
+	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-xl font-semibold text-gray-900">Create New Team</h2>
-				<button class="p-2 text-gray-400" onclick={() => (showCreateTeamModal = false)}>
+				<h2 id="create-team-title" class="text-base-content text-xl font-semibold">
+					Create New Team
+				</h2>
+				<button
+					class="btn btn-ghost btn-sm"
+					onclick={() => (showCreateTeamModal = false)}
+					aria-label="Close create team dialog"
+				>
 					<X class="h-5 w-5" />
 				</button>
 			</div>
@@ -200,14 +163,14 @@
 				class="space-y-4"
 			>
 				<div>
-					<label for="team-name" class="mb-2 block text-sm font-medium text-gray-700"
-						>Team Name</label
-					>
+					<label for="team-name" class="label">
+						<span class="label-text">Team Name</span>
+					</label>
 					<input
 						id="team-name"
 						type="text"
 						name="name"
-						class="w-full rounded-lg border px-3 py-2"
+						class="input input-bordered w-full"
 						placeholder="Enter team name..."
 						required
 					/>
@@ -216,75 +179,14 @@
 				<div class="flex space-x-3 pt-4">
 					<button
 						type="button"
-						class="flex-1 rounded-lg border px-4 py-2"
+						class="btn btn-outline flex-1"
 						onclick={() => (showCreateTeamModal = false)}
 					>
 						Cancel
 					</button>
-					<button
-						type="submit"
-						class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white"
-					>
-						Create Team
-					</button>
+					<button type="submit" class="btn btn-primary flex-1"> Create Team </button>
 				</div>
 			</form>
 		</div>
-	</div>
-{/if}
-
-<!-- Join Team Modal -->
-{#if showJoinTeamModal}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-		<div class="w-full max-w-md rounded-2xl bg-white p-6">
-			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-xl font-semibold text-gray-900">Join Team</h2>
-				<button
-					class="p-2 text-gray-400 transition-colors hover:text-gray-600"
-					onclick={() => (showJoinTeamModal = false)}
-				>
-					<X class="h-5 w-5" />
-				</button>
-			</div>
-
-			<form
-				onsubmit={(e) => {
-					e.preventDefault();
-					joinTeam();
-				}}
-				class="space-y-4"
-			>
-				<div>
-					<label for="team-invite-code" class="mb-2 block text-sm font-medium text-gray-700"
-						>Team Invite Code</label
-					>
-					<input
-						id="team-invite-code"
-						type="text"
-						class="w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-transparent focus:ring-2 focus:ring-purple-500"
-						placeholder="Enter invite code..."
-						bind:value={joinTeamCode}
-						required
-					/>
-					<p class="mt-2 text-sm text-gray-500">Ask your team leader for the invite code</p>
-				</div>
-
-				<div class="flex space-x-3 pt-4">
-					<button
-						type="button"
-						class="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
-						onclick={() => (showJoinTeamModal = false)}
-					>
-						Cancel
-					</button>
-					<button
-						type="submit"
-						class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-white transition-all hover:from-purple-700 hover:to-blue-700"
-					>
-						Join Team
-					</button>
-				</div>
-			</form>
-		</div>
-	</div>
+	</dialog>
 {/if}

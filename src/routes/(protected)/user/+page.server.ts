@@ -18,20 +18,7 @@ export const actions: Actions = {
 		if (email) update.email = email;
 		if (password) update.password = password;
 		const { error } = await locals.supabase.auth.updateUser(update);
-
-		if (error) {
-			const message = error.message;
-			if (message.includes('name')) {
-				return fail(400, { error: message, name, email });
-			}
-			if (message.includes('email')) {
-				return fail(400, { error: message, name, email });
-			}
-			if (message.includes('password')) {
-				return fail(400, { error: message, name, email });
-			}
-			return fail(400, { error: message, name, email });
-		}
+		if (error) return fail(400, { error: error.message });
 		return { success: true };
 	}
 };
