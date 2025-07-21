@@ -37,7 +37,11 @@ export const GET: RequestHandler = async ({ params }) => {
 		start(controller) {
 			registerStream(id, controller);
 
-			runAsyncStoryboard(storyboard).catch((err) => {
+			runAsyncStoryboard(storyboard)
+			.then(() => {
+				endStream(id);
+			})	
+			.catch((err) => {
 				console.error('Storyboard error:', err);
 				endStream(id);
 			});

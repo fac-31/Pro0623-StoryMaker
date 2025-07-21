@@ -25,6 +25,13 @@ test.describe('Accessibility', () => {
 	test('Signup, dashboard, and storyboard creation pages should have no automatically detectable accessibility issues', async ({
 		page
 	}) => {
+		test.setTimeout(120000); // 120 seconds
+
+		page.on('response', async response => {
+			const status = response.status();
+			expect([200, 303]).toContain(status);
+		});
+
 		// Generate a unique user
 		const uniqueId = Date.now();
 		const email = `testuser-${uniqueId}@example.com`;
@@ -65,7 +72,7 @@ test.describe('Accessibility', () => {
 		await page.getByRole('button', { name: 'New Storyboard' }).click();
 		await page.getByRole('textbox', { name: 'Story Concept:' }).fill('monkey makes a new friend');
 		await page.getByRole('textbox', { name: 'Story Style:' }).fill('realistic');
-		await page.getByRole('spinbutton', { name: 'Number of Slides:' }).fill('2');
+		await page.getByRole('spinbutton', { name: 'Number of Slides:' }).fill('1');
 		await page
 			.getByRole('textbox', { name: 'Target Audience:' })
 			.fill('professionals living in london');
@@ -73,8 +80,8 @@ test.describe('Accessibility', () => {
 		await page.getByRole('textbox', { name: 'Genre:' }).fill('drama');
 		await page.getByRole('button', { name: 'Start Storyboard' }).click();
 
-		// Optionally, wait for storyboard page to load (adjust selector as needed)
-		// await page.waitForSelector('h1');
+		// optionally, wait for storyboard page to fully finish (adjust selector as needed)
+		await page.getByText('done', { exact: true }).waitFor();
 
 		// Storyboard creation page
 		accessibilityScanResults = await new AxeBuilder({ page }).analyze();

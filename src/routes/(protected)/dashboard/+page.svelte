@@ -69,7 +69,7 @@
 			</svg>
 		</button>
 
-		<main class="px-6 py-8">
+		<div class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
 				<Storyboards {storyboards} list={user.projects as string[]} {user} />
@@ -88,6 +88,6 @@
 			 same with logout, we handle it in the sidebar component.	 
 			 TODO: consider changing this in the future -->
 			{/if}
-		</main>
+		</div>
 	</div>
 </div>
