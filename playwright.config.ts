@@ -18,6 +18,7 @@ export default defineConfig({
 		env: filteredEnv
 	},
 	testDir: 'e2e',
+	workers: 1, // Run tests one at a time
 	use: {
 		baseURL: 'http://localhost:5173'
 	}
