@@ -21,6 +21,11 @@ export default [
 		}
 	},
 	{
-		ignores: ['node_modules/', 'build/', '.svelte-kit/', 'static/games/']
+		ignores: [
+			'node_modules/', 
+			'build/', 
+			'.svelte-kit/', 
+			'static/games/'
+		]
 	}
 ];
