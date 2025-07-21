@@ -30,6 +30,7 @@
 	class="btn btn-ghost btn-circle"
 	onclick={toggleTheme}
 	aria-label="Toggle theme"
+	aria-pressed={theme === 'dark'}
 	title="Toggle between light and dark theme"
 >
 	{#if theme === 'light'}
