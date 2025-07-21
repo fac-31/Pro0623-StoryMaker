@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { navigating } from '$app/state';
-
 	import type { User as SupabaseUser } from '@supabase/supabase-js';
-	import type { ActionData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 	import { enhance } from '$app/forms';
 
+	type FormResult = { success?: boolean; error?: string };
+
 	interface Props {
 		supabase: SupabaseUser;
-		form?: ActionData;
+		form?: FormResult;
 	}
+
 	let { supabase, form }: Props = $props();
 
 	let name = $state(supabase?.user_metadata.display_name);
@@ -36,7 +37,7 @@
 	<p class="text-lg"><strong>Hello, </strong> {supabase?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-    <form
+	<form
 		method="POST"
 		action="?/changeSettings"
 		class="w-full max-w-xl"
@@ -108,7 +109,7 @@
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
 				{#if navigating.to}Updating…{:else}Update Details{/if}
-</button>
+			</button>
 
 			{#if form?.success}
 				<div class="alert alert-success" role="alert">

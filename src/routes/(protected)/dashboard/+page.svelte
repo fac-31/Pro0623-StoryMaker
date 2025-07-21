@@ -12,7 +12,7 @@
 	import type { Team } from '$lib/models/team.model.js';
 	import type { User } from '$lib/models/user.model.js';
 	import Settings from '$lib/components/Dashboard/Settings.svelte';
-	
+
 	const supabase = $derived(data.supabase) as SupabaseUser;
 	const user = $derived(data.user) as User;
 	const users = $derived(data.users) as User[];
