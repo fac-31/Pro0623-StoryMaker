@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@plugin "daisyui";
+@plugin 'daisyui';
 
 /* Ensure proper theme switching */
 :root {
@@ -121,6 +121,11 @@
 
 .dialogue-line {
 	@apply border-warning bg-base-100 mb-2 rounded border-l-4 p-2 text-sm;
+}
+
+/* Custom focus outline for better visibility */
+*:focus-visible {
+	@apply ring-primary ring-2 ring-offset-2 ring-offset-base-100;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { navigating } from '$app/state';
 	import type { User as SupabaseUser } from '@supabase/supabase-js';
 	import { invalidateAll } from '$app/navigation';
@@ -32,15 +32,16 @@
 	});
 </script>
 
-<div class="flex flex-col items-center gap-4">
+<div class='flex flex-col items-center gap-4'>
 	<h1>Account Settings</h1>
-	<p class="text-lg"><strong>Hello, </strong> {supabase?.user_metadata.display_name}!</p>
-	<p class="text-base-content/70">Check out and edit your account info</p>
+	<p class='text-lg'><strong>Hello, </strong> {supabase?.user_metadata.display_name}!</p>
+	<p class='text-base-content/70'>Check out and edit your account info</p>
 
 	<form
-		method="POST"
-		action="?/changeSettings"
-		class="w-full max-w-xl"
+		method='POST'
+		action='?/changeSettings'
+		class='w-full max-w-xl'
+		aria-label='Account settings form'
 		use:enhance={() => {
 			return async ({ result }) => {
 				// If the form submission was successful, invalidate all data
@@ -51,68 +52,68 @@
 			};
 		}}
 	>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="name" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Display name: </span>
+		<div class='form-control mb-4'>
+			<div class='flex items-center gap-4'>
+				<label for='name' class='label max-w-[60px] flex-auto'>
+					<span class='label-text'> Display name: </span>
 				</label>
 				<input
-					id="name"
-					name="name"
-					type="text"
-					autocomplete="name"
+					id='name'
+					name='name'
+					type='text'
+					autocomplete='name'
 					bind:value={name}
-					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					class='input input-bordered flex-1'
+					aria-describedby='form-error'
 				/>
 			</div>
 		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="email" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Email: </span>
+		<div class='form-control mb-4'>
+			<div class='flex items-center gap-4'>
+				<label for='email' class='label max-w-[60px] flex-auto'>
+					<span class='label-text'> Email: </span>
 				</label>
 				<input
-					id="email"
-					name="email"
-					type="email"
-					autocomplete="email"
+					id='email'
+					name='email'
+					type='email'
+					autocomplete='email'
 					bind:value={email}
-					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					class='input input-bordered flex-1'
+					aria-describedby='form-error'
 				/>
 			</div>
 		</div>
-		<div class="form-control mb-4">
-			<div class="flex items-center gap-4">
-				<label for="password" class="label max-w-[60px] flex-auto">
-					<span class="label-text"> Password: </span>
+		<div class='form-control mb-4'>
+			<div class='flex items-center gap-4'>
+				<label for='password' class='label max-w-[60px] flex-auto'>
+					<span class='label-text'> Password: </span>
 				</label>
 				<input
-					id="password"
-					name="password"
-					type="password"
-					autocomplete="new-password"
-					placeholder="Leave blank if no change"
+					id='password'
+					name='password'
+					type='password'
+					autocomplete='new-password'
+					placeholder='Leave blank if no change'
 					bind:value={password}
-					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					class='input input-bordered flex-1'
+					aria-describedby='form-error'
 				/>
 			</div>
 		</div>
 		<div>
 			{#if form?.error}
-				<div id="form-error" class="alert alert-error" role="alert">
+				<div id='form-error' class='alert alert-error' role='alert'>
 					<span>{form.error}</span>
 				</div>
 			{/if}
 
-			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
+			<button type='submit' disabled={navigating.to != null} class='btn btn-primary'>
 				{#if navigating.to}Updating…{:else}Update Details{/if}
 			</button>
 
 			{#if form?.success}
-				<div class="alert alert-success" role="alert">
+				<div class='alert alert-success' role='alert'>
 					<span>Details updated successfully!</span>
 				</div>
 			{/if}

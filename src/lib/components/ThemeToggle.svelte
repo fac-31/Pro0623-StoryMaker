@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import { Sun, Moon } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
@@ -27,14 +27,14 @@
 </script>
 
 <button
-	class="btn btn-ghost btn-circle"
+	class='btn btn-ghost btn-circle'
 	onclick={toggleTheme}
-	aria-label="Toggle theme"
-	title="Toggle between light and dark theme"
+	aria-label='Toggle theme'
+	title='Toggle between light and dark theme'
 >
 	{#if theme === 'light'}
-		<Moon class="h-5 w-5" />
+		<Moon class='h-5 w-5' aria-label='Switch to dark mode' />
 	{:else}
-		<Sun class="h-5 w-5" />
+		<Sun class='h-5 w-5' aria-label='Switch to light mode' />
 	{/if}
 </button>

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang='ts'>
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 	import { createEventDispatcher } from 'svelte';
 
@@ -64,119 +64,122 @@
 
 <form
 	on:submit|preventDefault={handleSubmit}
-	class="bg-base-100 mx-auto max-w-2xl space-y-6 rounded-lg border p-6 shadow-sm"
+	class='bg-base-100 mx-auto max-w-2xl space-y-6 rounded-lg border p-6 shadow-sm'
+	aria-label='Storyboard details form'
 >
-	<div class="form-control">
-		<label for="concept" class="label">
-			<span class="label-text">Story Concept:</span>
+	<div class='form-control'>
+		<label for='concept' class='label'>
+			<span class='label-text'>Story Concept:</span>
 		</label>
 		<textarea
-			id="concept"
-			class="textarea textarea-bordered focus:ring-2 focus:outline-none"
+			id='concept'
+			class='textarea textarea-bordered focus:ring-2 focus:outline-none'
 			bind:value={userPrompt.concept}
-			rows="3"
-			placeholder="Enter your story concept..."
+			rows='3'
+			placeholder='Enter your story concept...'
 			required
-			aria-describedby="concept-description concept-error"
+			aria-describedby='concept-description concept-error'
 			aria-invalid={conceptError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 		></textarea>
-		<span id="concept-description" class="sr-only"
+		<span id='concept-description' class='sr-only'
 			>Clearly outline the main idea or plot of your story.</span
 		>
-		<span id="concept-error" class="error-message" aria-live="polite">{conceptError}</span>
+		<span id='concept-error' class='error-message' aria-live='polite'>{conceptError}</span>
 	</div>
 
-	<div class="form-control">
-		<label for="numSlides" class="label">
-			<span class="label-text">Number of Slides:</span>
+	<div class='form-control'>
+		<label for='numSlides' class='label'>
+			<span class='label-text'>Number of Slides:</span>
 		</label>
 		<input
-			type="number"
-			id="numSlides"
-			class="input input-bordered max-w-xs focus:ring-2 focus:outline-none"
+			type='number'
+			id='numSlides'
+			class='input input-bordered max-w-xs focus:ring-2 focus:outline-none'
 			bind:value={userPrompt.numSlides}
-			min="1"
-			max="20"
+			min='1'
+			max='20'
 			required
-			aria-describedby="numSlides-description numSlides-error"
+			aria-describedby='numSlides-description numSlides-error'
 			aria-invalid={numSlidesError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 		/>
-		<span id="numSlides-description" class="sr-only">Enter a number between 1 and 20.</span>
-		<span id="numSlides-error" class="error-message" aria-live="polite">{numSlidesError}</span>
+		<span id='numSlides-description' class='sr-only'>Enter a number between 1 and 20.</span>
+		<span id='numSlides-error' class='error-message' aria-live='polite'>{numSlidesError}</span>
 	</div>
 
-	<div class="form-control">
-		<label for="storyStyle" class="label">
-			<span class="label-text">Story Style:</span>
+	<div class='form-control'>
+		<label for='storyStyle' class='label'>
+			<span class='label-text'>Story Style:</span>
 		</label>
 		<input
-			type="text"
-			id="storyStyle"
-			class="input input-bordered focus:ring-2 focus:outline-none"
+			type='text'
+			id='storyStyle'
+			class='input input-bordered focus:ring-2 focus:outline-none'
 			bind:value={userPrompt.storyStyle}
-			placeholder="e.g., minimalist, detailed, cartoon, realistic..."
+			placeholder='e.g., minimalist, detailed, cartoon, realistic...'
 			required
-			aria-describedby="storyStyle-description storyStyle-error"
+			aria-describedby='storyStyle-description storyStyle-error'
 			aria-invalid={storyStyleError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 		/>
-		<span id="storyStyle-description" class="sr-only"
-			>Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon, realistic).</span
+		<span id='storyStyle-description' class='sr-only'
+			>Describe the visual style of the storyboard (e.g., minimalist, detailed, cartoon,
+			realistic).</span
 		>
-		<span id="storyStyle-error" class="error-message" aria-live="polite">{storyStyleError}</span>
+		<span id='storyStyle-error' class='error-message' aria-live='polite'>{storyStyleError}</span>
 	</div>
 
-	<div class="form-control">
-		<label for="targetAudience" class="label">
-			<span class="label-text">Target Audience:</span>
+	<div class='form-control'>
+		<label for='targetAudience' class='label'>
+			<span class='label-text'>Target Audience:</span>
 		</label>
 		<input
-			type="text"
-			id="targetAudience"
-			class="input input-bordered focus:ring-2 focus:outline-none"
+			type='text'
+			id='targetAudience'
+			class='input input-bordered focus:ring-2 focus:outline-none'
 			bind:value={userPrompt.targetAudience}
-			placeholder="e.g., children, teens, adults, professionals..."
+			placeholder='e.g., children, teens, adults, professionals...'
 			required
-			aria-describedby="targetAudience-description targetAudience-error"
+			aria-describedby='targetAudience-description targetAudience-error'
 			aria-invalid={targetAudienceError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 		/>
-		<span id="targetAudience-description" class="sr-only"
-			>Specify the intended audience for this story (e.g., children, teens, adults, professionals).</span
+		<span id='targetAudience-description' class='sr-only'
+			>Specify the intended audience for this story (e.g., children, teens, adults,
+			professionals).</span
 		>
-		<span id="targetAudience-error" class="error-message" aria-live="polite"
+		<span id='targetAudience-error' class='error-message' aria-live='polite'
 			>{targetAudienceError}</span
 		>
 	</div>
 
-	<div class="form-control">
-		<label for="genre" class="label">
-			<span class="label-text">Genre:</span>
+	<div class='form-control'>
+		<label for='genre' class='label'>
+			<span class='label-text'>Genre:</span>
 		</label>
 		<input
-			type="text"
-			id="genre"
-			class="input input-bordered focus:ring-2 focus:outline-none"
+			type='text'
+			id='genre'
+			class='input input-bordered focus:ring-2 focus:outline-none'
 			bind:value={userPrompt.genre}
-			placeholder="e.g., adventure, comedy, drama, fantasy..."
+			placeholder='e.g., adventure, comedy, drama, fantasy...'
 			required
-			aria-describedby="genre-description genre-error"
+			aria-describedby='genre-description genre-error'
 			aria-invalid={genreError !== ''}
 			on:blur={(e) => validateField(e.target as HTMLInputElement | HTMLTextAreaElement)}
 		/>
-		<span id="genre-description" class="sr-only"
+		<span id='genre-description' class='sr-only'
 			>Define the genre of the story (e.g., adventure, comedy, drama, fantasy).</span
 		>
-		<span id="genre-error" class="error-message" aria-live="polite">{genreError}</span>
+		<span id='genre-error' class='error-message' aria-live='polite'>{genreError}</span>
 	</div>
 
-	<button type="submit" disabled={loading} class="focus:ring-2 focus:outline-none"
+	<button type='submit' disabled={loading} class='focus:ring-2 focus:outline-none'
 		>Start Storyboard</button
 	>
 
-	<div role="status" aria-live="polite">
+	<div role='status' aria-live='polite'>
 		{#if loading}
 			<p>Submitting form...</p>
 		{/if}
