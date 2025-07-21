@@ -1,11 +1,7 @@
 <script lang="ts">
 	import { navigating } from '$app/state';
 	export let data;
-	export let form: {
-		success: boolean;
-		error?: string;
-		errors?: { name?: string; email?: string; password?: string };
-	};
+	export let form: { success: boolean; error?: string; field?: string };
 	let name = data.user?.user_metadata.display_name;
 	let email = data.user?.email;
 	let password = '';
@@ -21,15 +17,8 @@
 	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form
-		method="POST"
-		class="w-full max-w-xl"
-		novalidate
-		role="group"
-		aria-labelledby="form-title"
-	>
-		<h2 id="form-title" class="sr-only">Account Information</h2>
-		<div class="form-control mb-4">
+	<form method="POST" class="w-full max-w-xl">
+		<div class="form-control mb-4" role="group">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Display name: </span>
@@ -41,15 +30,16 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
-					aria-errormessage="name-error"
-					aria-invalid={!!form?.errors?.name}
+					aria-describedby="name-error"
 				/>
 			</div>
-			{#if form?.errors?.name}
-				<p id="name-error" class="text-error text-sm mt-1" role="alert">{form.errors.name}</p>
-			{/if}
+			<div aria-live="assertive">
+				{#if form?.error && form.field === 'name'}
+					<p id="name-error" class="text-error text-sm mt-1">{form.error}</p>
+				{/if}
+			</div>
 		</div>
-		<div class="form-control mb-4">
+		<div class="form-control mb-4" role="group">
 			<div class="flex items-center gap-4">
 				<label for="email" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Email: </span>
@@ -61,15 +51,16 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
-					aria-errormessage="email-error"
-					aria-invalid={!!form?.errors?.email}
+					aria-describedby="email-error"
 				/>
 			</div>
-			{#if form?.errors?.email}
-				<p id="email-error" class="text-error text-sm mt-1" role="alert">{form.errors.email}</p>
-			{/if}
+			<div aria-live="assertive">
+				{#if form?.error && form.field === 'email'}
+					<p id="email-error" class="text-error text-sm mt-1">{form.error}</p>
+				{/if}
+			</div>
 		</div>
-		<div class="form-control mb-4">
+		<div class="form-control mb-4" role="group">
 			<div class="flex items-center gap-4">
 				<label for="password" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Password: </span>
@@ -82,19 +73,18 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
-					aria-errormessage="password-error"
-					aria-invalid={!!form?.errors?.password}
+					aria-describedby="password-error"
 				/>
 			</div>
-			{#if form?.errors?.password}
-				<p id="password-error" class="text-error text-sm mt-1" role="alert">
-					{form.errors.password}
-				</p>
-			{/if}
+			<div aria-live="assertive">
+				{#if form?.error && form.field === 'password'}
+					<p id="password-error" class="text-error text-sm mt-1">{form.error}</p>
+				{/if}
+			</div>
 		</div>
 		<div>
-			{#if form?.error && !form.errors}
-				<div id="form-error" class="alert alert-error" role="alert">
+			{#if form?.error && !form.field}
+				<div id="form-error" class="alert alert-error" role="alert" aria-live="assertive">
 					<span>{form.error}</span>
 				</div>
 			{/if}
@@ -104,7 +94,7 @@
 			</button>
 
 			{#if form?.success}
-				<div class="alert alert-success" role="alert">
+				<div class="alert alert-success" role="alert" aria-live="assertive">
 					<span>Details updated successfully!</span>
 				</div>
 			{/if}
