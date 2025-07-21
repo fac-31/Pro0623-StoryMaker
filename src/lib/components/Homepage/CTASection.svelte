@@ -13,13 +13,18 @@
 				captivate their audiences.
 			</p>
 			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a href="/signup" class="btn btn-secondary btn-lg">
+				<a
+					href="/signup"
+					class="btn btn-secondary btn-lg"
+					aria-label="Sign up for a free account and start creating your storyboard"
+				>
 					<span>Start Creating Free</span>
 					<ArrowRight class="h-5 w-5" />
 				</a>
 				<a
 					href="/storyboard"
 					class="btn btn-outline btn-lg hover:text-primary border-white text-white hover:bg-white"
+					aria-label="Try a demo of our storyboard creator"
 				>
 					Try Demo
 				</a>
