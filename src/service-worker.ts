@@ -5,11 +5,20 @@ import { build, files, version } from '$service-worker';
 declare const self: ServiceWorkerGlobalScope;
 
 const CACHE = `cache-${version}`;
-const ASSETS = [...build, ...files, '/offline.html'];
+const ASSETS = Array.from(new Set([...build, ...files, '/offline.html'])).filter(
+	(asset) => !asset.endsWith('.gitkeep') && !asset.startsWith('/games/')
+);
 
 self.addEventListener('install', (event: ExtendableEvent) => {
 	self.skipWaiting();
-	event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
+	event.waitUntil(
+		caches.open(CACHE).then((cache) =>
+			cache.addAll(ASSETS).catch((err) => {
+				console.error('Cache addAll failed:', err, ASSETS);
+				throw err;
+			})
+		)
+	);
 });
 
 self.addEventListener('activate', (event: ExtendableEvent) => {
