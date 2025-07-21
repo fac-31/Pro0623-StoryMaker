@@ -5,7 +5,7 @@
 	export let user;
 </script>
 
-<div class="px-6 py-4">
+<nav class="px-6 py-4">
 	<div class="flex items-center space-x-4">
 		<button class="btn btn-ghost btn-sm" aria-label="View notifications">
 			<Bell class="h-5 w-5" />
@@ -29,9 +29,9 @@
 			</button>
 		</form>
 	</div>
-</div>
+</nav>
 {#if mobileMenuOpen}
-	<div class="border-base-200 bg-base-100 border-t md:hidden">
+	<nav class="border-base-200 bg-base-100 border-t md:hidden">
 		<div class="space-y-4 px-4 py-4">
 			<a href="#features" class="text-base-content/70 hover:text-primary block">Features</a>
 			<a href="#how-it-works" class="text-base-content/70 hover:text-primary block">How it Works</a>
@@ -41,5 +41,5 @@
 				<a href="/signup" class="btn btn-primary w-full"> Start Creating </a>
 			</div>
 		</div>
-	</div>
+	</nav>
 {/if}
