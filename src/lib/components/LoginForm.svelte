@@ -49,7 +49,7 @@
 		</form>
 
 		<!-- Benefits -->
-		<div class="mt-8 border-t border-gray-200 pt-6">
+		<aside class="mt-8 border-t border-gray-200 pt-6">
 			<div class="space-y-3">
 				<div class="flex items-center space-x-3">
 					<Check class="text-success h-5 w-5" />
@@ -64,7 +64,7 @@
 					<span class="text-base-content/70 text-sm">Sync across devices</span>
 				</div>
 			</div>
-		</div>
+		</aside>
 	</div>
 </div>
 
