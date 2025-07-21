@@ -462,7 +462,6 @@
 				<input type="hidden" name="team_id" value={team._id} />
 				<input type="hidden" name="user_id" value={showRemoveUserModal} />
 
-				
 				<div class="flex space-x-3 pt-4">
 					<button
 						type="button"
