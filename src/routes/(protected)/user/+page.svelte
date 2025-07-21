@@ -17,7 +17,7 @@
 	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form method="POST" class="w-full max-w-xl">
+	<form method="POST" class="w-full max-w-xl" role="group">
 		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
@@ -30,7 +30,7 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby={form?.error ? 'form-error' : ''}
 				/>
 			</div>
 		</div>
@@ -46,7 +46,7 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby={form?.error ? 'form-error' : ''}
 				/>
 			</div>
 		</div>
@@ -63,26 +63,27 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
-					aria-describedby="form-error"
+					aria-describedby={form?.error ? 'form-error' : ''}
 				/>
 			</div>
 		</div>
 		<div>
-			{#if form?.error}
-				<div id="form-error" class="alert alert-error" role="alert">
-					<span>{form.error}</span>
-				</div>
-			{/if}
+			<div aria-live="assertive">
+				{#if form?.error}
+					<div id="form-error" class="alert alert-error" role="alert">
+						<span>{form.error}</span>
+					</div>
+				{/if}
+				{#if form?.success}
+					<div id="form-success" class="alert alert-success" role="alert">
+						<span>Details updated successfully!</span>
+					</div>
+				{/if}
+			</div>
 
 			<button type="submit" disabled={navigating.to != null} class="btn btn-primary">
 				{#if navigating.to}Updating…{:else}Update Details{/if}
 			</button>
-
-			{#if form?.success}
-				<div class="alert alert-success" role="alert">
-					<span>Details updated successfully!</span>
-				</div>
-			{/if}
 		</div>
 	</form>
 </div>
