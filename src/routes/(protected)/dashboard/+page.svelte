@@ -1,6 +1,8 @@
 <script lang="ts">
 	const { data } = $props();
 
+	import { onMount } from 'svelte';
+
 	import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
@@ -20,6 +22,20 @@
 	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
 	let selectedTeam = $state<Team | null>(null);
 	let sidebarCollapsed = $state(true);
+
+	onMount(() => {
+		const team = sessionStorage.getItem('team');
+
+		if (team) {
+			const data = JSON.parse(team);
+			sessionStorage.removeItem('teamContext');
+
+			if (data) {
+				currentView = 'team-storyboards';
+				selectedTeam = data;
+			}
+		}
+	});
 
 	function handleViewChange(view: string, team?: Team | null) {
 		currentView = view;

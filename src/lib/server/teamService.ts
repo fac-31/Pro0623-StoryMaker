@@ -145,7 +145,7 @@ export async function updateTeamUser(
 		const team = await teams.findOne({ _id: new ObjectId(team_id) });
 		if (!team) throw new Error('Team not found');
 
-		const existingUser = team.users.find((u) => u.user.equals(user_id));
+		const existingUser = team.users.find((u) => (u.user as ObjectId).equals(user_id));
 
 		if (existingUser) {
 			// User exists, update role
@@ -201,7 +201,7 @@ export async function removeTeamUser(team_id: string, user_id: string): Promise<
  */
 export async function isUserInTeam(team: Team, user_id: string) {
 	const teamUser: TeamUser | undefined = team.users.find((teamUser) =>
-		teamUser.user.equals(user_id)
+		(teamUser.user as ObjectId).equals(user_id)
 	);
 
 	if (!teamUser) return false;
@@ -220,7 +220,7 @@ export async function canUserEditTeam(team_id: string, user_id: string) {
 	if (!team) return 'Could not find team by id ' + team_id;
 
 	const teamUser: TeamUser | undefined = team.users.find((teamUser) =>
-		teamUser.user.equals(user_id)
+		(teamUser.user as ObjectId).equals(user_id)
 	);
 
 	if (!teamUser) return 'You are not in this team to edit';

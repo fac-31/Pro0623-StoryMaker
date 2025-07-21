@@ -83,7 +83,9 @@ export const POST: RequestHandler = async (event) => {
 
 	const projects: ObjectId[] = obj.projects as ObjectId[];
 	projects.push(result.insertedId);
-	await db.collection(table).updateOne({ _id: obj._id }, { $set: { projects: projects } });
+	await db
+		.collection(table)
+		.updateOne({ _id: obj._id as ObjectId }, { $set: { projects: projects } });
 
 	return json(result);
 };
