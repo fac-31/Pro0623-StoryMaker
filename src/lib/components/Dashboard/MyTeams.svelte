@@ -47,9 +47,9 @@
 	}
 </script>
 
-<div>
+<section>
 	<!-- Page Header -->
-	<div class="mb-8">
+	<header class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
 				<h1 class="text-base-content text-3xl font-bold">My Teams</h1>
@@ -65,7 +65,7 @@
 				</button>
 			</div>
 		</div>
-	</div>
+	</header>
 
 	<!-- Teams Grid -->
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -131,14 +131,16 @@
 			</div>
 		{/each}
 	</div>
-</div>
+</section>
 
 <!-- Create Team Modal -->
 {#if showCreateTeamModal}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
-				<h2 class="text-base-content text-xl font-semibold">Create New Team</h2>
+				<h2 id="create-team-title" class="text-base-content text-xl font-semibold">
+					Create New Team
+				</h2>
 				<button
 					class="btn btn-ghost btn-sm"
 					onclick={() => (showCreateTeamModal = false)}
@@ -186,5 +188,5 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	</dialog>
 {/if}

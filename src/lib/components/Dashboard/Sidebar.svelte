@@ -39,7 +39,7 @@
 >
 	<div class="flex h-full flex-col">
 		<!-- Sidebar Header -->
-		<div class="border-base-300/50 flex items-center justify-between border-b p-6">
+		<header class="border-base-300/50 flex items-center justify-between border-b p-6">
 			<div class="flex items-center space-x-3">
 				<div
 					class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
@@ -55,7 +55,7 @@
 			>
 				<X class="h-5 w-5" />
 			</button>
-		</div>
+		</header>
 
 		<!-- Navigation -->
 		<nav class="flex-1 space-y-2 px-4 py-6">
@@ -89,7 +89,7 @@
 		</nav>
 
 		<!-- User Section -->
-		<div class="border-base-300/50 border-t p-4">
+		<section class="border-base-300/50 border-t p-4" aria-label="User Profile">
 			<div class="flex items-center space-x-3">
 				<div
 					class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
@@ -107,6 +107,6 @@
 					</p>
 				</div>
 			</div>
-		</div>
+		</section>
 	</div>
 </aside>

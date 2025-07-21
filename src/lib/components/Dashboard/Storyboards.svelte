@@ -67,9 +67,9 @@
 	}
 </script>
 
-<div>
+<section>
 	<!-- Page Header -->
-	<div class="mb-8">
+	<header class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
 				<h1 class="text-base-content text-3xl font-bold">
@@ -89,7 +89,7 @@
 				<span>New Storyboard</span>
 			</button>
 		</div>
-	</div>
+	</header>
 
 	<!-- Team members list -->
 	{#if team && users}
@@ -373,11 +373,11 @@
 			</div>
 		{/if}
 	</section>
-</div>
+</section>
 
 <!-- Create Add User Modal -->
 {#if showAddUserModal && team && users}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-base-content text-xl font-semibold">Add User to team</h2>
@@ -426,12 +426,12 @@
 				</button>
 			</div>
 		</div>
-	</div>
+	</dialog>
 {/if}
 
 <!-- Create Remove User Modal -->
 {#if showRemoveUserModal && team && users}
-	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-base-content text-xl font-semibold">
@@ -462,6 +462,7 @@
 				<input type="hidden" name="team_id" value={team._id} />
 				<input type="hidden" name="user_id" value={showRemoveUserModal} />
 
+				
 				<div class="flex space-x-3 pt-4">
 					<button
 						type="button"
@@ -474,5 +475,5 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	</dialog>
 {/if}
