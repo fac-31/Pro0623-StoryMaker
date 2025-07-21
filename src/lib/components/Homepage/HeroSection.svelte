@@ -2,7 +2,11 @@
 	import { ArrowRight, Play, BookOpen } from 'lucide-svelte';
 </script>
 
-<section class="relative overflow-hidden py-20 lg:py-32">
+<section
+	class="relative overflow-hidden py-20 lg:py-32"
+	role="region"
+	aria-labelledby="hero-heading"
+>
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="grid items-center gap-12 lg:grid-cols-2">
 			<div class="space-y-8">
@@ -12,7 +16,10 @@
 					>
 						✨ AI-Powered Storyboarding
 					</div>
-					<h1 class="text-base-content text-4xl leading-tight font-bold lg:text-6xl">
+					<h1
+						id="hero-heading"
+						class="text-base-content text-4xl leading-tight font-bold lg:text-6xl"
+					>
 						Turn Your
 						<span
 							class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
@@ -28,11 +35,15 @@
 				</div>
 
 				<div class="flex flex-col gap-4 sm:flex-row">
-					<a href="/signup" class="btn btn-primary btn-lg">
+					<a
+						href="/signup"
+						class="btn btn-primary btn-lg"
+						aria-label="Start Creating for Free"
+					>
 						<span>Start Creating Free</span>
 						<ArrowRight class="h-5 w-5" />
 					</a>
-					<a href="/storyboard" class="btn btn-outline btn-lg">
+					<a href="/storyboard" class="btn btn-outline btn-lg" aria-label="Try the Demo">
 						<Play class="h-5 w-5" />
 						<span>Try Demo</span>
 					</a>

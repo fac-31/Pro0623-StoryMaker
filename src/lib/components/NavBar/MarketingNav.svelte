@@ -3,13 +3,25 @@
 	export let mobileMenuOpen: boolean = false;
 </script>
 
-<nav class="hidden items-center space-x-8 md:ml-8 md:flex">
-	<a href="#features" class="text-base-content/70 hover:text-primary transition-colors">Features</a>
-	<a href="#how-it-works" class="text-base-content/70 hover:text-primary transition-colors"
-		>How it Works</a
+<nav
+	class="hidden items-center space-x-8 md:ml-8 md:flex"
+	role="navigation"
+	aria-label="Primary"
+>
+	<a
+		href="#features"
+		class="text-base-content/70 hover:text-primary transition-colors"
+		aria-label="Features">Features</a
 	>
-	<a href="#testimonials" class="text-base-content/70 hover:text-primary transition-colors"
-		>Testimonials</a
+	<a
+		href="#how-it-works"
+		class="text-base-content/70 hover:text-primary transition-colors"
+		aria-label="How it Works">How it Works</a
+	>
+	<a
+		href="#testimonials"
+		class="text-base-content/70 hover:text-primary transition-colors"
+		aria-label="Testimonials">Testimonials</a
 	>
 </nav>
 
@@ -20,22 +32,29 @@
 
 <!-- Mobile Navigation -->
 {#if mobileMenuOpen}
-	<nav class="border-base-300 bg-base-100 border-t md:hidden">
+	<nav
+		class="border-base-300 bg-base-100 border-t md:hidden"
+		role="navigation"
+		aria-label="Mobile"
+	>
 		<div class="space-y-4 px-4 py-4">
 			<a
 				href="#features"
 				class="text-base-content/70 hover:text-primary block"
-				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}>Features</a
+				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}
+				aria-label="Features">Features</a
 			>
 			<a
 				href="#how-it-works"
 				class="text-base-content/70 hover:text-primary block"
-				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}>How it Works</a
+				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}
+				aria-label="How it Works">How it Works</a
 			>
 			<a
 				href="#testimonials"
 				class="text-base-content/70 hover:text-primary block"
-				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}>Testimonials</a
+				on:click={() => setTimeout(() => (mobileMenuOpen = false), 100)}
+				aria-label="Testimonials">Testimonials</a
 			>
 			<div class="border-base-200 space-y-2 border-t pt-4">
 				<a href="/login" class="text-base-content/70 block w-full text-left">Sign In</a>
