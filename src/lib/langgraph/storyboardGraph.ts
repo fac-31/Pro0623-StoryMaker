@@ -67,10 +67,14 @@ Genre: {genre}
 	};
 };
 
-const generateImagePrompt = (slide: SlideOutline): string => {
+const generateImagePrompt = (slide: SlideOutline, characterSheet: string): string => {
 	const promptParts: string[] = [];
 
-	// Add scene description
+	// Add scene description & Charactersheet
+	promptParts.push(`Character Profiles:\n${characterSheet}`);
+    promptParts.push(
+        'Please follow the character profiles above exactly—do not alter appearance between panels.'
+      );
 	promptParts.push(`Scene: ${slide.sceneDescription}`);
 
 	// Add character descriptions
@@ -92,6 +96,65 @@ const generateImagePrompt = (slide: SlideOutline): string => {
 	return fullPrompt;
 };
 
+const generateCharacterSheet = async (state: Storyboard): Promise<Partial<Storyboard>> => {
+	addLog(`[LangGraph] Starting character sheet generation.`);
+
+	// 1. Aggregate all character data from the outline
+	const characterData: Record<
+		string,
+		{ name: string; roles: Set<string>; descriptions: Set<string> }
+	> = {};
+	for (const slide of state.storyOutline.slideOutlines) {
+		for (const ch of slide.characters) {
+			if (!characterData[ch.name]) {
+				characterData[ch.name] = { name: ch.name, roles: new Set(), descriptions: new Set() };
+			}
+			characterData[ch.name].roles.add(ch.role);
+			characterData[ch.name].descriptions.add(ch.description);
+		}
+	}
+
+	// 2. Define the synthesis model and prompt once
+	const synthesizerLlm = new ChatOpenAI({ modelName: 'gpt-4', temperature: 0 });
+	const synthesizerPrompt = ChatPromptTemplate.fromTemplate(`
+Based on the following details for a character named "{name}", create a single, cohesive, and definitive visual profile.
+This profile will be used as a master reference for an image generation model to ensure visual consistency across multiple scenes.
+Combine all unique details into one clear paragraph. Focus on visual appearance.
+
+Character Name: {name}
+Known Roles: {roles}
+Collected Descriptions:
+{descriptions}
+
+Synthesized Profile:`);
+	const synthesizerChain = synthesizerPrompt.pipe(synthesizerLlm);
+
+	// 3. Synthesize a profile for each character
+	const synthesisPromises = Object.values(characterData).map((charInfo) =>
+		synthesizerChain.invoke({
+			name: charInfo.name,
+			roles: Array.from(charInfo.roles).join(', '),
+			descriptions: Array.from(charInfo.descriptions)
+				.map((d) => `- ${d}`)
+				.join('\n')
+		})
+	);
+
+	const synthesizedResults = await Promise.all(synthesisPromises);
+	// 4. Build the final character sheet string
+	const finalSheet = synthesizedResults
+		.map((result, index) => {
+			const charName = Object.values(characterData)[index].name;
+			const profile = (result.content as string).trim();
+			return `• ${charName}: ${profile}`;
+		})
+		.join('\n\n'); // Use double newline for better separation
+
+	console.log('[LangGraph] Synthesized characterSheet →\n', finalSheet);
+	addLog(`[LangGraph] Synthesized characterSheet:\n${finalSheet}`);
+	return { characterSheet: finalSheet };
+};
+
 const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] generateImage called for slide :', state.currentSlide);
 	addLog(`[LangGraph] generateImage called for prompt: ${state.currentSlide}`);
@@ -100,7 +163,7 @@ const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> =>
 	updateStream(state._id.toString(), state);
 
 	//create prompt for image generation
-	const imagePrompt = generateImagePrompt(state.storyOutline.slideOutlines[state.currentSlide - 1]);
+	const imagePrompt = generateImagePrompt(state.storyOutline.slideOutlines[state.currentSlide - 1], state.characterSheet);
 
 	try {
 		const response = await openai.images.generate({
@@ -148,8 +211,6 @@ const saveSlideAndAdvance = async (state: Storyboard): Promise<Partial<Storyboar
 	// Advance to next slide. mark complete is in the logic of shouldContinue()
 	const nextSlide = currentSlideNum + 1;
 
-	updateStream(state._id.toString(), state);
-
 	console.log('[LangGraph] saveSlideAndAdvance nextSlide:', nextSlide);
 	addLog(`[LangGraph] saveSlideAndAdvance nextSlide: ${nextSlide}`);
 	return {
@@ -181,12 +242,14 @@ export const createStoryboardGraph = () => {
 
 	// Add nodes
 	workflow.addNode('generateStoryOutline', generateStoryOutline);
+	workflow.addNode('generateCharacterSheet', generateCharacterSheet);
 	workflow.addNode('generateImage', generateImage);
 	workflow.addNode('saveAndAdvance', saveSlideAndAdvance);
 
 	// Define edges using '__start__' and '__end__' as required
 	workflow.addEdge('__start__', 'generateStoryOutline');
-	workflow.addEdge('generateStoryOutline', 'generateImage');
+	workflow.addEdge('generateStoryOutline', 'generateCharacterSheet');
+	workflow.addEdge('generateCharacterSheet', 'generateImage');
 	workflow.addEdge('generateImage', 'saveAndAdvance');
 	workflow.addConditionalEdges('saveAndAdvance', shouldContinue, {
 		nextSlide: 'generateImage',

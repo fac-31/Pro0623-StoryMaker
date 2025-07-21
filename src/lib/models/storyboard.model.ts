@@ -15,6 +15,7 @@ export interface Storyboard {
 	updatedAt: Date;
 	storyOutline: StoryOutline;
 	visualSlides: VisualSlide[];
+	characterSheet: string;
 }
 
 export type NewStoryboard = Omit<Storyboard, '_id'>;
