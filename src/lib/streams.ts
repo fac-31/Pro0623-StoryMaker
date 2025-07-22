@@ -44,7 +44,11 @@ export function endStream(taskId: string) {
 
 	const { controller, abortController } = streamData;
 	if (!abortController.signal.aborted) {
-		controller.close();
+		try {
+			controller.close();
+		} catch (error) {
+			console.log(error);
+		}
 	}
 	streams.delete(taskId);
 }
@@ -58,5 +62,4 @@ export function cancelStream(taskId: string) {
 	if (!streamData) return;
 
 	streamData.abortController.abort();
-	streams.delete(taskId);
 }

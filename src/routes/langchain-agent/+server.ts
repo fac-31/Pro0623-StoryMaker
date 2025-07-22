@@ -4,11 +4,13 @@ import type { RequestHandler } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const { concept } = await request.json();
-	const abortController = new AbortController();
 	try {
-		const result = await runStoryboardCreation(concept, abortController.signal);
+		const result = await runStoryboardCreation(concept, request.signal);
 		return json(result);
 	} catch (error) {
+		if ((error as Error).name === 'AbortError') {
+			return new Response('Request Aborted', { status: 499 });
+		}
 		return json({ error: (error as Error).message }, { status: 500 });
 	}
 };
