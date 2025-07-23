@@ -44,22 +44,6 @@
 						<a href="/signup" class="hover:text-neutral-content transition-colors">Sign Up</a>
 					</li>
 					<li><a href="/login" class="hover:text-neutral-content transition-colors">Sign In</a></li>
-					<li>
-						<a href="/logout" class="hover:text-neutral-content transition-colors">Sign Out</a>
-					</li>
-				</ul>
-			</div>
-
-			<div>
-				<h3 class="mb-4 font-semibold">Support</h3>
-				<ul class="text-neutral-content/70 space-y-2">
-					<li>
-						<a href="/help" class="hover:text-neutral-content transition-colors">Help Center</a>
-					</li>
-					<li>
-						<a href="/privacy" class="hover:text-neutral-content transition-colors">Privacy</a>
-					</li>
-					<li><a href="/terms" class="hover:text-neutral-content transition-colors">Terms</a></li>
 				</ul>
 			</div>
 		</div>

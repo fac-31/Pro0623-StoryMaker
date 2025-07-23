@@ -1,7 +1,7 @@
 import type { ObjectId } from 'mongodb';
 
 export interface User {
-	_id: ObjectId;
+	_id: ObjectId | string;
 	supabase: string;
 	name: string;
 	projects: ObjectId[] | string[];

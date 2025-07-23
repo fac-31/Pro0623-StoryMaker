@@ -1,15 +1,27 @@
+/// <reference types="@sveltejs/kit" />
 /// <reference lib="webworker" />
 import { build, files, version } from '$service-worker';
 
-const CACHE = `cache-${version}`;
-const ASSETS = [...build, ...files, '/offline.html'];
+declare const self: ServiceWorkerGlobalScope;
 
-self.addEventListener('install', (event) => {
+const CACHE = `cache-${version}`;
+const ASSETS = Array.from(new Set([...build, ...files, '/offline.html'])).filter(
+	(asset) => !asset.endsWith('.gitkeep') && !asset.startsWith('/games/')
+);
+
+self.addEventListener('install', (event: ExtendableEvent) => {
 	self.skipWaiting();
-	event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
+	event.waitUntil(
+		caches.open(CACHE).then((cache) =>
+			cache.addAll(ASSETS).catch((err) => {
+				console.error('Cache addAll failed:', err, ASSETS);
+				throw err;
+			})
+		)
+	);
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', (event: ExtendableEvent) => {
 	event.waitUntil(
 		caches
 			.keys()
@@ -19,11 +31,16 @@ self.addEventListener('activate', (event) => {
 	);
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event: FetchEvent) => {
 	if (event.request.method !== 'GET') return;
 
 	if (event.request.mode === 'navigate') {
-		event.respondWith(fetch(event.request).catch(() => caches.match('/offline.html')));
+		event.respondWith(
+			fetch(event.request).catch(async () => {
+				const cached = await caches.match('/offline.html');
+				return cached ?? new Response('Offline', { status: 503, statusText: 'Offline' });
+			})
+		);
 		return;
 	}
 

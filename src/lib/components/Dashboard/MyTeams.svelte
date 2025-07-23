@@ -136,7 +136,7 @@
 <!-- Create Team Modal -->
 {#if showCreateTeamModal}
 	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
-		<div class="w-full max-w-md rounded-2xl bg-white p-6">
+		<div class="bg-base-100 w-full max-w-md rounded-2xl p-6 shadow-lg">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 id="create-team-title" class="text-base-content text-xl font-semibold">
 					Create New Team
@@ -179,7 +179,7 @@
 				<div class="flex space-x-3 pt-4">
 					<button
 						type="button"
-						class="btn btn-outline flex-1"
+						class="btn btn-primary flex-1"
 						onclick={() => (showCreateTeamModal = false)}
 					>
 						Cancel

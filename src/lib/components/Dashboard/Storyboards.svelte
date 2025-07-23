@@ -10,7 +10,6 @@
 		X,
 		Video
 	} from 'lucide-svelte';
-	import type { ObjectId } from 'mongodb';
 
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
@@ -38,7 +37,7 @@
 	let viewMode = $state('grid');
 	let searchQuery = $state('');
 	let showAddUserModal = $state(false);
-	let showRemoveUserModal = $state<ObjectId | null>(null);
+	let showRemoveUserModal = $state<string | null>(null);
 	let admin = team?.users.find((teamuser) => (teamuser.user = user._id))?.role == 'admin';
 
 	// Computed values
@@ -128,7 +127,21 @@
 									<select
 										name="role"
 										class="select select-bordered select-sm"
-										onchange={(e) => e.currentTarget.form?.requestSubmit()}
+										onchange={(e) => {
+											const value = e.currentTarget.value;
+
+											const formData = new FormData();
+											formData.append('team_id', team._id as string);
+											formData.append('user_id', teamuser.user as string);
+											formData.append('role', value);
+
+											fetch('?/updateUser', {
+												method: 'POST',
+												body: formData
+											}).then((/*res*/) => {
+												// TODO fix role not updated properly in frontend
+											});
+										}}
 										disabled={!admin || user._id === teamuser.user}
 									>
 										<option value="user" selected={teamuser.role === 'user'}>Member</option>
@@ -142,7 +155,7 @@
 										<div>
 											<button
 												class="btn btn-square"
-												onclick={() => (showRemoveUserModal = teamuser.user)}
+												onclick={() => (showRemoveUserModal = teamuser.user as string)}
 											>
 												<Trash class="h-5 w-5" />
 											</button>
@@ -378,7 +391,7 @@
 <!-- Create Add User Modal -->
 {#if showAddUserModal && team && users}
 	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
-		<div class="w-full max-w-md rounded-2xl bg-white p-6">
+		<div class="bg-base-100 w-full max-w-md rounded-2xl p-6 shadow-lg">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-base-content text-xl font-semibold">Add User to team</h2>
 				<button
@@ -400,6 +413,7 @@
 								// This callback runs after the action completes
 								return async ({ update }) => {
 									await update();
+									team.users.push({ user: user._id, role: 'user' });
 									showAddUserModal = false;
 								};
 							}}
@@ -435,8 +449,9 @@
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-base-content text-xl font-semibold">
-					Are you sure you want to remove {users.find((user) => user._id == showRemoveUserModal)
-						?.name}?
+					Are you sure you want to remove {users.find(
+						(user) => (user._id as string) == showRemoveUserModal
+					)?.name}?
 				</h2>
 				<button
 					class="btn btn-ghost btn-sm"
@@ -454,6 +469,7 @@
 					// This callback runs after the action completes
 					return async ({ update }) => {
 						await update();
+						team.users = team.users.filter((teamuser) => teamuser.user != showRemoveUserModal);
 						showRemoveUserModal = null;
 					};
 				}}

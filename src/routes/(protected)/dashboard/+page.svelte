@@ -1,6 +1,8 @@
 <script lang="ts">
 	const { data } = $props();
 
+	import { onMount } from 'svelte';
+
 	import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 	import Sidebar from '$lib/components/Dashboard/Sidebar.svelte';
@@ -9,6 +11,7 @@
 	import type { Storyboard } from '$lib/models/storyboard.model.js';
 	import type { Team } from '$lib/models/team.model.js';
 	import type { User } from '$lib/models/user.model.js';
+	import Settings from '$lib/components/Dashboard/Settings.svelte';
 
 	const supabase = $derived(data.supabase) as SupabaseUser;
 	const user = $derived(data.user) as User;
@@ -20,6 +23,20 @@
 	let currentView = $state('my-storyboards'); // 'my-storyboards', 'teams', 'team-storyboards'
 	let selectedTeam = $state<Team | null>(null);
 	let sidebarCollapsed = $state(true);
+
+	onMount(() => {
+		const team = sessionStorage.getItem('team');
+
+		if (team) {
+			const data = JSON.parse(team);
+			sessionStorage.removeItem('teamContext');
+
+			if (data) {
+				currentView = 'team-storyboards';
+				selectedTeam = data;
+			}
+		}
+	});
 
 	function handleViewChange(view: string, team?: Team | null) {
 		currentView = view;
@@ -87,6 +104,8 @@
 			 we goto "\user" route from the navbar itself.
 			 same with logout, we handle it in the sidebar component.	 
 			 TODO: consider changing this in the future -->
+			{:else if currentView === 'settings'}
+				<Settings {supabase} />
 			{/if}
 		</main>
 	</div>

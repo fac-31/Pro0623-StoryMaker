@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { Play, X, Home, Users, Settings, Bell, LogOut } from 'lucide-svelte';
-	import { goto } from '$app/navigation';
+	import { Play, X, Home, Users, Settings, LogOut } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
 	import ThemeToggle from '../ThemeToggle.svelte';
 
@@ -19,14 +18,11 @@
 		{ id: 'my-storyboards', label: 'My Storyboards', icon: Home },
 		{ id: 'my-teams', label: 'My Teams', icon: Users },
 		{ id: 'settings', label: 'Settings', icon: Settings },
-		{ id: 'notifications', label: 'Notifications', icon: Bell },
 		{ id: 'logout', label: 'Logout', icon: LogOut }
 	];
 
 	function handleNavClick(itemId: string) {
-		if (itemId === 'settings') {
-			goto('/user');
-		} else if (itemId !== 'logout') {
+		if (itemId !== 'logout') {
 			onViewChange(itemId);
 		}
 	}
