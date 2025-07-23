@@ -30,6 +30,7 @@ export interface NewStoryboard {
 	updatedAt: Date;
 	storyOutline: StoryOutline;
 	visualSlides: VisualSlide[];
+	characterSheet: string;
 	interactions?: unknown; // Use unknown instead of any
 	gameHtml?: string; // Use string for HTML
 }
