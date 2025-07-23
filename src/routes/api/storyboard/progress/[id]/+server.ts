@@ -3,7 +3,7 @@ import { runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { Storyboard } from '$lib/models/storyboard.model';
-import { registerStream, updateStream, endStream } from '$lib/streams';
+import { registerStream, updateStream, cancelStream, endStream } from '$lib/streams';
 import { ObjectId } from 'mongodb';
 
 /**
@@ -44,7 +44,7 @@ export const GET: RequestHandler = async ({ params }) => {
 			});
 		},
 		cancel() {
-			endStream(id);
+			cancelStream(id);
 		}
 	});
 
