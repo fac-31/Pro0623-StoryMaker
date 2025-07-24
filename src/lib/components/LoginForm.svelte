@@ -28,7 +28,7 @@
 			</div>
 
 			{#if error}
-				<div class="alert alert-error">
+				<div class="alert alert-error" aria-live="polite">
 					<span>{error}</span>
 				</div>
 			{/if}

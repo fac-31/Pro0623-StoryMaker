@@ -5,7 +5,11 @@
 	let mobileMenuOpen = false;
 </script>
 
-<header class="navbar bg-base-100/80 border-base-200 sticky top-0 z-50 border-b backdrop-blur-md">
+<header
+	class="navbar bg-base-100/80 border-base-200 sticky top-0 z-50 border-b backdrop-blur-md"
+	role="navigation"
+	aria-label="Main Navigation"
+>
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between py-4">
 			<div class="flex items-center space-x-2">

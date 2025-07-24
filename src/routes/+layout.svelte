@@ -7,6 +7,25 @@
 			const base = import.meta.env.BASE_URL;
 			navigator.serviceWorker.register(`${base}service-worker.js`);
 		}
+
+		const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+		if (mediaQuery.matches) {
+			document.body.classList.add('no-motion');
+		}
+
+		const handleChange = () => {
+			if (mediaQuery.matches) {
+				document.body.classList.add('no-motion');
+			} else {
+				document.body.classList.remove('no-motion');
+			}
+		};
+
+		mediaQuery.addEventListener('change', handleChange);
+
+		return () => {
+			mediaQuery.removeEventListener('change', handleChange);
+		};
 	});
 </script>
 
