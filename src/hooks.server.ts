@@ -32,7 +32,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.user = user ?? null;
 
 	console.log('[hooks.server.ts] Resolving request for:', event.url.pathname);
-	const response = await resolve(event);
+	const response = await resolve(event, {
+		transformPageChunk: ({ html }) => {
+			const lang = event.request.headers.get('accept-language')?.split(',')[0] || 'en';
+			return html.replace('%lang%', lang);
+		}
+	});
 
 	// Optionally, log the response status for debugging
 	console.log(
