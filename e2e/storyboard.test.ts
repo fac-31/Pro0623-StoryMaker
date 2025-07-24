@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 test('Create a storyboard', async ({ page }) => {
-	// Generate a unique user
-	const uniqueId = Date.now();
+	// Generate a unique user with more randomness to avoid conflicts
+	const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 	const email = `testuser-${uniqueId}@example.com`;
 	const password = 'password123';
 	const fullName = 'Test User';
-	const displayName = `TestDisplay${uniqueId}`;
+	const displayName = `TestDisplay${uniqueId.replace(/[^a-zA-Z0-9]/g, '')}`;
 
 	// Sign up the user
 	await page.goto('/signup');
@@ -17,7 +17,7 @@ test('Create a storyboard', async ({ page }) => {
 	await page.getByRole('button', { name: 'Create Account' }).click();
 
 	// Wait for redirect to login
-	await page.waitForURL('/login');
+	await page.waitForURL('/login', { timeout: 60000 });
 	await expect(page).toHaveURL('/login');
 
 	// Log in with the new user

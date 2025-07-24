@@ -3,11 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 test.describe('Authentication', () => {
-	const uniqueId = Date.now();
+	const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 	const email = `testuser-${uniqueId}@example.com`;
 	const password = 'password123';
 	const fullName = 'Test User';
-	const displayName = `TestDisplay${uniqueId}`;
+	const displayName = `TestDisplay${uniqueId.replace(/[^a-zA-Z0-9]/g, '')}`;
 
 	test('should allow a user to sign up and then log in', async ({ page }) => {
 		// --- 1. Sign up ---
@@ -41,10 +41,11 @@ test.describe('Authentication', () => {
 
 	test('should allow a user to log out', async ({ page }) => {
 		// --- 1. Sign up a new user to test with ---
-		const logoutEmail = `logout-${uniqueId}@example.com`;
+		const logoutUniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+		const logoutEmail = `logout-${logoutUniqueId}@example.com`;
 		const logoutPassword = 'password123';
 		const logoutFullName = 'Logout Test User';
-		const logoutDisplayName = `LogoutDisplay${uniqueId}`;
+		const logoutDisplayName = `LogoutDisplay${logoutUniqueId.replace(/[^a-zA-Z0-9]/g, '')}`;
 
 		await page.goto('/signup');
 		await page.getByRole('textbox', { name: 'Email Address' }).fill(logoutEmail);

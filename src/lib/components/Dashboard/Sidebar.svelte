@@ -98,7 +98,7 @@
 					<p class="text-base-content truncate text-sm font-medium">
 						{supabase.user_metadata.display_name || 'User'}
 					</p>
-					<p class="text-base-content/50 truncate text-xs">
+					<p class="text-base-content/70 truncate text-xs">
 						{supabase.email || 'user@example.com'}
 					</p>
 				</div>
