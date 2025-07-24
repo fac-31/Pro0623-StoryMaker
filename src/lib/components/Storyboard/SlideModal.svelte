@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, tick } from 'svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import type { SlideOutline } from '$lib/models/story';
 
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
@@ -14,7 +15,19 @@
 		close: void;
 	}>();
 
-	$: slideOutline = storyboard.storyOutline.slideOutlines[selectedSlideIndex];
+	// Create a local, editable copy of the slide outline.
+	let editableSlideOutline: SlideOutline;
+
+	// This reactive block re-initializes the form whenever the selected slide changes.
+	$: {
+		// Deep copy to prevent mutating the original storyboard object directly.
+		editableSlideOutline = JSON.parse(
+			JSON.stringify(storyboard.storyOutline.slideOutlines[selectedSlideIndex])
+		);
+		// Reset editing state when the slide changes
+		editing = false;
+	}
+
 	$: visualSlide = storyboard.visualSlides[selectedSlideIndex];
 
 	let triggerElement: HTMLElement | null = null;
@@ -104,15 +117,14 @@
 	}
 
 	async function editStoryboard() {
-		editing = true;
 		error = '';
 		try {
 			const res = await fetch('/api/storyboard/edit', {
 				method: 'POST',
 				body: JSON.stringify({
-					newSlideOutline : "", 
-					slideNumber : 1,
-					storyboard_id  : 1 
+					newSlideOutline: editableSlideOutline,
+					slideNumber: selectedSlideIndex,
+					storyboard_id: storyboard._id
 				})
 			});
 			const data = await res.json();
@@ -120,23 +132,27 @@
 				const id = data.id;
 				const edit = true;
 				await progressStoryboard(id, edit);
-
-				//storyboard = storyBoardResponse.storyboardOutput;
-				//await fetchLogs();
+				editing = false; // Exit editing mode on success
 			} else {
-				error = data.error || 'Failed to start storyboard';
+				error = data.error || 'Failed to save storyboard';
 			}
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
-		} finally {
-			editing = false;
 		}
+	}
+
+	function cancelEdit() {
+		// Revert changes by re-copying the original data
+		editableSlideOutline = JSON.parse(
+			JSON.stringify(storyboard.storyOutline.slideOutlines[selectedSlideIndex])
+		);
+		editing = false;
 	}
 
 	//you need to unite this function with the function in StoryboardPage.svelte
 	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
 		return new Promise((resolve, reject) => {
-        	const source = new EventSource(`/api/storyboard/progress/${id}/${edit}`);
+			const source = new EventSource(`/api/storyboard/progress/${id}/${edit}`);
 
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);
@@ -154,7 +170,6 @@
 			};
 		});
 	}
-	
 </script>
 
 {#if show}
@@ -188,48 +203,100 @@
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
 				<div class="slide-details">
-					<h3 id="modal-title">Slide {slideOutline.slideId}</h3>
+					<h3 id="modal-title">Slide {editableSlideOutline.slideId}</h3>
 
 					<div class="detail-section">
 						<h4>Scene</h4>
-						<p><strong>Title:</strong> {slideOutline.sceneTitle}</p>
-						<p><strong>Duration:</strong> {slideOutline.durationSeconds}s</p>
-						<p><strong>Timestamp:</strong> {slideOutline.timestamp}</p>
+						{#if editing}
+							<p>
+								<strong>Title:</strong> <input bind:value={editableSlideOutline.sceneTitle} />
+							</p>
+							<p>
+								<strong>Duration:</strong>
+								<input type="number" bind:value={editableSlideOutline.durationSeconds} />s
+							</p>
+							<p>
+								<strong>Timestamp:</strong>
+								<input bind:value={editableSlideOutline.timestamp} />
+							</p>
+						{:else}
+							<p><strong>Title:</strong> {editableSlideOutline.sceneTitle}</p>
+							<p><strong>Duration:</strong> {editableSlideOutline.durationSeconds}s</p>
+							<p><strong>Timestamp:</strong> {editableSlideOutline.timestamp}</p>
+						{/if}
 					</div>
 
 					<div class="detail-section">
 						<h4>Description</h4>
-						<p>{slideOutline.sceneDescription}</p>
+						{#if editing}
+							<textarea bind:value={editableSlideOutline.sceneDescription}></textarea>
+						{:else}
+							<p>{editableSlideOutline.sceneDescription}</p>
+						{/if}
 					</div>
 
 					<div class="detail-section">
 						<h4>Visual Style</h4>
-						<p>{slideOutline.visualStyle}</p>
-						<p><strong>Camera:</strong> {slideOutline.cameraAngle}</p>
+						{#if editing}
+							<input bind:value={editableSlideOutline.visualStyle} />
+							<p>
+								<strong>Camera:</strong> <input bind:value={editableSlideOutline.cameraAngle} />
+							</p>
+						{:else}
+							<p>{editableSlideOutline.visualStyle}</p>
+							<p><strong>Camera:</strong> {editableSlideOutline.cameraAngle}</p>
+						{/if}
 					</div>
 
-					{#if slideOutline.characters.length > 0}
+					{#if editableSlideOutline.characters.length > 0}
 						<div class="detail-section">
 							<h4>Characters</h4>
-							{#each slideOutline.characters as character (slideOutline.slideId + character.name)}
+							{#each editableSlideOutline.characters as character, i (editableSlideOutline.slideId + character.name)}
 								<div class="character-info">
-									<strong>{character.name}</strong> ({character.role})
-									<p>{character.description}</p>
-									<small>Position: {character.position}</small>
-									{#if character.emotions.length > 0}
-										<div class="emotions">Emotions: {character.emotions.join(', ')}</div>
+									{#if editing}
+										<strong>Name:</strong>
+										<input bind:value={character.name} />
+										<strong>Role:</strong>
+										<input bind:value={character.role} />
+										<p>
+											<strong>Description:</strong>
+											<textarea bind:value={character.description}></textarea>
+										</p>
+										<small
+											><strong>Position:</strong> <input bind:value={character.position} /></small
+										>
+										{#if character.emotions.length > 0}
+											<div class="emotions">
+												<strong>Emotions:</strong>
+												<input bind:value={character.emotions} />
+											</div>
+										{/if}
+									{:else}
+										<strong>{character.name}</strong> ({character.role})
+										<p>{character.description}</p>
+										<small>Position: {character.position}</small>
+										{#if character.emotions.length > 0}
+											<div class="emotions">Emotions: {character.emotions.join(', ')}</div>
+										{/if}
 									{/if}
 								</div>
 							{/each}
 						</div>
 					{/if}
 
-					{#if slideOutline.text.dialogue.length > 0}
+					{#if editableSlideOutline.text.dialogue.length > 0}
 						<div class="detail-section">
 							<h4>Dialogue</h4>
-							{#each slideOutline.text.dialogue as dialogue (slideOutline.slideId + dialogue.line)}
+							{#each editableSlideOutline.text.dialogue as dialogue, i (editableSlideOutline.slideId + dialogue.line)}
 								<div class="dialogue-line">
-									<strong>{dialogue.character}:</strong> "{dialogue.line}"
+									{#if editing}
+										<strong>Character:</strong>
+										<input bind:value={dialogue.character} />
+										<strong>Line:</strong>
+										<input bind:value={dialogue.line} />
+									{:else}
+										<strong>{dialogue.character}:</strong> "{dialogue.line}"
+									{/if}
 								</div>
 							{/each}
 						</div>
@@ -251,6 +318,15 @@
 					{/if}
 				</div>
 			</div>
+			<div class="modal-footer">
+				{#if editing}
+					<button on:click={cancelEdit}>Cancel</button>
+					<button on:click={editStoryboard}>Save</button>
+				{:else}
+					<button on:click={() => (editing = true)}>Edit</button>
+				{/if}
+			</div>
 		</div>
 	</div>
 {/if}
+
