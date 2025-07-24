@@ -84,9 +84,21 @@ export const POST: RequestHandler = async (event) => {
 
 	const projects: ObjectId[] = obj.projects as ObjectId[];
 	projects.push(result.insertedId);
-	await db
-		.collection(table)
-		.updateOne({ _id: obj._id as ObjectId }, { $set: { projects: projects } });
+	
+	try {
+		const result = await db.collection(table).updateOne({ _id: new ObjectId(obj._id) }, { $set: { projects: projects } });
+	
+		if (!result.matchedCount) {
+			throw new Error(`Update failed: no document found with _id ${obj._id}`);
+		}
+	
+		if (!result.modifiedCount) {
+			console.warn(`Update skipped: document was matched but not changed (same data?)`);
+		}
+	} catch (err) {
+		console.error('Failed to update projects:', err);
+		throw new Error('Database update failed');
+	}
 
 	return json(result);
 };
