@@ -57,9 +57,22 @@ test.describe('Accessibility', () => {
 		await page.waitForURL('http://localhost:5173/dashboard');
 		await expect(page).toHaveURL('http://localhost:5173/dashboard');
 
-		// Dashboard page
+		// Dashboard page - My Storyboards view (default)
 		accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 		expect(accessibilityScanResults.violations).toEqual([]);
+
+		// Test My Teams view
+		await page.getByRole('button', { name: 'My Teams' }).click();
+		accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+		expect(accessibilityScanResults.violations).toEqual([]);
+
+		// Test Settings view
+		await page.getByRole('button', { name: 'Settings' }).click();
+		accessibilityScanResults = await new AxeBuilder({ page }).analyze();
+		expect(accessibilityScanResults.violations).toEqual([]);
+
+		// Return to My Storyboards for the rest of the test
+		await page.getByRole('button', { name: 'My Storyboards' }).click();
 
 		// Create a storyboard
 		await page.getByRole('button', { name: 'New Storyboard' }).click();

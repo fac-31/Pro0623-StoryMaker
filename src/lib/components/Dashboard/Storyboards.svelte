@@ -246,7 +246,7 @@
 								{storyboard.prompts.concept}
 							</p>
 
-							<div class="text-base-content/50 mb-4 flex items-center justify-between text-xs">
+							<div class="text-base-content/70 mb-4 flex items-center justify-between text-xs">
 								<span>{storyboard.visualSlides.length} slides</span>
 							</div>
 

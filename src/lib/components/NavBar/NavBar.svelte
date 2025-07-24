@@ -21,10 +21,10 @@
 				</span>
 			</div>
 			<div class="flex items-center space-x-8">
-				<slot name="nav" {mobileMenuOpen}></slot>
+				<slot name="nav" {mobileMenuOpen} closeMobileMenu={() => (mobileMenuOpen = false)}></slot>
 				<ThemeToggle />
 				<button
-					class="btn btn-ghost btn-square md:hidden"
+					class="btn btn-ghost btn-square min-h-[44px] min-w-[44px] md:hidden"
 					on:click={() => (mobileMenuOpen = !mobileMenuOpen)}
 					aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
 					aria-expanded={mobileMenuOpen}

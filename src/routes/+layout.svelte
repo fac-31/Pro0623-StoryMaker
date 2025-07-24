@@ -19,7 +19,12 @@
 		Skip to main content
 	</a>
 
-	<main id="main-content" class="container mx-auto">
+	<main
+		id="main-content"
+		class="container mx-auto"
+		aria-label="Main application content"
+		tabindex="-1"
+	>
 		<slot />
 	</main>
 </div>
