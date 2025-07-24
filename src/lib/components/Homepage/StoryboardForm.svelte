@@ -92,4 +92,8 @@
 	<button type="submit" class="btn btn-primary w-full text-lg" disabled={loading}>
 		{loading ? 'Loading...' : 'Start Storyboard'}
 	</button>
+
+	{#if loading}
+		<span class="sr-only" aria-live="polite"> Loading... </span>
+	{/if}
 </form>

@@ -28,11 +28,19 @@
 				</div>
 
 				<div class="flex flex-col gap-4 sm:flex-row">
-					<a href="/signup" class="btn btn-primary btn-lg">
+					<a
+						href="/signup"
+						class="btn btn-primary btn-lg"
+						aria-label="Start creating your stories for free"
+					>
 						<span>Start Creating Free</span>
 						<ArrowRight class="h-5 w-5" />
 					</a>
-					<a href="/storyboard" class="btn btn-outline btn-lg">
+					<a
+						href="/storyboard"
+						class="btn btn-outline btn-lg"
+						aria-label="Try the demo of the storyboard creator"
+					>
 						<Play class="h-5 w-5" />
 						<span>Try Demo</span>
 					</a>
