@@ -5,7 +5,7 @@
 	import FeatureSection from '$lib/components/Homepage/FeatureSection.svelte';
 	import StepSection from '$lib/components/Homepage/StepSection.svelte';
 	import TestimonialSection from '$lib/components/Homepage/TestimonialSection.svelte';
-	import CtaSection from '$lib/components/Homepage/CTASection.svelte';
+	import CtaSection from '$lib/components/Homepage/CtaSection.svelte';
 	import Footer from '$lib/components/Homepage/Footer.svelte';
 </script>
 
