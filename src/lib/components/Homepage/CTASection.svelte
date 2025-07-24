@@ -20,6 +20,7 @@
 				<a
 					href="/storyboard"
 					class="btn btn-outline btn-lg hover:text-primary border-white text-white hover:bg-white"
+					aria-label="Try the interactive demo to create a storyboard"
 				>
 					Try Demo
 				</a>

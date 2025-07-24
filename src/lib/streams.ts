@@ -30,8 +30,14 @@ export function updateStream(taskId: string, data: unknown) {
 	const streamData = streams.get(taskId);
 	if (!streamData) return;
 
-	const encoder = new TextEncoder();
-	streamData.controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+	try {
+		const encoder = new TextEncoder();
+		streamData.controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+	} catch (error) {
+		console.warn(`Failed to update stream ${taskId}:`, error);
+		// Remove the controller if it's already closed
+		streams.delete(taskId);
+	}
 }
 
 /**
