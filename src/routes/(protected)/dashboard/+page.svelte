@@ -86,7 +86,7 @@
 			</svg>
 		</button>
 
-		<main class="px-6 py-8">
+		<div class="px-6 py-8">
 			<!-- Render components based on currentView -->
 			{#if currentView === 'my-storyboards'}
 				<Storyboards {storyboards} list={user.projects as string[]} {user} />
@@ -107,6 +107,6 @@
 			{:else if currentView === 'settings'}
 				<Settings {supabase} />
 			{/if}
-		</main>
+		</div>
 	</div>
 </div>
