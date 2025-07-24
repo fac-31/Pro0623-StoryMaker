@@ -3,7 +3,7 @@ import { runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { Storyboard } from '$lib/models/storyboard.model';
-import { registerStream, updateStream, endStream } from '$lib/streams';
+import { registerStream, updateStream, cancelStream, endStream } from '$lib/streams';
 import { ObjectId } from 'mongodb';
 
 /**
@@ -35,17 +35,16 @@ export const GET: RequestHandler = async ({ params }) => {
 
 	const stream = new ReadableStream({
 		start(controller) {
-			registerStream(id, controller);
+			const abortController = new AbortController();
+			registerStream(id, controller, abortController);
 
-			runAsyncStoryboard(storyboard).catch((err) => {
+			runAsyncStoryboard(storyboard, abortController.signal).catch((err) => {
 				console.error('Storyboard error:', err);
 				endStream(id);
 			});
 		},
-
 		cancel() {
-			// Cleanup if the client disconnects
-			endStream(id);
+			cancelStream(id);
 		}
 	});
 
@@ -63,8 +62,8 @@ export const GET: RequestHandler = async ({ params }) => {
 	 * 3. Sends the final update to the stream.
 	 * 4. Ends the stream.
 	 */
-	async function runAsyncStoryboard(storyboard: Storyboard) {
-		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard);
+	async function runAsyncStoryboard(storyboard: Storyboard, signal: AbortSignal) {
+		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
 

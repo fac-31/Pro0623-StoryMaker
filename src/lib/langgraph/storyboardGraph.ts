@@ -13,6 +13,7 @@ import { storyOutlineSchema } from '$lib/schemas/story.schema.js'; // Generated 
 import type { SlideOutline } from '$lib/models/story';
 import { updateStream } from '$lib/streams';
 import { v2 as cloudinary } from 'cloudinary';
+import type { RunnableConfig } from '@langchain/core/runnables';
 
 // Configure Cloudinary (usually done in your app initialization)
 cloudinary.config({
@@ -37,7 +38,10 @@ const openai = new OpenAI({
  * @param {Storyboard} state - The current state of the storyboard.
  * @returns {Promise<Partial<Storyboard>>} A promise that resolves to a partial storyboard with the generated outline.
  */
-const generateStoryOutline = async (state: Storyboard): Promise<Partial<Storyboard>> => {
+const generateStoryOutline = async (
+	state: Storyboard,
+	config: RunnableConfig
+): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] generateStoryOutline called with:', state.prompts);
 	addLog(`[LangGraph] generateStoryOutline called with: ${state.prompts}`);
 
@@ -64,7 +68,7 @@ Genre: {genre}
 	const chain = prompt.pipe(llm);
 
 	type ChainInput = Parameters<typeof chain.invoke>[0];
-	const storyOutLine = (await chain.invoke(state.prompts as ChainInput)) as StoryOutline;
+	const storyOutLine = (await chain.invoke(state.prompts as ChainInput, config)) as StoryOutline;
 
 	// Initialize visual slides structure
 	const slides: VisualSlide[] = storyOutLine.slideOutlines.map((part, index) => ({
@@ -86,10 +90,14 @@ Genre: {genre}
  * @param {SlideOutline} slide - The outline of the slide.
  * @returns {string} The generated image prompt.
  */
-const generateImagePrompt = (slide: SlideOutline): string => {
+const generateImagePrompt = (slide: SlideOutline, characterSheet: string): string => {
 	const promptParts: string[] = [];
-
-	// Add scene description
+	console.log('Double checking', characterSheet);
+	// Add scene description & Charactersheet
+	promptParts.push(`Character Profiles:\n${characterSheet}`);
+	promptParts.push(
+		'Please follow the character profiles above exactly—do not alter appearance between panels.'
+	);
 	promptParts.push(`Scene: ${slide.sceneDescription}`);
 
 	// Add character descriptions
@@ -109,6 +117,71 @@ const generateImagePrompt = (slide: SlideOutline): string => {
 
 	const fullPrompt = `Storyboard panel: ${promptParts.join('. ')}. Professional illustration style, clean lines, suitable for storyboard presentation.`;
 	return fullPrompt;
+};
+
+const generateCharacterSheet = async (
+	state: Storyboard,
+	config: RunnableConfig
+): Promise<Partial<Storyboard>> => {
+	addLog(`[LangGraph] Starting character sheet generation.`);
+
+	// 1. Aggregate all character data from the outline
+	const characterData: Record<
+		string,
+		{ name: string; roles: Set<string>; descriptions: Set<string> }
+	> = {};
+	for (const slide of state.storyOutline.slideOutlines) {
+		for (const ch of slide.characters) {
+			if (!characterData[ch.name]) {
+				characterData[ch.name] = { name: ch.name, roles: new Set(), descriptions: new Set() };
+			}
+			characterData[ch.name].roles.add(ch.role);
+			characterData[ch.name].descriptions.add(ch.description);
+		}
+	}
+
+	// 2. Define the synthesis model and prompt once
+	const synthesizerLlm = new ChatOpenAI({ modelName: 'gpt-4', temperature: 0 });
+	const synthesizerPrompt = ChatPromptTemplate.fromTemplate(`
+Based on the following details for a character named "{name}", create a single, cohesive, and definitive visual profile.
+This profile will be used as a master reference for an image generation model to ensure visual consistency across multiple scenes.
+Combine all unique details into one clear paragraph. Focus on visual appearance.
+
+Character Name: {name}
+Known Roles: {roles}
+Collected Descriptions:
+{descriptions}
+
+Synthesized Profile:`);
+	const synthesizerChain = synthesizerPrompt.pipe(synthesizerLlm);
+
+	// 3. Synthesize a profile for each character
+	const synthesisPromises = Object.values(characterData).map((charInfo) =>
+		synthesizerChain.invoke(
+			{
+				name: charInfo.name,
+				roles: Array.from(charInfo.roles).join(', '),
+				descriptions: Array.from(charInfo.descriptions)
+					.map((d) => `- ${d}`)
+					.join('\n')
+			},
+			config
+		)
+	);
+
+	const synthesizedResults = await Promise.all(synthesisPromises);
+	// 4. Build the final character sheet string
+	const finalSheet = synthesizedResults
+		.map((result, index) => {
+			const charName = Object.values(characterData)[index].name;
+			const profile = (result.content as string).trim();
+			return `• ${charName}: ${profile}`;
+		})
+		.join('\n\n'); // Use double newline for better separation
+
+	console.log('[LangGraph] Synthesized characterSheet →\n', finalSheet);
+	addLog(`[LangGraph] Synthesized characterSheet:\n${finalSheet}`);
+	return { characterSheet: finalSheet };
 };
 const uploadToCloudinary = async (imageUrl: string, slideNumber: number): Promise<string> => {
 	try {
@@ -142,24 +215,33 @@ const uploadToCloudinary = async (imageUrl: string, slideNumber: number): Promis
  * @param {Storyboard} state - The current state of the storyboard.
  * @returns {Promise<Partial<Storyboard>>} A promise that resolves to a partial storyboard with the generated image.
  */
-const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> => {
+const generateImage = async (
+	state: Storyboard,
+	config: RunnableConfig
+): Promise<Partial<Storyboard>> => {
 	console.log('[LangGraph] generateImage called for slide :', state.currentSlide);
 	addLog(`[LangGraph] generateImage called for prompt: ${state.currentSlide}`);
-
+	console.log(state);
 	state.status = 'generating-image';
 	updateStream(state._id.toString(), state);
 
 	//create prompt for image generation
-	const imagePrompt = generateImagePrompt(state.storyOutline.slideOutlines[state.currentSlide - 1]);
+	const imagePrompt = generateImagePrompt(
+		state.storyOutline.slideOutlines[state.currentSlide - 1],
+		state.characterSheet
+	);
 
 	try {
-		const response = await openai.images.generate({
-			model: 'dall-e-3',
-			prompt: imagePrompt,
-			size: '1792x1024', // Landscape format good for storyboards
-			quality: 'standard',
-			n: 1
-		});
+		const response = await openai.images.generate(
+			{
+				model: 'dall-e-3',
+				prompt: imagePrompt,
+				size: '1792x1024', // Landscape format good for storyboards
+				quality: 'standard',
+				n: 1
+			},
+			{ signal: config.signal }
+		);
 
 		const dalleImageUrl = response.data && response.data[0] && response.data[0].url;
 
@@ -209,6 +291,12 @@ const generateImage = async (state: Storyboard): Promise<Partial<Storyboard>> =>
 			visualSlides: updatedVisualSlides
 		};
 	} catch (error) {
+		if ((error as Error).name === 'AbortError') {
+			console.log('[LangGraph] Image generation was aborted.');
+			addLog('[LangGraph] Image generation was aborted.');
+			// Re-throw or handle as appropriate for the graph's state
+			throw error;
+		}
 		console.error('[LangGraph] Image generation failed:', error);
 		addLog(`[LangGraph] Image generation failed: ${error}`);
 		return {};
@@ -264,18 +352,21 @@ export const createStoryboardGraph = () => {
 			updatedAt: null,
 			storyOutline: null,
 			currentSlide: null,
-			visualSlides: null
+			visualSlides: null,
+			characterSheet: null
 		}
 	});
 
 	// Add nodes
 	workflow.addNode('generateStoryOutline', generateStoryOutline);
+	workflow.addNode('generateCharacterSheet', generateCharacterSheet);
 	workflow.addNode('generateImage', generateImage);
 	workflow.addNode('saveAndAdvance', saveSlideAndAdvance);
 
 	// Define edges using '__start__' and '__end__' as required
 	workflow.addEdge('__start__', 'generateStoryOutline');
-	workflow.addEdge('generateStoryOutline', 'generateImage');
+	workflow.addEdge('generateStoryOutline', 'generateCharacterSheet');
+	workflow.addEdge('generateCharacterSheet', 'generateImage');
 	workflow.addEdge('generateImage', 'saveAndAdvance');
 	workflow.addConditionalEdges('saveAndAdvance', shouldContinue, {
 		nextSlide: 'generateImage',
@@ -290,14 +381,17 @@ export const createStoryboardGraph = () => {
  * @param {Storyboard} storyboard - The initial storyboard state.
  * @returns {Promise<Storyboard>} A promise that resolves to the completed storyboard.
  */
-export const runStoryboardCreation = async (storyboard: Storyboard): Promise<Storyboard> => {
+export const runStoryboardCreation = async (
+	storyboard: Storyboard,
+	signal: AbortSignal
+): Promise<Storyboard> => {
 	console.log('[LangGraph] runStoryboardCreation called with:', storyboard.prompts);
 	addLog(`[LangGraph] runStoryboardCreation called with: ${storyboard.prompts}`);
 	const app = createStoryboardGraph();
 
 	storyboard.currentSlide = 1;
 
-	const result = await app.invoke(storyboard);
+	const result = await app.invoke(storyboard, { signal });
 	console.log('[LangGraph] runStoryboardCreation result:', result);
 	addLog(`[LangGraph] runStoryboardCreation result: ${JSON.stringify(result)}`);
 

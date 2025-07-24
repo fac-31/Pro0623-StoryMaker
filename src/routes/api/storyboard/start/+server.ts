@@ -65,7 +65,8 @@ export const POST: RequestHandler = async (event) => {
 			},
 			slideOutlines: []
 		},
-		visualSlides: []
+		visualSlides: [],
+		characterSheet: ''
 	};
 
 	const db = await initDB();

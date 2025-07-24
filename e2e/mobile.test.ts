@@ -49,7 +49,7 @@ test.describe('Mobile Navigation - Marketing', () => {
 		await page.waitForTimeout(100);
 		await expect(mobileMenu).toBeVisible();
 		await mobileMenu.getByRole('link', { name: 'How it Works' }).click();
-		await expect(page).toHaveURL(/#how-it-works/);
+		await expect(page.evaluate(() => window.location.hash)).resolves.toBe('#how-it-works');
 	});
 });
 
