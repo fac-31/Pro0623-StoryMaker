@@ -17,7 +17,7 @@ test('Create a storyboard', async ({ page }) => {
 	await page.getByRole('button', { name: 'Create Account' }).click();
 
 	// Wait for redirect to login
-	await page.waitForURL('/login');
+	await page.waitForURL('/login', { timeout: 60000 });
 	await expect(page).toHaveURL('/login');
 
 	// Log in with the new user

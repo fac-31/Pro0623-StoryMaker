@@ -66,7 +66,7 @@ test.describe('Accessibility', () => {
 		accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 		expect(accessibilityScanResults.violations).toEqual([]);
 
-		// Test Settings view  
+		// Test Settings view
 		await page.getByRole('button', { name: 'Settings' }).click();
 		accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 		expect(accessibilityScanResults.violations).toEqual([]);

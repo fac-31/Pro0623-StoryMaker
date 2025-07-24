@@ -11,7 +11,13 @@
 
 <div class="bg-base-200 min-h-screen">
 	<NavBar>
-		<MarketingNav slot="nav" let:mobileMenuOpen let:closeMobileMenu {mobileMenuOpen} {closeMobileMenu} />
+		<MarketingNav
+			slot="nav"
+			let:mobileMenuOpen
+			let:closeMobileMenu
+			{mobileMenuOpen}
+			{closeMobileMenu}
+		/>
 	</NavBar>
 	<HeroSection />
 	<FeatureSection />

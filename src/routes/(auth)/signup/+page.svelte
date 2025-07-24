@@ -104,7 +104,11 @@
 						</div>
 					{/if}
 
-					<button type="submit" disabled={navigating.to != null} class="btn btn-primary w-full min-h-[44px]">
+					<button
+						type="submit"
+						disabled={navigating.to != null}
+						class="btn btn-primary min-h-[44px] w-full"
+					>
 						{#if navigating.to}
 							Creating Account...
 						{:else}

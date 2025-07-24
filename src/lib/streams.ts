@@ -19,8 +19,14 @@ export function updateStream(taskId: string, data: unknown) {
 	const controller = streams.get(taskId);
 	if (!controller) return;
 
-	const encoder = new TextEncoder();
-	controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+	try {
+		const encoder = new TextEncoder();
+		controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+	} catch (error) {
+		console.warn(`Failed to update stream ${taskId}:`, error);
+		// Remove the controller if it's already closed
+		streams.delete(taskId);
+	}
 }
 
 /**
@@ -31,6 +37,11 @@ export function endStream(taskId: string) {
 	const controller = streams.get(taskId);
 	if (!controller) return;
 
-	controller.close();
-	streams.delete(taskId);
+	try {
+		controller.close();
+	} catch (error) {
+		console.warn(`Failed to close stream ${taskId}:`, error);
+	} finally {
+		streams.delete(taskId);
+	}
 }

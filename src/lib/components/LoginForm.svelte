@@ -38,7 +38,7 @@
 				aria-label="Sign In"
 				name="sign-in"
 				disabled={navigating.to != null}
-				class="btn btn-primary w-full min-h-[44px]"
+				class="btn btn-primary min-h-[44px] w-full"
 			>
 				{#if navigating.to}
 					Signing In...

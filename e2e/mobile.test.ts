@@ -133,7 +133,7 @@ test.describe('Mobile Accessibility', () => {
 
 		// Check that content doesn't overflow horizontally excessively
 		const body = page.locator('body');
-		const scrollInfo = await body.evaluate(el => ({
+		const scrollInfo = await body.evaluate((el) => ({
 			scrollWidth: el.scrollWidth,
 			clientWidth: el.clientWidth,
 			ratio: el.scrollWidth / el.clientWidth

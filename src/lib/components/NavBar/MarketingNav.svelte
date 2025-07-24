@@ -40,7 +40,7 @@
 		>
 		<div class="border-base-200 space-y-2 border-t pt-4">
 			<a href="/login" class="text-base-content/70 block w-full text-left">Sign In</a>
-			<a href="/signup" class="btn btn-primary w-full min-h-[44px]"> Start Creating </a>
+			<a href="/signup" class="btn btn-primary min-h-[44px] w-full"> Start Creating </a>
 		</div>
 	</div>
 </nav>
