@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, tick } from 'svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import { focusTrap } from '$lib/actions/focusTrap';
 
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
@@ -32,48 +33,6 @@
 	function handleOverlayKeydown(event: KeyboardEvent) {
 		if (event.key === 'Enter' || event.key === ' ') {
 			closeModal();
-		}
-	}
-
-	function handleFocusTrap(event: KeyboardEvent) {
-		if (event.key !== 'Tab' || !modalContentElement) return;
-
-		const focusableElements = Array.from(
-			modalContentElement.querySelectorAll(
-				'button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
-			)
-		).filter(
-			(el) => (el as HTMLElement).offsetParent !== null // Check for visibility
-		) as HTMLElement[];
-
-		if (focusableElements.length === 0) {
-			if (document.activeElement !== modalContentElement) {
-				modalContentElement.focus();
-			}
-			event.preventDefault();
-			return;
-		}
-
-		const firstElement = focusableElements[0];
-		const lastElement = focusableElements[focusableElements.length - 1];
-		const currentActiveElement = document.activeElement;
-
-		if (event.shiftKey) {
-			// Shift + Tab
-			if (currentActiveElement === firstElement || currentActiveElement === modalContentElement) {
-				lastElement.focus();
-				event.preventDefault();
-			}
-		} else {
-			// Tab
-			if (currentActiveElement === lastElement) {
-				firstElement.focus();
-				event.preventDefault();
-			} else if (currentActiveElement === modalContentElement && focusableElements.length > 0) {
-				// If focus is on the modal container, move to the first actual interactive element
-				firstElement.focus();
-				event.preventDefault();
-			}
 		}
 	}
 
@@ -122,7 +81,7 @@
 			tabindex="0"
 			aria-labelledby="modal-title"
 			on:click|stopPropagation
-			on:keydown={handleFocusTrap}
+			use:focusTrap
 		>
 			<button
 				class="close-button focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:outline-none"

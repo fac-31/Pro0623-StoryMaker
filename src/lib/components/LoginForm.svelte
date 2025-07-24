@@ -11,7 +11,15 @@
 				<label class="label" for="email">
 					<span class="label-text">Email Address</span>
 				</label>
-				<input id="email" name="email" type="email" required class="input input-bordered w-full" />
+				<input
+					id="email"
+					name="email"
+					type="email"
+					required
+					class="input input-bordered w-full"
+					aria-describedby="error-message"
+					aria-invalid={error}
+				/>
 			</div>
 
 			<div class="form-control">
@@ -24,11 +32,13 @@
 					type="password"
 					required
 					class="input input-bordered w-full"
+					aria-describedby="error-message"
+					aria-invalid={error}
 				/>
 			</div>
 
 			{#if error}
-				<div class="alert alert-error">
+				<div class="alert alert-error" id="error-message">
 					<span>{error}</span>
 				</div>
 			{/if}
