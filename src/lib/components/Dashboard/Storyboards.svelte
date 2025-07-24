@@ -390,7 +390,7 @@
 
 <!-- Create Add User Modal -->
 {#if showAddUserModal && team && users}
-	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
+	<dialog class="popup inset-0 z-50 bg-black/50 p-4" open>
 		<div class="bg-base-100 w-full max-w-md rounded-2xl p-6 shadow-lg">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-base-content text-xl font-semibold">Add User to team</h2>
@@ -445,7 +445,7 @@
 
 <!-- Create Remove User Modal -->
 {#if showRemoveUserModal && team && users}
-	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
+	<dialog class="popup inset-0 z-50 bg-black/50 p-4" open>
 		<div class="w-full max-w-md rounded-2xl bg-white p-6">
 			<div class="mb-6 flex items-center justify-between">
 				<h2 class="text-base-content text-xl font-semibold">
