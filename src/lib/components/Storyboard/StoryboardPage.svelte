@@ -77,7 +77,7 @@
 
 	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
 		return new Promise((resolve, reject) => {
-        	const source = new EventSource(`/api/storyboard/progress/${id}/${edit}`);
+			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
 
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);

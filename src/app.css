@@ -65,7 +65,7 @@
 }
 
 .modal-content {
-	@apply bg-base-100 relative h-[90%] w-[95%] overflow-hidden rounded-lg;
+	@apply bg-base-100 relative max-h-[90%] w-[95%] overflow-hidden rounded-lg flex flex-col;
 }
 
 .close-button {
@@ -73,7 +73,7 @@
 }
 
 .modal-body {
-	@apply flex h-full;
+	@apply flex flex-1 overflow-hidden;
 }
 
 .slide-details {
@@ -131,6 +131,12 @@
 
 .dialogue-line {
 	@apply border-warning bg-base-100 mb-2 rounded border-l-4 p-2 text-sm;
+}
+
+.modal-footer {
+	@apply border-base-300 bg-base-200 flex items-center justify-end gap-2 border-t px-6 py-4;
+	min-height: 60px;
+	flex-shrink: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

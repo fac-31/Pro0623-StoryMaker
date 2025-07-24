@@ -23,9 +23,9 @@ import { ObjectId } from 'mongodb';
  * 4. Initiates the storyboard creation process.
  * 5. Returns the stream response to the client.
  */
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, url }) => {
 	const id = params.id;
-    const edit = params.edit === 'true'; // Convert string to boolean
+    const edit = url.searchParams.get('edit') === 'true'; // false if not provided
 	if (!id) return json({ error: 'ID not provided' }, { status: 500 });
 
 	const db = await initDB();
@@ -74,6 +74,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	 * 4. Ends the stream.
 	 */
 	async function runAsyncStoryboard(storyboard: Storyboard, signal: AbortSignal) {
+		console.log("entered runAsync");
 		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });

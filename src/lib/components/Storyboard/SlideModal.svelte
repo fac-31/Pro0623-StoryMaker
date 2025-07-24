@@ -320,13 +320,12 @@
 			</div>
 			<div class="modal-footer">
 				{#if editing}
-					<button on:click={cancelEdit}>Cancel</button>
-					<button on:click={editStoryboard}>Save</button>
+					<button class="btn btn-primary" on:click={cancelEdit}>Cancel</button>
+					<button class="btn btn-primary" on:click={editStoryboard}>Save</button>
 				{:else}
-					<button on:click={() => (editing = true)}>Edit</button>
+					<button class="btn btn-primary" on:click={() => (editing = true)}>Edit</button>
 				{/if}
 			</div>
 		</div>
 	</div>
 {/if}
-
