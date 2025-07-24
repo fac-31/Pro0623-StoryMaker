@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
+import { runStoryboardCreation, runStoryboardEdit } from '$lib/langgraph/storyboardGraph';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { Storyboard } from '$lib/models/storyboard.model';
@@ -25,6 +25,7 @@ import { ObjectId } from 'mongodb';
  */
 export const GET: RequestHandler = async ({ params }) => {
 	const id = params.id;
+    const edit = params.edit === 'true'; // Convert string to boolean
 	if (!id) return json({ error: 'ID not provided' }, { status: 500 });
 
 	const db = await initDB();
@@ -38,10 +39,20 @@ export const GET: RequestHandler = async ({ params }) => {
 			const abortController = new AbortController();
 			registerStream(id, controller, abortController);
 
-			runAsyncStoryboard(storyboard, abortController.signal).catch((err) => {
-				console.error('Storyboard error:', err);
-				endStream(id);
-			});
+			if (edit)
+			{
+				runAsyncStoryboardEdit(storyboard, abortController.signal).catch((err) => {
+					console.error('Storyboard error:', err);
+					endStream(id);
+				});
+			}
+			else
+			{
+				runAsyncStoryboard(storyboard, abortController.signal).catch((err) => {
+					console.error('Storyboard error:', err);
+					endStream(id);
+				});
+			}
 		},
 		cancel() {
 			cancelStream(id);
@@ -66,6 +77,13 @@ export const GET: RequestHandler = async ({ params }) => {
 		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
+
+		updateStream(storyboard._id.toString(), storyboardOutput);
+		endStream(storyboard._id.toString());
+	}
+
+	async function runAsyncStoryboardEdit(storyboard: Storyboard, signal: AbortSignal) {
+		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
 
 		updateStream(storyboard._id.toString(), storyboardOutput);
 		endStream(storyboard._id.toString());

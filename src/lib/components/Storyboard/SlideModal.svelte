@@ -5,6 +5,8 @@
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
+	let editing = false;
+	let error = '';
 
 	let liveRegionMessage = ''; // New variable for the live region
 
@@ -100,6 +102,59 @@
 	} else {
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
+
+	async function editStoryboard() {
+		editing = true;
+		error = '';
+		try {
+			const res = await fetch('/api/storyboard/edit', {
+				method: 'POST',
+				body: JSON.stringify({
+					newSlideOutline : "", 
+					slideNumber : 1,
+					storyboard_id  : 1 
+				})
+			});
+			const data = await res.json();
+			if (res.ok) {
+				const id = data.id;
+				const edit = true;
+				await progressStoryboard(id, edit);
+
+				//storyboard = storyBoardResponse.storyboardOutput;
+				//await fetchLogs();
+			} else {
+				error = data.error || 'Failed to start storyboard';
+			}
+		} catch (e) {
+			error = e instanceof Error ? e.message : String(e);
+		} finally {
+			editing = false;
+		}
+	}
+
+	//you need to unite this function with the function in StoryboardPage.svelte
+	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
+		return new Promise((resolve, reject) => {
+        	const source = new EventSource(`/api/storyboard/progress/${id}/${edit}`);
+
+			source.onmessage = (event) => {
+				storyboard = JSON.parse(event.data);
+
+				if (storyboard && storyboard.status == 'done') {
+					source.close();
+					resolve();
+				}
+			};
+
+			source.onerror = (err) => {
+				console.error('SSE connection error', err);
+				source.close();
+				reject(new Error('SSE connection error'));
+			};
+		});
+	}
+	
 </script>
 
 {#if show}

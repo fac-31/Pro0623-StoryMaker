@@ -377,6 +377,39 @@ export const createStoryboardGraph = () => {
 };
 
 /**
+ * Creates and compiles the storyboard graph workflow.
+ * @returns {StateGraph} The compiled storyboard graph workflow.
+ */
+export const createStoryboardEditGraph = () => {
+	console.log('[LangGraph] createStoryboardGraph called');
+	addLog('[LangGraph] createStoryboardGraph called');
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const workflow = new StateGraph<Storyboard, any, any, string>({
+		channels: {
+			_id: null,
+			status: null,
+			prompts: null,
+			createdAt: null,
+			updatedAt: null,
+			storyOutline: null,
+			currentSlide: null,
+			visualSlides: null,
+			characterSheet: null
+		}
+	});
+
+	// Add nodes
+	workflow.addNode('generateImage', generateImage);
+
+	// Define edges using '__start__' and '__end__' as required
+	workflow.addEdge('__start__', 'generateImage');
+	workflow.addEdge('generateImage', '__end__');
+
+
+	return workflow.compile();
+};
+
+/**
  * Runs the storyboard creation process.
  * @param {Storyboard} storyboard - The initial storyboard state.
  * @returns {Promise<Storyboard>} A promise that resolves to the completed storyboard.
@@ -394,6 +427,22 @@ export const runStoryboardCreation = async (
 	const result = await app.invoke(storyboard, { signal });
 	console.log('[LangGraph] runStoryboardCreation result:', result);
 	addLog(`[LangGraph] runStoryboardCreation result: ${JSON.stringify(result)}`);
+
+	result.updatedAt = new Date();
+	result.status = 'done';
+	return result as Storyboard;
+};
+
+export const runStoryboardEdit = async (
+	storyboard: Storyboard,
+	signal: AbortSignal
+): Promise<Storyboard> => {
+	console.log('[LangGraph] runStoryboardEdit called with:', storyboard.currentSlide);
+	const app = createStoryboardEditGraph();
+
+	const result = await app.invoke(storyboard, { signal });
+	console.log('[LangGraph] runStoryboardEdit result:', result);
+	addLog(`[LangGraph] runStoryboardEdit result: ${JSON.stringify(result)}`);
 
 	result.updatedAt = new Date();
 	result.status = 'done';

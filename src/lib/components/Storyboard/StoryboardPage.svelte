@@ -60,7 +60,8 @@
 			if (res.ok) {
 				const id = data.insertedId;
 
-				await progressStoryboard(id);
+				const edit = false;
+				await progressStoryboard(id, false);
 
 				//storyboard = storyBoardResponse.storyboardOutput;
 				//await fetchLogs();
@@ -74,9 +75,9 @@
 		}
 	}
 
-	async function progressStoryboard(id: string): Promise<void> {
+	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
 		return new Promise((resolve, reject) => {
-			const source = new EventSource('/api/storyboard/progress/' + id);
+        	const source = new EventSource(`/api/storyboard/progress/${id}/${edit}`);
 
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);
