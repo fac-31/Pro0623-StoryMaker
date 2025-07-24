@@ -19,7 +19,7 @@
 		Skip to main content
 	</a>
 
-	<main id="main-content" class="container mx-auto">
+	<main id="main-content" class="container mx-auto" aria-live="polite" role="main">
 		<slot />
 	</main>
 </div>

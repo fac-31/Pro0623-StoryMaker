@@ -1,24 +1,57 @@
 <script lang="ts">
 	import { navigating } from '$app/state';
-	export let data;
-	export let form: { success: boolean; error?: string; field?: string };
-	let name = data.user?.user_metadata.display_name;
-	let email = data.user?.email;
-	let password = '';
-	$: if (form?.success) {
-		name = data.user?.user_metadata.display_name;
-		email = data.user?.email;
-		password = '';
+	import type { User as SupabaseUser } from '@supabase/supabase-js';
+	import { invalidateAll } from '$app/navigation';
+	import { enhance } from '$app/forms';
+
+	type FormResult = { success?: boolean; error?: string };
+
+	interface Props {
+		supabase: SupabaseUser;
+		form?: FormResult;
 	}
+
+	let { supabase, form }: Props = $props();
+
+	let name = $state(supabase?.user_metadata.display_name);
+	let email = $state(supabase?.email);
+	let password = $state('');
+
+	// Use $effect.pre to react to prop changes before rendering
+	$effect.pre(() => {
+		// This ensures the component state updates if the supabase prop changes
+		name = supabase?.user_metadata.display_name;
+		email = supabase?.email;
+	});
+
+	$effect(() => {
+		if (form?.success) {
+			// Clear the password field on success
+			password = '';
+		}
+	});
 </script>
 
 <div class="flex flex-col items-center gap-4">
 	<h1>Account Settings</h1>
-	<p class="text-lg"><strong>Hello, </strong> {data.user?.user_metadata.display_name}!</p>
+	<p class="text-lg"><strong>Hello, </strong> {supabase?.user_metadata.display_name}!</p>
 	<p class="text-base-content/70">Check out and edit your account info</p>
 
-	<form method="POST" class="w-full max-w-xl">
-		<div class="form-control mb-4" role="group">
+	<form
+		method="POST"
+		action="?/changeSettings"
+		class="w-full max-w-xl"
+		use:enhance={() => {
+			return async ({ result }) => {
+				// If the form submission was successful, invalidate all data
+				// causing load functions to re-run.
+				if (result.type === 'success') {
+					await invalidateAll();
+				}
+			};
+		}}
+	>
+		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="name" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Display name: </span>
@@ -30,16 +63,11 @@
 					autocomplete="name"
 					bind:value={name}
 					class="input input-bordered flex-1"
-					aria-describedby="name-error"
+					aria-describedby="form-error"
 				/>
 			</div>
-			<div aria-live="assertive">
-				{#if form?.error && form.field === 'name'}
-					<p id="name-error" class="text-error text-sm mt-1">{form.error}</p>
-				{/if}
-			</div>
 		</div>
-		<div class="form-control mb-4" role="group">
+		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="email" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Email: </span>
@@ -51,16 +79,11 @@
 					autocomplete="email"
 					bind:value={email}
 					class="input input-bordered flex-1"
-					aria-describedby="email-error"
+					aria-describedby="form-error"
 				/>
 			</div>
-			<div aria-live="assertive">
-				{#if form?.error && form.field === 'email'}
-					<p id="email-error" class="text-error text-sm mt-1">{form.error}</p>
-				{/if}
-			</div>
 		</div>
-		<div class="form-control mb-4" role="group">
+		<div class="form-control mb-4">
 			<div class="flex items-center gap-4">
 				<label for="password" class="label max-w-[60px] flex-auto">
 					<span class="label-text"> Password: </span>
@@ -73,18 +96,13 @@
 					placeholder="Leave blank if no change"
 					bind:value={password}
 					class="input input-bordered flex-1"
-					aria-describedby="password-error"
+					aria-describedby="form-error"
 				/>
-			</div>
-			<div aria-live="assertive">
-				{#if form?.error && form.field === 'password'}
-					<p id="password-error" class="text-error text-sm mt-1">{form.error}</p>
-				{/if}
 			</div>
 		</div>
 		<div>
-			{#if form?.error && !form.field}
-				<div id="form-error" class="alert alert-error" role="alert" aria-live="assertive">
+			{#if form?.error}
+				<div id="form-error" class="alert alert-error" role="alert">
 					<span>{form.error}</span>
 				</div>
 			{/if}
@@ -94,7 +112,7 @@
 			</button>
 
 			{#if form?.success}
-				<div class="alert alert-success" role="alert" aria-live="assertive">
+				<div class="alert alert-success" role="alert">
 					<span>Details updated successfully!</span>
 				</div>
 			{/if}

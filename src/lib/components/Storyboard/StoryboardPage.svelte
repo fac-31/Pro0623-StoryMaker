@@ -192,7 +192,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<main class="bg-base-200 min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+<div class="bg-base-200 min-h-screen px-4 py-12 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-6xl space-y-8">
 		<!-- Header with Back Button and Title -->
 		<header class="flex items-center justify-between">
@@ -307,7 +307,7 @@
 			</div>
 		</section>
 	</div>
-</main>
+</div>
 
 <!-- Modal for detailed slide view -->
 {#if selectedSlideIndex !== null && storyboard}
