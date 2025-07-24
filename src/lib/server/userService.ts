@@ -3,6 +3,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { getDB } from './db';
 
 import type { User, NewUser, SafeUser } from '$lib/models/user.model';
+import { serializeMongoDocument } from '$lib/server/utils.js';
 
 /**
  * Inserts a new user into the database.
@@ -40,7 +41,9 @@ export async function getAllUsers(): Promise<User[]> {
 	const users = db.collection<User>('users');
 
 	try {
-		return await users.find({}).toArray();
+		const result = await users.find({}).toArray();
+		const serialized = serializeMongoDocument(result);
+		return serialized as User[];
 	} catch (err) {
 		// Should be expecting every supabase users have mongodb user?
 		console.error('Failed to get all users:', err);
@@ -58,11 +61,22 @@ export async function getUserFromEvent(event: RequestEvent): Promise<User | null
 	const supabase = event.locals.user;
 	if (!supabase) return null;
 
+	return await getUserFromSupabaseId(supabase.id);
+}
+
+/**
+ * Retrieves a user from the database based on the Supabase ID given.
+ * @param {string} supabase - The supabase id
+ * @returns {Promise&lt;User | null&gt;} A promise that resolves to the user object if found, or null if not found.
+ * @throws {Error} If the database find operation fails.
+ */
+export async function getUserFromSupabaseId(supabaseId: string): Promise<User | null> {
 	const db = getDB();
 	const users = db.collection<User>('users');
 
 	try {
-		return await users.findOne({ supabase: supabase.id });
+		const user = await users.findOne({ supabase: supabaseId });
+		return serializeMongoDocument(user) as User;
 	} catch (err) {
 		// Should be expecting every supabase users have mongodb user?
 		console.error('Failed to find user:', err);

@@ -1,36 +1,71 @@
-/** A map to store active streams, keyed by task ID. */
-const streams = new Map<string, ReadableStreamDefaultController>();
+// streams.ts
+
+type StreamData = {
+	controller: ReadableStreamDefaultController;
+	abortController: AbortController;
+};
+
+const streams = new Map<string, StreamData>();
 
 /**
- * Registers a new stream controller for a given task ID.
- * @param {string} taskId - The unique identifier for the task.
- * @param {ReadableStreamDefaultController} controller - The controller for the stream.
+ * Registers a new stream with its controller and abort controller.
+ * @param taskId - The unique task ID.
+ * @param controller - The ReadableStream controller.
+ * @param abortController - The associated AbortController.
  */
-export function registerStream(taskId: string, controller: ReadableStreamDefaultController) {
-	streams.set(taskId, controller);
+export function registerStream(
+	taskId: string,
+	controller: ReadableStreamDefaultController,
+	abortController: AbortController
+) {
+	streams.set(taskId, { controller, abortController });
 }
 
 /**
- * Updates a stream with new data for a given task ID.
- * @param {string} taskId - The unique identifier for the task.
- * @param {unknown} data - The data to be sent through the stream.
+ * Pushes data to the stream associated with a task ID.
+ * @param taskId - The task ID to send data to.
+ * @param data - The data to send.
  */
 export function updateStream(taskId: string, data: unknown) {
-	const controller = streams.get(taskId);
-	if (!controller) return;
+	const streamData = streams.get(taskId);
+	if (!streamData) return;
 
-	const encoder = new TextEncoder();
-	controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+	try {
+		const encoder = new TextEncoder();
+		streamData.controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+	} catch (error) {
+		console.warn(`Failed to update stream ${taskId}:`, error);
+		// Remove the controller if it's already closed
+		streams.delete(taskId);
+	}
 }
 
 /**
- * Ends a stream for a given task ID, closing the controller and removing it from the map.
- * @param {string} taskId - The unique identifier for the task.
+ * Ends the stream, closing it and cleaning up the map.
+ * @param taskId - The task ID to close.
  */
 export function endStream(taskId: string) {
-	const controller = streams.get(taskId);
-	if (!controller) return;
+	const streamData = streams.get(taskId);
+	if (!streamData) return;
 
-	controller.close();
+	const { controller, abortController } = streamData;
+	if (!abortController.signal.aborted) {
+		try {
+			controller.close();
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	streams.delete(taskId);
+}
+
+/**
+ * Cancels the stream early via abort signal.
+ * @param taskId - The task ID to cancel.
+ */
+export function cancelStream(taskId: string) {
+	const streamData = streams.get(taskId);
+	if (!streamData) return;
+
+	streamData.abortController.abort();
 }

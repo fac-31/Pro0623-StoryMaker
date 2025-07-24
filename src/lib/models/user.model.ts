@@ -1,11 +1,11 @@
 import type { ObjectId } from 'mongodb';
 
 export interface User {
-	_id: ObjectId;
+	_id: ObjectId | string;
 	supabase: string;
 	name: string;
-	projects: ObjectId[];
-	teams: ObjectId[];
+	projects: ObjectId[] | string[];
+	teams: ObjectId[] | string[];
 }
 
 export type NewUser = Omit<User, '_id'>;

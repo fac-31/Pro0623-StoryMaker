@@ -1,32 +1,28 @@
 <script lang="ts">
-	import { Play, X, Home, Users, Settings, Bell, LogOut } from 'lucide-svelte';
-	import { goto } from '$app/navigation';
+	import { Play, X, Home, Users, Settings, LogOut } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
 	import ThemeToggle from '../ThemeToggle.svelte';
 
 	interface Props {
-		user: User;
+		supabase: User;
 		currentView: string;
 		sidebarCollapsed: boolean;
 		onViewChange: (view: string) => void;
 		onToggleSidebar: () => void;
 	}
 
-	let { user, currentView, sidebarCollapsed, onViewChange, onToggleSidebar }: Props = $props();
+	let { supabase, currentView, sidebarCollapsed, onViewChange, onToggleSidebar }: Props = $props();
 
 	// Navigation items
 	const navItems = [
 		{ id: 'my-storyboards', label: 'My Storyboards', icon: Home },
 		{ id: 'my-teams', label: 'My Teams', icon: Users },
 		{ id: 'settings', label: 'Settings', icon: Settings },
-		{ id: 'notifications', label: 'Notifications', icon: Bell },
 		{ id: 'logout', label: 'Logout', icon: LogOut }
 	];
 
 	function handleNavClick(itemId: string) {
-		if (itemId === 'settings') {
-			goto('/user');
-		} else if (itemId !== 'logout') {
+		if (itemId !== 'logout') {
 			onViewChange(itemId);
 		}
 	}
@@ -39,7 +35,7 @@
 >
 	<div class="flex h-full flex-col">
 		<!-- Sidebar Header -->
-		<div class="border-base-300/50 flex items-center justify-between border-b p-6">
+		<header class="border-base-300/50 flex items-center justify-between border-b p-6">
 			<div class="flex items-center space-x-3">
 				<div
 					class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
@@ -55,7 +51,7 @@
 			>
 				<X class="h-5 w-5" />
 			</button>
-		</div>
+		</header>
 
 		<!-- Navigation -->
 		<nav class="flex-1 space-y-2 px-4 py-6">
@@ -89,22 +85,24 @@
 		</nav>
 
 		<!-- User Section -->
-		<div class="border-base-300/50 border-t p-4">
+		<section class="border-base-300/50 border-t p-4" aria-label="User Profile">
 			<div class="flex items-center space-x-3">
 				<div
 					class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600"
 				>
 					<span class="text-sm font-medium text-white"
-						>{user.user_metadata.display_name?.charAt(0) || 'U'}</span
+						>{supabase.user_metadata.display_name?.charAt(0) || 'U'}</span
 					>
 				</div>
 				<div class="min-w-0 flex-1">
 					<p class="text-base-content truncate text-sm font-medium">
-						{user.user_metadata.display_name || 'User'}
+						{supabase.user_metadata.display_name || 'User'}
 					</p>
-					<p class="text-base-content/50 truncate text-xs">{user.email || 'user@example.com'}</p>
+					<p class="text-base-content/70 truncate text-xs">
+						{supabase.email || 'user@example.com'}
+					</p>
 				</div>
 			</div>
-		</div>
+		</section>
 	</div>
 </aside>

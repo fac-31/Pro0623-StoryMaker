@@ -1,8 +1,12 @@
+import { ObjectId } from 'mongodb';
 import { json } from '@sveltejs/kit';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { UserPrompt } from '$lib/models/UserPrompt';
 import type { NewStoryboard } from '$lib/models/storyboard.model';
+import type { Team } from '$lib/models/team.model';
+import type { User } from '$lib/models/user.model';
+import { getTeamById, isUserInTeam } from '$lib/server/teamService';
 import { getUserFromEvent } from '$lib/server/userService';
 
 /**
@@ -26,7 +30,24 @@ import { getUserFromEvent } from '$lib/server/userService';
  * - Returns a 404 status if the user is not found.
  */
 export const POST: RequestHandler = async (event) => {
-	const prompts: UserPrompt = await event.request.json();
+	const { prompts, team_id } = (await event.request.json()) as {
+		prompts: UserPrompt;
+		team_id: string | null;
+	};
+
+	const user = await getUserFromEvent(event);
+	if (!user) {
+		return json({ error: 'User not found' }, { status: 404 });
+	}
+
+	let team: Team | null = null;
+	if (team_id) {
+		team = await getTeamById(team_id);
+		if (!team) return json({ error: 'Invalid team id' }, { status: 404 });
+
+		if (!isUserInTeam(team, user._id.toString()))
+			return json({ error: 'User not in team' }, { status: 500 });
+	}
 
 	const storyboard: NewStoryboard = {
 		status: 'none',
@@ -44,7 +65,8 @@ export const POST: RequestHandler = async (event) => {
 			},
 			slideOutlines: []
 		},
-		visualSlides: []
+		visualSlides: [],
+		characterSheet: ''
 	};
 
 	const db = await initDB();
@@ -54,19 +76,17 @@ export const POST: RequestHandler = async (event) => {
 		return json({ error: 'Failed to save storyboard' }, { status: 500 });
 	}
 
-	// Update user to include this storyboard
-	const user = await getUserFromEvent(event);
+	// Insert storyboard id to either user or team object
+	const table = team ? 'teams' : 'users';
+	const obj: Team | User = team ? team : user;
 
-	if (!user) {
-		return json({ error: 'User not found' }, { status: 404 });
-	}
-	if (!user.projects) {
-		user.projects = [];
-	}
+	if (!obj.projects) obj.projects = [];
 
-	user.projects.push(result.insertedId);
-
-	await db.collection('users').updateOne({ _id: user._id }, { $set: { projects: user.projects } });
+	const projects: ObjectId[] = obj.projects as ObjectId[];
+	projects.push(result.insertedId);
+	await db
+		.collection(table)
+		.updateOne({ _id: obj._id as ObjectId }, { $set: { projects: projects } });
 
 	return json(result);
 };

@@ -1,23 +1,50 @@
 <script lang="ts">
-	import { Plus, Search, Grid3X3, List, Play, MoreHorizontal, Video } from 'lucide-svelte';
+	import {
+		Plus,
+		Trash,
+		Search,
+		Grid3X3,
+		List,
+		Play,
+		MoreHorizontal,
+		X,
+		Video
+	} from 'lucide-svelte';
+
+	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
+
 	import { storyboardStore } from '$lib/stores/storyboard';
+	import { teamStore } from '$lib/stores/team';
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import type { Team } from '$lib/models/team.model';
+	import type { User } from '$lib/models/user.model';
 
 	interface Props {
 		storyboards: Storyboard[];
+		list: string[];
+		user: User;
+		team?: Team;
+		users?: User[];
 	}
 
-	let { storyboards }: Props = $props();
+	let { storyboards, list, user, team, users }: Props = $props();
+
+	teamStore.set(team ? team : null);
 
 	// State management
 	let selectedStoryboard = $state<Storyboard | null>(null);
 	let viewMode = $state('grid');
 	let searchQuery = $state('');
+	let showAddUserModal = $state(false);
+	let showRemoveUserModal = $state<string | null>(null);
+	let admin = team?.users.find((teamuser) => (teamuser.user = user._id))?.role == 'admin';
 
 	// Computed values
 	const filteredProjects = () => {
 		return storyboards.filter((storyboard) => {
+			if (!list.includes(storyboard._id as string)) return false;
+
 			const matchesSearch =
 				storyboard.prompts.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				storyboard.storyOutline.storyMetadata.title
@@ -39,12 +66,18 @@
 	}
 </script>
 
-<div>
+<section>
 	<!-- Page Header -->
-	<div class="mb-8">
+	<header class="mb-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
-				<h1 class="text-base-content text-3xl font-bold">My Storyboards</h1>
+				<h1 class="text-base-content text-3xl font-bold">
+					{#if team}
+						{team.name}'s Storyboards
+					{:else}
+						My Storyboards
+					{/if}
+				</h1>
 				<p class="text-base-content/70 mt-1">
 					Create and manage your AI-powered storyboard projects
 				</p>
@@ -55,7 +88,87 @@
 				<span>New Storyboard</span>
 			</button>
 		</div>
-	</div>
+	</header>
+
+	<!-- Team members list -->
+	{#if team && users}
+		<section
+			class="border-base-300/50 bg-base-100/80 mb-8 rounded-2xl border p-6 shadow-xl backdrop-blur-sm"
+			aria-label="Members list"
+		>
+			<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+				<div>
+					<h2 class="text-base-content text-2xl font-bold">Members list</h2>
+				</div>
+
+				{#if admin}
+					<div>
+						<button class="btn btn-primary" onclick={() => (showAddUserModal = true)}>
+							<Plus class="h-5 w-5" />
+							<span>Add User</span>
+						</button>
+					</div>
+				{/if}
+			</div>
+
+			<table class="table w-auto">
+				<tbody>
+					{#each team.users as teamuser (teamuser.user)}
+						<tr class="group border-base-300 hover:bg-base-200 border-b transition-colors">
+							<td class="py-4">
+								{users.find((user) => user._id == teamuser.user)?.name}
+							</td>
+							<td class="py-4">
+								<form method="POST" action="?/updateUser" class="inline">
+									<!-- Hidden inputs for identifying which user to update -->
+									<input type="hidden" name="team_id" value={team._id} />
+									<input type="hidden" name="user_id" value={teamuser.user} />
+
+									<select
+										name="role"
+										class="select select-bordered select-sm"
+										onchange={(e) => {
+											const value = e.currentTarget.value;
+
+											const formData = new FormData();
+											formData.append('team_id', team._id as string);
+											formData.append('user_id', teamuser.user as string);
+											formData.append('role', value);
+
+											fetch('?/updateUser', {
+												method: 'POST',
+												body: formData
+											}).then((/*res*/) => {
+												// TODO fix role not updated properly in frontend
+											});
+										}}
+										disabled={!admin || user._id === teamuser.user}
+									>
+										<option value="user" selected={teamuser.role === 'user'}>Member</option>
+										<option value="admin" selected={teamuser.role === 'admin'}>Admin</option>
+									</select>
+								</form>
+							</td>
+							{#if admin}
+								<td>
+									{#if user._id !== teamuser.user}
+										<div>
+											<button
+												class="btn btn-square"
+												onclick={() => (showRemoveUserModal = teamuser.user as string)}
+											>
+												<Trash class="h-5 w-5" />
+											</button>
+										</div>
+									{/if}
+								</td>
+							{/if}
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</section>
+	{/if}
 
 	<!-- Filters and Search -->
 	<section
@@ -133,7 +246,7 @@
 								{storyboard.prompts.concept}
 							</p>
 
-							<div class="text-base-content/50 mb-4 flex items-center justify-between text-xs">
+							<div class="text-base-content/70 mb-4 flex items-center justify-between text-xs">
 								<span>{storyboard.visualSlides.length} slides</span>
 							</div>
 
@@ -273,4 +386,109 @@
 			</div>
 		{/if}
 	</section>
-</div>
+</section>
+
+<!-- Create Add User Modal -->
+{#if showAddUserModal && team && users}
+	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
+		<div class="bg-base-100 w-full max-w-md rounded-2xl p-6 shadow-lg">
+			<div class="mb-6 flex items-center justify-between">
+				<h2 class="text-base-content text-xl font-semibold">Add User to team</h2>
+				<button
+					class="btn btn-ghost btn-sm"
+					onclick={() => (showAddUserModal = false)}
+					aria-label="Close create team dialog"
+				>
+					<X class="h-5 w-5" />
+				</button>
+			</div>
+
+			<div class="max-h-60 space-y-2 overflow-y-auto">
+				{#each users as user (user._id)}
+					{#if !team?.users.find((teamuser) => teamuser.user == user._id)}
+						<form
+							method="POST"
+							action="?/addUser"
+							use:enhance={() => {
+								// This callback runs after the action completes
+								return async ({ update }) => {
+									await update();
+									team.users.push({ user: user._id, role: 'user' });
+									showAddUserModal = false;
+								};
+							}}
+							class="space-y-4"
+						>
+							<input type="hidden" name="team_id" value={team._id} />
+							<input type="hidden" name="user_id" value={user._id} />
+							<button type="submit" class="btn btn-primary flex-1">
+								<Plus class="h-5 w-5" />
+								{user.name}
+							</button>
+						</form>
+					{/if}
+				{/each}
+			</div>
+
+			<div class="flex space-x-3 pt-4">
+				<button
+					type="button"
+					class="btn btn-outline flex-1"
+					onclick={() => (showAddUserModal = false)}
+				>
+					Cancel
+				</button>
+			</div>
+		</div>
+	</dialog>
+{/if}
+
+<!-- Create Remove User Modal -->
+{#if showRemoveUserModal && team && users}
+	<dialog class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" open>
+		<div class="w-full max-w-md rounded-2xl bg-white p-6">
+			<div class="mb-6 flex items-center justify-between">
+				<h2 class="text-base-content text-xl font-semibold">
+					Are you sure you want to remove {users.find(
+						(user) => (user._id as string) == showRemoveUserModal
+					)?.name}?
+				</h2>
+				<button
+					class="btn btn-ghost btn-sm"
+					onclick={() => (showRemoveUserModal = null)}
+					aria-label="Close create team dialog"
+				>
+					<X class="h-5 w-5" />
+				</button>
+			</div>
+
+			<form
+				method="POST"
+				action="?/removeUser"
+				use:enhance={() => {
+					// This callback runs after the action completes
+					return async ({ update }) => {
+						await update();
+						team.users = team.users.filter((teamuser) => teamuser.user != showRemoveUserModal);
+						showRemoveUserModal = null;
+					};
+				}}
+				class="space-y-4"
+			>
+				<input type="hidden" name="team_id" value={team._id} />
+				<input type="hidden" name="user_id" value={showRemoveUserModal} />
+
+				<div class="flex space-x-3 pt-4">
+					<button
+						type="button"
+						class="btn btn-outline flex-1"
+						onclick={() => (showRemoveUserModal = null)}
+					>
+						Cancel
+					</button>
+					<button type="submit" class="btn btn-primary flex-1">Remove User</button>
+				</div>
+			</form>
+		</div>
+	</dialog>
+{/if}

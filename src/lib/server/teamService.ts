@@ -20,11 +20,14 @@ export async function insertTeam(name: string, owner: User): Promise<InsertOneRe
 	const session = client.startSession();
 	let insertResult: InsertOneResult | null = null;
 
+	const user_id =
+		owner._id instanceof ObjectId ? owner._id : new ObjectId((owner._id as string).toString());
+
 	//session is used to ensure atomicity. when we create a team, we also add the team to the user's teams array
 	try {
 		await session.withTransaction(async () => {
 			const teamuser: TeamUser = {
-				user: owner._id,
+				user: user_id,
 				role: 'admin'
 			};
 
@@ -39,7 +42,7 @@ export async function insertTeam(name: string, owner: User): Promise<InsertOneRe
 
 			// Update user
 			const updateResult = await usersCollection.updateOne(
-				{ _id: owner._id },
+				{ _id: user_id },
 				{ $addToSet: { teams: insertResult.insertedId } },
 				{ session }
 			);
@@ -82,23 +85,14 @@ export async function getAllTeams(): Promise<Team[]> {
 
 /**
  * Retrieves all teams associated with a specific user.
- * @param {string} supabaseUserId - The Supabase ID of the user.
+ * @param {User} user - The user object.
  * @returns {Promise<Team[]>} A promise that resolves to an array of teams the user belongs to.
  * @throws {Error} If the database find operation fails.
  */
-export async function getTeamsOfUser(supabaseUserId: string): Promise<Team[]> {
+export async function getTeamsOfUser(user: User): Promise<Team[]> {
 	const db = getDB();
 
 	try {
-		const userDoc = await await db.collection('users').findOne({
-			supabase: supabaseUserId // Use supabase field
-		});
-		const user = userDoc as User;
-		if (!user) {
-			console.log('User not found:', supabaseUserId);
-			return [];
-		}
-
 		const teamsCollection = db.collection('teams');
 
 		const teams = await teamsCollection
@@ -151,7 +145,7 @@ export async function updateTeamUser(
 		const team = await teams.findOne({ _id: new ObjectId(team_id) });
 		if (!team) throw new Error('Team not found');
 
-		const existingUser = team.users.find((u) => u.user.equals(user_id));
+		const existingUser = team.users.find((u) => (u.user as ObjectId).equals(user_id));
 
 		if (existingUser) {
 			// User exists, update role
@@ -200,6 +194,22 @@ export async function removeTeamUser(team_id: string, user_id: string): Promise<
 }
 
 /**
+ * Checks if a user is in a team.
+ * @param {Team} team - Team object.
+ * @param {string} user_id - The ID of the user.
+ * @returns {Promise<boolean>} Returns true if the user is in a team, false otherwise.
+ */
+export async function isUserInTeam(team: Team, user_id: string) {
+	const teamUser: TeamUser | undefined = team.users.find((teamUser) =>
+		(teamUser.user as ObjectId).equals(user_id)
+	);
+
+	if (!teamUser) return false;
+
+	return true;
+}
+
+/**
  * Checks if a user has permission to edit a team.
  * @param {string} team_id - The ID of the team.
  * @param {string} user_id - The ID of the user.
@@ -210,7 +220,7 @@ export async function canUserEditTeam(team_id: string, user_id: string) {
 	if (!team) return 'Could not find team by id ' + team_id;
 
 	const teamUser: TeamUser | undefined = team.users.find((teamUser) =>
-		teamUser.user.equals(user_id)
+		(teamUser.user as ObjectId).equals(user_id)
 	);
 
 	if (!teamUser) return 'You are not in this team to edit';

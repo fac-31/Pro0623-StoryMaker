@@ -1,5 +1,13 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		if ('serviceWorker' in navigator) {
+			const base = import.meta.env.BASE_URL;
+			navigator.serviceWorker.register(`${base}service-worker.js`);
+		}
+	});
 </script>
 
 <div class="bg-base-100 min-h-screen">
@@ -11,7 +19,12 @@
 		Skip to main content
 	</a>
 
-	<main id="main-content" class="container mx-auto">
+	<main
+		id="main-content"
+		class="container mx-auto"
+		aria-label="Main application content"
+		tabindex="-1"
+	>
 		<slot />
 	</main>
 </div>

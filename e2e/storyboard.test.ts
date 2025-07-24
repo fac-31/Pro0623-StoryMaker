@@ -1,13 +1,35 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test('Create a storyboard', async ({ page }) => {
-	await page.goto('http://localhost:5173/login');
-	await page.getByRole('textbox', { name: 'Email Address' }).click();
-	await page.getByRole('textbox', { name: 'Email Address' }).fill('annavanwingerden@outlook.com');
-	await page.getByRole('textbox', { name: 'Email Address' }).press('Tab');
-	await page.getByRole('textbox', { name: 'Password' }).fill('testing');
-	await page.getByRole('button', { name: 'Sign In' }).click();
-	await page.goto('http://localhost:5173/dashboard');
+	// Generate a unique user with more randomness to avoid conflicts
+	const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+	const email = `testuser-${uniqueId}@example.com`;
+	const password = 'password123';
+	const fullName = 'Test User';
+	const displayName = `TestDisplay${uniqueId.replace(/[^a-zA-Z0-9]/g, '')}`;
+
+	// Sign up the user
+	await page.goto('/signup');
+	await page.getByRole('textbox', { name: 'Email Address' }).fill(email);
+	await page.getByRole('textbox', { name: 'Password' }).fill(password);
+	await page.getByRole('textbox', { name: 'Full Name' }).fill(fullName);
+	await page.getByRole('textbox', { name: 'Display Name' }).fill(displayName);
+	await page.getByRole('button', { name: 'Create Account' }).click();
+
+	// Wait for redirect to login
+	await page.waitForURL('/login', { timeout: 60000 });
+	await expect(page).toHaveURL('/login');
+
+	// Log in with the new user
+	await page.getByRole('textbox', { name: 'Email Address' }).fill(email);
+	await page.getByRole('textbox', { name: 'Password' }).fill(password);
+	await page.getByRole('button', { name: 'Sign in' }).click();
+
+	// Wait for redirect to dashboard
+	await page.waitForURL('/dashboard');
+	await expect(page).toHaveURL('/dashboard');
+
+	// Now create a storyboard
 	await page.getByRole('button', { name: 'New Storyboard' }).click();
 	await page.getByRole('textbox', { name: 'Story Concept:' }).click();
 	await page.getByRole('textbox', { name: 'Story Concept:' }).fill('monkey makes a new friend');

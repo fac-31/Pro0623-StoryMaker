@@ -1,4 +1,6 @@
-import { Db, MongoClient } from 'mongodb';
+/// <reference types="@sveltejs/kit" />
+import { MongoClient } from 'mongodb';
+import type { Db } from 'mongodb';
 import { env } from '$env/dynamic/private';
 
 let db: Db;

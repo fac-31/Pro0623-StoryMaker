@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Storyboard } from '$lib/models/storyboard.model';
+	import type { Team } from '$lib/models/team.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 	import StoryboardForm from '$lib/components/Storyboard/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
@@ -15,10 +16,34 @@
 	};
 
 	export let storyboard: Storyboard | null = null;
+	export let team: Team | null = null;
 	let loading = false;
 	let error = '';
 	let selectedSlideIndex: number | null = null;
 	let showModal = false;
+	let gameUrl: string | null = null;
+
+	async function generateGame() {
+		if (!storyboard?._id) return;
+		loading = true;
+		error = '';
+		try {
+			const res = await fetch('/api/storyboard/generate-game', {
+				method: 'POST',
+				body: JSON.stringify({ storyboardId: storyboard._id })
+			});
+			const data = await res.json();
+			if (res.ok) {
+				window.location.href = data.gamePath;
+			} else {
+				error = data.error || 'Failed to generate game';
+			}
+		} catch (e) {
+			error = e instanceof Error ? e.message : String(e);
+		} finally {
+			loading = false;
+		}
+	}
 
 	async function startStoryboard() {
 		loading = true;
@@ -26,12 +51,14 @@
 		try {
 			const res = await fetch('/api/storyboard/start', {
 				method: 'POST',
-				body: JSON.stringify(userPrompt)
+				body: JSON.stringify({
+					prompts: userPrompt,
+					team_id: team?._id
+				})
 			});
 			const data = await res.json();
 			if (res.ok) {
 				const id = data.insertedId;
-				console.log(id);
 
 				await progressStoryboard(id);
 
@@ -165,13 +192,16 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<main class="bg-base-200 min-h-screen px-4 py-12 sm:px-6 lg:px-8">
+<div class="bg-base-200 min-h-screen px-4 py-12 sm:px-6 lg:px-8">
 	<div class="mx-auto max-w-6xl space-y-8">
 		<!-- Header with Back Button and Title -->
 		<header class="flex items-center justify-between">
 			<div class="flex items-center space-x-4">
 				<button
-					onclick={() => window.history.back()}
+					onclick={() => {
+						sessionStorage.setItem('team', JSON.stringify(team));
+						window.history.back();
+					}}
 					class="btn btn-ghost btn-sm"
 					aria-label="Go back to previous page"
 				>
@@ -194,6 +224,11 @@
 					<div>
 						<h1 class="text-base-content text-3xl font-bold">Create New Storyboard</h1>
 						<p class="text-base-content/70 mt-1">Transform your story ideas into visual magic</p>
+						{#if team}
+							<p class="text-yellow-600">
+								You are creating a storyboard for {team.name}
+							</p>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -260,11 +295,19 @@
 							{/each}
 						</div>
 					</section>
+					{#if storyboard.status === 'done'}
+						<button class="btn btn-primary" onclick={generateGame}>Generate Game</button>
+					{/if}
+					{#if gameUrl}
+						<div class="mt-4">
+							<iframe src={gameUrl} title="Game preview" class="h-[600px] w-full border"></iframe>
+						</div>
+					{/if}
 				{/if}
 			</div>
 		</section>
 	</div>
-</main>
+</div>
 
 <!-- Modal for detailed slide view -->
 {#if selectedSlideIndex !== null && storyboard}

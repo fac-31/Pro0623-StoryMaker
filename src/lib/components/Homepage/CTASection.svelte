@@ -2,10 +2,10 @@
 	import { ArrowRight } from 'lucide-svelte';
 </script>
 
-<section class="bg-gradient-to-r from-purple-600 to-blue-600 py-20">
+<section class="bg-gradient-to-r from-purple-600 to-blue-600 py-20" aria-labelledby="cta-heading">
 	<div class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
 		<div class="space-y-8">
-			<h2 class="text-3xl font-bold text-white lg:text-5xl">
+			<h2 class="text-3xl font-bold text-white lg:text-5xl" id="cta-heading">
 				Ready to Bring Your Stories to Life?
 			</h2>
 			<p class="text-primary-content/80 text-xl leading-relaxed">

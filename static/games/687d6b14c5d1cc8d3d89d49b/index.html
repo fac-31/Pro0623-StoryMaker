@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dino Makes a Friend</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 100vh;
+				background-color: #f0f8ff;
+			}
+			#game-container {
+				width: 80%;
+				max-width: 800px;
+				text-align: center;
+			}
+			img {
+				width: 100%;
+				height: auto;
+				border: 2px solid #ccc;
+				margin-bottom: 20px;
+			}
+			.interaction-description {
+				font-size: 1.2em;
+				margin-bottom: 10px;
+			}
+			.highlight {
+				position: absolute;
+				border: 2px dashed red;
+				pointer-events: none;
+			}
+			#hint {
+				margin-top: 10px;
+				padding: 10px 20px;
+				background-color: #ffeb3b;
+				border: none;
+				cursor: pointer;
+				font-size: 1em;
+			}
+			#next {
+				margin-top: 20px;
+				padding: 10px 20px;
+				background-color: #4caf50;
+				color: white;
+				border: none;
+				cursor: pointer;
+				font-size: 1em;
+				display: none;
+			}
+			.hint-text {
+				margin-top: 10px;
+				color: #ff5722;
+				font-weight: bold;
+			}
+			.option-buttons {
+				margin-top: 10px;
+			}
+			.option-buttons button {
+				margin: 5px;
+				padding: 10px 20px;
+				font-size: 1em;
+				cursor: pointer;
+			}
+			.puzzle-container {
+				margin-top: 20px;
+			}
+			.puzzle-piece {
+				display: inline-block;
+				width: 100px;
+				height: 100px;
+				margin: 10px;
+				background-color: #e0e0e0;
+				line-height: 100px;
+				text-align: center;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="game-container">
+			<img id="slide-image" src="" alt="Slide Image" />
+			<div class="interaction-description" id="interaction-description"></div>
+			<button id="hint">Hint</button>
+			<div class="hint-text" id="hint-text"></div>
+			<div id="interaction-area"></div>
+			<button id="next">Next</button>
+		</div>
+
+		<script>
+			const slides = [
+				{
+					imageUrl:
+						'https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753049919/storyboard-images/slide-1-1753049918019.webp',
+					interactions: [
+						{
+							type: 'drag',
+							description:
+								'Help Dino explore by dragging him around the jungle to discover new plants and trees.',
+							elements: ['Dino', 'jungle plants', 'trees'],
+							hint: 'Drag Dino to different parts of the jungle to explore.'
+						},
+						{
+							type: 'click',
+							description: 'Click on different plants to learn fun facts about the jungle.',
+							elements: ['plants'],
+							hint: 'Click on the highlighted plants to learn more.'
+						}
+					]
+				},
+				{
+					imageUrl:
+						'https://res.cloudinary.com/dn4cxpz0x/image/upload/v1753049948/storyboard-images/slide-2-1753049946964.webp',
+					interactions: [
+						{
+							type: 'choose',
+							description: "Choose Dino's approach to the bunny: 'Gently' or 'Excitedly'.",
+							options: ['Gently', 'Excitedly'],
+							outcome: {
+								Gently: 'The bunny feels safe and stays.',
+								Excitedly: 'The bunny is startled but intrigued.'
+							},
+							hint: 'Think about how Dino should approach the bunny.'
+						},
+						{
+							type: 'solve',
+							description: 'Solve a simple puzzle to help Dino communicate with the bunny.',
+							puzzleType: 'matching',
+							elements: ["Dino's words", "Bunny's expressions"],
+							hint: "Match Dino's words with the bunny's expressions."
+						}
+					]
+				}
+			];
+
+			let currentSlide = 0;
+
+			function loadSlide(slideIndex) {
+				const slide = slides[slideIndex];
+				document.getElementById('slide-image').src = slide.imageUrl;
+				document.getElementById('interaction-description').textContent =
+					slide.interactions[0].description;
+				document.getElementById('hint-text').textContent = '';
+				document.getElementById('next').style.display = 'none';
+				setupInteractions(slide.interactions);
+			}
+
+			function setupInteractions(interactions) {
+				const interactionArea = document.getElementById('interaction-area');
+				interactionArea.innerHTML = '';
+
+				interactions.forEach((interaction) => {
+					if (interaction.type === 'drag') {
+						setupDragInteraction(interaction);
+					} else if (interaction.type === 'click') {
+						setupClickInteraction(interaction);
+					} else if (interaction.type === 'choose') {
+						setupChooseInteraction(interaction);
+					} else if (interaction.type === 'solve') {
+						setupSolveInteraction(interaction);
+					}
+				});
+			}
+
+			function setupDragInteraction(interaction) {
+				const interactionArea = document.getElementById('interaction-area');
+				const draggable = document.createElement('div');
+				draggable.textContent = interaction.elements[0];
+				draggable.className = 'puzzle-piece';
+				draggable.draggable = true;
+				draggable.ondragstart = (e) => e.dataTransfer.setData('text', e.target.textContent);
+				interactionArea.appendChild(draggable);
+
+				const dropZone = document.createElement('div');
+				dropZone.textContent = 'Drop Zone';
+				dropZone.className = 'puzzle-piece';
+				dropZone.style.backgroundColor = '#c8e6c9';
+				dropZone.ondragover = (e) => e.preventDefault();
+				dropZone.ondrop = (e) => {
+					const data = e.dataTransfer.getData('text');
+					if (data === interaction.elements[0]) {
+						alert('Success! Dino explored the jungle.');
+						document.getElementById('next').style.display = 'block';
+					} else {
+						alert('Try again! Drag Dino to explore.');
+					}
+				};
+				interactionArea.appendChild(dropZone);
+			}
+
+			function setupClickInteraction(interaction) {
+				const interactionArea = document.getElementById('interaction-area');
+				interaction.elements.forEach((element) => {
+					const clickable = document.createElement('div');
+					clickable.textContent = element;
+					clickable.className = 'puzzle-piece';
+					clickable.onclick = () => {
+						alert(`You learned about ${element}!`);
+						document.getElementById('next').style.display = 'block';
+					};
+					interactionArea.appendChild(clickable);
+				});
+			}
+
+			function setupChooseInteraction(interaction) {
+				const interactionArea = document.getElementById('interaction-area');
+				const optionButtons = document.createElement('div');
+				optionButtons.className = 'option-buttons';
+
+				interaction.options.forEach((option) => {
+					const button = document.createElement('button');
+					button.textContent = option;
+					button.onclick = () => {
+						alert(interaction.outcome[option]);
+						document.getElementById('next').style.display = 'block';
+					};
+					optionButtons.appendChild(button);
+				});
+
+				interactionArea.appendChild(optionButtons);
+			}
+
+			function setupSolveInteraction(interaction) {
+				const interactionArea = document.getElementById('interaction-area');
+				const puzzleContainer = document.createElement('div');
+				puzzleContainer.className = 'puzzle-container';
+
+				interaction.elements.forEach((element) => {
+					const puzzlePiece = document.createElement('div');
+					puzzlePiece.textContent = element;
+					puzzlePiece.className = 'puzzle-piece';
+					puzzlePiece.onclick = () => {
+						alert(`Matched ${element}!`);
+						document.getElementById('next').style.display = 'block';
+					};
+					puzzleContainer.appendChild(puzzlePiece);
+				});
+
+				interactionArea.appendChild(puzzleContainer);
+			}
+
+			document.getElementById('hint').onclick = () => {
+				const slide = slides[currentSlide];
+				const hint = slide.interactions[0].hint;
+				document.getElementById('hint-text').textContent = hint;
+			};
+
+			document.getElementById('next').onclick = () => {
+				currentSlide++;
+				if (currentSlide < slides.length) {
+					loadSlide(currentSlide);
+				} else {
+					alert('You have completed the story!');
+				}
+			};
+
+			loadSlide(currentSlide);
+		</script>
+	</body>
+</html>

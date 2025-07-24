@@ -5,15 +5,15 @@ export const teamRoles = ['user', 'admin'] as const;
 export type TeamRole = (typeof teamRoles)[number];
 
 export interface TeamUser {
-	user: ObjectId;
+	user: ObjectId | string;
 	role: TeamRole;
 }
 
 export interface Team {
-	_id: ObjectId;
+	_id: ObjectId | string;
 	name: string;
 	users: TeamUser[];
-	projects: ObjectId[];
+	projects: ObjectId[] | string[];
 }
 
 export type NewTeam = Omit<Team, '_id'>;

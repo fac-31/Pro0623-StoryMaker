@@ -54,16 +54,8 @@
 	@apply fixed inset-0 z-[1000] flex items-center justify-center bg-black/80;
 }
 
-.modal-overlay:focus-within {
-	@apply ring-primary ring-4;
-}
-
 .modal-content {
 	@apply bg-base-100 relative h-[90%] w-[95%] overflow-hidden rounded-lg;
-}
-
-.modal-content:focus {
-	@apply ring-secondary ring-4;
 }
 
 .close-button {
@@ -140,4 +132,10 @@
 		transition-duration: 0.01ms !important;
 		scroll-behavior: auto !important;
 	}
+}
+
+*:focus-visible {
+	outline: 3px solid #00a8ff;
+	outline-offset: 2px;
+	border-radius: 2px;
 }
