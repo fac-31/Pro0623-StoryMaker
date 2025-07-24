@@ -46,13 +46,14 @@
 			</p>
 		</div>
 
-		<div class="grid gap-8 md:grid-cols-3">
+		<div class="grid gap-8 md:grid-cols-3" role="list">
 			{#each features as feature (feature.title)}
 				{@const Icon = feature.icon}
-				<div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl">
+				<div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl" role="listitem">
 					<div class="card-body">
 						<div
 							class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110"
+							aria-hidden="true"
 						>
 							<Icon class="h-6 w-6 text-white" />
 						</div>

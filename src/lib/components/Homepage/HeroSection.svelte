@@ -32,7 +32,11 @@
 						<span>Start Creating Free</span>
 						<ArrowRight class="h-5 w-5" />
 					</a>
-					<a href="/storyboard" class="btn btn-outline btn-lg">
+					<a
+						href="/storyboard"
+						class="btn btn-outline btn-lg"
+						aria-label="Try the interactive demo to create a storyboard"
+					>
 						<Play class="h-5 w-5" />
 						<span>Try Demo</span>
 					</a>
@@ -53,7 +57,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="badge badge-warning absolute -top-4 -right-4 rotate-12 transform">New!</div>
+				<div
+					class="badge badge-warning absolute -top-4 -right-4 rotate-12 transform"
+					aria-hidden="true"
+				>
+					New!
+				</div>
 			</div>
 		</div>
 	</div>

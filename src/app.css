@@ -143,3 +143,10 @@
 		scroll-behavior: auto !important;
 	}
 }
+
+/* Add a solid outline when an element is focused */
+:focus-visible {
+	outline: 3px solid hsl(var(--p)); /* Use the primary color for the outline */
+	outline-offset: 2px;
+	border-radius: 2px; /* Add a slight border-radius to the outline */
+}
