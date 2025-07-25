@@ -8,6 +8,7 @@
 	export let show: boolean = false;
 	let editing = false;
 	let loading = false;
+
 	let error = '';
 	let liveRegionMessage = ''; // New variable for the live region
 
