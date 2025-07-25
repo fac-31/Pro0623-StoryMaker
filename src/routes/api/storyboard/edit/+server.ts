@@ -13,10 +13,10 @@ export const POST: RequestHandler = async (event) => {
 		storyboard_id: string;
 	};
 
-	console.log('the new slide outline is ');
+	console.log('[Edit] the new slide outline is ');
 	console.log(newSlideOutline);
-	console.log(`slide Number ${slideNumber}`);
-	console.log(`storyboard_id ${storyboard_id}`);
+	console.log(`[Edit] slide Number ${slideNumber}`);
+	console.log(`[Edit] storyboard_id ${storyboard_id}`);
 
 	const user = await getUserFromEvent(event);
 	if (!user) {

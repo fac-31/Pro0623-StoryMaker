@@ -122,9 +122,15 @@
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
 
-	async function progressEditStoryboard(id: string, edit: boolean): Promise<Storyboard> {
+	async function progressEditStoryboard(id: string, edit: boolean, slideNumber?: number): Promise<Storyboard> {
 		return new Promise((resolve, reject) => {
-			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
+			let url = `/api/storyboard/progress/${id}`;
+			const params = new URLSearchParams();
+			if (edit) params.append('edit', 'true');
+			if (slideNumber) params.append('slideNumber', slideNumber.toString());
+			if (params.toString()) url += `?${params.toString()}`;
+			
+			const source = new EventSource(url);
 			source.onmessage = (event) => {
 				let latestStoryboard = JSON.parse(event.data);
 
@@ -158,7 +164,8 @@
 			if (res.ok) {
 				const storyboard_id = data.id;
 				const edit = true;
-				const updatedStoryboard = await progressEditStoryboard(storyboard_id, edit);
+				const slideNumber = selectedSlideIndex + 1; // Convert to 1-based index
+				const updatedStoryboard = await progressEditStoryboard(storyboard_id, edit, slideNumber);
 				if (updatedStoryboard) {
 					dispatch('update', updatedStoryboard);
 				}
