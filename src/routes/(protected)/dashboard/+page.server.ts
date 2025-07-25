@@ -6,7 +6,9 @@ import type { PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
-export const load: PageServerLoad = async ({ parent }) => {
+export const load: PageServerLoad = async ({ parent, depends }) => {
+	depends('dashboard:storyboards');
+	
 	const data = await parent();
 	const supabase = data.user;
 
