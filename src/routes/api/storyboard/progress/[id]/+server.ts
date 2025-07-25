@@ -25,9 +25,9 @@ import { ObjectId } from 'mongodb';
  */
 export const GET: RequestHandler = async ({ params, url }) => {
 	const id = params.id;
-	const editId = url.searchParams.get('edit');
+    const edit = url.searchParams.get('edit') === 'true'; // false if not provided	
 	if (!id) return json({ error: 'ID not provided' }, { status: 500 });
-
+	
 	const db = await initDB();
 	const storyboards = db.collection<Storyboard>('storyboards');
 
@@ -39,8 +39,8 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			const abortController = new AbortController();
 			registerStream(id, controller, abortController);
 
-			if (editId) {
-				runAsyncStoryboardEdit(storyboard, editId, abortController.signal).catch((err) => {
+			if (edit) {
+				runAsyncStoryboardEdit(storyboard, abortController.signal).catch((err) => {
 					console.error('Storyboard error:', err);
 					endStream(id);
 				});
@@ -82,7 +82,6 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 	async function runAsyncStoryboardEdit(
 		storyboard: Storyboard,
-		editId: string,
 		signal: AbortSignal
 	) {
 		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
