@@ -25,9 +25,9 @@ import { ObjectId } from 'mongodb';
  */
 export const GET: RequestHandler = async ({ params, url }) => {
 	const id = params.id;
-    const edit = url.searchParams.get('edit') === 'true'; // false if not provided	
+	const edit = url.searchParams.get('edit') === 'true'; // false if not provided
 	if (!id) return json({ error: 'ID not provided' }, { status: 500 });
-	
+
 	const db = await initDB();
 	const storyboards = db.collection<Storyboard>('storyboards');
 
@@ -80,10 +80,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		endStream(storyboard._id.toString());
 	}
 
-	async function runAsyncStoryboardEdit(
-		storyboard: Storyboard,
-		signal: AbortSignal
-	) {
+	async function runAsyncStoryboardEdit(storyboard: Storyboard, signal: AbortSignal) {
 		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
