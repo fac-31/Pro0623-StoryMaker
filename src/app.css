@@ -65,7 +65,7 @@
 }
 
 .modal-content {
-	@apply bg-base-100 relative max-h-[90%] w-[95%] overflow-hidden rounded-lg flex flex-col;
+	@apply bg-base-100 relative flex max-h-[90%] w-[95%] flex-col overflow-hidden rounded-lg;
 }
 
 .close-button {

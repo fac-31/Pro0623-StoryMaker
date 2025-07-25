@@ -25,7 +25,7 @@ import { ObjectId } from 'mongodb';
  */
 export const GET: RequestHandler = async ({ params, url }) => {
 	const id = params.id;
-    const edit = url.searchParams.get('edit') === 'true'; // false if not provided
+	const editId = url.searchParams.get('edit');
 	if (!id) return json({ error: 'ID not provided' }, { status: 500 });
 
 	const db = await initDB();
@@ -39,15 +39,12 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			const abortController = new AbortController();
 			registerStream(id, controller, abortController);
 
-			if (edit)
-			{
-				runAsyncStoryboardEdit(storyboard, abortController.signal).catch((err) => {
+			if (editId) {
+				runAsyncStoryboardEdit(storyboard, editId, abortController.signal).catch((err) => {
 					console.error('Storyboard error:', err);
 					endStream(id);
 				});
-			}
-			else
-			{
+			} else {
 				runAsyncStoryboard(storyboard, abortController.signal).catch((err) => {
 					console.error('Storyboard error:', err);
 					endStream(id);
@@ -74,7 +71,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	 * 4. Ends the stream.
 	 */
 	async function runAsyncStoryboard(storyboard: Storyboard, signal: AbortSignal) {
-		console.log("entered runAsync");
+		console.log('entered runAsync');
 		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
@@ -83,7 +80,11 @@ export const GET: RequestHandler = async ({ params, url }) => {
 		endStream(storyboard._id.toString());
 	}
 
-	async function runAsyncStoryboardEdit(storyboard: Storyboard, signal: AbortSignal) {
+	async function runAsyncStoryboardEdit(
+		storyboard: Storyboard,
+		editId: string,
+		signal: AbortSignal
+	) {
 		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });

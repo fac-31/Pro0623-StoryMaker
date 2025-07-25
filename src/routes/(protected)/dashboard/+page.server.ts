@@ -8,7 +8,7 @@ import type { Actions } from './$types';
 
 export const load: PageServerLoad = async ({ parent, depends }) => {
 	depends('dashboard:storyboards');
-	
+
 	const data = await parent();
 	const supabase = data.user;
 

@@ -43,6 +43,7 @@
 	function viewTeamStoryboards(team: Team | null) {
 		selectedTeam = team;
 		onViewChange('team-storyboards', team);
+		console.log('Viewing storyboards for team:', selectedTeam);
 	}
 </script>
 

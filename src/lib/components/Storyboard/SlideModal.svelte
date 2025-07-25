@@ -9,7 +9,6 @@
 	let editing = false;
 	let loading = false;
 	let error = '';
-
 	let liveRegionMessage = ''; // New variable for the live region
 
 	const dispatch = createEventDispatcher<{
@@ -122,7 +121,7 @@
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
 
-	async function progressStoryboard(id: string, edit: boolean): Promise<Storyboard> {
+	async function progressEditStoryboard(id: string, edit: boolean): Promise<Storyboard> {
 		return new Promise((resolve, reject) => {
 			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
 			source.onmessage = (event) => {
@@ -156,9 +155,9 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
-				const id = data.id;
+				const storyboard_id = data.id;
 				const edit = true;
-				const updatedStoryboard = await progressStoryboard(id, edit);
+				const updatedStoryboard = await progressEditStoryboard(storyboard_id, edit);
 				if (updatedStoryboard) {
 					dispatch('update', updatedStoryboard);
 				}
@@ -261,7 +260,7 @@
 					{#if editableSlideOutline.characters.length > 0}
 						<div class="detail-section">
 							<h4>Characters</h4>
-							{#each editableSlideOutline.characters as character, i (editableSlideOutline.slideId + i)}
+							{#each editableSlideOutline.characters as character (editableSlideOutline.slideId + character.name)}
 								<div class="character-info">
 									{#if editing}
 										<strong>Name:</strong>
@@ -297,7 +296,7 @@
 					{#if editableSlideOutline.text.dialogue.length > 0}
 						<div class="detail-section">
 							<h4>Dialogue</h4>
-							{#each editableSlideOutline.text.dialogue as dialogue, i (editableSlideOutline.slideId + dialogue.line)}
+							{#each editableSlideOutline.text.dialogue as dialogue (editableSlideOutline.slideId + dialogue.line)}
 								<div class="dialogue-line">
 									{#if editing}
 										<strong>Character:</strong>
@@ -337,6 +336,11 @@
 					{/if}
 				</div>
 			</div>
+			{#if error}
+				<div class="error-message mb-4 rounded border border-red-200 bg-red-50 p-2 text-red-600">
+					{error}
+				</div>
+			{/if}
 			<div class="modal-footer">
 				{#if editing}
 					<button class="btn btn-primary" on:click={cancelEdit} disabled={loading}>Cancel</button>

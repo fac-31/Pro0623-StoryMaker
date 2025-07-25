@@ -399,7 +399,6 @@ export const createStoryboardEditGraph = () => {
 	workflow.addEdge('__start__', 'generateImage');
 	workflow.addEdge('generateImage', '__end__');
 
-
 	return workflow.compile();
 };
 
