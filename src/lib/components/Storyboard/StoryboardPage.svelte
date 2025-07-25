@@ -46,11 +46,11 @@
 		}
 	}
 
-	//the function is left here because each update writes directly to the storyboard variable 
+	//the function is left here because each update writes directly to the storyboard variable
 	//in this svelte component.
 	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
 		return new Promise((resolve, reject) => {
-		const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
+			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);
 
@@ -93,8 +93,6 @@
 		}
 	}
 
-
-
 	function openSlideModal(event: CustomEvent<number>) {
 		selectedSlideIndex = event.detail;
 		showModal = true;
@@ -121,7 +119,6 @@
 		userPrompt = event.detail;
 		startStoryboard();
 	}
-
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -245,5 +242,11 @@
 
 <!-- Modal for detailed slide view -->
 {#if selectedSlideIndex !== null && storyboard}
-	<SlideModal {storyboard} {selectedSlideIndex} show={showModal} on:close={closeModal} on:update={handleStoryboardUpdate} />
+	<SlideModal
+		{storyboard}
+		{selectedSlideIndex}
+		show={showModal}
+		on:close={closeModal}
+		on:update={handleStoryboardUpdate}
+	/>
 {/if}

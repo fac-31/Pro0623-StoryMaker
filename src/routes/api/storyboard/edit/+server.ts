@@ -9,8 +9,8 @@ import type { SlideOutline } from '$lib/models/story.ts'
 export const POST: RequestHandler = async (event) => {
     const { newSlideOutline, slideNumber, storyboard_id } = (await event.request.json()) as {
         newSlideOutline: SlideOutline;
-        slideNumber : number;
-        storyboard_id : string;
+        slideNumber: number;
+        storyboard_id: string;
     };
 
     console.log("the new slide outline is ");
@@ -35,11 +35,11 @@ export const POST: RequestHandler = async (event) => {
             .collection('storyboards')
             .updateOne(
                 { _id: new ObjectId(storyboard_id) },
-                { 
-                    $set: { 
-                        [`storyOutline.slideOutlines.${slideNumber-1}`]: newSlideOutline,
+                {
+                    $set: {
+                        [`storyOutline.slideOutlines.${slideNumber - 1}`]: newSlideOutline,
                         currentSlide: slideNumber
-                    } 
+                    }
                 }
             );
 

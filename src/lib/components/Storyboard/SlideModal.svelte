@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { createEventDispatcher, tick } from 'svelte';
+	import { Loader2 } from 'lucide-svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { SlideOutline } from '$lib/models/story';
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
 	let editing = false;
+	let loading = false;
 	let error = '';
 
 	let liveRegionMessage = ''; // New variable for the live region
@@ -120,10 +122,9 @@
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
 
-
 	async function progressStoryboard(id: string, edit: boolean): Promise<Storyboard> {
 		return new Promise((resolve, reject) => {
-		const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
+			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
 			source.onmessage = (event) => {
 				let latestStoryboard = JSON.parse(event.data);
 
@@ -142,6 +143,7 @@
 	}
 
 	async function editStoryboard() {
+		loading = true;
 		error = '';
 		try {
 			const res = await fetch('/api/storyboard/edit', {
@@ -166,6 +168,8 @@
 			}
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
+		} finally {
+			loading = false;
 		}
 	}
 
@@ -311,7 +315,16 @@
 
 				<!-- Right side - Image (80%) -->
 				<div class="slide-image">
-					{#if visualSlide.imageGenerated && visualSlide.imageUrl}
+					{#if loading}
+						<div class="flex h-full items-center justify-center">
+							<div class="text-center">
+								<Loader2
+									class="text-primary mx-auto h-8 w-8 animate-spin motion-reduce:animate-none"
+								/>
+								<p class="text-base-content/70 mt-4">Updating slide...</p>
+							</div>
+						</div>
+					{:else if visualSlide.imageGenerated && visualSlide.imageUrl}
 						<img src={visualSlide.imageUrl} alt="Slide {visualSlide.slideNumber}" />
 					{:else}
 						<div class="large-placeholder">
@@ -326,8 +339,8 @@
 			</div>
 			<div class="modal-footer">
 				{#if editing}
-					<button class="btn btn-primary" on:click={cancelEdit}>Cancel</button>
-					<button class="btn btn-primary" on:click={editStoryboard}>Save</button>
+					<button class="btn btn-primary" on:click={cancelEdit} disabled={loading}>Cancel</button>
+					<button class="btn btn-primary" on:click={editStoryboard} disabled={loading}>Save</button>
 				{:else}
 					<button class="btn btn-primary" on:click={() => (editing = true)}>Edit</button>
 				{/if}

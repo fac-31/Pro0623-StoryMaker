@@ -86,6 +86,8 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	async function runAsyncStoryboardEdit(storyboard: Storyboard, signal: AbortSignal) {
 		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
 
+		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
+
 		updateStream(storyboard._id.toString(), storyboardOutput);
 		endStream(storyboard._id.toString());
 	}
