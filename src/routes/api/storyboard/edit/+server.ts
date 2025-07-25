@@ -13,6 +13,12 @@ export const POST: RequestHandler = async (event) => {
         storyboard_id : string;
     };
 
+    console.log("the new slide outline is ");
+    console.log(newSlideOutline);
+    console.log(`slide Number ${slideNumber}`);
+    console.log(`storyboard_id ${storyboard_id}`);
+
+
     const user = await getUserFromEvent(event);
     if (!user) {
         return json({ error: 'User not found' }, { status: 404 });

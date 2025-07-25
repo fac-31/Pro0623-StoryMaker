@@ -6,6 +6,7 @@
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import { Loader2, ArrowLeft, Sparkles } from 'lucide-svelte';
+	import { progressStoryboard } from '$lib/utils/storyboardprogress';
 
 	let userPrompt: UserPrompt = {
 		numSlides: 6,
@@ -59,12 +60,7 @@
 			const data = await res.json();
 			if (res.ok) {
 				const id = data.insertedId;
-
-				const edit = false;
-				await progressStoryboard(id, false);
-
-				//storyboard = storyBoardResponse.storyboardOutput;
-				//await fetchLogs();
+				storyboard = await progressStoryboard(id, false);
 			} else {
 				error = data.error || 'Failed to start storyboard';
 			}
@@ -75,26 +71,7 @@
 		}
 	}
 
-	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
-		return new Promise((resolve, reject) => {
-			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
 
-			source.onmessage = (event) => {
-				storyboard = JSON.parse(event.data);
-
-				if (storyboard && storyboard.status == 'done') {
-					source.close();
-					resolve();
-				}
-			};
-
-			source.onerror = (err) => {
-				console.error('SSE connection error', err);
-				source.close();
-				reject(new Error('SSE connection error'));
-			};
-		});
-	}
 
 	function openSlideModal(event: CustomEvent<number>) {
 		selectedSlideIndex = event.detail;
@@ -104,6 +81,10 @@
 	function closeModal() {
 		showModal = false;
 		selectedSlideIndex = null;
+	}
+
+	function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
+		storyboard = event.detail;
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -117,78 +98,6 @@
 		startStoryboard();
 	}
 
-	//not used yet.
-	// async function refineSlide() {
-	// 	if (!storyboard?._id) return;
-	// 	loading = true;
-	// 	error = '';
-	// 	try {
-	// 		const res = await fetch('/api/storyboard/refine', {
-	// 			method: 'POST',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ _id: storyboard._id, feedback })
-	// 		});
-	// 		const data = await res.json();
-	// 		if (res.ok) {
-	// 			storyboard = data;
-	// 			imageUrl = '';
-	// 			feedback = '';
-	// 			await fetchLogs();
-	// 		} else {
-	// 			error = data.error || 'Failed to refine slide';
-	// 		}
-	// 	} catch (e) {
-	// 		error = e instanceof Error ? e.message : String(e);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
-	// }
-
-	// async function approveSlide() {
-	// 	if (!storyboard?._id) return;
-	// 	loading = true;
-	// 	error = '';
-	// 	try {
-	// 		const res = await fetch('/api/storyboard/approve', {
-	// 			method: 'POST',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ _id: storyboard._id })
-	// 		});
-	// 		const data = await res.json();
-	// 		if (res.ok) {
-	// 			storyboard = data;
-	// 			imageUrl = data.currentSlideDraft?.imageUrl || '';
-	// 			await fetchLogs();
-	// 		} else {
-	// 			error = data.error || 'Failed to approve slide';
-	// 		}
-	// 	} catch (e) {
-	// 		error = e instanceof Error ? e.message : String(e);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
-	// }
-
-	// async function fetchCurrent() {
-	// 	if (!storyboard?._id) return;
-	// 	loading = true;
-	// 	error = '';
-	// 	try {
-	// 		const res = await fetch(`/api/storyboard/current?_id=${storyboard._id}`);
-	// 		const data = await res.json();
-	// 		if (res.ok) {
-	// 			storyboard = data;
-	// 			imageUrl = data.currentSlideDraft?.imageUrl || '';
-	// 			await fetchLogs();
-	// 		} else {
-	// 			error = data.error || 'Failed to fetch storyboard';
-	// 		}
-	// 	} catch (e) {
-	// 		error = e instanceof Error ? e.message : String(e);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
-	// }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -312,5 +221,5 @@
 
 <!-- Modal for detailed slide view -->
 {#if selectedSlideIndex !== null && storyboard}
-	<SlideModal {storyboard} {selectedSlideIndex} show={showModal} on:close={closeModal} />
+	<SlideModal {storyboard} {selectedSlideIndex} show={showModal} on:close={closeModal} on:update={handleStoryboardUpdate} />
 {/if}

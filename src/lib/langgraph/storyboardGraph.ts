@@ -42,7 +42,6 @@ const generateStoryOutline = async (
 	state: Storyboard,
 	config: RunnableConfig
 ): Promise<Partial<Storyboard>> => {
-	console.log('[LangGraph] generateStoryOutline called with:', state.prompts);
 	addLog(`[LangGraph] generateStoryOutline called with: ${state.prompts}`);
 
 	state.status = 'generating-outline';
@@ -76,7 +75,6 @@ Genre: {genre}
 		imageGenerated: false
 	}));
 
-	console.log('[LangGraph] generateStoryOutline result:\n', JSON.stringify(storyOutLine, null, 2));
 	addLog(`[LangGraph] generateStoryOutline result: ${JSON.stringify(storyOutLine, null, 2)}`);
 	return {
 		storyOutline: storyOutLine,
@@ -92,7 +90,6 @@ Genre: {genre}
  */
 const generateImagePrompt = (slide: SlideOutline, characterSheet: string): string => {
 	const promptParts: string[] = [];
-	console.log('Double checking', characterSheet);
 	// Add scene description & Charactersheet
 	promptParts.push(`Character Profiles:\n${characterSheet}`);
 	promptParts.push(
@@ -179,7 +176,6 @@ Synthesized Profile:`);
 		})
 		.join('\n\n'); // Use double newline for better separation
 
-	console.log('[LangGraph] Synthesized characterSheet →\n', finalSheet);
 	addLog(`[LangGraph] Synthesized characterSheet:\n${finalSheet}`);
 	return { characterSheet: finalSheet };
 };
@@ -219,9 +215,7 @@ const generateImage = async (
 	state: Storyboard,
 	config: RunnableConfig
 ): Promise<Partial<Storyboard>> => {
-	console.log('[LangGraph] generateImage called for slide :', state.currentSlide);
 	addLog(`[LangGraph] generateImage called for prompt: ${state.currentSlide}`);
-	console.log(state);
 	state.status = 'generating-image';
 	updateStream(state._id.toString(), state);
 
@@ -381,8 +375,8 @@ export const createStoryboardGraph = () => {
  * @returns {StateGraph} The compiled storyboard graph workflow.
  */
 export const createStoryboardEditGraph = () => {
-	console.log('[LangGraph] createStoryboardGraph called');
-	addLog('[LangGraph] createStoryboardGraph called');
+	console.log('[LangGraph] createStoryboardEditGraph called');
+	addLog('[LangGraph] createStoryboardEditGraph called');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const workflow = new StateGraph<Storyboard, any, any, string>({
 		channels: {

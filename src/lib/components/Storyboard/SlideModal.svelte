@@ -2,7 +2,7 @@
 	import { createEventDispatcher, tick } from 'svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { SlideOutline } from '$lib/models/story';
-
+	import { progressStoryboard } from '$lib/utils/storyboardprogress';
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
@@ -13,6 +13,7 @@
 
 	const dispatch = createEventDispatcher<{
 		close: void;
+		update: Storyboard;
 	}>();
 
 	// Create a local, editable copy of the slide outline.
@@ -41,11 +42,15 @@
 	}
 
 	function handleOverlayClick() {
-		closeModal();
+		// Prevent closing modal when in editing mode
+		if (!editing) {
+			closeModal();
+		}
 	}
 
 	function handleOverlayKeydown(event: KeyboardEvent) {
-		if (event.key === 'Enter' || event.key === ' ') {
+		// Prevent closing modal when in editing mode
+		if (!editing && (event.key === 'Enter' || event.key === ' ')) {
 			closeModal();
 		}
 	}
@@ -123,15 +128,17 @@
 				method: 'POST',
 				body: JSON.stringify({
 					newSlideOutline: editableSlideOutline,
-					slideNumber: selectedSlideIndex,
+					slideNumber: selectedSlideIndex + 1,
 					storyboard_id: storyboard._id
 				})
 			});
 			const data = await res.json();
 			if (res.ok) {
 				const id = data.id;
-				const edit = true;
-				await progressStoryboard(id, edit);
+				const updatedStoryboard = await progressStoryboard(id, true);
+				if (updatedStoryboard) {
+					dispatch('update', updatedStoryboard);
+				}
 				editing = false; // Exit editing mode on success
 			} else {
 				error = data.error || 'Failed to save storyboard';
@@ -147,28 +154,6 @@
 			JSON.stringify(storyboard.storyOutline.slideOutlines[selectedSlideIndex])
 		);
 		editing = false;
-	}
-
-	//you need to unite this function with the function in StoryboardPage.svelte
-	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
-		return new Promise((resolve, reject) => {
-			const source = new EventSource(`/api/storyboard/progress/${id}/${edit}`);
-
-			source.onmessage = (event) => {
-				storyboard = JSON.parse(event.data);
-
-				if (storyboard && storyboard.status == 'done') {
-					source.close();
-					resolve();
-				}
-			};
-
-			source.onerror = (err) => {
-				console.error('SSE connection error', err);
-				source.close();
-				reject(new Error('SSE connection error'));
-			};
-		});
 	}
 </script>
 
@@ -251,7 +236,7 @@
 					{#if editableSlideOutline.characters.length > 0}
 						<div class="detail-section">
 							<h4>Characters</h4>
-							{#each editableSlideOutline.characters as character, i (editableSlideOutline.slideId + character.name)}
+							{#each editableSlideOutline.characters as character, i (editableSlideOutline.slideId + i)}
 								<div class="character-info">
 									{#if editing}
 										<strong>Name:</strong>
