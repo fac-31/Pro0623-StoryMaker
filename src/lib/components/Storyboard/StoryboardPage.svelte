@@ -6,7 +6,6 @@
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import { Loader2, ArrowLeft, Sparkles } from 'lucide-svelte';
-	import { progressStoryboard } from '$lib/utils/storyboardprogress';
 
 	let userPrompt: UserPrompt = {
 		numSlides: 6,
@@ -46,6 +45,28 @@
 		}
 	}
 
+	//the function is left here because each update writes directly to the storyboard variable 
+	//in this svelte component.
+	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
+		return new Promise((resolve, reject) => {
+		const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
+			source.onmessage = (event) => {
+				storyboard = JSON.parse(event.data);
+
+				if (storyboard && storyboard.status == 'done') {
+					source.close();
+					resolve();
+				}
+			};
+
+			source.onerror = (err) => {
+				console.error('SSE connection error', err);
+				source.close();
+				reject(new Error('SSE connection error'));
+			};
+		});
+	}
+
 	async function startStoryboard() {
 		loading = true;
 		error = '';
@@ -60,7 +81,7 @@
 			const data = await res.json();
 			if (res.ok) {
 				const id = data.insertedId;
-				storyboard = await progressStoryboard(id, false);
+				await progressStoryboard(id, false);
 			} else {
 				error = data.error || 'Failed to start storyboard';
 			}

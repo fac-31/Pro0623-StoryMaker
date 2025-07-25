@@ -2,7 +2,6 @@
 	import { createEventDispatcher, tick } from 'svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { SlideOutline } from '$lib/models/story';
-	import { progressStoryboard } from '$lib/utils/storyboardprogress';
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
@@ -121,6 +120,27 @@
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
 
+
+	async function progressStoryboard(id: string, edit: boolean): Promise<Storyboard> {
+		return new Promise((resolve, reject) => {
+		const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
+			source.onmessage = (event) => {
+				let latestStoryboard = JSON.parse(event.data);
+
+				if (latestStoryboard && latestStoryboard.status == 'done') {
+					source.close();
+					resolve(latestStoryboard);
+				}
+			};
+
+			source.onerror = (err) => {
+				console.error('SSE connection error', err);
+				source.close();
+				reject(new Error('SSE connection error'));
+			};
+		});
+	}
+
 	async function editStoryboard() {
 		error = '';
 		try {
@@ -135,7 +155,8 @@
 			const data = await res.json();
 			if (res.ok) {
 				const id = data.id;
-				const updatedStoryboard = await progressStoryboard(id, true);
+				const edit = true;
+				const updatedStoryboard = await progressStoryboard(id, edit);
 				if (updatedStoryboard) {
 					dispatch('update', updatedStoryboard);
 				}
