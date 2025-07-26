@@ -170,7 +170,7 @@ npm run test:e2e        # Run end-to-end tests
 npm run test:dev        # Run tests in UI mode
 
 # Documentation
-npm run docs            # Generate TypeDoc documentation
+npm run generate-docs            # Generate TypeDoc documentation
 npm run generate-swagger # Update API documentation
 ```
 
@@ -195,26 +195,9 @@ npm run test:e2e -- --grep "accessibility"
 
 ---
 
-## 📚 API Documentation
+## 📚 Documentation
 
-The project includes a comprehensive OpenAPI specification. View the interactive API documentation:
-
-```bash
-# Generate and serve API docs
-npm run generate-swagger
-```
-
-### Key API Endpoints
-
-| Endpoint                        | Method | Description               |
-| ------------------------------- | ------ | ------------------------- |
-| `/api/storyboard/start`         | POST   | Create new storyboard     |
-| `/api/storyboard/progress/{id}` | GET    | Real-time progress stream |
-| from storyboard                 |
-| `/api/users/signup`             | POST   | User registration         |
-| `/api/teams/create`             | POST   | Create new team           |
-
----
+- **Documentation**: Check our [Typescript Documentation](https://fac-31.github.io/Pro0623-StoryMaker/typedoc/index.html), [Swagger API](https://fac-31.github.io/Pro0623-StoryMaker/api/index.html)
 
 ## 🎯 Tech Stack
 
@@ -285,22 +268,6 @@ We welcome contributions! Please see our contributing guidelines:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
-## 🙏 Acknowledgments
-
-- **OpenAI** for GPT-4 and DALL-E 3 APIs
-- **Svelte Team** for the amazing framework
-- **Tailwind CSS** for the utility-first approach
-- **MongoDB** for flexible data storage
-
----
-
-## 📞 Support
-
-- **Documentation**: Check our [Typescript Documentation](https://fac-31.github.io/Pro0623-StoryMaker/typedoc/index.html), [Swagger API](https://fac-31.github.io/Pro0623-StoryMaker/api/index.html), and [accessibility guide](./ACCESSIBILITY.md)
-- **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/your-username/story-maker/issues)
-- **Discussions**: Join our [GitHub Discussions](https://github.com/your-username/story-maker/discussions)
 
 ---
 
