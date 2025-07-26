@@ -29,11 +29,6 @@
 						<a href="/storyboard" class="hover:text-neutral-content transition-colors">Storyboard</a
 						>
 					</li>
-					<li>
-						<a href="/langchain-agent" class="hover:text-neutral-content transition-colors"
-							>AI Agent</a
-						>
-					</li>
 				</ul>
 			</div>
 

@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { runStoryboardCreation } from '$lib/langgraph/storyboardGraph';
+import { runStoryboardCreation, runStoryboardEdit } from '$lib/langgraph/storyboardGraph';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { Storyboard } from '$lib/models/storyboard.model';
@@ -23,8 +23,10 @@ import { ObjectId } from 'mongodb';
  * 4. Initiates the storyboard creation process.
  * 5. Returns the stream response to the client.
  */
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, url }) => {
 	const id = params.id;
+	const edit = url.searchParams.get('edit') === 'true'; // false if not provided
+	const slideNumber = url.searchParams.get('slideNumber'); // Get the specific slide number for edits
 	if (!id) return json({ error: 'ID not provided' }, { status: 500 });
 
 	const db = await initDB();
@@ -33,15 +35,26 @@ export const GET: RequestHandler = async ({ params }) => {
 	const storyboard: Storyboard | null = await storyboards.findOne({ _id: new ObjectId(id) });
 	if (!storyboard) return json({ error: 'Invalid ID' }, { status: 500 });
 
+	console.log(
+		`[Progress] Fetched storyboard for ${edit ? 'edit' : 'creation'}, currentSlide: ${storyboard.currentSlide}`
+	);
+
 	const stream = new ReadableStream({
 		start(controller) {
 			const abortController = new AbortController();
 			registerStream(id, controller, abortController);
 
-			runAsyncStoryboard(storyboard, abortController.signal).catch((err) => {
-				console.error('Storyboard error:', err);
-				endStream(id);
-			});
+			if (edit) {
+				runAsyncStoryboardEdit(storyboard, abortController.signal).catch((err) => {
+					console.error('Storyboard error:', err);
+					endStream(id);
+				});
+			} else {
+				runAsyncStoryboard(storyboard, abortController.signal).catch((err) => {
+					console.error('Storyboard error:', err);
+					endStream(id);
+				});
+			}
 		},
 		cancel() {
 			cancelStream(id);
@@ -63,7 +76,23 @@ export const GET: RequestHandler = async ({ params }) => {
 	 * 4. Ends the stream.
 	 */
 	async function runAsyncStoryboard(storyboard: Storyboard, signal: AbortSignal) {
+		console.log('entered runAsync');
 		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard, signal);
+
+		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
+
+		updateStream(storyboard._id.toString(), storyboardOutput);
+		endStream(storyboard._id.toString());
+	}
+
+	async function runAsyncStoryboardEdit(storyboard: Storyboard, signal: AbortSignal) {
+		// If slideNumber is provided, override the currentSlide to ensure we edit the correct slide
+		if (slideNumber) {
+			storyboard.currentSlide = parseInt(slideNumber);
+			console.log(`[Progress] Override currentSlide to: ${storyboard.currentSlide}`);
+		}
+
+		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
 

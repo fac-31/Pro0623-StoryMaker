@@ -6,6 +6,7 @@
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import { Loader2, ArrowLeft, Sparkles } from 'lucide-svelte';
+	import { invalidate } from '$app/navigation';
 
 	let userPrompt: UserPrompt = {
 		numSlides: 6,
@@ -45,39 +46,11 @@
 		}
 	}
 
-	async function startStoryboard() {
-		loading = true;
-		error = '';
-		try {
-			const res = await fetch('/api/storyboard/start', {
-				method: 'POST',
-				body: JSON.stringify({
-					prompts: userPrompt,
-					team_id: team?._id
-				})
-			});
-			const data = await res.json();
-			if (res.ok) {
-				const id = data.insertedId;
-
-				await progressStoryboard(id);
-
-				//storyboard = storyBoardResponse.storyboardOutput;
-				//await fetchLogs();
-			} else {
-				error = data.error || 'Failed to start storyboard';
-			}
-		} catch (e) {
-			error = e instanceof Error ? e.message : String(e);
-		} finally {
-			loading = false;
-		}
-	}
-
-	async function progressStoryboard(id: string): Promise<void> {
+	//the function is left here because each update writes directly to the storyboard variable
+	//in this svelte component.
+	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
 		return new Promise((resolve, reject) => {
-			const source = new EventSource('/api/storyboard/progress/' + id);
-
+			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);
 
@@ -95,6 +68,31 @@
 		});
 	}
 
+	async function startStoryboard() {
+		loading = true;
+		error = '';
+		try {
+			const res = await fetch('/api/storyboard/start', {
+				method: 'POST',
+				body: JSON.stringify({
+					prompts: userPrompt,
+					team_id: team?._id
+				})
+			});
+			const data = await res.json();
+			if (res.ok) {
+				const id = data.insertedId;
+				await progressStoryboard(id, false);
+			} else {
+				error = data.error || 'Failed to start storyboard';
+			}
+		} catch (e) {
+			error = e instanceof Error ? e.message : String(e);
+		} finally {
+			loading = false;
+		}
+	}
+
 	function openSlideModal(event: CustomEvent<number>) {
 		selectedSlideIndex = event.detail;
 		showModal = true;
@@ -103,6 +101,12 @@
 	function closeModal() {
 		showModal = false;
 		selectedSlideIndex = null;
+	}
+
+	function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
+		storyboard = event.detail;
+		// Invalidate the dashboard data so it refreshes when user navigates back
+		invalidate('dashboard:storyboards');
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -115,79 +119,6 @@
 		userPrompt = event.detail;
 		startStoryboard();
 	}
-
-	//not used yet.
-	// async function refineSlide() {
-	// 	if (!storyboard?._id) return;
-	// 	loading = true;
-	// 	error = '';
-	// 	try {
-	// 		const res = await fetch('/api/storyboard/refine', {
-	// 			method: 'POST',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ _id: storyboard._id, feedback })
-	// 		});
-	// 		const data = await res.json();
-	// 		if (res.ok) {
-	// 			storyboard = data;
-	// 			imageUrl = '';
-	// 			feedback = '';
-	// 			await fetchLogs();
-	// 		} else {
-	// 			error = data.error || 'Failed to refine slide';
-	// 		}
-	// 	} catch (e) {
-	// 		error = e instanceof Error ? e.message : String(e);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
-	// }
-
-	// async function approveSlide() {
-	// 	if (!storyboard?._id) return;
-	// 	loading = true;
-	// 	error = '';
-	// 	try {
-	// 		const res = await fetch('/api/storyboard/approve', {
-	// 			method: 'POST',
-	// 			headers: { 'Content-Type': 'application/json' },
-	// 			body: JSON.stringify({ _id: storyboard._id })
-	// 		});
-	// 		const data = await res.json();
-	// 		if (res.ok) {
-	// 			storyboard = data;
-	// 			imageUrl = data.currentSlideDraft?.imageUrl || '';
-	// 			await fetchLogs();
-	// 		} else {
-	// 			error = data.error || 'Failed to approve slide';
-	// 		}
-	// 	} catch (e) {
-	// 		error = e instanceof Error ? e.message : String(e);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
-	// }
-
-	// async function fetchCurrent() {
-	// 	if (!storyboard?._id) return;
-	// 	loading = true;
-	// 	error = '';
-	// 	try {
-	// 		const res = await fetch(`/api/storyboard/current?_id=${storyboard._id}`);
-	// 		const data = await res.json();
-	// 		if (res.ok) {
-	// 			storyboard = data;
-	// 			imageUrl = data.currentSlideDraft?.imageUrl || '';
-	// 			await fetchLogs();
-	// 		} else {
-	// 			error = data.error || 'Failed to fetch storyboard';
-	// 		}
-	// 	} catch (e) {
-	// 		error = e instanceof Error ? e.message : String(e);
-	// 	} finally {
-	// 		loading = false;
-	// 	}
-	// }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -311,5 +242,11 @@
 
 <!-- Modal for detailed slide view -->
 {#if selectedSlideIndex !== null && storyboard}
-	<SlideModal {storyboard} {selectedSlideIndex} show={showModal} on:close={closeModal} />
+	<SlideModal
+		{storyboard}
+		{selectedSlideIndex}
+		show={showModal}
+		on:close={closeModal}
+		on:update={handleStoryboardUpdate}
+	/>
 {/if}
