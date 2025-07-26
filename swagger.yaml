@@ -30,7 +30,7 @@ paths:
               type: object
               properties:
                 prompts:
-                  $ref: "#/components/schemas/UserPrompt"
+                  $ref: '#/components/schemas/UserPrompt'
                 team_id:
                   type: string
                   nullable: true
@@ -38,7 +38,7 @@ paths:
               required:
                 - prompts
       responses:
-        "200":
+        '200':
           description: Storyboard created successfully
           content:
             application/json:
@@ -49,18 +49,18 @@ paths:
                     type: boolean
                   insertedId:
                     type: string
-        "404":
+        '404':
           description: User not found or invalid team ID
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Failed to save storyboard or user not in team
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /storyboard/progress/{id}:
     get:
@@ -88,18 +88,18 @@ paths:
           schema:
             type: integer
       responses:
-        "200":
+        '200':
           description: Server-sent events stream
           content:
             text/event-stream:
               schema:
                 type: string
-        "500":
+        '500':
           description: ID not provided or invalid ID
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /storyboard/edit:
     post:
@@ -117,7 +117,7 @@ paths:
               type: object
               properties:
                 newSlideOutline:
-                  $ref: "#/components/schemas/SlideOutline"
+                  $ref: '#/components/schemas/SlideOutline'
                 slideNumber:
                   type: integer
                   description: The slide number to edit (1-based)
@@ -129,7 +129,7 @@ paths:
                 - slideNumber
                 - storyboard_id
       responses:
-        "200":
+        '200':
           description: Slide updated successfully
           content:
             application/json:
@@ -142,18 +142,18 @@ paths:
                     type: string
                   modifiedCount:
                     type: integer
-        "404":
+        '404':
           description: User not found or storyboard not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Database update failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /storyboard/generate-game:
     post:
@@ -174,7 +174,7 @@ paths:
               required:
                 - storyboardId
       responses:
-        "200":
+        '200':
           description: Game generated successfully
           content:
             application/json:
@@ -186,24 +186,24 @@ paths:
                   gamePath:
                     type: string
                     description: Path to the generated game HTML file
-        "400":
+        '400':
           description: Missing storyboardId
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
+                $ref: '#/components/schemas/Error'
+        '404':
           description: Storyboard not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: OpenAI API key not configured or generation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /storyboard/logs:
     get:
@@ -212,7 +212,7 @@ paths:
       summary: Get storyboard processing logs
       description: Retrieves logs from storyboard processing operations
       responses:
-        "200":
+        '200':
           description: Logs retrieved successfully
           content:
             application/json:
@@ -243,7 +243,7 @@ paths:
               required:
                 - name
       responses:
-        "200":
+        '200':
           description: Team created successfully
           content:
             application/json:
@@ -254,18 +254,18 @@ paths:
                     type: boolean
                   insertedId:
                     type: string
-        "401":
+        '401':
           description: User not logged in
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Failed to insert team
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /teams/getall:
     get:
@@ -274,20 +274,20 @@ paths:
       summary: Get all teams
       description: Retrieves all teams from the database
       responses:
-        "200":
+        '200':
           description: Teams retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Team"
-        "500":
+                  $ref: '#/components/schemas/Team'
+        '500':
           description: Failed to get teams
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /teams/removeuser:
     post:
@@ -314,7 +314,7 @@ paths:
                 - team_id
                 - user_id
       responses:
-        "200":
+        '200':
           description: User removed successfully
           content:
             application/json:
@@ -323,18 +323,18 @@ paths:
                 properties:
                   success:
                     type: boolean
-        "401":
+        '401':
           description: User not logged in, insufficient permissions, or trying to remove self
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Failed to remove user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /teams/updateuser:
     post:
@@ -366,7 +366,7 @@ paths:
                 - user_id
                 - role
       responses:
-        "200":
+        '200':
           description: User role updated successfully
           content:
             application/json:
@@ -375,18 +375,18 @@ paths:
                 properties:
                   success:
                     type: boolean
-        "401":
+        '401':
           description: User not logged in, insufficient permissions, or invalid role
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Failed to update user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   # Users Endpoints
   /users/signup:
@@ -400,9 +400,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserSignup"
+              $ref: '#/components/schemas/UserSignup'
       responses:
-        "200":
+        '200':
           description: User created successfully
           content:
             application/json:
@@ -417,12 +417,12 @@ paths:
                   mongodb:
                     type: string
                     description: MongoDB document ID
-        "500":
+        '500':
           description: Signup failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /users/me:
     get:
@@ -433,24 +433,24 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: User information retrieved successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SafeUser"
-        "401":
+                $ref: '#/components/schemas/SafeUser'
+        '401':
           description: User not logged in
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "500":
+                $ref: '#/components/schemas/Error'
+        '500':
           description: Failed to get user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
   /users/getall:
     get:
@@ -459,20 +459,20 @@ paths:
       summary: Get all users
       description: Retrieves all users from the database (safe format without sensitive data)
       responses:
-        "200":
+        '200':
           description: Users retrieved successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/SafeUser"
-        "500":
+                  $ref: '#/components/schemas/SafeUser'
+        '500':
           description: Failed to get users
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
 
 components:
   securitySchemes:
@@ -581,7 +581,7 @@ components:
         dialogue:
           type: array
           items:
-            $ref: "#/components/schemas/SlideDialogue"
+            $ref: '#/components/schemas/SlideDialogue'
       required:
         - dialogue
 
@@ -597,11 +597,11 @@ components:
         sceneTitle:
           type: string
         text:
-          $ref: "#/components/schemas/SlideText"
+          $ref: '#/components/schemas/SlideText'
         characters:
           type: array
           items:
-            $ref: "#/components/schemas/Character"
+            $ref: '#/components/schemas/Character'
         sceneDescription:
           type: string
         visualStyle:
@@ -643,11 +643,11 @@ components:
       type: object
       properties:
         storyMetadata:
-          $ref: "#/components/schemas/StoryMetadata"
+          $ref: '#/components/schemas/StoryMetadata'
         slideOutlines:
           type: array
           items:
-            $ref: "#/components/schemas/SlideOutline"
+            $ref: '#/components/schemas/SlideOutline'
       required:
         - storyMetadata
         - slideOutlines
@@ -675,15 +675,9 @@ components:
           description: MongoDB ObjectId
         status:
           type: string
-          enum: [
-            none,
-            generating-outline,
-            generating-image,
-            uploading-image,
-            done,
-          ]
+          enum: [none, generating-outline, generating-image, uploading-image, done]
         prompts:
-          $ref: "#/components/schemas/UserPrompt"
+          $ref: '#/components/schemas/UserPrompt'
         currentSlide:
           type: integer
         createdAt:
@@ -693,11 +687,11 @@ components:
           type: string
           format: date-time
         storyOutline:
-          $ref: "#/components/schemas/StoryOutline"
+          $ref: '#/components/schemas/StoryOutline'
         visualSlides:
           type: array
           items:
-            $ref: "#/components/schemas/VisualSlide"
+            $ref: '#/components/schemas/VisualSlide'
       required:
         - _id
         - status
@@ -732,7 +726,7 @@ components:
         users:
           type: array
           items:
-            $ref: "#/components/schemas/TeamUser"
+            $ref: '#/components/schemas/TeamUser'
         projects:
           type: array
           items:

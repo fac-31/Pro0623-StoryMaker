@@ -122,14 +122,19 @@
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
 
-	async function progressEditStoryboard(id: string, edit: boolean, slideNumber?: number): Promise<Storyboard> {
+	async function progressEditStoryboard(
+		id: string,
+		edit: boolean,
+		slideNumber?: number
+	): Promise<Storyboard> {
 		return new Promise((resolve, reject) => {
 			let url = `/api/storyboard/progress/${id}`;
+			// eslint-disable-next-line svelte/prefer-svelte-reactivity
 			const params = new URLSearchParams();
 			if (edit) params.append('edit', 'true');
 			if (slideNumber) params.append('slideNumber', slideNumber.toString());
 			if (params.toString()) url += `?${params.toString()}`;
-			
+
 			const source = new EventSource(url);
 			source.onmessage = (event) => {
 				let latestStoryboard = JSON.parse(event.data);

@@ -431,7 +431,10 @@ export const runStoryboardEdit = async (
 	signal: AbortSignal
 ): Promise<Storyboard> => {
 	console.log('[LangGraph] runStoryboardEdit called with currentSlide:', storyboard.currentSlide);
-	console.log('[LangGraph] runStoryboardEdit will generate image for slide outline at index:', storyboard.currentSlide - 1);
+	console.log(
+		'[LangGraph] runStoryboardEdit will generate image for slide outline at index:',
+		storyboard.currentSlide - 1
+	);
 	const app = createStoryboardEditGraph();
 
 	const result = await app.invoke(storyboard, { signal });

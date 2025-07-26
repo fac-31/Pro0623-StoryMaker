@@ -35,7 +35,9 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	const storyboard: Storyboard | null = await storyboards.findOne({ _id: new ObjectId(id) });
 	if (!storyboard) return json({ error: 'Invalid ID' }, { status: 500 });
 
-	console.log(`[Progress] Fetched storyboard for ${edit ? 'edit' : 'creation'}, currentSlide: ${storyboard.currentSlide}`);
+	console.log(
+		`[Progress] Fetched storyboard for ${edit ? 'edit' : 'creation'}, currentSlide: ${storyboard.currentSlide}`
+	);
 
 	const stream = new ReadableStream({
 		start(controller) {
@@ -89,7 +91,7 @@ export const GET: RequestHandler = async ({ params, url }) => {
 			storyboard.currentSlide = parseInt(slideNumber);
 			console.log(`[Progress] Override currentSlide to: ${storyboard.currentSlide}`);
 		}
-		
+
 		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
