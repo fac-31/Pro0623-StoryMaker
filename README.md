@@ -1,8 +1,8 @@
 # 🎬 Story Maker
 
-> **AI-Powered Storyboard Creation & Video Generation Platform**
+> **AI-Powered Storyboard Creation & Interactive Game Platform**
 
-Transform your creative ideas into compelling visual stories with the power of artificial intelligence. Story Maker combines cutting-edge AI technologies to generate storyboards, create stunning visuals, and produce engaging video content.
+Transform your creative ideas into compelling visual stories and interactive experiences with the power of artificial intelligence. Story Maker combines cutting-edge AI technologies to generate storyboards, create stunning visuals, and produce engaging interactive games.
 
 [![Built with SvelteKit](https://img.shields.io/badge/Built%20with-SvelteKit-FF3E00?style=flat-square&logo=svelte)](https://kit.svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -17,6 +17,7 @@ Transform your creative ideas into compelling visual stories with the power of a
 
 - **GPT-4 Integration**: Intelligent story outline and scene generation
 - **DALL-E 3 Visuals**: Stunning AI-generated images for each scene
+- **Interactive Game Creation**: Transform storyboards into playable HTML games with clickable elements
 - **LangGraph Workflows**: Advanced AI agent orchestration for complex storytelling
 
 ### 👥 **Collaboration & Management**
@@ -73,7 +74,6 @@ Create a `.env` file in the root directory with the following variables:
 ```env
 # 🤖 AI Services (Required)
 OPENAI_API_KEY=your_openai_api_key_here
-ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 
 # 🔍 Search (Optional)
 TAVILY_API_KEY=your_tavily_api_key_here
@@ -114,8 +114,16 @@ CLOUDINARY_API_SECRET=your_cloudinary_secret
 - Watch real-time progress as AI generates your story outline
 - DALL-E creates unique visuals for each scene
 - Review and refine the generated content
+- Edit individual slides as needed
 
-### 3. **Collaborate**
+### 3. **Generate Interactive Games**
+
+- Transform your completed storyboard into a playable HTML game
+- AI automatically detects interactive elements in your scenes
+- Creates clickable hotspots and game mechanics
+- Play directly in the browser with hints and progression tracking
+
+### 4. **Collaborate**
 
 - Create teams and invite collaborators
 - Manage user roles and permissions
