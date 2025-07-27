@@ -12,6 +12,7 @@ export type StoryboardStatus =
 
 export interface Storyboard {
 	_id: ObjectId | string;
+	mode: 'create' | 'edit';
 	status: StoryboardStatus;
 	prompts: UserPrompt;
 	currentSlide: number;
@@ -20,9 +21,17 @@ export interface Storyboard {
 	storyOutline: StoryOutline;
 	visualSlides: VisualSlide[];
 	characterSheet: string;
+	userWantsEdit: boolean;
+	editHistory?: Record<number, {
+	original: string;
+	instruction: string;
+	updated: string;
+	}[]>;
+	userAction: 'approve' | 'reprompt';
 }
 
 export interface NewStoryboard {
+	mode: 'create' | 'edit';
 	status: StoryboardStatus;
 	prompts: UserPrompt;
 	currentSlide: number;
@@ -33,4 +42,11 @@ export interface NewStoryboard {
 	characterSheet: string;
 	interactions?: unknown; // Use unknown instead of any
 	gameHtml?: string; // Use string for HTML
+	userWantsEdit: boolean;
+		editHistory?: Record<number, {
+		original: string;
+		instruction: string;
+		updated: string;
+	}[]>;
+	userAction: 'approve' | 'reprompt';
 }

@@ -323,17 +323,107 @@ const saveSlideAndAdvance = async (state: Storyboard): Promise<Partial<Storyboar
  * @param {Storyboard} state - The current state of the storyboard.
  * @returns {'nextSlide' | 'complete'} The decision to move to the next slide or complete the storyboard.
  */
-const shouldContinue = (state: Storyboard): 'nextSlide' | 'complete' => {
-	return state.currentSlide && state.currentSlide <= state.storyOutline.slideOutlines.length
-		? 'nextSlide'
-		: 'complete';
+const shouldContinue = (state: Storyboard): 'awaitingUser' | 'reprompt' | 'nextSlide' | 'complete' => {
+	  if (!state.userAction) return 'awaitingUser'; // new edge
+  		if (state.userAction === 'reprompt') return 'reprompt';
+			return state.currentSlide && state.currentSlide < state.storyOutline.slideOutlines.length
+			? 'nextSlide'
+			: 'complete';
+
 };
+
+const initialiseState = async (state: Storyboard): Promise<Storyboard> => {
+	if (!state.currentSlide) state.currentSlide = 1;
+	if (!state.visualSlides) state.visualSlides = [];
+	if (!state.prompts) state.prompts = [];
+	if (!state.mode) state.mode = 'create';
+	return state;
+};
+
+const shouldEdit = (state: Storyboard): 'reprompt' | 'continue' => {
+	const currentSlide = state.currentSlide ?? 1;
+	const wantsEdit = state.userWantsEdit ?? false; // set by UI or stream
+	console.log(`[LangGraph] shouldEdit: slide ${currentSlide}, user wants edit: ${wantsEdit}`);
+	return wantsEdit ? 'reprompt' : 'continue';
+};
+
+const reprompt = async (state: Storyboard): Promise<Storyboard> => {
+	const currentIndex = (state.currentSlide ?? 1) - 1;
+	const originalPrompt = state.prompts?.[currentIndex] ?? '';
+
+	// Replace with UI input or language model later
+	const instruction = await getUserInstruction(originalPrompt); // e.g., "make it darker"
+
+	const newPrompt = await rewritePrompt(originalPrompt, instruction);
+
+	state.prompts[currentIndex] = newPrompt;
+	state.userWantsEdit = false; // reset flag
+
+	if (!state.editHistory) state.editHistory = {};
+	if (!state.editHistory[currentIndex]) state.editHistory[currentIndex] = [];
+
+	state.editHistory[currentIndex].push({
+		original: originalPrompt,
+		instruction,
+		updated: newPrompt
+	});
+
+	console.log(`[LangGraph] reprompt: updated prompt for slide ${currentIndex + 1}`);
+	return state;
+};
+
+const rewritePrompt = async (original: string, instruction: string): Promise<string> => {
+	const systemPrompt = `
+You are a helpful AI that rewrites image generation prompts based on natural language edits.
+
+Original prompt: "{{original}}"
+Edit instruction: "{{instruction}}"
+
+Return a revised prompt that incorporates the instruction cleanly, but keeps the original intent. If the description of the character
+differs betweeen the original and the new instructions, you should defer to the new instructions. 
+`.trim();
+
+	const response = await openai.chat.completions.create({
+		model: 'gpt-4',
+		messages: [
+			{ role: 'system', content: systemPrompt },
+			{ role: 'user', content: `Original prompt: ${original}\nInstruction: ${instruction}` }
+		],
+		temperature: 0.7
+	});
+
+	return response.choices[0]?.message.content?.trim() || original;
+};
+
+const repromptImage = async (
+  state: Storyboard,
+  config: RunnableConfig
+): Promise<Partial<Storyboard>> => {
+  // Call your reprompt logic
+  const updatedState = await reprompt(state);
+  
+  // Generate image from the new prompt
+  const currentIndex = (updatedState.currentSlide ?? 1) - 1;
+  const finalPrompt = updatedState.prompts?.[currentIndex];
+  const imageURL = await generateImage(finalPrompt);
+
+  updatedState.visualSlides![currentIndex] = {
+    ...(updatedState.visualSlides?.[currentIndex] ?? {}),
+    imageUrl,
+    prompt: finalPrompt,
+    edited: true
+  };
+
+  return updatedState;
+};
+
+
 
 /**
  * Creates and compiles the storyboard graph workflow.
  * @returns {StateGraph} The compiled storyboard graph workflow.
  */
-export const createStoryboardGraph = () => {
+export const createStoryboardGraph = (mode: 'create' | 'edit' = 'create') => {
 	console.log('[LangGraph] createStoryboardGraph called');
 	addLog('[LangGraph] createStoryboardGraph called');
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -347,25 +437,51 @@ export const createStoryboardGraph = () => {
 			storyOutline: null,
 			currentSlide: null,
 			visualSlides: null,
-			characterSheet: null
+			characterSheet: null,
+			mode: null,
+			userWantsEdit: null,
+			editHistory: null,
+			userAction: null
 		}
 	});
 
 	// Add nodes
-	workflow.addNode('generateStoryOutline', generateStoryOutline);
-	workflow.addNode('generateCharacterSheet', generateCharacterSheet);
+
+	workflow.addNode('initialiseState', initialiseState)
 	workflow.addNode('generateImage', generateImage);
 	workflow.addNode('saveAndAdvance', saveSlideAndAdvance);
+	workflow.addNode('shouldEdit', shouldEdit);
+	workflow.addNode('reprompt', reprompt);
 
-	// Define edges using '__start__' and '__end__' as required
-	workflow.addEdge('__start__', 'generateStoryOutline');
-	workflow.addEdge('generateStoryOutline', 'generateCharacterSheet');
-	workflow.addEdge('generateCharacterSheet', 'generateImage');
-	workflow.addEdge('generateImage', 'saveAndAdvance');
-	workflow.addConditionalEdges('saveAndAdvance', shouldContinue, {
+	if (mode === 'create') {
+		workflow.addNode('generateStoryOutline', generateStoryOutline);
+		workflow.addNode('generateCharacterSheet', generateCharacterSheet);
+
+		workflow.addEdge('__start__', 'initialiseState');
+		workflow.addEdge('initialiseState', 'generateStoryOutline')
+		workflow.addEdge('generateStoryOutline', 'generateCharacterSheet');
+		workflow.addEdge('generateCharacterSheet', 'generateImage');
+		workflow.addEdge('generateImage', 'shouldEdit');
+		workflow.addConditionalEdges('shouldEdit', {
+			reprompt: 'reprompt',
+			continue: 'saveAndAdvance' 
+		});
+		workflow.addEdge('reprompt', 'generateImage')
+		workflow.addConditionalEdges('saveAndAdvance', shouldContinue, {
 		nextSlide: 'generateImage',
 		complete: '__end__'
 	});
+	} else {
+		workflow.addEdge('__start__', 'initialiseState');
+		workflow.addEdge('initialiseState', 'generateImage');
+		workflow.addEdge('generateImage', 'saveAndAdvance');
+		workflow.addConditionalEdges('saveAndAdvance', shouldContinue, {
+		nextSlide: 'generateImage',
+		complete: '__end__'
+	});
+	}
+	// Define edges using '__start__' and '__end__' as required
+
 
 	return workflow.compile();
 };
@@ -374,6 +490,7 @@ export const createStoryboardGraph = () => {
  * Creates and compiles the storyboard graph workflow.
  * @returns {StateGraph} The compiled storyboard graph workflow.
  */
+/*
 export const createStoryboardEditGraph = () => {
 	console.log('[LangGraph] createStoryboardEditGraph called');
 	addLog('[LangGraph] createStoryboardEditGraph called');
@@ -401,7 +518,7 @@ export const createStoryboardEditGraph = () => {
 
 	return workflow.compile();
 };
-
+*/
 /**
  * Runs the storyboard creation process.
  * @param {Storyboard} storyboard - The initial storyboard state.
@@ -413,7 +530,7 @@ export const runStoryboardCreation = async (
 ): Promise<Storyboard> => {
 	console.log('[LangGraph] runStoryboardCreation called with:', storyboard.prompts);
 	addLog(`[LangGraph] runStoryboardCreation called with: ${storyboard.prompts}`);
-	const app = createStoryboardGraph();
+	const app = createStoryboardGraph('create');
 
 	storyboard.currentSlide = 1;
 
@@ -435,7 +552,7 @@ export const runStoryboardEdit = async (
 		'[LangGraph] runStoryboardEdit will generate image for slide outline at index:',
 		storyboard.currentSlide - 1
 	);
-	const app = createStoryboardEditGraph();
+	const app = createStoryboardGraph("edit");
 
 	const result = await app.invoke(storyboard, { signal });
 	console.log('[LangGraph] runStoryboardEdit result:', result);
