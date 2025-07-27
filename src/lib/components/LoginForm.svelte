@@ -11,14 +11,7 @@
 				<label class="label" for="email">
 					<span class="label-text">Email Address</span>
 				</label>
-				<input
-					id="email"
-					name="email"
-					type="email"
-					required
-					class="input input-bordered w-full"
-					aria-describedby="error-message"
-				/>
+				<input id="email" name="email" type="email" required class="input input-bordered w-full" />
 			</div>
 
 			<div class="form-control">
@@ -31,18 +24,18 @@
 					type="password"
 					required
 					class="input input-bordered w-full"
-					aria-describedby="error-message"
 				/>
 			</div>
 
 			{#if error}
-				<div id="error-message" class="alert alert-error">
+				<div class="alert alert-error">
 					<span>{error}</span>
 				</div>
 			{/if}
 
 			<button
 				type="submit"
+				aria-label="Sign In"
 				name="sign-in"
 				disabled={navigating.to != null}
 				class="btn btn-primary min-h-[44px] w-full"

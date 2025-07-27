@@ -24,6 +24,7 @@
 		class="container mx-auto"
 		aria-label="Main application content"
 		tabindex="-1"
+		role="region"
 	>
 		<slot />
 	</main>

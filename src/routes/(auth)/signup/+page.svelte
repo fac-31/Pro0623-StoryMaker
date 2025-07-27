@@ -53,7 +53,6 @@
 							placeholder="Enter your full name"
 							required
 							class="input input-bordered w-full"
-							aria-describedby="error-message"
 						/>
 					</div>
 
@@ -68,7 +67,6 @@
 							placeholder="Choose a display name"
 							required
 							class="input input-bordered w-full"
-							aria-describedby="error-message"
 						/>
 					</div>
 
@@ -83,7 +81,6 @@
 							placeholder="Enter your email"
 							required
 							class="input input-bordered w-full"
-							aria-describedby="error-message"
 						/>
 					</div>
 
@@ -98,12 +95,11 @@
 							placeholder="Create a password"
 							required
 							class="input input-bordered w-full"
-							aria-describedby="error-message"
 						/>
 					</div>
 
 					{#if error}
-						<div id="error-message" class="alert alert-error">
+						<div class="alert alert-error">
 							<span>{error}</span>
 						</div>
 					{/if}

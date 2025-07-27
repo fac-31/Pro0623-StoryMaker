@@ -49,6 +49,8 @@ export const POST: RequestHandler = async (event) => {
 			return json({ error: 'User not in team' }, { status: 500 });
 	}
 
+	console.log('entered POST START');
+
 	const storyboard: NewStoryboard = {
 		status: 'none',
 		prompts,
@@ -102,5 +104,7 @@ export const POST: RequestHandler = async (event) => {
 		throw new Error('Database update failed');
 	}
 
+	console.log('returned json from START');
+	console.log(result);
 	return json(result);
 };
