@@ -41,8 +41,8 @@
 	let admin = team?.users.find((teamuser) => (teamuser.user = user._id))?.role == 'admin';
 
 	// Computed values
-	const filteredProjects = () => {
-		return storyboards.filter((storyboard) => {
+	const filteredProjects = $derived(
+		storyboards.filter((storyboard) => {
 			if (!list.includes(storyboard._id as string)) return false;
 
 			const matchesSearch =
@@ -51,8 +51,8 @@
 					.toLowerCase()
 					.includes(searchQuery.toLowerCase());
 			return matchesSearch;
-		});
-	};
+		})
+	);
 
 	function handleEditStoryboard(storyboard: Storyboard) {
 		selectedStoryboard = storyboard;
@@ -217,7 +217,7 @@
 	<section aria-label="Projects">
 		{#if viewMode === 'grid'}
 			<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{#each filteredProjects() as storyboard (storyboard._id)}
+				{#each filteredProjects as storyboard (storyboard._id)}
 					<div class="card bg-base-100 group shadow-xl transition-shadow hover:shadow-2xl">
 						<div class="relative">
 							<div
@@ -267,7 +267,7 @@
 			<div
 				class="border-base-300/50 bg-base-100/80 overflow-hidden rounded-2xl border shadow-xl backdrop-blur-sm"
 			>
-				{#if filteredProjects().length > 0}
+				{#if filteredProjects.length > 0}
 					<div class="overflow-x-auto">
 						<table class="table w-full">
 							<thead>
@@ -281,7 +281,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{#each filteredProjects() as storyboard (storyboard._id)}
+								{#each filteredProjects as storyboard (storyboard._id)}
 									<tr class="group border-base-300 hover:bg-base-200 border-b transition-colors">
 										<td class="py-4">
 											<div class="flex items-center space-x-3">

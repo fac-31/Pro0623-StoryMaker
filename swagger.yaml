@@ -19,13 +19,24 @@ paths:
       tags:
         - Storyboard
       summary: Start a new storyboard creation
-      description: Creates a new storyboard with initial user prompts and saves it to the database
+      description: Creates a new storyboard with initial user prompts and saves it to the database. Can be associated with a team if team_id is provided.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserPrompt'
+              type: object
+              properties:
+                prompts:
+                  $ref: '#/components/schemas/UserPrompt'
+                team_id:
+                  type: string
+                  nullable: true
+                  description: Optional team ID to associate the storyboard with a team
+              required:
+                - prompts
       responses:
         '200':
           description: Storyboard created successfully
@@ -39,13 +50,13 @@ paths:
                   insertedId:
                     type: string
         '404':
-          description: User not found
+          description: User not found or invalid team ID
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         '500':
-          description: Failed to save storyboard
+          description: Failed to save storyboard or user not in team
           content:
             application/json:
               schema:
@@ -56,7 +67,7 @@ paths:
       tags:
         - Storyboard
       summary: Get storyboard progress with real-time updates
-      description: Returns a server-sent events stream for real-time storyboard creation progress
+      description: Returns a server-sent events stream for real-time storyboard creation or editing progress
       parameters:
         - name: id
           in: path
@@ -64,6 +75,18 @@ paths:
           description: Storyboard ID
           schema:
             type: string
+        - name: edit
+          in: query
+          required: false
+          description: Set to 'true' to enable edit mode for existing storyboard
+          schema:
+            type: boolean
+        - name: slideNumber
+          in: query
+          required: false
+          description: Specific slide number to edit (used with edit=true)
+          schema:
+            type: integer
       responses:
         '200':
           description: Server-sent events stream
@@ -78,28 +101,93 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /storyboard/current:
-    get:
+  /storyboard/edit:
+    post:
       tags:
         - Storyboard
-      summary: Get current storyboard by ID
-      description: Retrieves a specific storyboard by its ID
-      parameters:
-        - name: _id
-          in: query
-          required: true
-          description: Storyboard ID
-          schema:
-            type: string
+      summary: Edit a specific slide in a storyboard
+      description: Updates a specific slide outline in an existing storyboard
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newSlideOutline:
+                  $ref: '#/components/schemas/SlideOutline'
+                slideNumber:
+                  type: integer
+                  description: The slide number to edit (1-based)
+                storyboard_id:
+                  type: string
+                  description: The ID of the storyboard to edit
+              required:
+                - newSlideOutline
+                - slideNumber
+                - storyboard_id
       responses:
         '200':
-          description: Storyboard retrieved successfully
+          description: Slide updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Storyboard'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  modifiedCount:
+                    type: integer
+        '404':
+          description: User not found or storyboard not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Database update failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /storyboard/generate-game:
+    post:
+      tags:
+        - Storyboard
+      summary: Generate interactive game from storyboard
+      description: Creates an interactive HTML game from a storyboard with clickable elements and game mechanics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                storyboardId:
+                  type: string
+                  description: The ID of the storyboard to generate a game from
+              required:
+                - storyboardId
+      responses:
+        '200':
+          description: Game generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  gamePath:
+                    type: string
+                    description: Path to the generated game HTML file
         '400':
-          description: Missing _id parameter
+          description: Missing storyboardId
           content:
             application/json:
               schema:
@@ -110,72 +198,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
-  /storyboard/generate-video:
-    post:
-      tags:
-        - Storyboard
-      summary: Generate video from storyboard
-      description: Processes storyboard slides to generate audio segments and prepare for video creation
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                storyboard:
-                  $ref: '#/components/schemas/Storyboard'
-                storyboardId:
-                  type: string
-              required:
-                - storyboard
-      responses:
-        '200':
-          description: Video generation data prepared successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  audioSegments:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        slideNumber:
-                          type: integer
-                        audioUrl:
-                          type: string
-                        duration:
-                          type: number
-                        dialogue:
-                          type: string
-                  slides:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        slideNumber:
-                          type: integer
-                        imageUrl:
-                          type: string
-                        sceneTitle:
-                          type: string
-                  storyMetadata:
-                    $ref: '#/components/schemas/StoryMetadata'
-                  message:
-                    type: string
-        '400':
-          description: No storyboard data provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
         '500':
-          description: ElevenLabs API key not configured or generation failed
+          description: OpenAI API key not configured or generation failed
           content:
             application/json:
               schema:
@@ -445,40 +469,6 @@ paths:
                   $ref: '#/components/schemas/SafeUser'
         '500':
           description: Failed to get users
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  # LangChain Agent Endpoint
-  /langchain-agent:
-    post:
-      tags:
-        - AI Agent
-      summary: Run LangChain AI agent
-      description: Executes the LangChain storyboard creation agent with a concept
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                concept:
-                  type: string
-                  description: The concept or idea for storyboard creation
-              required:
-                - concept
-      responses:
-        '200':
-          description: Agent execution completed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                description: Result from the LangChain agent execution
-        '500':
-          description: Agent execution failed
           content:
             application/json:
               schema:
