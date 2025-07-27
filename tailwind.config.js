@@ -7,7 +7,25 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	darkMode: 'media', // Automatically switches based on system preference
 	theme: {
-		extend: {}
+		extend: {
+			transitionProperty: {
+				DEFAULT: 'all'
+			},
+			transitionDuration: {
+				DEFAULT: '300ms'
+			},
+			transitionTimingFunction: {
+				DEFAULT: 'cubic-bezier(0.4, 0, 0.2, 1)'
+			}
+		}
+	},
+	variants: {
+		extend: {
+			transform: ['motion-reduce'],
+			transitionProperty: ['motion-reduce'],
+			transitionDuration: ['motion-reduce'],
+			transitionTimingFunction: ['motion-reduce']
+		}
 	},
 	plugins: [forms, typography, daisyui],
 	daisyui: {

@@ -11,6 +11,7 @@
 			<div class="flex items-center space-x-2">
 				<div
 					class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600"
+					aria-label="StoryMaker logo"
 				>
 					<Play class="h-4 w-4 text-white" />
 				</div>

@@ -23,15 +23,17 @@
 				<h3 class="mb-4 font-semibold">Product</h3>
 				<ul class="text-neutral-content/70 space-y-2">
 					<li>
-						<a href="#features" class="hover:text-neutral-content transition-colors">Features</a>
-					</li>
-					<li>
-						<a href="/storyboard" class="hover:text-neutral-content transition-colors">Storyboard</a
+						<a
+							href="#features"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Learn more about our features">Features</a
 						>
 					</li>
 					<li>
-						<a href="/langchain-agent" class="hover:text-neutral-content transition-colors"
-							>AI Agent</a
+						<a
+							href="/storyboard"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="View the storyboard demo">Storyboard</a
 						>
 					</li>
 				</ul>
@@ -41,9 +43,19 @@
 				<h3 class="mb-4 font-semibold">Account</h3>
 				<ul class="text-neutral-content/70 space-y-2">
 					<li>
-						<a href="/signup" class="hover:text-neutral-content transition-colors">Sign Up</a>
+						<a
+							href="/signup"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Create a new account">Sign Up</a
+						>
 					</li>
-					<li><a href="/login" class="hover:text-neutral-content transition-colors">Sign In</a></li>
+					<li>
+						<a
+							href="/login"
+							class="hover:text-neutral-content transition-colors"
+							aria-label="Sign in to your existing account">Sign In</a
+						>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -55,15 +67,18 @@
 			<div class="mt-4 flex space-x-6 md:mt-0">
 				<a
 					href="https://twitter.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Twitter</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Follow us on Twitter">Twitter</a
 				>
 				<a
 					href="https://linkedin.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">LinkedIn</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Connect with us on LinkedIn">LinkedIn</a
 				>
 				<a
 					href="https://instagram.com"
-					class="text-neutral-content/70 hover:text-neutral-content transition-colors">Instagram</a
+					class="text-neutral-content/70 hover:text-neutral-content transition-colors"
+					aria-label="Follow us on Instagram">Instagram</a
 				>
 			</div>
 		</div>

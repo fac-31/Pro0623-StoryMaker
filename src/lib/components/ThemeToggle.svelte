@@ -37,4 +37,7 @@
 	{:else}
 		<Sun class="h-5 w-5" />
 	{/if}
+	<span aria-live="polite" role="status" class="sr-only">
+		{theme === 'light' ? 'Switched to light theme' : 'Switched to dark theme'}
+	</span>
 </button>
