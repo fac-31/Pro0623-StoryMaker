@@ -14,7 +14,7 @@ export interface Storyboard {
 	_id: ObjectId | string;
 	mode: 'create' | 'edit';
 	status: StoryboardStatus;
-	prompts: UserPrompt;
+	prompts: UserPrompt[];
 	currentSlide: number;
 	createdAt: Date;
 	updatedAt: Date;
@@ -33,7 +33,7 @@ export interface Storyboard {
 export interface NewStoryboard {
 	mode: 'create' | 'edit';
 	status: StoryboardStatus;
-	prompts: UserPrompt;
+	prompts: UserPrompt[];
 	currentSlide: number;
 	createdAt: Date;
 	updatedAt: Date;

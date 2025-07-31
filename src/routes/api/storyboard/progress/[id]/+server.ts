@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { runStoryboardCreation, runStoryboardEdit } from '$lib/langgraph/storyboardGraph';
+import { runStoryboardCreation, runStoryboardEdit } from '$lib/langgraph';
 import { initDB } from '$lib/server/db';
 import type { RequestHandler } from '@sveltejs/kit';
 import type { Storyboard } from '$lib/models/storyboard.model';
