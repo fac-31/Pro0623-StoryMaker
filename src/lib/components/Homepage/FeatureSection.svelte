@@ -30,11 +30,14 @@
 	];
 </script>
 
-<section id="features" class="bg-base-100 py-20">
+<section id="features" class="bg-base-100 py-20" role="region" aria-labelledby="features-heading">
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="mb-16 space-y-4 text-center">
 			<div class="badge badge-primary badge-lg">Features</div>
-			<h2 class="text-base-content text-3xl font-bold lg:text-5xl">
+			<h2
+				id="features-heading"
+				class="text-base-content text-3xl font-bold lg:text-5xl"
+			>
 				Everything You Need to Create
 				<span class="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
 					Amazing Storyboards
@@ -49,14 +52,23 @@
 		<div class="grid gap-8 md:grid-cols-3">
 			{#each features as feature (feature.title)}
 				{@const Icon = feature.icon}
-				<div class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl">
+				<div
+					class="card bg-base-100 shadow-xl transition-shadow hover:shadow-2xl"
+					role="article"
+					aria-labelledby="{feature.title.toLowerCase().replace(/\s+/g, '-')}-heading"
+				>
 					<div class="card-body">
 						<div
 							class="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 transition-transform group-hover:scale-110"
 						>
 							<Icon class="h-6 w-6 text-white" />
 						</div>
-						<h3 class="card-title">{feature.title}</h3>
+						<h3
+							id="{feature.title.toLowerCase().replace(/\s+/g, '-')}-heading"
+							class="card-title"
+						>
+							{feature.title}
+						</h3>
 						<p>{feature.description}</p>
 					</div>
 				</div>
