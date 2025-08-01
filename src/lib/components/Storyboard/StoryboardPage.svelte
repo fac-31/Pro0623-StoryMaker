@@ -5,7 +5,7 @@
 	import StoryboardForm from '$lib/components/Storyboard/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
-	import { Loader2, ArrowLeft, Sparkles } from 'lucide-svelte';
+	import { Loader2, ArrowLeft, Sparkles, PlusCircle } from 'lucide-svelte';
 	import { invalidate } from '$app/navigation';
 
 	let userPrompt: UserPrompt = {
@@ -23,6 +23,7 @@
 	let selectedSlideIndex: number | null = null;
 	let showModal = false;
 	let gameUrl: string | null = null;
+	let isNewSlide = false;
 
 	async function generateGame() {
 		if (!storyboard?._id) return;
@@ -46,17 +47,25 @@
 		}
 	}
 
-	//the function is left here because each update writes directly to the storyboard variable
-	//in this svelte component.
-	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
+	async function progressStoryboard(
+		id: string,
+		edit: boolean,
+		slideNumber?: number
+	): Promise<Storyboard> {
 		return new Promise((resolve, reject) => {
-			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
+			let url = `/api/storyboard/progress/${id}`;
+			const params = new URLSearchParams();
+			if (edit) params.append('edit', 'true');
+			if (slideNumber) params.append('slideNumber', slideNumber.toString());
+			if (params.toString()) url += `?${params.toString()}`;
+
+			const source = new EventSource(url);
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);
 
 				if (storyboard && storyboard.status == 'done') {
 					source.close();
-					resolve();
+					resolve(storyboard);
 				}
 			};
 
@@ -95,12 +104,20 @@
 
 	function openSlideModal(event: CustomEvent<number>) {
 		selectedSlideIndex = event.detail;
+		isNewSlide = false;
+		showModal = true;
+	}
+
+	function addNewSlide(index: number) {
+		selectedSlideIndex = index;
+		isNewSlide = true;
 		showModal = true;
 	}
 
 	function closeModal() {
 		showModal = false;
 		selectedSlideIndex = null;
+		isNewSlide = false;
 	}
 
 	function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
@@ -223,6 +240,9 @@
 						<div class="slides-flex">
 							{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
 								<SlideThumbnail {storyboard} {slide} {index} on:open={openSlideModal} />
+								<button class="btn btn-ghost btn-sm" on:click={() => addNewSlide(index + 1)} aria-label="Add new slide after slide {slide.slideNumber}">
+									<PlusCircle class="h-5 w-5" />
+								</button>
 							{/each}
 						</div>
 					</section>
@@ -245,6 +265,8 @@
 	<SlideModal
 		{storyboard}
 		{selectedSlideIndex}
+		{progressStoryboard}
+		{isNewSlide}
 		show={showModal}
 		on:close={closeModal}
 		on:update={handleStoryboardUpdate}
