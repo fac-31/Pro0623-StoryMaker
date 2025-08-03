@@ -1,6 +1,7 @@
 import { ChatOpenAI } from '@langchain/openai';
 import OpenAI from 'openai';
 import { storyOutlineSchema } from '../../schemas/story.schema';
+import { env } from '$env/dynamic/private';
 
 export const llm = new ChatOpenAI({
 	modelName: 'gpt-4',
@@ -8,5 +9,5 @@ export const llm = new ChatOpenAI({
 }).withStructuredOutput(storyOutlineSchema);
 
 export const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY
+	apiKey: env.OPENAI_API_KEY
 });

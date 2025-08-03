@@ -8,6 +8,7 @@
 	export let storyboard: Storyboard;
 	export let selectedSlideIndex: number;
 	export let show: boolean = false;
+	export let isNewSlide: boolean = false;
 	export let progressStoryboard: (
 		id: string,
 		edit: boolean,
@@ -30,15 +31,30 @@
 
 	// This reactive block re-initializes the form whenever the selected slide changes.
 	$: {
-		// Deep copy to prevent mutating the original storyboard object directly.
-		editableSlideOutline = JSON.parse(
-			JSON.stringify(storyboard.storyOutline.slideOutlines[selectedSlideIndex])
-		);
-		// Reset editing state when the slide changes
-		editing = false;
+		if (isNewSlide) {
+			editableSlideOutline = {
+				slideId: 0,
+				sceneTitle: 'New Scene',
+				durationSeconds: 10,
+				timestamp: '0:00',
+				sceneDescription: '',
+				visualStyle: '',
+				cameraAngle: '',
+				characters: [],
+				text: { dialogue: [] }
+			};
+			editing = true; // Start in editing mode for new slides
+		} else {
+			// Deep copy to prevent mutating the original storyboard object directly.
+			editableSlideOutline = JSON.parse(
+				JSON.stringify(storyboard.storyOutline.slideOutlines[selectedSlideIndex])
+			);
+			// Reset editing state when the slide changes
+			editing = false;
+		}
 	}
 
-	$: visualSlide = storyboard.visualSlides[selectedSlideIndex];
+	$: visualSlide = isNewSlide ? null : storyboard.visualSlides[selectedSlideIndex];
 
 	let triggerElement: HTMLElement | null = null;
 	let modalContentElement: HTMLElement;
@@ -130,28 +146,38 @@
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
 
-	async function editStoryboard() {
+	async function saveChanges() {
 		loading = true;
 		error = '';
 		try {
-			const res = await fetch('/api/storyboard/edit', {
+			const url = isNewSlide ? '/api/storyboard/add-slide' : '/api/storyboard/edit';
+			const body = isNewSlide
+				? {
+						newSlideOutline: editableSlideOutline,
+						insertionIndex: selectedSlideIndex,
+						storyboard_id: storyboard._id
+				  }
+				: {
+						newSlideOutline: editableSlideOutline,
+						slideNumber: selectedSlideIndex + 1,
+						storyboard_id: storyboard._id
+				  };
+
+			const res = await fetch(url, {
 				method: 'POST',
-				body: JSON.stringify({
-					newSlideOutline: editableSlideOutline,
-					slideNumber: selectedSlideIndex + 1,
-					storyboard_id: storyboard._id
-				})
+				body: JSON.stringify(body)
 			});
 			const data = await res.json();
 			if (res.ok) {
 				const storyboard_id = data.id;
 				const edit = true;
-				const slideNumber = selectedSlideIndex + 1; // Convert to 1-based index
+				const slideNumber = isNewSlide ? selectedSlideIndex + 1 : selectedSlideIndex + 1;
 				const updatedStoryboard = await progressStoryboard(storyboard_id, edit, slideNumber);
 				if (updatedStoryboard) {
 					dispatch('update', updatedStoryboard);
 				}
 				editing = false; // Exit editing mode on success
+				closeModal();
 			} else {
 				error = data.error || 'Failed to save storyboard';
 			}
@@ -163,6 +189,10 @@
 	}
 
 	function cancelEdit() {
+		if (isNewSlide) {
+			closeModal();
+			return;
+		}
 		// Revert changes by re-copying the original data
 		editableSlideOutline = JSON.parse(
 			JSON.stringify(storyboard.storyOutline.slideOutlines[selectedSlideIndex])
@@ -202,7 +232,7 @@
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
 				<div class="slide-details">
-					<h3 id="modal-title">Slide {editableSlideOutline.slideId}</h3>
+					<h3 id="modal-title">{isNewSlide ? 'Add New Slide' : `Slide ${editableSlideOutline.slideId}`}</h3>
 
 					<SlideForm {editableSlideOutline} {editing} />
 				</div>
@@ -218,12 +248,12 @@
 								<p class="text-base-content/70 mt-4">Updating slide...</p>
 							</div>
 						</div>
-					{:else if visualSlide.imageGenerated && visualSlide.imageUrl}
+					{:else if visualSlide && visualSlide.imageGenerated && visualSlide.imageUrl}
 						<img src={visualSlide.imageUrl} alt="Slide {visualSlide.slideNumber}" />
 					{:else}
 						<div class="large-placeholder">
-							<h3>No Image Generated</h3>
-							{#if visualSlide.imagePrompt}
+							<h3>{isNewSlide ? 'Fill out the form to generate an image' : 'No Image Generated'}</h3>
+							{#if visualSlide && visualSlide.imagePrompt}
 								<p><strong>Image Prompt:</strong></p>
 								<p>{visualSlide.imagePrompt}</p>
 							{/if}
@@ -239,7 +269,7 @@
 			<div class="modal-footer">
 				{#if editing}
 					<button class="btn btn-primary" on:click={cancelEdit} disabled={loading}>Cancel</button>
-					<button class="btn btn-primary" on:click={editStoryboard} disabled={loading}>Save</button>
+					<button class="btn btn-primary" on:click={saveChanges} disabled={loading}>{isNewSlide ? 'Save & Generate' : 'Save'}</button>
 				{:else}
 					<button class="btn btn-primary" on:click={() => (editing = true)}>Edit</button>
 				{/if}
