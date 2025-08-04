@@ -1,4 +1,7 @@
 <script lang="ts">
+	/**
+	 * @file The main page for creating and viewing a storyboard.
+	 */
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { Team } from '$lib/models/team.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
@@ -7,6 +10,7 @@
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import { Loader2, ArrowLeft, Sparkles, PlusCircle } from 'lucide-svelte';
 	import { invalidate } from '$app/navigation';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 
 	let userPrompt: UserPrompt = {
 		numSlides: 6,
@@ -54,7 +58,7 @@
 	): Promise<Storyboard> {
 		return new Promise((resolve, reject) => {
 			let url = `/api/storyboard/progress/${id}`;
-			const params = new URLSearchParams();
+			const params = new SvelteURLSearchParams();
 			if (edit) params.append('edit', 'true');
 			if (slideNumber) params.append('slideNumber', slideNumber.toString());
 			if (params.toString()) url += `?${params.toString()}`;
@@ -108,6 +112,10 @@
 		showModal = true;
 	}
 
+	/**
+	 * Opens the slide modal in "create new" mode.
+	 * @param {number} index - The index where the new slide will be inserted.
+	 */
 	function addNewSlide(index: number) {
 		selectedSlideIndex = index;
 		isNewSlide = true;

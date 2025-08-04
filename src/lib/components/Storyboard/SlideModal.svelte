@@ -1,14 +1,27 @@
 <script lang="ts">
+	/**
+	 * @file A modal component for viewing, editing, and creating a single storyboard slide.
+	 */
 	import { createEventDispatcher, tick } from 'svelte';
 	import { Loader2 } from 'lucide-svelte';
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { SlideOutline } from '$lib/models/story';
 	import SlideForm from './SlideForm.svelte';
 
+	/** The full storyboard object. */
 	export let storyboard: Storyboard;
+	/** The index of the currently selected slide. */
 	export let selectedSlideIndex: number;
+	/** Controls the visibility of the modal. */
 	export let show: boolean = false;
+	/** If true, the modal is in "create new slide" mode. */
 	export let isNewSlide: boolean = false;
+	/**
+	 * A function passed from the parent to handle the SSE connection for image generation.
+	 * @param id - The storyboard ID.
+	 * @param edit - A flag indicating if this is an edit.
+	 * @param slideNumber - The specific slide number to process.
+	 */
 	export let progressStoryboard: (
 		id: string,
 		edit: boolean,
@@ -146,6 +159,12 @@
 		liveRegionMessage = ''; // Clear message when modal is not shown
 	}
 
+	/**
+	 * Saves changes to the slide.
+	 * If `isNewSlide` is true, it calls the 'add-slide' endpoint.
+	 * Otherwise, it calls the 'edit' endpoint.
+	 * Triggers the image generation process upon success.
+	 */
 	async function saveChanges() {
 		loading = true;
 		error = '';

@@ -1,9 +1,16 @@
 <script lang="ts">
+	/**
+	 * @file A form for editing the details of a single storyboard slide.
+	 */
 	import type { SlideOutline, Character, SlideDialogue } from '$lib/models/story';
 
+	/** The slide outline object to be edited. */
 	export let editableSlideOutline: SlideOutline;
+
+	/** Controls whether the form fields are in an editable state. */
 	export let editing: boolean;
 
+	/** Adds a new, empty character object to the characters array. */
 	function addCharacter() {
 		const newCharacter: Character = {
 			name: 'New Character',
@@ -15,6 +22,7 @@
 		editableSlideOutline.characters = [...editableSlideOutline.characters, newCharacter];
 	}
 
+	/** Adds a new, empty dialogue object to the dialogue array. */
 	function addDialogue() {
 		const newDialogue: SlideDialogue = {
 			character: '',
@@ -28,15 +36,15 @@
 	<h4>Scene</h4>
 	{#if editing}
 		<p>
-			<strong>Title:</strong> <input bind:value={editableSlideOutline.sceneTitle} />
+			<strong>Title:</strong> <input class="w-full" bind:value={editableSlideOutline.sceneTitle} />
 		</p>
 		<p>
 			<strong>Duration:</strong>
-			<input type="number" bind:value={editableSlideOutline.durationSeconds} />s
+			<input class="w-full" type="number" bind:value={editableSlideOutline.durationSeconds} />s
 		</p>
 		<p>
 			<strong>Timestamp:</strong>
-			<input bind:value={editableSlideOutline.timestamp} />
+			<input class="w-full" bind:value={editableSlideOutline.timestamp} />
 		</p>
 	{:else}
 		<p><strong>Title:</strong> {editableSlideOutline.sceneTitle}</p>
@@ -48,7 +56,7 @@
 <div class="detail-section">
 	<h4>Description</h4>
 	{#if editing}
-		<textarea bind:value={editableSlideOutline.sceneDescription}></textarea>
+		<textarea class="w-full" bind:value={editableSlideOutline.sceneDescription}></textarea>
 	{:else}
 		<p>{editableSlideOutline.sceneDescription}</p>
 	{/if}
@@ -57,9 +65,10 @@
 <div class="detail-section">
 	<h4>Visual Style</h4>
 	{#if editing}
-		<input bind:value={editableSlideOutline.visualStyle} />
+		<input class="w-full" bind:value={editableSlideOutline.visualStyle} />
 		<p>
-			<strong>Camera:</strong> <input bind:value={editableSlideOutline.cameraAngle} />
+			<strong>Camera:</strong>
+			<input class="w-full" bind:value={editableSlideOutline.cameraAngle} />
 		</p>
 	{:else}
 		<p>{editableSlideOutline.visualStyle}</p>
@@ -72,24 +81,31 @@
 	{#if editableSlideOutline.characters.length === 0}
 		<p>No characters in this slide.</p>
 	{/if}
-	{#each editableSlideOutline.characters as character (editableSlideOutline.slideId + character.name)}
+	{#each editableSlideOutline.characters as character (character)}
 		<div class="character-info">
 			{#if editing}
-				<strong>Name:</strong>
-				<input bind:value={character.name} />
-				<strong>Role:</strong>
-				<input bind:value={character.role} />
-				<p>
+				<div>
+					<strong>Name:</strong>
+					<input class="w-full" bind:value={character.name} />
+				</div>
+				<div>
+					<strong>Role:</strong>
+					<input class="w-full" bind:value={character.role} />
+				</div>
+				<div>
 					<strong>Description:</strong>
-					<textarea bind:value={character.description}></textarea>
-				</p>
-				<small><strong>Position:</strong> <input bind:value={character.position} /></small>
-				{#if character.emotions.length > 0}
-					<div class="emotions">
-						<strong>Emotions:</strong>
-						<input bind:value={character.emotions} />
-					</div>
-				{/if}
+					<textarea class="w-full" bind:value={character.description}></textarea>
+				</div>
+				<div>
+					<small
+						><strong>Position:</strong>
+						<input class="w-full" bind:value={character.position} /></small
+					>
+				</div>
+				<div class="emotions">
+					<strong>Emotions:</strong>
+					<input class="w-full" bind:value={character.emotions} />
+				</div>
 			{:else}
 				<strong>{character.name}</strong> ({character.role})
 				<p>{character.description}</p>
@@ -110,13 +126,19 @@
 	{#if editableSlideOutline.text.dialogue.length === 0}
 		<p>No dialogue in this slide.</p>
 	{/if}
-	{#each editableSlideOutline.text.dialogue as dialogue (editableSlideOutline.slideId + dialogue.line)}
+	{#each editableSlideOutline.text.dialogue as dialogue (dialogue)}
 		<div class="dialogue-line">
 			{#if editing}
-				<strong>Character:</strong>
-				<input bind:value={dialogue.character} />
-				<strong>Line:</strong>
-				<input bind:value={dialogue.line} />
+				<div>
+					<strong>Character:</strong>
+					<br />
+					<input class="w-full" bind:value={dialogue.character} />
+				</div>
+				<div>
+					<strong>Line:</strong>
+					<br />
+					<input class="w-full" bind:value={dialogue.line} />
+				</div>
 			{:else}
 				<strong>{dialogue.character}:</strong> "{dialogue.line}"
 			{/if}
