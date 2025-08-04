@@ -35,7 +35,7 @@
 
 	// Create a reactive local copy of storyboards for proper UI updates
 	let localStoryboards = $state(storyboards);
-	
+
 	// Update local copy when props change
 	$effect(() => {
 		localStoryboards = storyboards;
@@ -86,10 +86,10 @@
 			if (response.ok) {
 				// Close the modal first
 				showDeleteModal = null;
-				
+
 				// Immediately remove from local state for responsive UI
 				localStoryboards = localStoryboards.filter((s) => s._id !== storyboard._id);
-				
+
 				// Invalidate the dashboard data to refresh from server
 				await invalidate('dashboard:storyboards');
 			} else {
