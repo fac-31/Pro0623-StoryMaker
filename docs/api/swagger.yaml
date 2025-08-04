@@ -14,6 +14,43 @@ servers:
 
 paths:
   # Storyboard Endpoints
+
+  /storyboard/add-slide:
+    post:
+      summary: Add a new slide to a storyboard
+      description: Inserts a new slide outline at a specific index in a storyboard, re-indexing all subsequent slides.
+      tags:
+        - storyboard
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+              storyboard_id:
+                type: string
+                description: The ID of the storyboard to modify.
+              insertionIndex:
+                type: integer
+                description: The index at which to insert the new slide.
+              newSlideOutline:
+                $ref: '#/components/s/SlideOutline'
+      responses:
+        '200':
+          description: Successfully added the slide and returned the storyboard ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        '400':
+          description: Bad Request - Missing required fields.
+        '404':
+          description: Not Found - The specified storyboard could not be found.
+
   /storyboard/start:
     post:
       tags:
