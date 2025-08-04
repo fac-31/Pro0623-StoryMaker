@@ -76,7 +76,7 @@
 
 			if (response.ok) {
 				// Remove from local state
-				storyboards = storyboards.filter(s => s._id !== storyboard._id);
+				storyboards = storyboards.filter((s) => s._id !== storyboard._id);
 				showDeleteModal = null;
 			} else {
 				const error = await response.json();
@@ -548,10 +548,13 @@
 
 			<div class="mb-6">
 				<p class="text-base-content mb-4">
-					Are you sure you want to delete <strong>"{showDeleteModal.storyOutline.storyMetadata.title}"</strong>?
+					Are you sure you want to delete <strong
+						>"{showDeleteModal.storyOutline.storyMetadata.title}"</strong
+					>?
 				</p>
 				<p class="text-base-content/70 text-sm">
-					This action cannot be undone. All slides, images, and generated games will be permanently deleted.
+					This action cannot be undone. All slides, images, and generated games will be permanently
+					deleted.
 				</p>
 			</div>
 
