@@ -46,7 +46,7 @@
 			if (!list.includes(storyboard._id as string)) return false;
 
 			const matchesSearch =
-				storyboard.prompts.concept.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				storyboard.prompts.concept?.toLowerCase().includes((searchQuery ?? '').toLowerCase()) ||
 				storyboard.storyOutline.storyMetadata.title
 					.toLowerCase()
 					.includes(searchQuery.toLowerCase());

@@ -35,7 +35,12 @@ export const POST: RequestHandler = async (event) => {
 			{
 				$set: {
 					[`storyOutline.slideOutlines.${slideNumber - 1}`]: newSlideOutline,
-					currentSlide: slideNumber
+					currentSlide: slideNumber,
+					updatedAt: new Date()
+				},
+				$unset: {
+					gameHtml: '',
+					interactions: ''
 				}
 			}
 		);

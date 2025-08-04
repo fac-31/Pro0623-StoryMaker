@@ -1,12 +1,16 @@
 <script lang="ts">
+	/**
+	 * @file The main page for creating and viewing a storyboard.
+	 */
 	import type { Storyboard } from '$lib/models/storyboard.model';
 	import type { Team } from '$lib/models/team.model';
 	import type { UserPrompt } from '$lib/models/UserPrompt';
 	import StoryboardForm from '$lib/components/Storyboard/StoryboardForm.svelte';
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
-	import { Loader2, ArrowLeft, Sparkles } from 'lucide-svelte';
+	import { Loader2, ArrowLeft, Sparkles, PlusCircle } from 'lucide-svelte';
 	import { goto, invalidate } from '$app/navigation';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import { page } from '$app/stores';
 
 	let userPrompt: UserPrompt = {
@@ -24,6 +28,7 @@
 	let selectedSlideIndex: number | null = null;
 	let showModal = false;
 	let gameUrl: string | null = null;
+	let isNewSlide = false;
 
 	async function generateGame() {
 		if (!storyboard?._id) return;
@@ -36,6 +41,8 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
+				// Update local storyboard state to reflect that game now exists
+				storyboard = { ...storyboard, gameHtml: 'generated' };
 				window.location.href = data.gamePath;
 			} else {
 				error = data.error || 'Failed to generate game';
@@ -47,17 +54,25 @@
 		}
 	}
 
-	//the function is left here because each update writes directly to the storyboard variable
-	//in this svelte component.
-	async function progressStoryboard(id: string, edit: boolean): Promise<void> {
+	async function progressStoryboard(
+		id: string,
+		edit: boolean,
+		slideNumber?: number
+	): Promise<Storyboard> {
 		return new Promise((resolve, reject) => {
-			const source = new EventSource(`/api/storyboard/progress/${id}${edit ? '?edit=true' : ''}`);
+			let url = `/api/storyboard/progress/${id}`;
+			const params = new SvelteURLSearchParams();
+			if (edit) params.append('edit', 'true');
+			if (slideNumber) params.append('slideNumber', slideNumber.toString());
+			if (params.toString()) url += `?${params.toString()}`;
+
+			const source = new EventSource(url);
 			source.onmessage = (event) => {
 				storyboard = JSON.parse(event.data);
 
 				if (storyboard && storyboard.status == 'done') {
 					source.close();
-					resolve();
+					resolve(storyboard);
 				}
 			};
 
@@ -96,12 +111,24 @@
 
 	function openSlideModal(event: CustomEvent<number>) {
 		selectedSlideIndex = event.detail;
+		isNewSlide = false;
+		showModal = true;
+	}
+
+	/**
+	 * Opens the slide modal in "create new" mode.
+	 * @param {number} index - The index where the new slide will be inserted.
+	 */
+	function addNewSlide(index: number) {
+		selectedSlideIndex = index;
+		isNewSlide = true;
 		showModal = true;
 	}
 
 	function closeModal() {
 		showModal = false;
 		selectedSlideIndex = null;
+		isNewSlide = false;
 	}
 
 function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
@@ -225,11 +252,25 @@ function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
 						<div class="slides-flex">
 							{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
 								<SlideThumbnail {storyboard} {slide} {index} on:open={openSlideModal} />
+								<button
+									class="btn btn-ghost btn-sm"
+									onclick={() => addNewSlide(index + 1)}
+									aria-label="Add new slide after slide {slide.slideNumber}"
+								>
+									<PlusCircle class="h-5 w-5" />
+								</button>
 							{/each}
 						</div>
 					</section>
 					{#if storyboard.status === 'done'}
-						<button class="btn btn-primary" onclick={generateGame}>Generate Game</button>
+						<button class="btn btn-primary" onclick={generateGame} disabled={loading}>
+							{#if loading}
+								<Loader2 class="h-4 w-4 animate-spin motion-reduce:animate-none" />
+								{storyboard.gameHtml ? 'Loading Game...' : 'Generating Game...'}
+							{:else}
+								{storyboard.gameHtml ? 'See the Game' : 'Generate Game'}
+							{/if}
+						</button>
 					{/if}
 					{#if gameUrl}
 						<div class="mt-4">
@@ -247,6 +288,8 @@ function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
 	<SlideModal
 		{storyboard}
 		{selectedSlideIndex}
+		{progressStoryboard}
+		{isNewSlide}
 		show={showModal}
 		on:close={closeModal}
 		on:update={handleStoryboardUpdate}
