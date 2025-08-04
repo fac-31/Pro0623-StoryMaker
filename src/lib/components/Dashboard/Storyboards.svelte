@@ -38,6 +38,7 @@
 	let searchQuery = $state('');
 	let showAddUserModal = $state(false);
 	let showRemoveUserModal = $state<string | null>(null);
+	let showDeleteModal = $state<Storyboard | null>(null);
 	let admin = team?.users.find((teamuser) => (teamuser.user = user._id))?.role == 'admin';
 
 	// Computed values
@@ -63,6 +64,29 @@
 	function handleNewStoryboard() {
 		selectedStoryboard = null;
 		goto('/storyboard');
+	}
+
+	async function handleDeleteStoryboard(storyboard: Storyboard) {
+		try {
+			const response = await fetch('/api/storyboard/delete', {
+				method: 'DELETE',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ storyboardId: storyboard._id })
+			});
+
+			if (response.ok) {
+				// Remove from local state
+				storyboards = storyboards.filter(s => s._id !== storyboard._id);
+				showDeleteModal = null;
+			} else {
+				const error = await response.json();
+				console.error('Failed to delete storyboard:', error);
+				alert('Failed to delete storyboard: ' + (error.error || 'Unknown error'));
+			}
+		} catch (error) {
+			console.error('Error deleting storyboard:', error);
+			alert('Error deleting storyboard. Please try again.');
+		}
 	}
 </script>
 
@@ -257,6 +281,13 @@
 								>
 									View/Edit
 								</button>
+								<button
+									class="btn btn-outline btn-sm text-error hover:btn-error"
+									onclick={() => (showDeleteModal = storyboard)}
+									aria-label="Delete {storyboard.storyOutline.storyMetadata.title}"
+								>
+									<Trash class="h-4 w-4" />
+								</button>
 							</div>
 						</div>
 					</div>
@@ -341,6 +372,13 @@
 													aria-label="Edit {storyboard.storyOutline.storyMetadata.title}"
 												>
 													Continue
+												</button>
+												<button
+													class="btn btn-outline btn-sm hover:btn-error opacity-0 transition-opacity group-hover:opacity-100"
+													onclick={() => (showDeleteModal = storyboard)}
+													aria-label="Delete {storyboard.storyOutline.storyMetadata.title}"
+												>
+													<Trash class="h-4 w-4" />
 												</button>
 												<button
 													class="btn btn-ghost btn-sm opacity-0 transition-opacity group-hover:opacity-100"
@@ -489,6 +527,51 @@
 					<button type="submit" class="btn btn-primary flex-1">Remove User</button>
 				</div>
 			</form>
+		</div>
+	</dialog>
+{/if}
+
+<!-- Delete Storyboard Confirmation Modal -->
+{#if showDeleteModal}
+	<dialog class="popup inset-0 z-50 bg-black/50 p-4" open>
+		<div class="bg-base-100 w-full max-w-md rounded-2xl p-6 shadow-lg">
+			<div class="mb-6 flex items-center justify-between">
+				<h2 class="text-base-content text-xl font-semibold">Delete Storyboard</h2>
+				<button
+					class="btn btn-ghost btn-sm"
+					onclick={() => (showDeleteModal = null)}
+					aria-label="Close delete confirmation dialog"
+				>
+					<X class="h-5 w-5" />
+				</button>
+			</div>
+
+			<div class="mb-6">
+				<p class="text-base-content mb-4">
+					Are you sure you want to delete <strong>"{showDeleteModal.storyOutline.storyMetadata.title}"</strong>?
+				</p>
+				<p class="text-base-content/70 text-sm">
+					This action cannot be undone. All slides, images, and generated games will be permanently deleted.
+				</p>
+			</div>
+
+			<div class="flex space-x-3">
+				<button
+					type="button"
+					class="btn btn-outline flex-1"
+					onclick={() => (showDeleteModal = null)}
+				>
+					Cancel
+				</button>
+				<button
+					type="button"
+					class="btn btn-error flex-1"
+					onclick={() => showDeleteModal && handleDeleteStoryboard(showDeleteModal)}
+				>
+					<Trash class="h-4 w-4" />
+					Delete
+				</button>
+			</div>
 		</div>
 	</dialog>
 {/if}
