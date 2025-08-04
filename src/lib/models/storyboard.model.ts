@@ -20,6 +20,8 @@ export interface Storyboard {
 	storyOutline: StoryOutline;
 	visualSlides: VisualSlide[];
 	characterSheet: string;
+	interactions?: unknown;
+	gameHtml?: string;
 }
 
 export interface NewStoryboard {
