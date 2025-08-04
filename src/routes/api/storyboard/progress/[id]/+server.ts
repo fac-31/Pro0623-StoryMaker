@@ -5,6 +5,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 import type { Storyboard } from '$lib/models/storyboard.model';
 import { registerStream, updateStream, cancelStream, endStream } from '$lib/streams';
 import { ObjectId } from 'mongodb';
+import { getUserFromEvent } from '$lib/server/userService';
 
 /**
  * Handles GET requests for storyboard progress.
@@ -23,7 +24,8 @@ import { ObjectId } from 'mongodb';
  * 4. Initiates the storyboard creation process.
  * 5. Returns the stream response to the client.
  */
-export const GET: RequestHandler = async ({ params, url }) => {
+export const GET: RequestHandler = async (event) => {
+	const { params, url } = event;
 	const id = params.id;
 	const edit = url.searchParams.get('edit') === 'true'; // false if not provided
 	const slideNumber = url.searchParams.get('slideNumber'); // Get the specific slide number for edits
@@ -77,7 +79,15 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	 */
 	async function runAsyncStoryboard(storyboard: Storyboard, signal: AbortSignal) {
 		console.log('entered runAsync');
-		const storyboardOutput: Storyboard = await runStoryboardCreation(storyboard, signal);
+		const user = await getUserFromEvent(event);
+		if (!user) {
+			throw new Error('User not found');
+		}
+		const storyboardOutput: Storyboard = await runStoryboardCreation(
+			storyboard,
+			signal,
+			user._id.toString()
+		);
 
 		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
 

@@ -11,6 +11,9 @@ import {
 	saveSlideAndAdvance,
 	shouldContinue
 } from './nodes';
+import { getDB } from '$lib/server/db';
+import { ObjectId, type UpdateFilter } from 'mongodb';
+import type { User } from '$lib/models/user.model';
 
 /**
  * Creates and compiles the storyboard graph workflow.
@@ -92,7 +95,9 @@ export const createStoryboardEditGraph = () => {
  */
 export const runStoryboardCreation = async (
 	storyboard: Storyboard,
-	signal: AbortSignal
+	signal: AbortSignal,
+	userId: string,
+	teamId?: string
 ): Promise<Storyboard> => {
 	console.log('[LangGraph] runStoryboardCreation called with:', storyboard.prompts);
 	addLog(`[LangGraph] runStoryboardCreation called with: ${storyboard.prompts}`);
@@ -100,13 +105,71 @@ export const runStoryboardCreation = async (
 
 	storyboard.currentSlide = 1;
 
-	const result = await app.invoke(storyboard, { signal });
-	console.log('[LangGraph] runStoryboardCreation result:', result);
-	addLog(`[LangGraph] runStoryboardCreation result: ${JSON.stringify(result)}`);
+	// Phase 1: Generate the outline in memory
+	const outlineResult = await app.invoke(storyboard, { signal });
 
-	result.updatedAt = new Date();
-	result.status = 'done';
-	return result as Storyboard;
+	if (!outlineResult.storyOutline) {
+		throw new Error('Failed to generate storyboard outline.');
+	}
+
+	// Phase 2: Save to database
+	const db = await getDB();
+	const newStoryboard = {
+		...outlineResult,
+		userId: new ObjectId(userId),
+		teamId: teamId ? new ObjectId(teamId) : undefined,
+		createdAt: new Date(),
+		updatedAt: new Date()
+	};
+
+	const insertedStoryboard = await db.collection('storyboards').insertOne(newStoryboard);
+	const storyboardId = insertedStoryboard.insertedId;
+
+	if (teamId) {
+		await db
+			.collection('teams')
+			.updateOne(
+				{ _id: new ObjectId(teamId) },
+				{ $push: { projects: storyboardId } as unknown as UpdateFilter<User> }
+			);
+	} else {
+		await db
+			.collection('users')
+			.updateOne(
+				{ _id: new ObjectId(userId) },
+				{ $push: { projects: storyboardId } as unknown as UpdateFilter<User> }
+			);
+	}
+
+	// Phase 3: Generate images and complete the storyboard
+	try {
+		const finalResult = await app.invoke(newStoryboard, { signal });
+		console.log('[LangGraph] runStoryboardCreation result:', finalResult);
+		addLog(`[LangGraph] runStoryboardCreation result: ${JSON.stringify(finalResult)}`);
+
+		finalResult.updatedAt = new Date();
+		finalResult.status = 'done';
+		return finalResult as Storyboard;
+	} catch (error) {
+		// Cleanup failed storyboard
+		await db.collection('storyboards').deleteOne({ _id: storyboardId });
+		if (teamId) {
+			await db
+				.collection('teams')
+				.updateOne(
+					{ _id: new ObjectId(teamId) },
+					{ $pull: { projects: storyboardId } as unknown as UpdateFilter<User> }
+				);
+		} else {
+			await db
+				.collection('users')
+				.updateOne(
+					{ _id: new ObjectId(userId) },
+					{ $pull: { projects: storyboardId } as unknown as UpdateFilter<User> }
+				);
+		}
+		throw error;
+	}
 };
 
 export const runStoryboardEdit = async (

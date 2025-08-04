@@ -32,27 +32,23 @@ export async function POST(event) {
 				.collection('storyboards')
 				.deleteOne({ _id: new ObjectId(storyboard_id) }, { session: dbSession });
 
-			await db
-				.collection('users')
-				.updateOne(
-					{ _id: new ObjectId(user._id) },
-					{
-						$pull: { projects: { $in: [new ObjectId(user._id)] } } as unknown as UpdateFilter<User>
-					},
-					{ session: dbSession }
-				);
+			await db.collection('users').updateOne(
+				{ _id: new ObjectId(user._id) },
+				{
+					$pull: { projects: { $in: [new ObjectId(user._id)] } } as unknown as UpdateFilter<User>
+				},
+				{ session: dbSession }
+			);
 
-			await db
-				.collection('teams')
-				.updateMany(
-					{ users: { $elemMatch: { user: new ObjectId(user._id) } } },
-					{
-						$pull: {
-							projects: { $in: [new ObjectId(storyboard_id)] }
-						} as unknown as UpdateFilter<User>
-					},
-					{ session: dbSession }
-				);
+			await db.collection('teams').updateMany(
+				{ users: { $elemMatch: { user: new ObjectId(user._id) } } },
+				{
+					$pull: {
+						projects: { $in: [new ObjectId(storyboard_id)] }
+					} as unknown as UpdateFilter<User>
+				},
+				{ session: dbSession }
+			);
 		});
 	} finally {
 		dbSession.endSession();
