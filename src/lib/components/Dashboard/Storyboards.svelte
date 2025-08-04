@@ -12,7 +12,7 @@
 	} from 'lucide-svelte';
 
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 
 	import { storyboardStore } from '$lib/stores/storyboard';
 	import { teamStore } from '$lib/stores/team';
@@ -63,6 +63,23 @@
 	function handleNewStoryboard() {
 		selectedStoryboard = null;
 		goto('/storyboard');
+	}
+
+	async function handleDeleteStoryboard(storyboardId: string) {
+		if (
+			confirm(
+				'Are you sure you want to permanently delete this storyboard? This action cannot be undone.'
+			)
+		) {
+			const res = await fetch('/api/storyboard/delete', {
+				method: 'POST',
+				body: JSON.stringify({ storyboard_id: storyboardId })
+			});
+
+			if (res.ok) {
+				invalidate('dashboard:storyboards');
+			}
+		}
 	}
 </script>
 
@@ -257,6 +274,12 @@
 								>
 									View/Edit
 								</button>
+								<button
+									class="btn btn-error btn-sm"
+									onclick={() => handleDeleteStoryboard(storyboard._id as string)}
+								>
+									<Trash class="h-4 w-4" />
+								</button>
 							</div>
 						</div>
 					</div>
@@ -354,6 +377,12 @@
 													aria-label="Export {storyboard.storyOutline.storyMetadata.title} as video"
 												>
 													<Video class="h-4 w-4" />
+												</button>
+												<button
+													class="btn btn-error btn-sm"
+													onclick={() => handleDeleteStoryboard(storyboard._id as string)}
+												>
+													<Trash class="h-4 w-4" />
 												</button>
 											</div>
 										</td>
