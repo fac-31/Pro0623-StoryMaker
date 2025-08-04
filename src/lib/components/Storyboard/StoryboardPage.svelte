@@ -131,8 +131,9 @@
 	}
 
 	function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
+		console.log('handleStoryboardUpdate: updating storyboard variable');
 		storyboard = event.detail;
-		// Invalidate the dashboard data so it refreshes when user navigates back
+
 		invalidate('dashboard:storyboards');
 	}
 
