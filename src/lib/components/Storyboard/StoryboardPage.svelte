@@ -63,10 +63,10 @@
 			const params = new SvelteURLSearchParams();
 			if (edit) params.append('edit', 'true');
 			if (slideNumber) params.append('slideNumber', slideNumber.toString());
-			
+
 			// This is here just so every URL string can be unique, as otherwise EventSource would be attempting to reuse existing one
-			params.append("d", Date.now().toString());
-			
+			params.append('d', Date.now().toString());
+
 			if (params.toString()) url += `?${params.toString()}`;
 
 			const source = new EventSource(url);
