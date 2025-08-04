@@ -6,7 +6,8 @@
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import { Loader2, ArrowLeft, Sparkles } from 'lucide-svelte';
-	import { invalidate } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let userPrompt: UserPrompt = {
 		numSlides: 6,
@@ -103,11 +104,12 @@
 		selectedSlideIndex = null;
 	}
 
-	function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
-		storyboard = event.detail;
-		// Invalidate the dashboard data so it refreshes when user navigates back
-		invalidate('dashboard:storyboards');
-	}
+function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
+    console.log("handleStoryboardUpdate: updating storyboard variable");
+    storyboard = event.detail;
+    
+    invalidate('dashboard:storyboards');
+}
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.key === 'Escape') {
