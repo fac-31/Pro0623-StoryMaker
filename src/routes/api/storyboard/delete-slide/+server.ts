@@ -1,5 +1,5 @@
 /**
- * @file Handles the creation of a new slide within an existing storyboard.
+ * @file Handles the deletion of a slide from an existing storyboard.
  */
 import { json } from '@sveltejs/kit';
 import { getDB } from '$lib/server/db';
@@ -7,14 +7,14 @@ import { ObjectId } from 'mongodb';
 import type { Storyboard } from '$lib/models/storyboard.model';
 
 /**
- * @description Inserts a new slide at a specified index in a storyboard.
+ * @description Deletes a slide at a specified index in a storyboard.
  * @param {RequestEvent} event - The SvelteKit request event.
- * @returns {Promise<Response>} A JSON response containing the ID of the modified storyboard or an error.
+ * @returns {Promise<Response>} A JSON response containing the updated storyboard or an error.
  */
 export async function POST({ request }) {
-	const { storyboard_id, insertionIndex, newSlideOutline } = await request.json();
+	const { storyboard_id, slideIndex } = await request.json();
 
-	if (!storyboard_id || !insertionIndex || !newSlideOutline) {
+	if (!storyboard_id || slideIndex === undefined) {
 		return json({ error: 'Missing required fields' }, { status: 400 });
 	}
 
@@ -27,19 +27,12 @@ export async function POST({ request }) {
 		return json({ error: 'Storyboard not found' }, { status: 404 });
 	}
 
-	// Create new slide objects
-	const newVisualSlide = {
-		slideNumber: insertionIndex + 1,
-		imageGenerated: false
-	};
-	newSlideOutline.slideId = insertionIndex + 1;
-
-	// Insert the new slide
-	storyboard.storyOutline.slideOutlines.splice(insertionIndex, 0, newSlideOutline);
-	storyboard.visualSlides.splice(insertionIndex, 0, newVisualSlide);
+	// Remove the slide
+	storyboard.storyOutline.slideOutlines.splice(slideIndex, 1);
+	storyboard.visualSlides.splice(slideIndex, 1);
 
 	// Re-index subsequent slides
-	for (let i = insertionIndex + 1; i < storyboard.storyOutline.slideOutlines.length; i++) {
+	for (let i = slideIndex; i < storyboard.storyOutline.slideOutlines.length; i++) {
 		storyboard.storyOutline.slideOutlines[i].slideId = i + 1;
 		storyboard.visualSlides[i].slideNumber = i + 1;
 	}
@@ -48,5 +41,5 @@ export async function POST({ request }) {
 		.collection('storyboards')
 		.updateOne({ _id: new ObjectId(storyboard_id) }, { $set: storyboard });
 
-	return json({ id: storyboard_id });
+	return json({ success: true, storyboard });
 }
