@@ -35,6 +35,8 @@
 			});
 			const data = await res.json();
 			if (res.ok) {
+				// Update local storyboard state to reflect that game now exists
+				storyboard = { ...storyboard, gameHtml: 'generated' };
 				window.location.href = data.gamePath;
 			} else {
 				error = data.error || 'Failed to generate game';
@@ -230,9 +232,9 @@
 						<button class="btn btn-primary" onclick={generateGame} disabled={loading}>
 							{#if loading}
 								<Loader2 class="h-4 w-4 animate-spin motion-reduce:animate-none" />
-								Generating Game...
+								{storyboard.gameHtml ? 'Loading Game...' : 'Generating Game...'}
 							{:else}
-								Generate Game
+								{storyboard.gameHtml ? 'See the Game' : 'Generate Game'}
 							{/if}
 						</button>
 					{/if}

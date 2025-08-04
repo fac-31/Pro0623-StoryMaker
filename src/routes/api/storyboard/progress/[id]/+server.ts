@@ -94,7 +94,17 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 		const storyboardOutput: Storyboard = await runStoryboardEdit(storyboard, signal);
 
-		await storyboards.updateOne({ _id: new ObjectId(id) }, { $set: storyboardOutput });
+		// Clear game data when editing storyboard content
+		await storyboards.updateOne(
+			{ _id: new ObjectId(id) }, 
+			{ 
+				$set: storyboardOutput,
+				$unset: {
+					gameHtml: "",
+					interactions: ""
+				}
+			}
+		);
 
 		updateStream(storyboard._id.toString(), storyboardOutput);
 		endStream(storyboard._id.toString());
