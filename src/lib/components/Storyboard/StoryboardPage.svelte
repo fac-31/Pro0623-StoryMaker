@@ -227,7 +227,14 @@
 						</div>
 					</section>
 					{#if storyboard.status === 'done'}
-						<button class="btn btn-primary" onclick={generateGame}>Generate Game</button>
+						<button class="btn btn-primary" onclick={generateGame} disabled={loading}>
+							{#if loading}
+								<Loader2 class="h-4 w-4 animate-spin motion-reduce:animate-none" />
+								Generating Game...
+							{:else}
+								Generate Game
+							{/if}
+						</button>
 					{/if}
 					{#if gameUrl}
 						<div class="mt-4">
