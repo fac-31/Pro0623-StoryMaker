@@ -11,6 +11,54 @@ interface GenerateGameRequest {
 	storyboardId: string;
 }
 
+// Helper function to select the best bounding boxes for gameplay
+function selectBestBoundingBoxes(detectedObjects: any[], maxCount: number) {
+	if (!detectedObjects || detectedObjects.length === 0) {
+		return [];
+	}
+
+	// Score each bounding box based on size, position, and suitability for interaction
+	const scoredObjects = detectedObjects.map(obj => {
+		const area = (obj.width || 50) * (obj.height || 50);
+		const centerX = (obj.x || 0) + (obj.width || 50) / 2;
+		const centerY = (obj.y || 0) + (obj.height || 50) / 2;
+		
+		// Prefer objects that are:
+		// 1. Reasonably sized (not too small, not too large)
+		// 2. Not too close to edges
+		// 3. Have clear labels
+		let score = 0;
+		
+		// Size score: prefer medium-sized objects (between 1000-10000 px²)
+		if (area >= 1000 && area <= 10000) {
+			score += 3;
+		} else if (area >= 500 && area <= 20000) {
+			score += 2;
+		} else if (area >= 100) {
+			score += 1;
+		}
+		
+		// Position score: prefer objects not too close to edges (assuming 800x600 image)
+		if (centerX > 100 && centerX < 700 && centerY > 100 && centerY < 500) {
+			score += 2;
+		}
+		
+		// Label quality score: prefer objects with meaningful labels
+		const label = obj.label || '';
+		if (label.length > 3 && !label.toLowerCase().includes('unknown')) {
+			score += 2;
+		}
+		
+		return { ...obj, score };
+	});
+
+	// Sort by score (highest first) and take the best ones
+	return scoredObjects
+		.sort((a, b) => b.score - a.score)
+		.slice(0, maxCount)
+		.map(({ score, ...obj }) => obj); // Remove score from final object
+}
+
 // Helper function to get bounding boxes using OpenAI GPT-4o vision
 async function getBoundingBoxes(openai: OpenAI, imageUrl: string) {
 	const prompt = `You are an object detection assistant. For the image provided, list all distinct objects (e.g., characters, items, animals) and for each, return:
@@ -68,38 +116,38 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (!env.OPENAI_API_KEY) return json({ error: 'OpenAI API key not configured' }, { status: 500 });
 
 	const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
-	const prompt = `Generate rich game interactions for each slide in this story. CRITICAL: Every slide MUST have at least 2-3 meaningful interactions.
+	const prompt = `Generate exactly 3 meaningful interactions for each slide in this story. Each slide will have exactly 3 bounding boxes to interact with.
 
 INTERACTION TYPES:
 - "click": User clicks on an object to trigger an action
 - "choose": User selects from multiple choice options
 
 CRITICAL REQUIREMENTS:
-- EVERY slide MUST have at least 2 interactions minimum
+- EVERY slide MUST have EXACTLY 3 interactions (no more, no less)
 - Each interaction must have clear, engaging feedback text
-- Include sound effect names where appropriate (e.g., "water_spill.mp3", "door_creak.mp3")
+- Include sound effect names where appropriate (e.g., "water_spill.mp3", "door_creak.mp3") 
 - For choice interactions, provide 2-3 meaningful options with different outcomes
 - Make interactions feel rewarding and story-driven
-- If a slide has few detected objects, create generic interactions like "examine scene", "think about situation", "move forward"
+- Include mix of interaction types: at least 1 "click" and 1 "choose" per slide
 - Always include at least one "narrative" interaction that advances the story
 
 RESPONSE FORMAT:
-Return ONLY valid JSON in this exact structure:
+Return ONLY valid JSON with exactly 3 interactions per slide:
 {
   "1": {
-    "main-object": {
+    "interaction-1": {
       "type": "click",
       "result": "Engaging description of what happens",
       "sound": "sound_effect.mp3"
     },
-    "character-choice": {
-      "type": "choose",
+    "interaction-2": {
+      "type": "choose", 
       "options": [
         {"text": "Option 1", "result": "Outcome description"},
         {"text": "Option 2", "result": "Different outcome"}
       ]
     },
-    "scene-narrative": {
+    "interaction-3": {
       "type": "click",
       "result": "Story progression text that moves the narrative forward"
     }
@@ -130,20 +178,23 @@ Story JSON:\n${JSON.stringify(storyboard.storyOutline)}`;
 	// For each slide, get bounding boxes and attach to slide.detectedObjects
 	for (const slide of storyboard.visualSlides) {
 		if (slide.imageUrl) {
-			slide.detectedObjects = await getBoundingBoxes(openai, slide.imageUrl);
-			console.log('Detected objects for slide', slide.slideNumber, slide.detectedObjects);
+			const allDetectedObjects = await getBoundingBoxes(openai, slide.imageUrl);
+			// Limit to max 3 best objects per slide - prioritize larger, more central objects
+			slide.detectedObjects = selectBestBoundingBoxes(allDetectedObjects, 3);
+			console.log('Selected objects for slide', slide.slideNumber, slide.detectedObjects);
 		}
 	}
 
 	const htmlPrompt = `
 You are a web game developer. Given the following story, game interactions, and detected object bounding boxes, generate a complete HTML file (with embedded CSS and JavaScript) that implements the game.
 
-CRITICAL INTERACTION MAPPING:
-- You have TWO data sources: INTERACTIONS JSON (with interaction definitions) and DETECTED OBJECTS (with bounding box coordinates)
-- For each slide, create hotspots using the bounding box coordinates from detectedObjects
-- Connect each hotspot to the corresponding interaction from the INTERACTIONS JSON by matching slide numbers
+CRITICAL INTERACTION MAPPING (STREAMLINED):
+- Each slide has EXACTLY 3 bounding boxes and EXACTLY 3 corresponding interactions
+- Create hotspots using the bounding box coordinates from detectedObjects (limited to 3 per slide)
+- Map the first bounding box to "interaction-1", second to "interaction-2", third to "interaction-3"
 - When a hotspot is clicked, display the interaction result text in a visible dialog/popup or text area
 - For "choose" type interactions, show the options as buttons and display the selected result
+- This streamlined approach ensures clean, focused gameplay with exactly 3 interactive elements per slide
 
 CRITICAL VISUAL REQUIREMENTS (must be implemented exactly):
 - Use background-image CSS property for slide images, NOT <img> tags
@@ -155,7 +206,7 @@ CRITICAL VISUAL REQUIREMENTS (must be implemented exactly):
 GAME STRUCTURE REQUIREMENTS:
 - Display the corresponding image using background-image CSS (from the "imageUrl" field in the storyboard's "visualSlides")
 - For each interaction, use the provided bounding box coordinates (in slide.detectedObjects) to position interactive elements precisely over the image
-- CRITICAL: Every slide MUST have at least one interactive hotspot. If no detected objects exist for a slide, create a generic clickable area in the center with story-relevant text.
+- CRITICAL: Every slide has EXACTLY 3 interactive hotspots. The system automatically selects the 3 best bounding boxes per slide.
 - The user should only be able to proceed to the next slide after successfully completing all required interactions for the current slide
 - CRITICAL Z-INDEX SORTING: When rendering interactive boxes (hotspots), calculate area (width × height) for each box. Sort by area from largest to smallest. Assign z-index values starting from 100 for the largest box, incrementing by 10 for each smaller box. This ensures smaller boxes ALWAYS appear on top of larger boxes and remain clickable.
 - Example: Large box (1000px²) gets z-index: 100, Medium box (500px²) gets z-index: 110, Small box (100px²) gets z-index: 120
