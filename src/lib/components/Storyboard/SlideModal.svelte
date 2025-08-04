@@ -193,7 +193,9 @@
 				const slideNumber = isNewSlide ? selectedSlideIndex + 1 : selectedSlideIndex + 1;
 				const updatedStoryboard = await progressStoryboard(storyboard_id, edit, slideNumber);
 				if (updatedStoryboard) {
-					console.log("dispatching storyboard with ID: {storyboard_id}... done! Updating the storyboard in the app...");
+					console.log(
+						'dispatching storyboard with ID: {storyboard_id}... done! Updating the storyboard in the app...'
+					);
 					dispatch('update', updatedStoryboard);
 				}
 				editing = false; // Exit editing mode on success

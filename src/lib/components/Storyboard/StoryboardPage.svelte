@@ -131,12 +131,12 @@
 		isNewSlide = false;
 	}
 
-function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
-    console.log("handleStoryboardUpdate: updating storyboard variable");
-    storyboard = event.detail;
-    
-    invalidate('dashboard:storyboards');
-}
+	function handleStoryboardUpdate(event: CustomEvent<Storyboard>) {
+		console.log('handleStoryboardUpdate: updating storyboard variable');
+		storyboard = event.detail;
+
+		invalidate('dashboard:storyboards');
+	}
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (event.key === 'Escape') {
