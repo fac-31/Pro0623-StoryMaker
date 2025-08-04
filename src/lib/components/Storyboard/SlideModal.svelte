@@ -156,12 +156,12 @@
 						newSlideOutline: editableSlideOutline,
 						insertionIndex: selectedSlideIndex,
 						storyboard_id: storyboard._id
-				  }
+					}
 				: {
 						newSlideOutline: editableSlideOutline,
 						slideNumber: selectedSlideIndex + 1,
 						storyboard_id: storyboard._id
-				  };
+					};
 
 			const res = await fetch(url, {
 				method: 'POST',
@@ -232,7 +232,9 @@
 			<div class="modal-body">
 				<!-- Left side - Slide details (20%) -->
 				<div class="slide-details">
-					<h3 id="modal-title">{isNewSlide ? 'Add New Slide' : `Slide ${editableSlideOutline.slideId}`}</h3>
+					<h3 id="modal-title">
+						{isNewSlide ? 'Add New Slide' : `Slide ${editableSlideOutline.slideId}`}
+					</h3>
 
 					<SlideForm {editableSlideOutline} {editing} />
 				</div>
@@ -252,7 +254,9 @@
 						<img src={visualSlide.imageUrl} alt="Slide {visualSlide.slideNumber}" />
 					{:else}
 						<div class="large-placeholder">
-							<h3>{isNewSlide ? 'Fill out the form to generate an image' : 'No Image Generated'}</h3>
+							<h3>
+								{isNewSlide ? 'Fill out the form to generate an image' : 'No Image Generated'}
+							</h3>
 							{#if visualSlide && visualSlide.imagePrompt}
 								<p><strong>Image Prompt:</strong></p>
 								<p>{visualSlide.imagePrompt}</p>
@@ -269,7 +273,9 @@
 			<div class="modal-footer">
 				{#if editing}
 					<button class="btn btn-primary" on:click={cancelEdit} disabled={loading}>Cancel</button>
-					<button class="btn btn-primary" on:click={saveChanges} disabled={loading}>{isNewSlide ? 'Save & Generate' : 'Save'}</button>
+					<button class="btn btn-primary" on:click={saveChanges} disabled={loading}
+						>{isNewSlide ? 'Save & Generate' : 'Save'}</button
+					>
 				{:else}
 					<button class="btn btn-primary" on:click={() => (editing = true)}>Edit</button>
 				{/if}

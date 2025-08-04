@@ -240,7 +240,11 @@
 						<div class="slides-flex">
 							{#each storyboard.visualSlides as slide, index (slide.slideNumber)}
 								<SlideThumbnail {storyboard} {slide} {index} on:open={openSlideModal} />
-								<button class="btn btn-ghost btn-sm" onclick={() => addNewSlide(index + 1)} aria-label="Add new slide after slide {slide.slideNumber}">
+								<button
+									class="btn btn-ghost btn-sm"
+									onclick={() => addNewSlide(index + 1)}
+									aria-label="Add new slide after slide {slide.slideNumber}"
+								>
 									<PlusCircle class="h-5 w-5" />
 								</button>
 							{/each}
