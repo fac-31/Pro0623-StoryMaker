@@ -138,6 +138,13 @@ Story JSON:\n${JSON.stringify(storyboard.storyOutline)}`;
 	const htmlPrompt = `
 You are a web game developer. Given the following story, game interactions, and detected object bounding boxes, generate a complete HTML file (with embedded CSS and JavaScript) that implements the game.
 
+CRITICAL INTERACTION MAPPING:
+- You have TWO data sources: INTERACTIONS JSON (with interaction definitions) and DETECTED OBJECTS (with bounding box coordinates)
+- For each slide, create hotspots using the bounding box coordinates from detectedObjects
+- Connect each hotspot to the corresponding interaction from the INTERACTIONS JSON by matching slide numbers
+- When a hotspot is clicked, display the interaction result text in a visible dialog/popup or text area
+- For "choose" type interactions, show the options as buttons and display the selected result
+
 CRITICAL VISUAL REQUIREMENTS (must be implemented exactly):
 - Use background-image CSS property for slide images, NOT <img> tags
 - Interactive hotspots MUST have highly visible borders: "border: 3px solid rgba(255, 0, 0, 0.8)" with "background-color: rgba(255, 0, 0, 0.3)"
@@ -158,12 +165,21 @@ GAME STRUCTURE REQUIREMENTS:
 - Display a prominent "Next Slide" button that only appears after all interactions are completed
 - After completing the final slide, show a "Game Complete!" message and a "Return to Storyboard" button that redirects to the parent page
 
+CRITICAL INTERACTION IMPLEMENTATION:
+- Create hotspots using detectedObjects coordinates: style="left: {x}px; top: {y}px; width: {width}px; height: {height}px;"
+- Assign each hotspot a data-interaction attribute matching the interaction keys from the INTERACTIONS JSON
+- In the click handler, look up the interaction using: interactionData[currentSlide][interactionKey]
+- For "click" type: call showInteractionResult(interaction.result) to display the text
+- For "choose" type: call showChoiceOptions(interaction.options, currentSlide, interactionKey) to show choice buttons
+- EXAMPLE: <div class="hotspot" data-interaction="main-object" onclick="handleClick('main-object')" ...>
+
 TECHNICAL REQUIREMENTS:
 - Use only vanilla JS, HTML, and CSS (no external dependencies)
-- The game should be playable in an iframe
+- The game should be playable in an iframe  
 - Ensure responsive design that works on different screen sizes
 - Add hover effects to make interactive elements more discoverable
 - Include proper error handling for missing elements
+- MUST implement all the JavaScript functions provided in the templates above
 
 CSS STYLING TEMPLATE (use this exact styling for hotspots):
 .hotspot {
@@ -233,6 +249,74 @@ function returnToStoryboard() {
     setTimeout(() => { window.history.back(); }, 100);
 }
 
+// INTERACTION DISPLAY LOGIC:
+function showInteractionResult(result, isChoice = false) {
+    // Create or update result display area
+    let resultArea = document.getElementById('interaction-result');
+    if (!resultArea) {
+        resultArea = document.createElement('div');
+        resultArea.id = 'interaction-result';
+        resultArea.style.cssText = \`
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.9); color: white; padding: 20px; border-radius: 10px;
+            max-width: 80%; text-align: center; z-index: 1000; font-size: 16px;
+        \`;
+        document.body.appendChild(resultArea);
+    }
+    
+    resultArea.innerHTML = \`
+        <p>\${result}</p>
+        <button onclick="closeInteractionResult()" style="
+            margin-top: 10px; padding: 5px 15px; background: #007bff; 
+            color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Continue
+        </button>
+    \`;
+    resultArea.style.display = 'block';
+}
+
+function closeInteractionResult() {
+    const resultArea = document.getElementById('interaction-result');
+    if (resultArea) resultArea.style.display = 'none';
+}
+
+function showChoiceOptions(options, slideNum, interactionKey) {
+    let choiceArea = document.getElementById('choice-options');
+    if (!choiceArea) {
+        choiceArea = document.createElement('div');
+        choiceArea.id = 'choice-options';
+        choiceArea.style.cssText = \`
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.9); color: white; padding: 20px; border-radius: 10px;
+            max-width: 80%; text-align: center; z-index: 1000;
+        \`;
+        document.body.appendChild(choiceArea);
+    }
+    
+    const buttons = options.map((option, index) => 
+        \`<button onclick="selectChoice(\${slideNum}, '\${interactionKey}', \${index})" style="
+            display: block; margin: 10px auto; padding: 10px 20px; background: #28a745; 
+            color: white; border: none; border-radius: 5px; cursor: pointer; min-width: 200px;">
+            \${option.text}
+        </button>\`
+    ).join('');
+    
+    choiceArea.innerHTML = \`<p>Choose your action:</p>\${buttons}\`;
+    choiceArea.style.display = 'block';
+}
+
+function selectChoice(slideNum, interactionKey, optionIndex) {
+    const interaction = interactionData[slideNum][interactionKey];
+    const selectedOption = interaction.options[optionIndex];
+    
+    document.getElementById('choice-options').style.display = 'none';
+    showInteractionResult(selectedOption.result);
+    
+    // Mark interaction as completed
+    interactionsCompleted[slideNum][interactionKey] = true;
+    checkSlideCompletion();
+}
+
 Do not include explanations or markdown, just return the raw HTML.
 
 STORY JSON:
@@ -252,8 +336,8 @@ ${JSON.stringify(interactions, null, 2)}
 	// Remove code fences if present
 	generatedHtml = generatedHtml.replace(/```html|```/g, '').trim();
 
-	// Validate generated HTML contains required CSS classes and game flow elements
-	const requiredElements = ['.hotspot', 'background-image:', 'rgba(255, 0, 0, 0.8)', 'z-index:', 'sort', 'currentSlide', 'totalSlides'];
+	// Validate generated HTML contains required CSS classes and interaction functions
+	const requiredElements = ['.hotspot', 'background-image:', 'rgba(255, 0, 0, 0.8)', 'z-index:', 'sort', 'currentSlide', 'totalSlides', 'showInteractionResult', 'data-interaction'];
 	const hasRequiredElements = requiredElements.every((element) => generatedHtml.includes(element));
 
 	if (!hasRequiredElements) {
