@@ -35,7 +35,7 @@ paths:
                 type: integer
                 description: The index at which to insert the new slide.
               newSlideOutline:
-                $ref: '#/components/s/SlideOutline'
+                $ref: '#/components/schemas/SlideOutline'
       responses:
         '200':
           description: Successfully added the slide and returned the storyboard ID.
