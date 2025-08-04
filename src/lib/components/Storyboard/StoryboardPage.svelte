@@ -9,9 +9,8 @@
 	import SlideThumbnail from '$lib/components/Storyboard/SlideThumbnail.svelte';
 	import SlideModal from '$lib/components/Storyboard/SlideModal.svelte';
 	import { Loader2, ArrowLeft, Sparkles, PlusCircle } from 'lucide-svelte';
-	import { goto, invalidate } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 	import { SvelteURLSearchParams } from 'svelte/reactivity';
-	import { page } from '$app/stores';
 
 	let userPrompt: UserPrompt = {
 		numSlides: 6,
