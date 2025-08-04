@@ -330,7 +330,9 @@
 					>
 				{:else}
 					<button class="btn btn-primary" on:click={() => (editing = true)}>Edit</button>
-					<button class="btn btn-error" on:click={deleteSlide} disabled={loading}>Delete</button>
+					{#if !isNewSlide}
+						<button class="btn btn-error" on:click={deleteSlide} disabled={loading}>Delete</button>
+					{/if}
 				{/if}
 			</div>
 		</div>

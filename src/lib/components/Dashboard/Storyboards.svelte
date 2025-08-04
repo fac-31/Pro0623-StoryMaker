@@ -13,6 +13,7 @@
 
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
 
 	import { storyboardStore } from '$lib/stores/storyboard';
 	import { teamStore } from '$lib/stores/team';
@@ -32,6 +33,14 @@
 
 	teamStore.set(team ? team : null);
 
+	// Create a reactive local copy of storyboards for proper UI updates
+	let localStoryboards = $state(storyboards);
+	
+	// Update local copy when props change
+	$effect(() => {
+		localStoryboards = storyboards;
+	});
+
 	// State management
 	let selectedStoryboard = $state<Storyboard | null>(null);
 	let viewMode = $state('grid');
@@ -43,7 +52,7 @@
 
 	// Computed values
 	const filteredProjects = $derived(
-		storyboards.filter((storyboard) => {
+		localStoryboards.filter((storyboard) => {
 			if (!list.includes(storyboard._id as string)) return false;
 
 			const matchesSearch =
@@ -75,9 +84,14 @@
 			});
 
 			if (response.ok) {
-				// Remove from local state
-				storyboards = storyboards.filter((s) => s._id !== storyboard._id);
+				// Close the modal first
 				showDeleteModal = null;
+				
+				// Immediately remove from local state for responsive UI
+				localStoryboards = localStoryboards.filter((s) => s._id !== storyboard._id);
+				
+				// Invalidate the dashboard data to refresh from server
+				await invalidate('dashboard:storyboards');
 			} else {
 				const error = await response.json();
 				console.error('Failed to delete storyboard:', error);
