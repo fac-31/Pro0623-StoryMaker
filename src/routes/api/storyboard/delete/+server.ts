@@ -56,15 +56,15 @@ export const DELETE: RequestHandler = async (event) => {
 		}
 
 		// Remove storyboard from user's projects
-		await (db.collection('users') as any).updateOne(
+		await db.collection('users').updateOne(
 			{ _id: new ObjectId(user._id) },
-			{ $pull: { projects: storyboardId } }
+			{ $pull: { projects: storyboardId } } as object
 		);
 
 		// Remove storyboard from all teams that have it
-		await (db.collection('teams') as any).updateMany(
+		await db.collection('teams').updateMany(
 			{ projects: { $in: [storyboardId] } },
-			{ $pull: { projects: storyboardId } }
+			{ $pull: { projects: storyboardId } } as object
 		);
 
 		// Clean up generated game files if they exist

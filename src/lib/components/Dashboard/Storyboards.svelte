@@ -34,12 +34,7 @@
 	teamStore.set(team ? team : null);
 
 	// Create a reactive local copy of storyboards for proper UI updates
-	let localStoryboards = $state(storyboards);
-
-	// Update local copy when props change
-	$effect(() => {
-		localStoryboards = storyboards;
-	});
+	let localStoryboards = $derived(storyboards);
 
 	// State management
 	let selectedStoryboard = $state<Storyboard | null>(null);
