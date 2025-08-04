@@ -68,6 +68,8 @@ test.describe('Mobile Navigation - Dashboard', () => {
 		await page.getByRole('textbox', { name: 'Password' }).fill(password);
 		await page.getByRole('textbox', { name: 'Full Name' }).fill(fullName);
 		await page.getByRole('textbox', { name: 'Display Name' }).fill(displayName);
+		await expect(page.getByRole('button', { name: 'Create Account' })).toBeEnabled();
+		await expect(page.getByRole('button', { name: 'Create Account' })).toBeVisible();
 		await page.getByRole('button', { name: 'Create Account' }).click();
 
 		// Wait for redirect to login

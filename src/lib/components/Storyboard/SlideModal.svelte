@@ -193,6 +193,9 @@
 				const slideNumber = isNewSlide ? selectedSlideIndex + 1 : selectedSlideIndex + 1;
 				const updatedStoryboard = await progressStoryboard(storyboard_id, edit, slideNumber);
 				if (updatedStoryboard) {
+					console.log(
+						'dispatching storyboard with ID: {storyboard_id}... done! Updating the storyboard in the app...'
+					);
 					dispatch('update', updatedStoryboard);
 				}
 				editing = false; // Exit editing mode on success
@@ -204,6 +207,36 @@
 			error = e instanceof Error ? e.message : String(e);
 		} finally {
 			loading = false;
+		}
+	}
+
+	/**
+	 * Deletes the current slide after confirmation.
+	 */
+	async function deleteSlide() {
+		if (confirm('Are you sure you want to delete this slide?')) {
+			loading = true;
+			error = '';
+			try {
+				const res = await fetch('/api/storyboard/delete-slide', {
+					method: 'POST',
+					body: JSON.stringify({
+						storyboard_id: storyboard._id,
+						slideIndex: selectedSlideIndex
+					})
+				});
+				const data = await res.json();
+				if (res.ok) {
+					dispatch('update', data.storyboard);
+					closeModal();
+				} else {
+					error = data.error || 'Failed to delete slide';
+				}
+			} catch (e) {
+				error = e instanceof Error ? e.message : String(e);
+			} finally {
+				loading = false;
+			}
 		}
 	}
 
@@ -297,6 +330,7 @@
 					>
 				{:else}
 					<button class="btn btn-primary" on:click={() => (editing = true)}>Edit</button>
+					<button class="btn btn-error" on:click={deleteSlide} disabled={loading}>Delete</button>
 				{/if}
 			</div>
 		</div>
