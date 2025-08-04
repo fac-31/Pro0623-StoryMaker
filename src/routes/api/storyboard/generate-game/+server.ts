@@ -65,11 +65,13 @@ function selectBestBoundingBoxes(
 	});
 
 	// Sort by score (highest first) and take the best ones
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	return scoredObjects
-		.sort((a, b) => b.score! - a.score!)
-		.slice(0, maxCount)
-		.map(({ score: _, ...obj }) => obj); // Remove score from final object
+	return (
+		scoredObjects
+			.sort((a, b) => b.score! - a.score!)
+			.slice(0, maxCount)
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			.map(({ score: _, ...obj }) => obj)
+	); // Remove score from final object
 }
 
 // Helper function to get bounding boxes using OpenAI GPT-4o vision
