@@ -11,8 +11,20 @@ interface GenerateGameRequest {
 	storyboardId: string;
 }
 
+interface DetectedObject {
+	x?: number;
+	y?: number;
+	width?: number;
+	height?: number;
+	label?: string;
+	score?: number;
+}
+
 // Helper function to select the best bounding boxes for gameplay
-function selectBestBoundingBoxes(detectedObjects: any[], maxCount: number) {
+function selectBestBoundingBoxes(
+	detectedObjects: DetectedObject[],
+	maxCount: number
+): DetectedObject[] {
 	if (!detectedObjects || detectedObjects.length === 0) {
 		return [];
 	}
@@ -53,10 +65,11 @@ function selectBestBoundingBoxes(detectedObjects: any[], maxCount: number) {
 	});
 
 	// Sort by score (highest first) and take the best ones
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	return scoredObjects
-		.sort((a, b) => b.score - a.score)
+		.sort((a, b) => b.score! - a.score!)
 		.slice(0, maxCount)
-		.map(({ score, ...obj }) => obj); // Remove score from final object
+		.map(({ score: _, ...obj }) => obj); // Remove score from final object
 }
 
 // Helper function to get bounding boxes using OpenAI GPT-4o vision
