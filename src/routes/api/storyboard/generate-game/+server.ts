@@ -18,17 +18,17 @@ function selectBestBoundingBoxes(detectedObjects: any[], maxCount: number) {
 	}
 
 	// Score each bounding box based on size, position, and suitability for interaction
-	const scoredObjects = detectedObjects.map(obj => {
+	const scoredObjects = detectedObjects.map((obj) => {
 		const area = (obj.width || 50) * (obj.height || 50);
 		const centerX = (obj.x || 0) + (obj.width || 50) / 2;
 		const centerY = (obj.y || 0) + (obj.height || 50) / 2;
-		
+
 		// Prefer objects that are:
 		// 1. Reasonably sized (not too small, not too large)
 		// 2. Not too close to edges
 		// 3. Have clear labels
 		let score = 0;
-		
+
 		// Size score: prefer medium-sized objects (between 1000-10000 px²)
 		if (area >= 1000 && area <= 10000) {
 			score += 3;
@@ -37,18 +37,18 @@ function selectBestBoundingBoxes(detectedObjects: any[], maxCount: number) {
 		} else if (area >= 100) {
 			score += 1;
 		}
-		
+
 		// Position score: prefer objects not too close to edges (assuming 800x600 image)
 		if (centerX > 100 && centerX < 700 && centerY > 100 && centerY < 500) {
 			score += 2;
 		}
-		
+
 		// Label quality score: prefer objects with meaningful labels
 		const label = obj.label || '';
 		if (label.length > 3 && !label.toLowerCase().includes('unknown')) {
 			score += 2;
 		}
-		
+
 		return { ...obj, score };
 	});
 
@@ -388,7 +388,17 @@ ${JSON.stringify(interactions, null, 2)}
 	generatedHtml = generatedHtml.replace(/```html|```/g, '').trim();
 
 	// Validate generated HTML contains required CSS classes and interaction functions
-	const requiredElements = ['.hotspot', 'background-image:', 'rgba(255, 0, 0, 0.8)', 'z-index:', 'sort', 'currentSlide', 'totalSlides', 'showInteractionResult', 'data-interaction'];
+	const requiredElements = [
+		'.hotspot',
+		'background-image:',
+		'rgba(255, 0, 0, 0.8)',
+		'z-index:',
+		'sort',
+		'currentSlide',
+		'totalSlides',
+		'showInteractionResult',
+		'data-interaction'
+	];
 	const hasRequiredElements = requiredElements.every((element) => generatedHtml.includes(element));
 
 	if (!hasRequiredElements) {

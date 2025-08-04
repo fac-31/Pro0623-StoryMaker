@@ -39,8 +39,8 @@ export const POST: RequestHandler = async (event) => {
 					updatedAt: new Date()
 				},
 				$unset: {
-					gameHtml: "",
-					interactions: ""
+					gameHtml: '',
+					interactions: ''
 				}
 			}
 		);

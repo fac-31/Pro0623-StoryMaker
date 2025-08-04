@@ -96,12 +96,12 @@ export const GET: RequestHandler = async ({ params, url }) => {
 
 		// Clear game data when editing storyboard content
 		await storyboards.updateOne(
-			{ _id: new ObjectId(id) }, 
-			{ 
+			{ _id: new ObjectId(id) },
+			{
 				$set: storyboardOutput,
 				$unset: {
-					gameHtml: "",
-					interactions: ""
+					gameHtml: '',
+					interactions: ''
 				}
 			}
 		);
